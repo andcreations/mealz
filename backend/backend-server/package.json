@@ -1,0 +1,59 @@
+{
+  "name": "@mealz/backend-server",
+  "version": "1.0.0",
+  "description": "Mealz backend",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "nest build",
+    "clean": "rm -rf node_modules dist",
+    "test": "jest",
+    "start": "nest start",
+    "start:dev": "nest start --watch"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/static": "^8.2.0",
+    "@nestjs/common": "^11.1.2",
+    "@nestjs/core": "^11.1.2",
+    "@nestjs/platform-express": "^11.1.2",
+    "@nestjs/platform-fastify": "^11.1.3",
+    "@nestjs/serve-static": "^5.0.3",
+    "@nestjs/swagger": "^11.2.0",
+    "ansi-colors": "^4.1.3",
+    "bcryptjs": "^3.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "cookie-parser": "^1.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "ms": "^2.1.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.1.0",
+    "sqlite3": "^5.1.7",
+    "uuid": "^11.1.0",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.7",
+    "@types/jest": "^27.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^16.9.1",
+    "@types/node-schedule": "^1.3.2",
+    "@types/uuid": "^8.3.3",
+    "ts-jest": "^29.3.4",
+    "ts-node": "^10.2.1",
+    "typescript": "^5.8.3"
+  },
+  "author": "",
+  "license": "ISC",
+  "jest": {
+    "rootDir": "src",
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "testRegex": ".test.ts$",
+    "transform": {
+      "^.+\\.(t)s$": "ts-jest"
+    }
+  }
+}

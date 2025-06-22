@@ -1,0 +1,9 @@
+.mealz-full-screen {
+  width: 100vw;
+  height: 100vh;
+}
+
+.mealz-full-screen-center {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+}

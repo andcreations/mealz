@@ -1,0 +1,8 @@
+**/dist
+**/node_modules
+
+backend/etc/https/*.crt
+backend/etc/https/*.key
+backend/etc/https/*.csr
+
+NOTES.md

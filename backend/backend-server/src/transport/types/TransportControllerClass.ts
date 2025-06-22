@@ -1,0 +1,1 @@
+export type TransportControllerClass<T = any> = new (...args: any[]) => T;

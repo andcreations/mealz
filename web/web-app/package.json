@@ -1,0 +1,44 @@
+{
+  "name": "@mealz/web-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build-tools": "tsc -p ./src/tools --outDir ./dist/tools",
+    "build-styles": "node dist/tools/build styles",
+    "build-assets": "node dist/tools/build assets",
+    "build-app": "node dist/tools/build app",
+    "build-html": "node dist/tools/build html",
+    "build-all": "node dist/tools/build all",
+    "build": "npm run build-tools && node dist/tools/build all",
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "watch": "node dist/tools/watch"
+  },
+  "author": "Mikolaj Gucki",
+  "license": "MIT",
+  "dependencies": {
+    "@andcreations/common": "^0.1.13",
+    "@andcreations/web-common": "^0.2.0",
+    "bootstrap": "^5.3.6",
+    "classnames": "^2.5.1",
+    "html-to-react": "^1.7.0",
+    "lodash": "^4.17.21",
+    "react": "^19.1.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@andcreations/web-builder": "^0.2.1",
+    "@types/node": "^16.9.1",
+    "@types/react": "^18.1.0",
+    "@types/react-dom": "^18.1.0",
+    "ts-jest": "^27.0.5",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.9.1"
+  }
+}

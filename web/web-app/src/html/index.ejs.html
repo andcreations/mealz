@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <title>Mealz | Eat good. Feel great.</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<% for (let index = 0; index < cssFiles.length; index++) { %>
+<% const cssFile = cssFiles[index]; %>
+<% const disabled = index > 0 ? 'disabled ': ''; %>
+  <link href="<%= cssFile.file %>" rel="stylesheet" title="<%= cssFile.title %>" type="text/css" <%= disabled %>/>
+<% } %>
+  <link href="favicon.png" rel="icon" type="image/png"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&display=swap" rel="stylesheet">  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <script>
+    function onBodyLoad() {
+    }
+  </script>
+</head>
+<body onload="onBodyLoad()">
+  <div id="app"></div>
+  <script src="<%= appJsFile %>"></script>
+</body>
+</html>

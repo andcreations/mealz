@@ -1,0 +1,16 @@
+@mixin mealz-flex-container() {
+  display: flex;
+}
+
+@mixin mealz-flex-center() {
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin mealz-flex-horizontal() {
+  flex-direction: row;
+}
+
+@mixin mealz-flex-vertical() {
+  flex-direction: column;
+}

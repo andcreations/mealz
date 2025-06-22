@@ -1,0 +1,4 @@
+.mealz-center {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+}

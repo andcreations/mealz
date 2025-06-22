@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "declaration": false,
+    "outDir": "./build/dist",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "jsx": "react",
+    "paths": {
+      "@mealz/backend-api": [
+        "../../backend/backend-server/src/api"
+      ],
+      "@mealz/backend-users-auth-gateway-api": [
+        "../../backend/backend-server/src/domains/users/services/auth/gateway-api"
+      ],
+    }
+  }
+}

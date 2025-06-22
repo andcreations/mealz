@@ -1,0 +1,1 @@
+export type DBEntityClass<T = any> = new (...args: any[]) => T;

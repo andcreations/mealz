@@ -1,0 +1,19 @@
+@use 'sass:color';
+
+body {
+  background-image: linear-gradient(
+    $mealz-theme-color-bg-dark,
+    color.scale($mealz-theme-color-bg-dark, $lightness: -64%)
+  );
+  color: $mealz-color;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+a, a:hover {
+  color: $blue-300;
+}
+
+a, a:visited {
+  text-decoration: none;
+}

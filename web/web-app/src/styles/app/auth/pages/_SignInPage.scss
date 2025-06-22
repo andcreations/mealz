@@ -1,0 +1,14 @@
+.mealz-sign-in-page {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  @include mealz-flex-center();
+
+  .mealz-sign-in-page-wrapper {
+    margin-top: 6rem;
+    height: 100%;
+  }
+
+  .mealz-sign-in-page-logo {
+    margin-bottom: 2rem;
+  }
+}

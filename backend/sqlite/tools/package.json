@@ -1,0 +1,20 @@
+{
+  "name": "@mealz/sqlite-tools",
+  "version": "1.0.0",
+  "description": "SQLite tools",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf node_modules dist"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/node": "^16.9.1",
+    "ts-node": "^10.2.1",
+    "typescript": "^5.8.3"
+  },
+  "author": "AndCreations",
+  "license": "MIT"
+}

@@ -1,0 +1,7 @@
+@use 'sass:color';
+
+$mealz-color: color.adjust($mealz-theme-color-fg, $whiteness: 75%);
+
+$mealz-theme-color-fg-dark: color.scale($mealz-theme-color-fg, $lightness: -32%);
+$mealz-theme-color-bg-dark: color.scale($mealz-theme-color-bg, $lightness: -64%);
+$mealz-theme-color-border: $mealz-theme-color-bg

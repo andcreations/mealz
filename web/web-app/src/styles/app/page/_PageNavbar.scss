@@ -1,0 +1,19 @@
+$mealz-navbar-height: 4rem;
+
+.mealz-navbar {
+  background-color: mix($gray-800, $gray-900, 50%);
+}
+
+.mealz-navbar-container {
+  @include mealz-flex-container();
+}
+
+.mealz-navbar-left {
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+
+.mealz-navbar-right {
+  flex-grow: 0;
+  flex-shrink: 1;
+}

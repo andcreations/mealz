@@ -1,0 +1,15 @@
+.mealz-sign-in-form {
+  .mealz-sign-in-form-control {
+    margin-top: 0.875rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .mealz-sign-in-form-button {
+    margin-top: 0.875rem;
+  }
+
+  .mealz-sign-in-form-status {
+    margin-top: 0.875rem;
+    @include mealz-font-size-small();
+  }
+}
