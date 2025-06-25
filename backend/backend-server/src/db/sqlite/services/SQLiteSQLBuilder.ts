@@ -3,7 +3,6 @@ import { MealzError } from '#mealz/backend-common';
 
 import {
   DBFieldSpec,
-  Parameter,
   WHERE_AND,
   WHERE_OR, 
   Where,
@@ -15,9 +14,19 @@ import {
   InvalidFindOptionsError,
   Update,
   UpdateOperator,
+  MissingRequiredDBFieldError,
 } from '../../core';
 import { SQLITE_FALSE, SQLITE_TRUE } from '../const';
-import { SQLiteWhereBuildError } from '../errors';
+import { SQLiteInvalidValueError, SQLiteWhereBuildError } from '../errors';
+import { SQLiteStatement } from '../types';
+
+class SQLiteStatementContext {
+  private paramIndex = 0;
+
+  public nextParam(prefix: string): string {
+    return `$${prefix}${this.paramIndex++}`;
+  }
+}
 
 @Injectable()
 export class SQLiteSQLBuilder {
@@ -26,34 +35,55 @@ export class SQLiteSQLBuilder {
     whereList: Where<T>[],
     fieldsSpec: DBFieldSpec[],
     operator: string,
-  ): string {
-    let sql = '(';
+    context: SQLiteStatementContext,
+  ): SQLiteStatement {
+    const statement: SQLiteStatement = new SQLiteStatement('(');
 
     whereList.forEach((subWhere, index) => {
       if (index > 0) {
-        sql += ` ${operator} `;
+        statement.appendSQL(` ${operator} `);
       }
-      sql += this.buildWhere<T>(entityName, subWhere, fieldsSpec);
+      const subWhereResult = this.buildWhere<T>(
+        entityName,
+        subWhere,
+        fieldsSpec,
+        context,
+      );
+      statement.append(subWhereResult);
     });
 
-    sql += ')';
-    return sql;
+    statement.appendSQL(')');
+    return statement;
   }
 
   private buildOr<T>(
     entityName: string,
     where: WhereOr<T>,
     fieldsSpec: DBFieldSpec[],
-  ): string {
-    return this.buildMulti(entityName, where[WHERE_OR], fieldsSpec, 'OR');
+    context: SQLiteStatementContext,
+  ): SQLiteStatement {
+    return this.buildMulti(
+      entityName,
+      where[WHERE_OR],
+      fieldsSpec,
+      'OR',
+      context,
+    );
   }
 
   private buildAnd<T>(
     entityName: string,
     where: WhereAnd<T>,
     fieldsSpec: DBFieldSpec[],
-  ): string {
-    return this.buildMulti(entityName, where[WHERE_AND], fieldsSpec, 'AND');
+    context: SQLiteStatementContext,
+  ): SQLiteStatement {
+    return this.buildMulti(
+      entityName,
+      where[WHERE_AND],
+      fieldsSpec,
+      'AND',
+      context,
+    );
   }
 
   private assertType(
@@ -93,12 +123,22 @@ export class SQLiteSQLBuilder {
     this.assertType(entityName, [DBFieldType.STRING], fieldsSpec, field);
   }
 
-  private getSQLValue(value: WhereOperator[keyof WhereOperator]): string {
+  private getSQLValue(
+    entityName: string,
+    value: WhereOperator[keyof WhereOperator],
+  ): string {
+    if (Array.isArray(value)) {
+      throw new SQLiteInvalidValueError(
+        entityName,
+        `Array is not supported in where clause`,
+      );
+    }
+
     let sqlValue = '';
     const valueType = typeof value;
     switch (valueType) {
       case 'string':
-        sqlValue = `'${value}'`;
+        sqlValue = `${value}`;
         break;
       case 'number':
         sqlValue = value.toString();
@@ -106,12 +146,6 @@ export class SQLiteSQLBuilder {
       case 'boolean':
         sqlValue = value ? SQLITE_TRUE.toString() : SQLITE_FALSE.toString();
         break;
-    }
-    if (Array.isArray(value)) {
-      sqlValue = value.map(this.getSQLValue).join(',');
-    }
-    if (value instanceof Parameter) {
-      sqlValue = `@${value.getName()}`;
     }
     return sqlValue;    
   }
@@ -121,47 +155,73 @@ export class SQLiteSQLBuilder {
     field: string,
     where: WhereOperator,
     fieldsSpec: DBFieldSpec[],
-  ): string {
-    let sql = '';
+    context: SQLiteStatementContext,
+  ): SQLiteStatement {
+    let statement: SQLiteStatement = new SQLiteStatement();
+
+    const appendOne = (sql: string, value: string) => {
+      const param = context.nextParam('where');
+      statement.append(new SQLiteStatement(
+        sql.replace('{}', param),
+        {
+          [param]: value,
+        },
+      ));
+    };
+    const appendArray = (sql: string, items: Array<string | number>) => {
+      let itemsSql = '';
+      items.forEach((item, index) => {
+        const param = context.nextParam('where');
+        statement.setParam(param, item);
+
+        if (index > 0) {
+          itemsSql += ',';
+        }
+        itemsSql += param;
+      });
+      statement.append(new SQLiteStatement(
+        sql.replace('{}', itemsSql),
+      ));
+    };
 
     Object.keys(where).forEach((operator, index) => {
       if (index > 0) {
-        sql += ' AND ';
+        statement.appendSQL(' AND ');
       }
-      const sqlValue = this.getSQLValue(where[operator]);
+      const value = where[operator];
   
       switch (operator) {
         case '$eq':
-          sql += `${field} = ${sqlValue}`;
+          appendOne(`${field} = {}`, this.getSQLValue(entityName, value));
           break;
         case '$ne':
-          sql += `${field} != ${sqlValue}`;
+          appendOne(`${field} != {}`, this.getSQLValue(entityName, value));
           break;
         case '$gt':
           this.assertNumber(entityName, fieldsSpec, field);
-          sql += `${field} > ${sqlValue}`;
+          appendOne(`${field} > {}`, this.getSQLValue(entityName, value));
           break;
         case '$gte':
           this.assertNumber(entityName, fieldsSpec, field);
-          sql += `${field} >= ${sqlValue}`;
+          appendOne(`${field} >= {}`, this.getSQLValue(entityName, value));
           break;
         case '$lt':
           this.assertNumber(entityName, fieldsSpec, field);
-          sql += `${field} < ${sqlValue}`;
+          appendOne(`${field} < {}`, this.getSQLValue(entityName, value));
           break;
         case '$lte':
           this.assertNumber(entityName, fieldsSpec, field);
-          sql += `${field} <= ${sqlValue}`;
+          appendOne(`${field} <= {}`, this.getSQLValue(entityName, value));
           break;
         case '$in':
-          sql += `${field} IN (${sqlValue})`;
+          appendArray(`${field} IN ({})`, value);
           break;
         case '$nin':
-          sql += `${field} NOT IN (${sqlValue})`;
+          appendArray(`${field} NOT IN ({})`, value);
           break;
         case '$like':
           this.assertString(entityName, fieldsSpec, field);
-          sql += `${field} LIKE ${sqlValue}`;
+          appendOne(`${field} LIKE {}`, this.getSQLValue(entityName, value));
           break;
         default:
           throw new SQLiteWhereBuildError(
@@ -171,17 +231,18 @@ export class SQLiteSQLBuilder {
       }
     });
 
-    return sql;
+    return statement;
   }
 
-  public buildWhere<T>(
+  private buildWhere<T>(
     entityName: string,
     where: Where<T>,
     fieldsSpec: DBFieldSpec[],
-  ): string {
+    context: SQLiteStatementContext,
+  ): SQLiteStatement {
     const keys = Object.keys(where);
     if (keys.length === 0) {
-      return '';
+      return new SQLiteStatement();
     }
     const isSingleKey = keys.length === 1;
 
@@ -194,7 +255,12 @@ export class SQLiteSQLBuilder {
           `${WHERE_OR} is not supported with multiple conditions`
         );
       }
-      return this.buildOr(entityName, where as WhereOr<T>, fieldsSpec);
+      return this.buildOr(
+        entityName,
+        where as WhereOr<T>,
+        fieldsSpec,
+        context,
+      );
     }
 
     // and
@@ -206,19 +272,30 @@ export class SQLiteSQLBuilder {
           `${WHERE_AND} is not supported with multiple conditions`
         );
       }
-      return this.buildAnd(entityName, where as WhereAnd<T>, fieldsSpec);
+      return this.buildAnd(
+        entityName,
+        where as WhereAnd<T>,
+        fieldsSpec,
+        context,
+      );
     }
    
     // field conditions
-    let sql = '';
+    let whereStatement: SQLiteStatement = new SQLiteStatement();
     Object.keys(where).forEach((field, index) => {
       if (index > 0) {
-        sql += ' AND ';
+        whereStatement.appendSQL(' AND ');
       }
-      sql += this.buildFieldWhere(entityName,field, where[field], fieldsSpec);
+      const fieldWhereStatement = this.buildFieldWhere(
+        entityName,field,
+        where[field],
+        fieldsSpec,
+        context,
+      );
+      whereStatement.append(fieldWhereStatement);
     });
 
-    return sql;
+    return whereStatement;
   }
 
   public buildSelect<T>(
@@ -226,31 +303,38 @@ export class SQLiteSQLBuilder {
     fieldsSpec: DBFieldSpec[],
     where?: Where<T>,
     options?: FindOptions<T, keyof T>,
-  ): string {
-    let sql = `SELECT`;
+  ): SQLiteStatement {
+    const context = new SQLiteStatementContext();
+    let statement = new SQLiteStatement('SELECT');
 
     // projection
     const { projection } = options;
     if (projection) {
-      sql += ` ${projection.join(',')}`;
+      statement.appendSQL(` ${projection.join(',')}`);
     } else {
-      sql += ` *`;
+      statement.appendSQL(` *`);
     }
 
     // where
-    sql += ` FROM ${entityName}`;
-    const sqlWhere = this.buildWhere(entityName, where, fieldsSpec);
-    if (sqlWhere) {
-      sql += ` WHERE ${sqlWhere}`;
+    statement.appendSQL(` FROM ${entityName}`);
+    const sqlWhereStatement = this.buildWhere(
+      entityName,
+      where,
+      fieldsSpec,
+      context,
+    );
+    if (sqlWhereStatement) {
+      statement.appendSQL(` WHERE `);
+      statement.append(sqlWhereStatement);
     }
 
     // sort
     const { sort } = options;
     if (sort && sort.length > 0) {
-      sql += ` ORDER BY`;
+      statement.appendSQL(` ORDER BY`);
       sort.forEach((entry, index) => {
         if (index > 0) {
-          sql += `,`;
+          statement.appendSQL(`,`);
         }
         const sortFields = Object.entries(entry);
         if (sortFields.length !== 1) {
@@ -260,7 +344,7 @@ export class SQLiteSQLBuilder {
           );
         }
         const [field, order] = sortFields[0];
-        sql += ` ${field} ${order === 'asc' ? 'ASC' : 'DESC'}`;
+        statement.appendSQL(` ${field} ${order === 'asc' ? 'ASC' : 'DESC'}`);
       });
     }
 
@@ -273,7 +357,7 @@ export class SQLiteSQLBuilder {
       );
     }
     if (limit) {
-      sql += ` LIMIT ${limit}`;
+      statement.appendSQL(` LIMIT ${limit}`);
     }
 
     // offset
@@ -284,10 +368,10 @@ export class SQLiteSQLBuilder {
       );
     }
     if (offset) {
-      sql += ` OFFSET ${offset}`;
+      statement.appendSQL(` OFFSET ${offset}`);
     }
 
-    return sql;
+    return statement;
   }
 
   private buildFieldUpdate<T>(
@@ -295,7 +379,8 @@ export class SQLiteSQLBuilder {
     field: string,
     fieldsSpec: DBFieldSpec[],
     operator: UpdateOperator<T>,
-  ): string {
+    context: SQLiteStatementContext,
+  ): SQLiteStatement {
     const keys = Object.keys(operator); 
     if (keys.length !== 1) {
       const operatorStr = JSON.stringify(operator);
@@ -306,13 +391,24 @@ export class SQLiteSQLBuilder {
     }
     const key = keys[0];
     const value = operator[key];
+    const param = context.nextParam('set');
 
     switch (key) {
       case '$set':
-        return `${field} = ${this.getSQLValue(value)}`;
+        return new SQLiteStatement(
+          `${field} = ${param}`,
+          {
+            [param]: this.getSQLValue(entityName, value),
+          },
+        );
       case '$inc':
         this.assertNumber(entityName, fieldsSpec, field);
-        return `${field} = ${field} + ${value}`;
+        return new SQLiteStatement(
+          `${field} = ${field} + ${param}`,
+          {
+            [param]: value,
+          },
+        );
       default:
         throw new SQLiteWhereBuildError(
           entityName,
@@ -321,25 +417,129 @@ export class SQLiteSQLBuilder {
     }
   }
 
-  public buildUpdateSet<T>(
+  public buildUpdate<T>(
     entityName: string,
     fieldsSpec: DBFieldSpec[],
     update: Update<T>,
-  ): string {
-    let sql = ``;
+    where: Where<T>,
+  ): SQLiteStatement {
+    const context = new SQLiteStatementContext();
+    let statement: SQLiteStatement = new SQLiteStatement(
+      `UPDATE ${entityName} SET `,
+    );
 
     Object.entries(update).forEach(([field, updateOperator], index) => {
       if (index > 0) {
-        sql += `,`;
+        statement.appendSQL(`, `);
       }
-      sql += this.buildFieldUpdate(
+      const fieldUpdateStatement = this.buildFieldUpdate(
         entityName,
         field,
         fieldsSpec,
         updateOperator,
+        context,
       );
+      statement.append(fieldUpdateStatement);
     });
 
-    return sql;
+    const whereStatement = this.buildWhere(
+      entityName,
+      where,
+      fieldsSpec,
+      context,
+    );
+    if (whereStatement) {
+      statement.appendSQL(` WHERE `);
+      statement.append(whereStatement);
+    }
+
+    return statement;    
+  }
+
+  public buildInsert<T>(
+    entityName: string,
+    fieldsSpec: DBFieldSpec[],
+    entity: T,
+  ): SQLiteStatement {
+    const isDefined = (value: any) => value != null;
+
+    const context = new SQLiteStatementContext();
+    let statement: SQLiteStatement = new SQLiteStatement(
+      `INSERT INTO ${entityName} `,
+    );
+
+    const values: Array<{
+      columnName: string;
+      paramName: string;
+      value: string 
+    }> = [];
+
+    // collect columns, parameters and values
+    fieldsSpec.forEach(fieldSpec => {
+      const value = entity[fieldSpec.name];
+      
+      // non-optional fields must have a value
+      if (!fieldSpec.optional && !isDefined(value)) {
+        throw new MissingRequiredDBFieldError(
+          entityName,
+          fieldSpec.name,
+        );
+      }
+
+      // skip undefined values
+      if (!isDefined(value)) {
+        return;
+      }
+
+      values.push({
+        columnName: fieldSpec.name,
+        paramName: context.nextParam('value'),
+        value: this.getSQLValue(entityName, value),
+      });
+    });    
+    
+    // columns
+    const columns = values.map(item => item.columnName).join(',');
+    statement.appendSQL(`(${columns}) VALUES (`);
+
+    // values as parameters
+    values.forEach((item, index) => {
+      if (index > 0) {
+        statement.appendSQL(`,`);
+      }
+      statement.appendSQL(`${item.paramName}`);
+    });
+    statement.appendSQL(`)`);
+
+    // parameters
+    values.forEach(item => {
+      statement.setParam(item.paramName, item.value);
+    });
+
+    return statement;
+  }
+
+  public buildDelete<T>(
+    entityName: string,
+    fieldsSpec: DBFieldSpec[],
+    where: Where<T>,
+  ): SQLiteStatement {
+    const context = new SQLiteStatementContext();
+    let statement: SQLiteStatement = new SQLiteStatement(
+      `DELETE FROM ${entityName} `,
+    );
+
+    const whereStatement = this.buildWhere(
+      entityName,
+      where,
+      fieldsSpec,
+      context,
+    );
+    if (whereStatement) {
+      statement.appendSQL(` WHERE `);
+      statement.append(whereStatement);
+    }
+
+    return statement;
   }
 }

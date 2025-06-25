@@ -36,7 +36,9 @@ export class SQLiteDBRepositoryFactory implements OnModuleInit {
     }
   }
 
-  public async createRepository(entityName: string): Promise<DBRepository<unknown>> {
+  public async createRepository(
+    entityName: string,
+  ): Promise<DBRepository<unknown>> {
     // create
     const repository = await this.moduleRef.create(SQLiteDBRepository);
 

@@ -9,6 +9,7 @@ import { UnknownDBError } from '../../core';
 import { SQLITE_DBE_MODULE_OPTIONS } from '../const';
 import { SQLiteDBModuleOptions } from '../SQLiteDBModule';
 import { SQLiteError } from '../errors/SQLiteError';
+import { SQLiteStatement } from '../types';
 
 @Injectable()
 export class SQLiteDB {
@@ -65,32 +66,37 @@ export class SQLiteDB {
     return this.handleError(func);
   }
 
-  public async run(statement: string): Promise<void> {
+  public async run(statement: SQLiteStatement): Promise<void> {
     const func = () =>
       new Promise<void>((resolve, reject) => {
-        this.db.run(statement, (error) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-          resolve();
-        });
+        this.db.run(
+          statement.getSQL(),
+          statement.getParams(),
+          (error) => {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve();
+          },
+        );
       });
     return this.handleError(func);
   }
 
   public async each(
-    statement: string,
+    statement: SQLiteStatement,
     callback: (row: any) => void,
   ): Promise<void> {
     const func = () =>
       new Promise<void>((resolve, reject) => {
         this.db.each(
-          statement,
+          statement.getSQL(),
+          statement.getParams(),
           (error, row) => {
             if (error) {
               reject(error);
-              return;
+              return; 
             }
             callback(row);
           },

@@ -7,7 +7,7 @@ export type Sort<T> = {
 }
 
 export interface FindOptions<T, K extends keyof T> {
-  projection?: K[];//Projection<K>;
+  projection?: Projection<T>;
   limit?: number;
   offset?: number;
   sort?: Sort<T>[];

@@ -18,7 +18,9 @@ export class UsersAuthRepository {
     email: string,
     context: Context,
   ): Promise<Pick<User, 'id' | 'password' | 'roles'> | undefined> {
-    const entity = await this.usersRepository.findOne<'id' | 'password' | 'roles'>(
+    const entity = await this.usersRepository.findOne<
+      'id' | 'password' | 'roles'
+    >(
       { email: { $eq: email } },
       { projection: ['id', 'password', 'roles'] },
       context,

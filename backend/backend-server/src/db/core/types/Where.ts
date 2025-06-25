@@ -1,19 +1,6 @@
 export type FieldsOf<T> = keyof T;
 
-export class Parameter {
-  public constructor(private readonly name: string) {
-    throw new Error('Parameters are not supported yet');
-  }
-
-  public getName(): string {
-    return this.name;
-  }
-}
-export function parameter(name: string): Parameter {
-  return new Parameter(name);
-}
-
-export type Value<V> = V | Parameter;
+export type Value<V> = V;
 
 export type WhereOperator = {
   $eq?: Value<string | number | boolean>;

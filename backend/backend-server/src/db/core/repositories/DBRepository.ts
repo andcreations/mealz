@@ -77,8 +77,9 @@ export abstract class DBRepository<T> {
   /**
    * Insert an entity into the database.
    * @param entity - The entity to insert.
+   * @param context - The context of the insert operation.
    */
-  public abstract insert(entity: T): Promise<void>;
+  public abstract insert(entity: T, context: Context): Promise<void>;
 
   /**
    * Find entities in the database.
@@ -92,7 +93,7 @@ export abstract class DBRepository<T> {
     options: FindOptions<T, K>,
     context: Context,
   ): Promise<Pick<T, K>[]>;
-
+    
   /**
    * Find one entity in the database.
    * @param where - The where clause.

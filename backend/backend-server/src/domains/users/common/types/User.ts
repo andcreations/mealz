@@ -1,8 +1,8 @@
 import { UserRole } from '#mealz/backend-api';
 
-export interface User {
-  id: string;
-  email: string;
-  password?: string;
-  roles?: UserRole[];
+export class User {
+  public id: string;
+  public email: string;
+  public password?: string;
+  public roles?: UserRole[];
 }

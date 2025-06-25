@@ -1,5 +1,4 @@
 import { DBEntity, DBField, DBFieldType } from '#mealz/backend-db';
-import { User } from '#mealz/backend-users-common';
 
 export const USER_DB_ENTITY_NAME = 'User';
 

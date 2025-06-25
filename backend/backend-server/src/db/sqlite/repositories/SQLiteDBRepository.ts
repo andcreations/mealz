@@ -5,11 +5,9 @@ import { Logger } from '#mealz/backend-logger';
 import { 
   DBEntityAlreadyExistsError,
   DBFieldSpec,
-  DBFieldType,
   DBRepository,
   FindOptions,
   IterateCallback,
-  MissingRequiredDBFieldError,
   Update,
   Where,
 } from '../../core';
@@ -51,34 +49,21 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     });
   }
 
-  public async insert(entity: T): Promise<void> {
-    const columns: string[] = [];
-    const values: string[] = [];
+  public async insert(entity: T, context: Context): Promise<void> {
+    const statement = this.sqlBuilder.buildInsert(
+      this.getEntityName(),
+      this.getFieldsSpec(),
+      entity,
+    );
 
-    this.getFieldsSpec().forEach(fieldSpec => {
-      const value = entity[fieldSpec.name];
-      
-      // non-optional fields must have a value
-      if (!fieldSpec.optional && value === undefined) {
-        throw new MissingRequiredDBFieldError(
-          this.getEntityName(),
-          fieldSpec.name,
-        );
-      }
+    this.logger.verbose(
+      'Running SQL insert',
+      {
+        ...context,
+        ...statement.toContext(),
+      },
+    );
 
-      // skip undefined values
-      if (value === undefined) {
-        return;
-      }
-
-      columns.push(fieldSpec.name);
-      values.push(this.getValueForSQL(value, fieldSpec.type));
-    });
-
-    // insert
-    const statement =
-      `INSERT INTO ${this.getEntityName()} ` +
-     `(${columns.join(',')}) VALUES (${values.join(',')})`;
     try {
       await this.db.run(statement);
     } catch (error) {
@@ -92,28 +77,27 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     }
   }
 
-  private getValueForSQL(value: string, type: DBFieldType) {
-    if (type === DBFieldType.STRING) {
-      return `'${value}'`;
-    }
-    return value;
-  }
-
   public async find<K extends keyof T>(
     where: Where<T>,
     options: FindOptions<T, K>,
     context: Context,
   ): Promise<Pick<T, K>[]> {
-    const sql = this.sqlBuilder.buildSelect(
+    const statement = this.sqlBuilder.buildSelect(
       this.getEntityName(),
       this.getFieldsSpec(),
       where,
       options,
     );
-    this.logger.verbose('Running SQL query', { ...context, sql });
+    this.logger.verbose(
+      'Running SQL query',
+      {
+        ...context,
+        ...statement.toContext(),
+      },
+    );
     
     const rows: Pick<T, K>[] = [];
-    await this.db.each(sql, (row) => {
+    await this.db.each(statement, (row) => {
       rows.push(row);
     });
     return rows;
@@ -125,22 +109,21 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     callback: IterateCallback<Pick<T, K>>,
     context: Context,
   ): Promise<void> {
-    const sql = this.sqlBuilder.buildSelect(
+    const statement = this.sqlBuilder.buildSelect(
       this.getEntityName(),
       this.getFieldsSpec(),
       where,
       options,
     );
     this.logger.verbose(
-      `Running SQL query [entity:${this.getEntityName()}]`,
+      'Running SQL query',
       {
         ...context,
-        entity: this.getEntityName(),
-        sql,
+        ...statement.toContext(),
       },
     );
 
-    await this.db.each(sql, (row) => {
+    await this.db.each(statement, (row) => {
       callback.onNext(row);
     });
     callback.onComplete();
@@ -151,59 +134,39 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     update: Update<T>,
     context: Context,
   ): Promise<void> {
-    let sql = `UPDATE ${this.getEntityName()} SET`;
-
-    // set
-    sql += ' ' + this.sqlBuilder.buildUpdateSet(
+    const statement = this.sqlBuilder.buildUpdate(
       this.getEntityName(),
       this.getFieldsSpec(),
       update,
-    );
-
-    // where
-    const sqlWhere = this.sqlBuilder.buildWhere(
-      this.getEntityName(),
       where,
-      this.getFieldsSpec(),
     );
-    if (sqlWhere) {
-      sql += ` WHERE ${sqlWhere}`;
-    }
-
     this.logger.verbose(
-      `Running SQL update`,
+      'Running SQL update',
       {
         ...context,
-        entity: this.getEntityName(),
-        sql,
+        ...statement.toContext(),
       },
     );
-    await this.db.run(sql);
+
+    await this.db.run(statement);
   }
 
   public async delete(
     where: Where<T>,
     context: Context,
   ): Promise<void> {
-    let sql = `DELETE FROM ${this.getEntityName()}`;
-
-    const sqlWhere = this.sqlBuilder.buildWhere(
+    const statement = this.sqlBuilder.buildDelete(
       this.getEntityName(),
-      where,
       this.getFieldsSpec(),
+      where,
     );
-    if (sqlWhere) {
-      sql += ` WHERE ${sqlWhere}`;
-    }
-
     this.logger.verbose(
-      `Running SQL delete`,
+      'Running SQL delete',
       {
         ...context,
-        entity: this.getEntityName(),
-        sql,
+        ...statement.toContext(),
       },
     );
-    await this.db.run(sql);
+    await this.db.run(statement);
   }
 }
