@@ -9,7 +9,8 @@ import { SQLiteDBRepository } from '../repositories';
 
 interface RepositoryEntry {
   entityName: string;
-  repository: DBRepository<unknown>;
+  tableName: string;
+  repository: SQLiteDBRepository<unknown>;
 }
 
 @Injectable()
@@ -22,11 +23,15 @@ export class SQLiteDBRepositoryFactory implements OnModuleInit {
   ) {}
 
   public async onModuleInit(): Promise<void> {
-    // initialize repositories
+  // initialize repositories
     for (const entry of this.entries) {
       const entitySpec = getDBEntitySpec(entry.entityName);
       const fieldsSpec = getDBFieldSpec(entitySpec.clazz);
-      await entry.repository.init(entitySpec, fieldsSpec);
+      await entry.repository.initSQLiteDBRepository(
+        entry.tableName,
+        entitySpec,
+        fieldsSpec,
+      );
 
       this.logger.debug('Initialized DB repository', {
         ...BOOTSTRAP_CONTEXT,
@@ -38,13 +43,15 @@ export class SQLiteDBRepositoryFactory implements OnModuleInit {
 
   public async createRepository(
     entityName: string,
+    tableName: string,
   ): Promise<DBRepository<unknown>> {
-    // create
+  // create
     const repository = await this.moduleRef.create(SQLiteDBRepository);
 
-    // keep for initialization
+  // keep for initialization
     this.entries.push({
       entityName,
+      tableName,
       repository,
     });
     return repository;

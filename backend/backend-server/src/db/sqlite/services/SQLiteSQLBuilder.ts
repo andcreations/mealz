@@ -299,6 +299,7 @@ export class SQLiteSQLBuilder {
   }
 
   public buildSelect<T>(
+    tableName: string,
     entityName: string,
     fieldsSpec: DBFieldSpec[],
     where?: Where<T>,
@@ -316,7 +317,7 @@ export class SQLiteSQLBuilder {
     }
 
     // where
-    statement.appendSQL(` FROM ${entityName}`);
+    statement.appendSQL(` FROM ${tableName}`);
     const sqlWhereStatement = this.buildWhere(
       entityName,
       where,
@@ -418,6 +419,7 @@ export class SQLiteSQLBuilder {
   }
 
   public buildUpdate<T>(
+    tableName: string,
     entityName: string,
     fieldsSpec: DBFieldSpec[],
     update: Update<T>,
@@ -425,7 +427,7 @@ export class SQLiteSQLBuilder {
   ): SQLiteStatement {
     const context = new SQLiteStatementContext();
     let statement: SQLiteStatement = new SQLiteStatement(
-      `UPDATE ${entityName} SET `,
+      `UPDATE ${tableName} SET `,
     );
 
     Object.entries(update).forEach(([field, updateOperator], index) => {
@@ -457,6 +459,7 @@ export class SQLiteSQLBuilder {
   }
 
   public buildInsert<T>(
+    tableName: string,
     entityName: string,
     fieldsSpec: DBFieldSpec[],
     entity: T,
@@ -465,7 +468,7 @@ export class SQLiteSQLBuilder {
 
     const context = new SQLiteStatementContext();
     let statement: SQLiteStatement = new SQLiteStatement(
-      `INSERT INTO ${entityName} `,
+      `INSERT INTO ${tableName} `,
     );
 
     const values: Array<{
@@ -520,13 +523,14 @@ export class SQLiteSQLBuilder {
   }
 
   public buildDelete<T>(
+    tableName: string,
     entityName: string,
     fieldsSpec: DBFieldSpec[],
     where: Where<T>,
   ): SQLiteStatement {
     const context = new SQLiteStatementContext();
     let statement: SQLiteStatement = new SQLiteStatement(
-      `DELETE FROM ${entityName} `,
+      `DELETE FROM ${tableName} `,
     );
 
     const whereStatement = this.buildWhere(

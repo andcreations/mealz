@@ -9,7 +9,8 @@ import {
 } from './services';
 
 interface Entity {
-  name: string;
+  entityName: string;
+  tableName: string;
 }
 
 export interface SQLiteDBModuleOptions {
@@ -32,9 +33,9 @@ export class SQLiteDBModule {
     };
     const repositories: Provider[] = options.entities.map(entity => {
       return {
-        provide: getDBRepositoryToken(options.name, entity.name),
+        provide: getDBRepositoryToken(options.name, entity.entityName),
         useFactory: async (factory: SQLiteDBRepositoryFactory) => {
-          return factory.createRepository(entity.name);
+          return factory.createRepository(entity.entityName, entity.tableName);
         },
         inject: [SQLiteDBRepositoryFactory],
       };

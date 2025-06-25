@@ -38,7 +38,7 @@ export abstract class DBRepository<T> {
     this.fieldsSpec = fieldsSpec;
 
     // list & validate fields
-    const existingFields = await this.listFields(entitySpec.name);
+    const existingFields = await this.listFields();
     await this.validateFields(entitySpec.name, existingFields, fieldsSpec);
   }
 
@@ -67,12 +67,9 @@ export abstract class DBRepository<T> {
 
   /**
    * List the fields of the entity.
-   * @param entityName - The name of the entity.
    * @returns The fields of the entity.
    */
-  public abstract listFields(
-    entityName: string,
-  ): Promise<Pick<DBFieldSpec, 'name' | 'type'>[]>;
+  public abstract listFields(): Promise<Pick<DBFieldSpec, 'name' | 'type'>[]>;
 
   /**
    * Insert an entity into the database.

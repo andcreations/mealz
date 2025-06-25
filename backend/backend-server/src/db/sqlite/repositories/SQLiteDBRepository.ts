@@ -4,6 +4,7 @@ import { Logger } from '#mealz/backend-logger';
 
 import { 
   DBEntityAlreadyExistsError,
+  DBEntitySpec,
   DBFieldSpec,
   DBRepository,
   FindOptions,
@@ -23,6 +24,8 @@ interface SQLiteColumn {
 
 @Injectable()
 export class SQLiteDBRepository<T> extends DBRepository<T>{
+  private tableName: string;
+
   public constructor(
     private readonly db: SQLiteDB,
     private readonly sqlBuilder: SQLiteSQLBuilder,
@@ -31,11 +34,18 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     super();
   }
 
-  public async listFields(
-    entityName: string,
-  ): Promise<Pick<DBFieldSpec, 'name' | 'type'>[]> {
+  public async initSQLiteDBRepository(
+    tableName: string,
+    entitySpec: DBEntitySpec,
+    fieldsSpec: DBFieldSpec[],
+  ): Promise<void> {
+    this.init(entitySpec, fieldsSpec);
+    this.tableName = tableName;
+  }
+
+  public async listFields(): Promise<Pick<DBFieldSpec, 'name' | 'type'>[]> {
     const response = await this.db.pragma<SQLiteColumn[]>(
-      `table_info(${entityName})`,
+      `table_info(${this.tableName})`,
     );
     return response.map(column => {
       const type = COLUMN_TO_FIELD_MAPPING[column.type];
@@ -51,6 +61,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
 
   public async insert(entity: T, context: Context): Promise<void> {
     const statement = this.sqlBuilder.buildInsert(
+      this.tableName,
       this.getEntityName(),
       this.getFieldsSpec(),
       entity,
@@ -83,6 +94,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     context: Context,
   ): Promise<Pick<T, K>[]> {
     const statement = this.sqlBuilder.buildSelect(
+      this.tableName,
       this.getEntityName(),
       this.getFieldsSpec(),
       where,
@@ -110,6 +122,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     context: Context,
   ): Promise<void> {
     const statement = this.sqlBuilder.buildSelect(
+      this.tableName,
       this.getEntityName(),
       this.getFieldsSpec(),
       where,
@@ -135,6 +148,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     context: Context,
   ): Promise<void> {
     const statement = this.sqlBuilder.buildUpdate(
+      this.tableName,
       this.getEntityName(),
       this.getFieldsSpec(),
       update,
@@ -156,6 +170,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     context: Context,
   ): Promise<void> {
     const statement = this.sqlBuilder.buildDelete(
+      this.tableName,
       this.getEntityName(),
       this.getFieldsSpec(),
       where,
