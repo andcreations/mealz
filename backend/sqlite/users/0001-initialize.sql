@@ -1,14 +1,14 @@
 -- Create table & indexes
-CREATE TABLE User (
+CREATE TABLE Users (
   id TEXT PRIMARY KEY,
   email TEXT NOT NULL,
   password TEXT NOT NULL,
   roles TEXT NOT NULL
 );
-CREATE UNIQUE INDEX User_email ON User (email);
+CREATE UNIQUE INDEX Users_email ON Users (email);
 
 -- Create the admin user with password "eatgood"
-INSERT INTO User (id,email,password,roles)
+INSERT INTO Users (id,email,password,roles)
 VALUES (
   '01975110-fbb7-714d-bb5f-62f41fc39791',
   'mealz@andcreations.com',
