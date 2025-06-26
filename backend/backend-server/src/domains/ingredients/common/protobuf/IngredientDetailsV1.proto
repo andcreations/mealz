@@ -1,0 +1,57 @@
+syntax = "proto3";
+package mealz.ingredients;
+
+enum IngredientType {
+  GENERIC = 0;
+  PRODUCT = 1;
+}
+
+enum FactId {
+  CALORIES = 0;
+  CARBS = 1;
+  SUGARS = 2;
+  PROTEIN = 3;
+  TOTAL_FAT = 4;
+  SATURATED_FAT = 5;
+  MONOUNSATURATED_FAT = 6;
+  POLYUNSATURATED_FAT = 7;
+  TRANS_FAT = 8;
+}
+
+enum FactUnit {
+  KCAL = 0;
+  GRAMS = 1;
+}
+
+message FactPer100 {
+  // Fact identifier
+  FactId id = 1;
+
+  // Unit of the fact
+  FactUnit unit = 2;
+
+  // Amount of the fact per 100 units
+  double amount = 3;
+}
+
+message Product {
+  // Brand of the product
+  string brand = 1;
+}
+
+message IngredientDetailsV1 {
+  // Name in U.S. English
+  string name = 1;
+
+  // Name translations in other languages
+  map<string, string> translations = 2;
+
+  // Type of ingredient
+  IngredientType type = 3;
+
+  // Facts per 100g
+  repeated FactPer100 facts = 4;
+
+  // Product if ingredient is a product
+  optional Product product = 5;
+}

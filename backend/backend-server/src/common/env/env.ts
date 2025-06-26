@@ -1,3 +1,5 @@
+import { InternalError } from '../errors';
+
 export function getStrEnv(
   name: string,
   defaultValue?: string,
@@ -8,7 +10,7 @@ export function getStrEnv(
 export function requireStrEnv(name: string): string {
   const value = getStrEnv(name);
   if (value === undefined) {
-    throw new Error(`Environment variable ${name} not set`);
+    throw new InternalError(`Environment variable ${name} not set`);
   }
   return value;
 }
@@ -24,7 +26,7 @@ export function getBoolEnv(
 export function requireBoolEnv(name: string): boolean {
   const value = getBoolEnv(name);
   if (value === undefined) {
-    throw new Error(`Environment variable ${name} not set`);
+    throw new InternalError(`Environment variable ${name} not set`);
   }
   return value;
 }
@@ -42,7 +44,7 @@ export function getIntEnv(
     return defaultValue;
   }
   if (!isInt(value)) {
-    throw new Error(`Environment variable ${name} is not an integer`);
+    throw new InternalError(`Environment variable ${name} is not an integer`);
   }
   return parseInt(value);
 }
@@ -50,7 +52,7 @@ export function getIntEnv(
 export function requireIntEnv(name: string): number {
   const value = getIntEnv(name);
   if (value === undefined) {
-    throw new Error(`Environment variable ${name} not set`);
+    throw new InternalError(`Environment variable ${name} not set`);
   }
   return value;
 }

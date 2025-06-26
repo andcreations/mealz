@@ -18,7 +18,7 @@ import {
 } from '../../core';
 import { SQLITE_FALSE, SQLITE_TRUE } from '../const';
 import { SQLiteInvalidValueError, SQLiteWhereBuildError } from '../errors';
-import { SQLiteStatement } from '../types';
+import { SQLiteParamValue, SQLiteStatement } from '../types';
 
 class SQLiteStatementContext {
   private paramIndex = 0;
@@ -125,13 +125,17 @@ export class SQLiteSQLBuilder {
 
   private getSQLValue(
     entityName: string,
-    value: WhereOperator[keyof WhereOperator],
-  ): string {
+    value: any,
+  ): string | Buffer {
     if (Array.isArray(value)) {
       throw new SQLiteInvalidValueError(
         entityName,
-        `Array is not supported in where clause`,
+        `Array not as a SQL value`,
       );
+    }
+
+    if (value instanceof Buffer) {
+      return value;
     }
 
     let sqlValue = '';
@@ -148,6 +152,28 @@ export class SQLiteSQLBuilder {
         break;
     }
     return sqlValue;    
+  }
+
+  private getSingleSQLValueForWhere(
+    entityName: string,
+    value: WhereOperator[keyof WhereOperator],
+  ): string {
+    if (Array.isArray(value)) {
+      throw new SQLiteInvalidValueError(
+        entityName,
+        `Array not supported in where clause`,
+      );
+    }
+
+    const sqlValue = this.getSQLValue(entityName, value);
+    if (typeof sqlValue !== 'string') {
+      throw new SQLiteInvalidValueError(
+        entityName,
+        `Value not a string in where clause`,
+      );
+    }
+
+    return sqlValue;
   }
 
   private buildFieldWhere<T>(
@@ -192,26 +218,40 @@ export class SQLiteSQLBuilder {
   
       switch (operator) {
         case '$eq':
-          appendOne(`${field} = {}`, this.getSQLValue(entityName, value));
+          appendOne(
+            `${field} = {}`,
+            this.getSingleSQLValueForWhere(entityName, value),
+          );
           break;
         case '$ne':
-          appendOne(`${field} != {}`, this.getSQLValue(entityName, value));
+          appendOne(
+            `${field} != {}`,
+            this.getSingleSQLValueForWhere(entityName, value),
+          );
           break;
         case '$gt':
-          this.assertNumber(entityName, fieldsSpec, field);
-          appendOne(`${field} > {}`, this.getSQLValue(entityName, value));
+          appendOne(
+            `${field} > {}`,
+            this.getSingleSQLValueForWhere(entityName, value),
+          );
           break;
         case '$gte':
-          this.assertNumber(entityName, fieldsSpec, field);
-          appendOne(`${field} >= {}`, this.getSQLValue(entityName, value));
+          appendOne(
+            `${field} >= {}`,
+            this.getSingleSQLValueForWhere(entityName, value),
+          );
           break;
         case '$lt':
-          this.assertNumber(entityName, fieldsSpec, field);
-          appendOne(`${field} < {}`, this.getSQLValue(entityName, value));
+          appendOne(
+            `${field} < {}`,
+            this.getSingleSQLValueForWhere(entityName, value),
+          );
           break;
         case '$lte':
-          this.assertNumber(entityName, fieldsSpec, field);
-          appendOne(`${field} <= {}`, this.getSQLValue(entityName, value));
+          appendOne(
+            `${field} <= {}`,
+            this.getSingleSQLValueForWhere(entityName, value),
+          );
           break;
         case '$in':
           appendArray(`${field} IN ({})`, value);
@@ -221,7 +261,10 @@ export class SQLiteSQLBuilder {
           break;
         case '$like':
           this.assertString(entityName, fieldsSpec, field);
-          appendOne(`${field} LIKE {}`, this.getSQLValue(entityName, value));
+          appendOne(
+            `${field} LIKE {}`,
+            this.getSingleSQLValueForWhere(entityName, value),
+          );
           break;
         default:
           throw new SQLiteWhereBuildError(
@@ -324,7 +367,7 @@ export class SQLiteSQLBuilder {
       fieldsSpec,
       context,
     );
-    if (sqlWhereStatement) {
+    if (sqlWhereStatement.hasSQL()) {
       statement.appendSQL(` WHERE `);
       statement.append(sqlWhereStatement);
     }
@@ -450,7 +493,7 @@ export class SQLiteSQLBuilder {
       fieldsSpec,
       context,
     );
-    if (whereStatement) {
+    if (whereStatement.hasSQL()) {
       statement.appendSQL(` WHERE `);
       statement.append(whereStatement);
     }
@@ -474,7 +517,7 @@ export class SQLiteSQLBuilder {
     const values: Array<{
       columnName: string;
       paramName: string;
-      value: string 
+      value: SQLiteParamValue,
     }> = [];
 
     // collect columns, parameters and values
@@ -539,7 +582,7 @@ export class SQLiteSQLBuilder {
       fieldsSpec,
       context,
     );
-    if (whereStatement) {
+    if (whereStatement.hasSQL()) {
       statement.appendSQL(` WHERE `);
       statement.append(whereStatement);
     }

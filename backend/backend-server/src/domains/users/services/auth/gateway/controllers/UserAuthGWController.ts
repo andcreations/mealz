@@ -51,7 +51,7 @@ export class UserAuthGWController {
       },
     ); 
    
-    return await this.userAuthGWService.userAuth(body, context);
+    return authResponse;
   }
 
   @Auth()

@@ -1,0 +1,1 @@
+export const INGREDIENTS_DB_NAME = 'ingredients';

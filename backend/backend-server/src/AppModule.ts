@@ -10,13 +10,14 @@ import {
   RequestLogMiddleware,
 } from '#mealz/backend-gateway-common';
 
-import { UsersDomainModule } from './domains';
+import { UsersDomainModule, IngredientsDomainModule } from './domains';
 import { getServeStaticModule } from './web-app';
 
 @Module({
   imports: [
     getServeStaticModule(),
     UsersDomainModule,
+    IngredientsDomainModule,
   ],
 })
 export class AppModule implements NestModule {

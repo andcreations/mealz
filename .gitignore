@@ -1,6 +1,7 @@
 **/dist
 **/node_modules
 
+backend/.db/*
 backend/etc/https/*.crt
 backend/etc/https/*.key
 backend/etc/https/*.csr

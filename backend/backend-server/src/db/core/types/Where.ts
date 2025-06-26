@@ -3,12 +3,12 @@ export type FieldsOf<T> = keyof T;
 export type Value<V> = V;
 
 export type WhereOperator = {
-  $eq?: Value<string | number | boolean>;
-  $ne?: Value<string | number | boolean>;
-  $gt?: Value<number>;
-  $gte?: Value<number>;
-  $lt?: Value<number>;
-  $lte?: Value<number>;
+  $eq?: Value<string | number>;
+  $ne?: Value<string | number>;
+  $gt?: Value<string | number>;
+  $gte?: Value<string | number>;
+  $lt?: Value<string | number>;
+  $lte?: Value<string | number>;
   $in?: Value<string | number>[];
   $nin?: Value<string | number>[];
   $like?: Value<string>;

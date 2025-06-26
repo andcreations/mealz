@@ -5,26 +5,27 @@ import {
   USERS_DB_NAME,
   USER_DB_ENTITY_NAME,
   UserDBEntity,
-  mapUserDBEntityToUser,
+  UserDBMapper,
 } from '#mealz/backend-users-db';
 
 export class UsersAuthRepository {
   public constructor(
     @InjectDBRepository(USERS_DB_NAME, USER_DB_ENTITY_NAME)
-    private readonly usersRepository: DBRepository<UserDBEntity>,
+    private readonly repository: DBRepository<UserDBEntity>,
+    private readonly mapper: UserDBMapper,
   ) {}
 
   public async findUserByEmailForAuth(
     email: string,
     context: Context,
   ): Promise<Pick<User, 'id' | 'password' | 'roles'> | undefined> {
-    const entity = await this.usersRepository.findOne<
+    const entity = await this.repository.findOne<
       'id' | 'password' | 'roles'
     >(
       { email: { $eq: email } },
       { projection: ['id', 'password', 'roles'] },
       context,
     );
-    return mapUserDBEntityToUser(entity, ['id', 'password', 'roles']);
+    return this.mapper.fromEntity(entity, ['id', 'password', 'roles']);
   }
 }

@@ -1,5 +1,5 @@
-import { Log } from './Log';
-import { SQLiteDB } from './SQLiteDB';
+import { errorToMessage, Log } from './log';
+import { SQLiteDB } from './sqlite';
 
 async function run(): Promise<void> {
   if (process.argv.length < 3) {
@@ -14,4 +14,7 @@ async function run(): Promise<void> {
   await db.close();
 }
 
-run().catch(error => Log.error('Failed to run scripts', error));
+run().catch(error => {
+  const message = errorToMessage(error);
+  Log.error('Failed to run scripts from directory', '  ' + message);  
+});

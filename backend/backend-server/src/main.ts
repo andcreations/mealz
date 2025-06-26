@@ -12,7 +12,12 @@ import {
 import fastifyCookie from '@fastify/cookie';
 import * as cookieParser from 'cookie-parser';
 import { BOOTSTRAP_CONTEXT } from '#mealz/backend-core';
-import { getIntEnv, isExpress, isFastify } from '#mealz/backend-common';
+import {
+  getIntEnv,
+  InternalError,
+  isExpress,
+  isFastify,
+} from '#mealz/backend-common';
 import { getLogger } from '#mealz/backend-logger';
 import { GatewayBootstrap } from '#mealz/backend-gateway-common';
 
@@ -30,10 +35,10 @@ function readCertificateAndKey(): CertificateAndKey | undefined {
 
   if (certFile && keyFile) {
     if (!fs.existsSync(certFile)) {
-      throw new Error(`HTTPS certificate file ${certFile} not found`);
+      throw new InternalError(`HTTPS certificate file ${certFile} not found`);
     }
     if (!fs.existsSync(keyFile)) {
-      throw new Error(`HTTPS key file ${keyFile} not found`);
+      throw new InternalError(`HTTPS key file ${keyFile} not found`);
     }
     getLogger().info(`Reading HTTPS certificate & key`, {
       ...BOOTSTRAP_CONTEXT,
@@ -76,7 +81,7 @@ async function bootstrap() {
   }
 
   if (!app) {
-    throw new Error('Invalid web application type');
+    throw new InternalError('Invalid web application type');
   }
 
 // configure

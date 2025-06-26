@@ -1,4 +1,4 @@
-export type SQLiteParamValue = string | number;
+export type SQLiteParamValue = string | number | Buffer;
 export type SQLiteParams = Record<string, SQLiteParamValue>;
 
 export class SQLiteStatement {
@@ -8,6 +8,10 @@ export class SQLiteStatement {
   public constructor(sql = '', params: SQLiteParams = {}) {
     this.sql = sql;
     this.params = params;
+  }
+
+  public hasSQL(): boolean {
+    return this.sql.length > 0;
   }
 
   public getSQL(): string {
@@ -35,9 +39,22 @@ export class SQLiteStatement {
   }
 
   public toContext(): Record<string, string> {
+    const params: Record<string, string | number> = {};
+    Object.keys(this.params).forEach((key) => {
+      const value = this.params[key];
+      if (value instanceof Buffer) {
+        params[key] = `Binary buffer of size ${value.length}`;
+        return;
+      }
+      if (typeof value === 'number') {
+        params[key] = value;
+        return;
+      }
+      params[key] = value.toString();
+    });
     return {
       sql: this.sql,
-      params: JSON.stringify(this.params),
+      params: JSON.stringify(params),
     };
   }
 }

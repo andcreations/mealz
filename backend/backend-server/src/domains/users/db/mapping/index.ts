@@ -1,1 +1,1 @@
-export * from './user-mapping';
+export * from './UserDBMapper';

@@ -1,7 +1,8 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as sqlite3 from 'sqlite3';
-import { Log } from './Log';
+
+import { Colors, Log } from '../log';
 
 export class SQLiteDB {
   private db: sqlite3.Database;
@@ -19,7 +20,7 @@ export class SQLiteDB {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    Log.info(`Opening SQLite database ${dbFilename}`);
+    Log.info(`Opening SQLite database ${Colors.cyan(dbFilename)}`);
     const db = new SQLiteDB();
     await db.init(dbFilename);
     return db;
@@ -27,6 +28,30 @@ export class SQLiteDB {
 
   public async close(): Promise<void> {
     await this.db.close();
+  }
+
+  public async select<T>(query: string, params: any[]): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+      this.db.all(query, params, (error, rows) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rows as T[]);
+        }
+      });
+    });
+  }
+
+  public async run(query: string, params: any[]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.db.run(query, params, (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 
   public async runScriptFromFile(filename: string): Promise<void> {
