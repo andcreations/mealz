@@ -48,8 +48,7 @@ export class IngredientDBMapper implements OnModuleInit {
 
     return {
       id: entity.id,
-      name: entity.name,
-      translations: details.translations,
+      name: details.name,
       type: details.type,
       facts: details.facts.map(fromFactPb),
       ...(details.product ? { product: fromProductPb(details.product) } : {}),

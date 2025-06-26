@@ -40,18 +40,15 @@ message Product {
 }
 
 message IngredientDetailsV1 {
-  // Name in U.S. English
-  string name = 1;
-
-  // Name translations in other languages
-  map<string, string> translations = 2;
+  // Name in various languages
+  map<string, string> name = 1;
 
   // Type of ingredient
-  IngredientType type = 3;
+  IngredientType type = 2;
 
   // Facts per 100g
-  repeated FactPer100 facts = 4;
+  repeated FactPer100 facts = 3;
 
   // Product if ingredient is a product
-  optional Product product = 5;
+  optional Product product = 4;
 }

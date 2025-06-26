@@ -2,6 +2,7 @@
 **/node_modules
 
 backend/.db/*
+backend/data/usda/data/**
 backend/etc/https/*.crt
 backend/etc/https/*.key
 backend/etc/https/*.csr

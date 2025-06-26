@@ -10,6 +10,11 @@ interface Error {
   message: string;
 }
 
+interface DBIngredient {
+  id: string;
+  name: Record<string, string>;
+}
+
 async function loadIngredients(filename: string): Promise<any> {
   if (!fs.existsSync(filename)) {
     throw new Error(`File ${filename} does not exist`);
@@ -65,7 +70,13 @@ function validateIngredient(
 }
 
 function getIngredientName(ingredient: any): string {
-  return ingredient.name ?? '?';
+  if (!ingredient.name) {
+    return '?';
+  }
+  if (ingredient.name.en) {
+    return ingredient.name.en;
+  }
+  return Object.keys(ingredient.name)[0] ?? '?';
 }
 
 async function validateIngredients(
@@ -96,6 +107,41 @@ async function validateIngredients(
   }
 }
 
+async function readAllIngredientsFromDB(
+  db: SQLiteDB,
+  detailsPb: protobufjs.Type,
+): Promise<DBIngredient[]> {
+  const ingredients: DBIngredient[] = [];
+  const limit = 100;
+
+  let lastId: string | undefined = undefined;
+  while (true) {
+    // read
+    let where: string = '';
+    if (lastId) {
+      where = `WHERE id > '${lastId}'`;
+    }
+    const query = `SELECT id, details FROM Ingredients ${where} LIMIT ${limit}`;
+    const rows = await db.select<any>(query, []);
+
+    // keep
+    rows.forEach(row => {
+      const details = detailsPb.toObject(detailsPb.decode(row.details));
+      ingredients.push({
+        id: row.id,
+        name: details.name,
+      });
+    });
+
+    // go next
+    if (rows.length < limit) {
+      break;
+    }
+    lastId = rows[rows.length - 1].id;
+  }
+  return ingredients;
+}
+
 async function insertIngredients(
   db: SQLiteDB,
   ingredients: any,
@@ -103,31 +149,52 @@ async function insertIngredients(
   detailsVersion: number,
   overwrite = false,
 ): Promise<void> {
+  const dbIngredients = await readAllIngredientsFromDB(db, detailsPb);
+
   for (const ingredient of ingredients) {
-    const existing = await db.select<{ id: number }>(
-      'SELECT id FROM Ingredients WHERE name = ?',
-      [ingredient.name],
-    );
-    if (existing.length > 0 && !overwrite) {
-      Log.info(`Skipping ingredient ${Colors.yellow(ingredient.name)}`);
+    // find existing
+    const existingInDb = dbIngredients.filter(dbIngredient => {
+      const dbNames = Object.values(dbIngredient.name);
+      const names = Object.values(ingredient.name);
+      return dbNames.some(dbName => names.includes(dbName));
+    });
+
+    // skip existing
+    if (existingInDb.length > 0 && !overwrite) {
+      const name = getIngredientName(ingredient);
+      Log.info(`Skipping ingredient ${Colors.yellow(name)}`);
       continue;
     }
-    const id = generateId();
-    const detailsBuffer = detailsPb.encode(ingredient).finish();
 
-    if (existing.length > 0) {
-      Log.info(`Deleting existing ingredient ${Colors.yellow(ingredient.name)}`);
-      await db.run(
-        'DELETE FROM Ingredients WHERE name = ?',
-        [ingredient.name],
-      );
+    // delete existing
+    if (existingInDb.length > 0 && overwrite) {
+      for (const existing of existingInDb) {
+        const name = getIngredientName(existing);
+        Log.info(
+          `Deleting existing ingredient ${Colors.yellow(name)}` +
+          ` ${Colors.gray('(' + existing.id + ')')}`
+        );
+        await db.run(
+          'DELETE FROM Ingredients WHERE id = ?',
+          [existing.id],
+        );
+      }
     }
 
-    Log.info(`Inserting ingredient ${Colors.yellow(ingredient.name)}`);
+    // insert new
+    const id = existingInDb.length > 0 ? existingInDb[0].id : generateId();
+    const detailsBuffer = detailsPb.encode(ingredient).finish();
+    const name = getIngredientName(ingredient);
+
+    // insert
+    Log.info(
+      `Inserting ingredient ${Colors.yellow(name)}` +
+      ` ${Colors.gray('(' + id + ')')}`
+    );
     await db.run(
-      'INSERT INTO Ingredients (id, name, detailsVersion,details) ' +
-      'VALUES (?, ?, ?, ?)',
-      [id, ingredient.name, detailsVersion, detailsBuffer],
+      'INSERT INTO Ingredients (id, detailsVersion, details) ' +
+      'VALUES (?, ?, ?)',
+      [id, detailsVersion, detailsBuffer],
     );
   }
 }

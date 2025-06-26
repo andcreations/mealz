@@ -12,12 +12,6 @@ export class IngredientDBEntity {
   public id: string;
 
   @DBField({
-    name: 'name',
-    type: DBFieldType.STRING,
-  })
-  public name: string;
-
-  @DBField({
     name: 'detailsVersion',
     type: DBFieldType.INTEGER,
   })

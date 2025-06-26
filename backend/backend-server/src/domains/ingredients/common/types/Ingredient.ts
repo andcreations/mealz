@@ -10,11 +10,8 @@ export class Ingredient {
   // Ingredient unique identifier
   public id: string;
 
-  // Name in U.S. English
-  public name: string;
-
-  // Name translations in other languages
-  public translations: Record<string, string> = {};
+  // Name in various languages
+  public name: Record<string, string>;
 
   // Type of ingredient
   public type: IngredientType;
