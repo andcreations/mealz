@@ -20,4 +20,5 @@ import { UsersAuthTransportController } from './controllers';
     UsersAuthTransportController,
   ],
 })
-export class UsersAuthModule {}
+export class UsersAuthModule {
+}

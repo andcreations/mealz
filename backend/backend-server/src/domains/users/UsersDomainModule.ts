@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UsersAuthModule, UserAuthGWModule } from './services/auth';
+import { UsersAuthModule, UsersAuthGWModule } from './services/auth';
 
 @Module({
   imports: [   
     UsersAuthModule,
-    UserAuthGWModule,
+    UsersAuthGWModule,
   ],
 })
-export class UsersDomainModule {}
+export class UsersDomainModule {
+}

@@ -18,4 +18,5 @@ import { UserAuthGWService } from './services';
     UserAuthGWController,
   ],
 })
-export class UserAuthGWModule {}
+export class UsersAuthGWModule {
+}

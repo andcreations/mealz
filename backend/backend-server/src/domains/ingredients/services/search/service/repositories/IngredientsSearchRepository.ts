@@ -17,7 +17,7 @@ export class IngredientsSearchRepository {
     private readonly mapper: IngredientDBMapper,
   ) {}
 
-  public async readNext(
+  public async readFromLast(
     lastId: string | undefined,
     limit: number,
     context: Context,

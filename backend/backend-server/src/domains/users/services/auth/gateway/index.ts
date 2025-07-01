@@ -1,1 +1,1 @@
-export * from './UserAuthGWModule';
+export * from './UsersAuthGWModule';
