@@ -2,9 +2,10 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as protobufjs from 'protobufjs';
 import { InternalError, MealzError } from '#mealz/backend-common';
 import {
-  loadIngredientDetailsV1Pb,
   IngredientDetailsVersion,
   Ingredient,
+  loadIngredientDetailsV1Pb,
+  IngredientDetailsV1PbMapper,
 } from '#mealz/backend-ingredients-common';
 
 import { IngredientDBEntity } from '../entities';
@@ -12,6 +13,10 @@ import { IngredientDBEntity } from '../entities';
 @Injectable()
 export class IngredientDBMapper implements OnModuleInit {
   private detailsV1Pb: protobufjs.Type;
+
+  public constructor(
+    private readonly ingredientsDetailsV1PbMapper: IngredientDetailsV1PbMapper,
+  ) {}
 
   public async onModuleInit(): Promise<void> {
     this.detailsV1Pb = loadIngredientDetailsV1Pb();
@@ -34,25 +39,10 @@ export class IngredientDBMapper implements OnModuleInit {
   }
 
   private fromDetailsV1(entity: IngredientDBEntity): Ingredient {
-    const detailsPb = this.detailsV1Pb.decode(entity.details);
-    const details = this.detailsV1Pb.toObject(detailsPb);
-
-    const fromFactPb = (fact: any) => ({
-      id: fact.id,
-      unit: fact.unit,
-      amount: fact.amount,
-    });
-    const fromProductPb = (product: any) => ({
-      brand: product.brand,
-    });
-
     return {
       id: entity.id,
-      name: details.name,
-      type: details.type,
-      facts: details.facts.map(fromFactPb),
-      ...(details.product ? { product: fromProductPb(details.product) } : {}),
-    }
+      ...this.ingredientsDetailsV1PbMapper.fromPb(entity.details),
+    };
   }
 }
 

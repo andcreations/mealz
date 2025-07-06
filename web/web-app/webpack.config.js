@@ -3,7 +3,7 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'development', // 'production'
+  mode: 'development', // TODO 'production'
   entry: path.resolve(__dirname,'./src/app/main.tsx'),
   output: {
     path: path.resolve(__dirname,'./dist/app/'),

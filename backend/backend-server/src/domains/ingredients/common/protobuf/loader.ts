@@ -1,9 +1,9 @@
 import * as path from 'path';
-import { loadProtobuf } from '#mealz/backend-common';
+import { loadProtobufFromFile } from '#mealz/backend-common';
 
 export function loadIngredientDetailsV1Pb() {
-  return loadProtobuf(
-    path.join(__dirname, 'IngredientDetailsV1.proto'),
+  return loadProtobufFromFile(
+    path.join(__dirname, 'IngredientDetailsV1Pb.proto'),
     'mealz.ingredients',
     'IngredientDetailsV1',
   );

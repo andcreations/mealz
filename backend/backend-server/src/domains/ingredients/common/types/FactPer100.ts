@@ -1,4 +1,4 @@
-enum FactId {
+export enum FactId {
   Calories = 'calories',
   Carbs = 'carbs',
   Sugars = 'sugars',
@@ -10,7 +10,7 @@ enum FactId {
   TransFat = 'trans_fat',
 }
 
-enum FactUnit {
+export enum FactUnit {
   Kcal = 'kcal',
   Grams = 'g',
 }

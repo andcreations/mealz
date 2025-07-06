@@ -199,19 +199,15 @@ async function insertIngredients(
   }
 }
 
-async function run(): Promise<void> {
-  if (process.argv.length < 3) {
-    Log.error('Re-run with arguments [db-file] [json-file]');
-    process.exit(1);
-  }
-  const dbFilename = process.argv[2];
-  const jsonFilename = process.argv[3];
-
+export async function insertIngredientsFromJSON(
+  db: SQLiteDB,
+  jsonFilename: string,
+): Promise<void> {
   const detailsVersion = 1;
 // load protobuf
   const detailsPb = loadProtobuf(
     backendSrc(
-      'domains/ingredients/common/protobuf/IngredientDetailsV1.proto'
+      'domains/ingredients/common/protobuf/IngredientDetailsV1Pb.proto'
     ),
     'mealz.ingredients',
     'IngredientDetailsV1',
@@ -222,12 +218,27 @@ async function run(): Promise<void> {
   await validateIngredients(ingredients, detailsPb);
 
 // insert
-  const db = await SQLiteDB.open(dbFilename);
   await insertIngredients(db, ingredients, detailsPb, detailsVersion, true);
+}
+
+async function run(): Promise<void> {
+  if (process.argv.length < 3) {
+    Log.error('Re-run with arguments: [db-file] [json-file]');
+    process.exit(1);
+  }
+  const dbFilename = process.argv[2];
+  const jsonFilename = process.argv[3];
+
+  const db = await SQLiteDB.open(dbFilename);
+  await insertIngredientsFromJSON(db, jsonFilename);
   await db.close();
 }
 
-run().catch(error => {
-  const message = errorToMessage(error);
-  Log.error('Failed to insert ingredients from JSON', '  ' + message);
-});
+if (require.main === module) {
+  run().catch(error => {
+    const message = errorToMessage(error);
+    Log.error('Failed to insert ingredients from JSON', '  ' + message);
+    process.exit(1);
+  });
+}
+

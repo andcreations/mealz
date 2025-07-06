@@ -1,7 +1,7 @@
 import { hashPassword } from '../utils';
 
 if (process.argv.length < 3) {
-  console.error('Re-run with password');
+  console.error('Re-run with arguments: [password]');
   process.exit(1);
 }
 

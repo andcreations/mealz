@@ -3,7 +3,7 @@ import { SQLiteDB } from './sqlite';
 
 async function run(): Promise<void> {
   if (process.argv.length < 3) {
-    Log.error('Re-run with arguments [db-file] [directory]');
+    Log.error('Re-run with arguments: [db-file] [directory]');
     process.exit(1);
   }
   const dbFilename = process.argv[2];
@@ -17,4 +17,5 @@ async function run(): Promise<void> {
 run().catch(error => {
   const message = errorToMessage(error);
   Log.error('Failed to run scripts from directory', '  ' + message);  
+  process.exit(1);
 });

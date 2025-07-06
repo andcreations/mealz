@@ -1,6 +1,5 @@
 import { Service } from '@andcreations/common';
 import { HTTPWebClientService } from '@andcreations/web-common';
-import { ACCESS_TOKEN_COOKIE_NAME } from '@mealz/backend-api';
 import {
   UsersAuthAPI,
   UserAuthGWRequestV1,

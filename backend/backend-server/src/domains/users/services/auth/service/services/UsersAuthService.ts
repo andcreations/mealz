@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as ms from 'ms';
 import * as jwt from 'jsonwebtoken';
 import { Context } from '#mealz/backend-core';
-import { getStrEnv, requireStrEnv } from '#mealz/backend-common';
+import { requireStrEnv } from '#mealz/backend-common';
 import { JwtPayload } from '#mealz/backend-gateway-core';
 import {
   AuthUserRequestV1,
@@ -16,7 +16,7 @@ import { UsersAuthRepository } from '../repositories';
 
 @Injectable()
 export class UsersAuthService {
-  private static readonly ACCESS_TOKEN_PERIOD = '1h';
+  private static readonly ACCESS_TOKEN_PERIOD = '365h';
 
   private readonly jwtSecret: string;
   private readonly jwtAccessTokenPeriod: number;

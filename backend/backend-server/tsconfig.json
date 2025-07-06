@@ -26,7 +26,11 @@
       "#mealz/backend-users-auth-gateway-api": ["src/domains/users/services/auth/gateway-api"],
 
       "#mealz/backend-ingredients-common": ["src/domains/ingredients/common"],
-      "#mealz/backend-ingredients-db": ["src/domains/ingredients/db"]
+      "#mealz/backend-ingredients-db": ["src/domains/ingredients/db"],
+      "#mealz/backend-ingredients-gateway-api": ["src/domains/ingredients/gateway-api"],
+      "#mealz/backend-ingredients-gateway-common": ["src/domains/ingredients/gateway-common"],
+      "#mealz/backend-ingredients-crud-service-api": ["src/domains/ingredients/services/crud/service-api"],
+      "#mealz/backend-ingredients-crud-gateway-api": ["src/domains/ingredients/services/crud/gateway-api"]
     }
   },
   "exclude": ["node_modules", "dist"]

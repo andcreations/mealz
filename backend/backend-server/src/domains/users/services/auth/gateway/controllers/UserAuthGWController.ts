@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Post,
   Res,
 } from '@nestjs/common';
@@ -30,8 +31,8 @@ export class UserAuthGWController {
   ) {}
 
   @Post('v1')
-  @HttpCode(200)
-  public async authUserV1(
+  @HttpCode(HttpStatus.OK)
+  public async signInV1(
     @Body() body: UserAuthGWRequestV1Impl,
     @GWContext() context: Context,
     @Res({ passthrough: true }) response: Response | FastifyReply,
@@ -57,7 +58,7 @@ export class UserAuthGWController {
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Delete('v1')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   public async signOutV1(
     @Res({ passthrough: true }) response: Response | FastifyReply,
   ): Promise<void> {
@@ -78,7 +79,7 @@ export class UserAuthGWController {
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('check/v1')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   public async checkV1(): Promise<void> {
     // Nothing here, just to check if the user is logged in.
   }
