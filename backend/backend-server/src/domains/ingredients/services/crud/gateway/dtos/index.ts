@@ -1,1 +1,1 @@
-export * from './ReadManyV1GWQueryParams';
+export * from './ReadFromLastV1GWQueryParams';

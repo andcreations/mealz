@@ -6,10 +6,10 @@ import {
   ReadFromLastRequestV1,
 } from '#mealz/backend-ingredients-crud-service-api';
 import { 
-  ReadManyIngredientsGWResponseV1,
+  ReadIngredientsFromLastGWResponseV1,
 } from '#mealz/backend-ingredients-crud-gateway-api';
 
-import { ReadManyV1GWQueryParams } from '../dtos';
+import { ReadFromLastV1GWQueryParams } from '../dtos';
 
 @Injectable()
 export class IngredientsCrudGWService {
@@ -19,9 +19,9 @@ export class IngredientsCrudGWService {
   ) {}
 
   public async readFromLast(
-    gwParams: ReadManyV1GWQueryParams,
+    gwParams: ReadFromLastV1GWQueryParams,
     context: Context,
-  ): Promise<ReadManyIngredientsGWResponseV1> {
+  ): Promise<ReadIngredientsFromLastGWResponseV1> {
     const request: ReadFromLastRequestV1 = {
       lastId: gwParams.lastId,
       limit: gwParams.limit,

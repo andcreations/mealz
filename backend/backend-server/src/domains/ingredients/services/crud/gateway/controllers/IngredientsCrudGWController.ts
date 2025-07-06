@@ -8,10 +8,10 @@ import {
 } from '#mealz/backend-gateway-common';
 import {
   INGREDIENTS_CRUD_URL,
-  ReadManyIngredientsGWResponseV1,
+  ReadIngredientsFromLastGWResponseV1,
 } from '#mealz/backend-ingredients-crud-gateway-api';
 
-import { ReadManyV1GWQueryParams } from '../dtos';
+import { ReadFromLastV1GWQueryParams } from '../dtos';
 import { IngredientsCrudGWService } from '../services';
 
 @Controller(INGREDIENTS_CRUD_URL)
@@ -20,13 +20,13 @@ export class IngredientsCrudGWController {
     private readonly ingredientsCrudGWService: IngredientsCrudGWService,
   ) {}
 
-  // @Auth()
-  // @Roles([UserRole.USER, UserRole.ADMIN])
-  @Get('many/v1')
-  public async readManyV1(
-    @Query() gwParams: ReadManyV1GWQueryParams,
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Get('from-last/v1')
+  public async readFromLastV1(
+    @Query() gwParams: ReadFromLastV1GWQueryParams,
     @GWContext() context: Context,
-  ): Promise<ReadManyIngredientsGWResponseV1> {
+  ): Promise<ReadIngredientsFromLastGWResponseV1> {
     return await this.ingredientsCrudGWService.readFromLast(gwParams, context);
   }
 }

@@ -1,1 +1,1 @@
-export * from './ReadManyIngredientsGWResponseV1';
+export * from './ReadIngredientsFromLastGWResponseV1';

@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
-export class ReadManyV1GWQueryParams {
+export class ReadFromLastV1GWQueryParams {
   @IsString()
   @IsOptional()
   public lastId?: string;
