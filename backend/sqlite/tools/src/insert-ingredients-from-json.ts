@@ -1,14 +1,13 @@
+import 'reflect-metadata';
 import * as fs from 'fs';
-import * as protobufjs from 'protobufjs';
+import { encode, decode } from '@msgpack/msgpack';
+import { validateSync } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
+import { IngredientDetailsV1 } from './ingredients';
 
 import { Colors, errorToMessage, Log } from './log';
-import { backendSrc, generateId } from './common';
-import { listRequiredFields, loadProtobuf } from './protobuf';
+import { generateId, TypeValidationError } from './common';
 import { SQLiteDB } from './sqlite';
-
-interface Error {
-  message: string;
-}
 
 interface DBIngredient {
   id: string;
@@ -26,44 +25,31 @@ async function loadIngredients(filename: string): Promise<any> {
   return ingredients;
 }
 
-function validateIngredient(
-  ingredient: any,
-  detailsPb: protobufjs.Type,
-): Error[] {
+function validateIngredient(ingredient: any): TypeValidationError[] {
   if (typeof ingredient !== 'object') {
     return [
       {
-        message: 'Ingredient must be an object',
+        error: 'Ingredient must be an object',
       }
     ];
   }
   if (Array.isArray(ingredient)) {
     return [
       {
-        message: 'Ingredient must be an object while it is an array',
+        error: 'Ingredient must be an object while it is an array',
       }
     ];
   }
-  const errors: Error[] = [];
 
-  const requiredFields = listRequiredFields(detailsPb);
-  const missingFields: string[] = [];
-  for (const field of requiredFields) {
-    if (ingredient[field] == null) {
-      missingFields.push(field);
-    }
-  }
-  if (missingFields.length > 0) {
-    errors.push({
-      message: `${missingFields.join(', ')}: missing or null field(s)`,
-    });
-  }
+  const errors: TypeValidationError[] = [];
+  const ingredientInstance = plainToInstance(IngredientDetailsV1, ingredient);
 
-  const protobufError = detailsPb.verify(ingredient);
-  if (protobufError) {
-    errors.push({
-      message: protobufError,
-    });
+  const validationErrors = validateSync(ingredientInstance);
+  if (validationErrors.length > 0) {
+    const typeValidationErrors = TypeValidationError.fromValidationErrors(
+      validationErrors,
+    );
+    errors.push(...typeValidationErrors);
   }
 
   return errors;
@@ -79,10 +65,7 @@ function getIngredientName(ingredient: any): string {
   return Object.keys(ingredient.name)[0] ?? '?';
 }
 
-async function validateIngredients(
-  ingredients: any,
-  detailsPb: protobufjs.Type,
-): Promise<void> {
+async function validateIngredients(ingredients: any): Promise<void> {
   if (!Array.isArray(ingredients)) {
     throw new Error('Ingredients must be an array');
   }
@@ -90,13 +73,13 @@ async function validateIngredients(
   const invalidIndexes: number[] = [];
   for (let index = 0; index < ingredients.length; index++) {
     const ingredient = ingredients[index];
-    const errors = validateIngredient(ingredient, detailsPb);
+    const errors = validateIngredient(ingredient);
     if (errors.length > 0) {
       const name = getIngredientName(ingredient);
       Log.error(
         `Invalid ingredient at index ${Colors.yellow(index.toString())} ` +
         `with name ${Colors.yellow(name) }`,
-        errors.map(error => `  ${error.message}`).join('\n'),
+        TypeValidationError.buildMessage(errors),
       );
       invalidIndexes.push(index);
     }
@@ -107,10 +90,7 @@ async function validateIngredients(
   }
 }
 
-async function readAllIngredientsFromDB(
-  db: SQLiteDB,
-  detailsPb: protobufjs.Type,
-): Promise<DBIngredient[]> {
+async function readAllIngredientsFromDB(db: SQLiteDB): Promise<DBIngredient[]> {
   const ingredients: DBIngredient[] = [];
   const limit = 100;
 
@@ -126,7 +106,7 @@ async function readAllIngredientsFromDB(
 
     // keep
     rows.forEach(row => {
-      const details = detailsPb.toObject(detailsPb.decode(row.details));
+      const details = decode(row.details) as IngredientDetailsV1;
       ingredients.push({
         id: row.id,
         name: details.name,
@@ -145,11 +125,10 @@ async function readAllIngredientsFromDB(
 async function insertIngredients(
   db: SQLiteDB,
   ingredients: any,
-  detailsPb: protobufjs.Type,
   detailsVersion: number,
   overwrite = false,
 ): Promise<void> {
-  const dbIngredients = await readAllIngredientsFromDB(db, detailsPb);
+  const dbIngredients = await readAllIngredientsFromDB(db);
 
   for (const ingredient of ingredients) {
     // find existing
@@ -183,7 +162,7 @@ async function insertIngredients(
 
     // insert new
     const id = existingInDb.length > 0 ? existingInDb[0].id : generateId();
-    const detailsBuffer = detailsPb.encode(ingredient).finish();
+    const detailsBuffer = encode(ingredient);
     const name = getIngredientName(ingredient);
 
     // insert
@@ -204,25 +183,17 @@ export async function insertIngredientsFromJSON(
   jsonFilename: string,
 ): Promise<void> {
   const detailsVersion = 1;
-// load protobuf
-  const detailsPb = loadProtobuf(
-    backendSrc(
-      'domains/ingredients/common/protobuf/IngredientDetailsV1Pb.proto'
-    ),
-    'mealz.ingredients',
-    'IngredientDetailsV1',
-  );
 
 // load & validate
   const ingredients = await loadIngredients(jsonFilename);
-  await validateIngredients(ingredients, detailsPb);
+  await validateIngredients(ingredients);
 
 // insert
-  await insertIngredients(db, ingredients, detailsPb, detailsVersion, true);
+  await insertIngredients(db, ingredients, detailsVersion, true);
 }
 
 async function run(): Promise<void> {
-  if (process.argv.length < 3) {
+  if (process.argv.length < 4) {
     Log.error('Re-run with arguments: [db-file] [json-file]');
     process.exit(1);
   }

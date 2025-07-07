@@ -7,4 +7,6 @@ backend/etc/https/*.crt
 backend/etc/https/*.key
 backend/etc/https/*.csr
 
+backend/sqlite/tools/src/ingredients/v1
+
 NOTES.md

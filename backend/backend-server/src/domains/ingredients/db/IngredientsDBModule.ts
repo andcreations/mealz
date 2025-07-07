@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { IngredientsCommonModule } from '../common';
-import { IngredientDBMapper } from './mapping';
+import { IngredientDetailsV1Mapper, IngredientDBMapper } from './mapping';
 
 @Module({
-  imports: [
-    IngredientsCommonModule,
-  ],
+  imports: [],
   providers: [
+    IngredientDetailsV1Mapper,
     IngredientDBMapper,
   ],
   exports: [ 

@@ -1,26 +1,16 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import * as protobufjs from 'protobufjs';
 import { InternalError, MealzError } from '#mealz/backend-common';
-import {
-  IngredientDetailsVersion,
-  Ingredient,
-  loadIngredientDetailsV1Pb,
-  IngredientDetailsV1PbMapper,
-} from '#mealz/backend-ingredients-common';
+import { Ingredient } from '#mealz/backend-ingredients-common';
 
+import { IngredientDetailsVersion } from '../types';
 import { IngredientDBEntity } from '../entities';
+import { IngredientDetailsV1Mapper } from './IngredientDetailsV1Mapper';
 
 @Injectable()
-export class IngredientDBMapper implements OnModuleInit {
-  private detailsV1Pb: protobufjs.Type;
-
+export class IngredientDBMapper {
   public constructor(
-    private readonly ingredientsDetailsV1PbMapper: IngredientDetailsV1PbMapper,
+    private readonly ingredientsDetailsV1Mapper: IngredientDetailsV1Mapper,
   ) {}
-
-  public async onModuleInit(): Promise<void> {
-    this.detailsV1Pb = loadIngredientDetailsV1Pb();
-  }
 
   public fromEntity(
     entity: IngredientDBEntity | undefined,
@@ -41,7 +31,7 @@ export class IngredientDBMapper implements OnModuleInit {
   private fromDetailsV1(entity: IngredientDBEntity): Ingredient {
     return {
       id: entity.id,
-      ...this.ingredientsDetailsV1PbMapper.fromPb(entity.details),
+      ...this.ingredientsDetailsV1Mapper.fromBuffer(entity.details),
     };
   }
 }
