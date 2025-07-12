@@ -1,4 +1,4 @@
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 
 import { TransportControllerClass } from '../types';
 import {

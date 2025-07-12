@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
-import { InjectDBRepository, DBRepository, Where } from '#mealz/backend-db';
-import { Ingredient } from '#mealz/backend-ingredients-common';
+import { Context } from '@mealz/backend-core';
+import { InjectDBRepository, DBRepository, Where } from '@mealz/backend-db';
+import { Ingredient } from '@mealz/backend-ingredients-common';
 import {
   INGREDIENTS_DB_NAME,
   INGREDIENT_DB_ENTITY_NAME,
   IngredientDBEntity,
   IngredientDBMapper,
-} from '#mealz/backend-ingredients-db';
+} from '@mealz/backend-ingredients-db';
 
 @Injectable()
 export class IngredientsSearchRepository {

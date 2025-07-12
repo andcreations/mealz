@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as ms from 'ms';
 import * as jwt from 'jsonwebtoken';
-import { Context } from '#mealz/backend-core';
-import { requireStrEnv } from '#mealz/backend-common';
-import { JwtPayload } from '#mealz/backend-gateway-core';
+import { Context } from '@mealz/backend-core';
+import { requireStrEnv } from '@mealz/backend-common';
+import { JwtPayload } from '@mealz/backend-gateway-core';
 import {
   AuthUserRequestV1,
   AuthUserResponseV1,
-} from '#mealz/backend-users-auth-service-api';
+} from '@mealz/backend-users-auth-service-api';
 
 import { InvalidEmailOrPasswordError } from '../errors';
 import { comparePassword } from '../utils';

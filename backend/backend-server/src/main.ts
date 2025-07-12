@@ -11,15 +11,15 @@ import {
 } from '@nestjs/platform-fastify';
 import fastifyCookie from '@fastify/cookie';
 import * as cookieParser from 'cookie-parser';
-import { BOOTSTRAP_CONTEXT } from '#mealz/backend-core';
+import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
 import {
   getIntEnv,
   InternalError,
   isExpress,
   isFastify,
-} from '#mealz/backend-common';
-import { getLogger } from '#mealz/backend-logger';
-import { GatewayBootstrap } from '#mealz/backend-gateway-common';
+} from '@mealz/backend-common';
+import { getLogger } from '@mealz/backend-logger';
+import { GatewayBootstrap } from '@mealz/backend-gateway-common';
 
 import { AppModule } from './AppModule';
 import { INestApplication } from '@nestjs/common';

@@ -1,4 +1,4 @@
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 
 export abstract class Transporter {
   public abstract sendRequest<TRequest, TResponse>(

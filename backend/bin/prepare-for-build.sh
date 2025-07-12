@@ -1,5 +1,3 @@
-#!/bin/bash
-
 if [ -n "$BASH_VERSION" ]; then
   # bash
   SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
@@ -13,4 +11,5 @@ fi
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 BACKEND_DIR="$SCRIPT_DIR/.."
 
-ln -s $BACKEND_DIR/backend-server/src/domains/ingredients/db/types/v1 $BACKEND_DIR/sqlite/tools/src/ingredients/v1
+ln -sf $BACKEND_DIR/backend-server/src/domains/ingredients/db/types/v1 $BACKEND_DIR/sqlite/tools/src/ingredients
+ln -sf $BACKEND_DIR/backend-server/src/domains/ingredients/db/types/v1 $BACKEND_DIR/data/src/ingredients

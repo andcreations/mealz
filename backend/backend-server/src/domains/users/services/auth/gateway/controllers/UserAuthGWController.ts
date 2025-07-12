@@ -10,16 +10,16 @@ import {
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 import { Response } from 'express';
-import { ACCESS_TOKEN_COOKIE_NAME, UserRole } from '#mealz/backend-api';
-import { Context } from '#mealz/backend-core';
-import { daysToMs, isSecure } from '#mealz/backend-common';
+import { ACCESS_TOKEN_COOKIE_NAME, UserRole } from '@mealz/backend-api';
+import { Context } from '@mealz/backend-core';
+import { daysToMs, isSecure } from '@mealz/backend-common';
 import {
   Auth,
   GWContext,
   Roles,
   setCookie,
-} from '#mealz/backend-gateway-common';
-import { USERS_AUTH_URL } from '#mealz/backend-users-auth-gateway-api';
+} from '@mealz/backend-gateway-common';
+import { USERS_AUTH_URL } from '@mealz/backend-users-auth-gateway-api';
 
 import { UserAuthGWRequestV1Impl, UserAuthGWResponseV1Impl } from '../dtos';
 import { UserAuthGWService } from '../services';

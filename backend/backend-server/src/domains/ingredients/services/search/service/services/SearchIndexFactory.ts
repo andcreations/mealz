@@ -4,7 +4,7 @@ import {
   SearchIndex,
   MiniSearchIndex,
   FuseSearchIndex,
-} from '#mealz/backend-common';
+} from '@mealz/backend-common';
 
 import { SEARCH_INDEX_OPTIONS } from '../const';
 import { IngredientSearchDocument } from '../types';

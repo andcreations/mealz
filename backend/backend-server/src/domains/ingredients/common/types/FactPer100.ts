@@ -7,7 +7,6 @@ export enum FactId {
   SaturatedFat = 'saturated_fat',
   MonounsaturatedFat = 'monounsaturated_fat',
   PolyunsaturatedFat = 'polyunsaturated_fat',
-  TransFat = 'trans_fat',
 }
 
 export enum FactUnit {

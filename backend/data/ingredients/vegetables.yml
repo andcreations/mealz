@@ -1,0 +1,17 @@
+- name:
+    en: Avocado
+    pl: Awokado
+  unit: g
+  type: generic
+  weight: 201
+  facts:
+    calories: 322
+    carbs: 17
+    sugars: 1.3
+    protein: 4
+    fat:
+      total: 29
+      saturated: 4.3
+      monounsaturated: 3.7
+      polyunsaturated: 20
+  link: https://www.nutritionix.com/food/avocado

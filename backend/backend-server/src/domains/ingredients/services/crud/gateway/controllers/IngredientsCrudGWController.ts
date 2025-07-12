@@ -1,15 +1,15 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { UserRole } from '#mealz/backend-api';
-import { Context } from '#mealz/backend-core';
+import { UserRole } from '@mealz/backend-api';
+import { Context } from '@mealz/backend-core';
 import {
   Auth,
   GWContext,
   Roles,
-} from '#mealz/backend-gateway-common';
+} from '@mealz/backend-gateway-common';
 import {
   INGREDIENTS_CRUD_URL,
   ReadIngredientsFromLastGWResponseV1,
-} from '#mealz/backend-ingredients-crud-gateway-api';
+} from '@mealz/backend-ingredients-crud-gateway-api';
 
 import { ReadFromLastV1GWQueryParams } from '../dtos';
 import { IngredientsCrudGWService } from '../services';

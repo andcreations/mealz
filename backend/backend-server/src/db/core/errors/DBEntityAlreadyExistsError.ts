@@ -1,4 +1,4 @@
-import { MealzError } from '#mealz/backend-common';
+import { MealzError } from '@mealz/backend-common';
 import { HttpStatus } from '@nestjs/common';
 
 export class DBEntityAlreadyExistsError extends MealzError {

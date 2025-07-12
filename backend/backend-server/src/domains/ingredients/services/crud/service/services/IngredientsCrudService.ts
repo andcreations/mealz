@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 import {
   ReadFromLastRequestV1,
   ReadFromLastResponseV1,
-} from '#mealz/backend-ingredients-crud-service-api';
+} from '@mealz/backend-ingredients-crud-service-api';
 
 import { IngredientsCrudRepository } from '../repositories';
 

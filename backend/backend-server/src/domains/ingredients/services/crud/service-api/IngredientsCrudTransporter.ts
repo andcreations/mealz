@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
-import { Transporter } from '#mealz/backend-transport';
+import { Context } from '@mealz/backend-core';
+import { Transporter } from '@mealz/backend-transport';
 
 import { INGREDIENTS_CRUD_TRANSPORTER_TOKEN } from './inject-tokens';
 import { ReadFromLastRequestV1, ReadFromLastResponseV1 } from './dtos';

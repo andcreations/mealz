@@ -1,163 +1,201 @@
 [
   {
     "name": {
-      "en": "Pillsbury Golden Layer Buttermilk Biscuits, Artificial Flavor, refrigerated dough"
+      "en": "Apple",
+      "pl": "Jabłko"
     },
     "type": 0,
-    "facts": [
+    "unitPer100": 0,
+    "factsPer100": [
       {
-        "id": 3,
-        "unit": 1,
-        "amount": 5.88
-      },
-      {
-        "id": 8,
-        "unit": 1,
-        "amount": 4.412
-      },
-      {
-        "id": 5,
-        "unit": 1,
-        "amount": 2.941
-      },
-      {
-        "id": 4,
-        "unit": 1,
-        "amount": 13.24
+        "id": 0,
+        "unit": 0,
+        "amount": 52.2
       },
       {
         "id": 1,
         "unit": 1,
-        "amount": 41.18
-      },
-      {
-        "id": 0,
-        "unit": 0,
-        "amount": 307
+        "amount": 13.74
       },
       {
         "id": 2,
         "unit": 1,
-        "amount": 5.88
-      }
-    ]
-  },
-  {
-    "name": {
-      "en": "Pillsbury, Cinnamon Rolls with Icing, refrigerated dough"
-    },
-    "type": 0,
-    "facts": [
+        "amount": 10.44
+      },
       {
         "id": 3,
         "unit": 1,
-        "amount": 4.34
-      },
-      {
-        "id": 8,
-        "unit": 1,
-        "amount": 4.29
-      },
-      {
-        "id": 5,
-        "unit": 1,
-        "amount": 3.25
+        "amount": 0.27
       },
       {
         "id": 4,
         "unit": 1,
-        "amount": 11.27
-      },
-      {
-        "id": 1,
-        "unit": 1,
-        "amount": 53.42
-      },
-      {
-        "id": 0,
-        "unit": 0,
-        "amount": 330
-      },
-      {
-        "id": 2,
-        "unit": 1,
-        "amount": 21.34
-      }
-    ]
-  },
-  {
-    "name": {
-      "en": "Kraft Foods, Shake N Bake Original Recipe, Coating for Pork, dry"
-    },
-    "type": 0,
-    "facts": [
-      {
-        "id": 4,
-        "unit": 1,
-        "amount": 3.7
-      },
-      {
-        "id": 1,
-        "unit": 1,
-        "amount": 79.8
-      },
-      {
-        "id": 0,
-        "unit": 0,
-        "amount": 377
-      },
-      {
-        "id": 3,
-        "unit": 1,
-        "amount": 6.1
-      }
-    ]
-  },
-  {
-    "name": {
-      "en": "George Weston Bakeries, Thomas English Muffins"
-    },
-    "type": 0,
-    "facts": [
-      {
-        "id": 8,
-        "unit": 1,
-        "amount": 0.082
+        "amount": 0.16
       },
       {
         "id": 5,
         "unit": 1,
-        "amount": 0.308
-      },
-      {
-        "id": 3,
-        "unit": 1,
-        "amount": 8
+        "amount": 0.05
       },
       {
         "id": 6,
         "unit": 1,
-        "amount": 0.303
+        "amount": 0.05
       },
       {
         "id": 7,
         "unit": 1,
-        "amount": 0.92
-      },
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Avocado",
+      "pl": "Awokado"
+    },
+    "type": 1,
+    "unitPer100": 0,
+    "factsPer100": [
       {
-        "id": 4,
-        "unit": 1,
-        "amount": 1.8
+        "id": 0,
+        "unit": 0,
+        "amount": 160.2
       },
       {
         "id": 1,
         "unit": 1,
-        "amount": 46
+        "amount": 8.46
       },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.65
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.99
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 14.43
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2.14
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1.84
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 9.95
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pear",
+      "pl": "Gruszka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
       {
         "id": 0,
         "unit": 0,
-        "amount": 232
+        "amount": 56.74
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 15.17
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 9.55
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.34
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.17
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.11
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.11
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Rolled oats",
+      "pl": "Płatki owsiane"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 373.17
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 64.88
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.98
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 12.93
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 6.34
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.22
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 2.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.95
       }
     ]
   }

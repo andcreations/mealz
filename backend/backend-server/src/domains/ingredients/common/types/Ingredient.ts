@@ -6,6 +6,11 @@ export enum IngredientType {
   Product = 'product',
 }
 
+export enum UnitPer100 {
+  Grams = 'g',
+  Milliliters = 'ml',
+}
+
 export class Ingredient {
   // Ingredient unique identifier
   public id: string;
@@ -16,8 +21,11 @@ export class Ingredient {
   // Type of ingredient
   public type: IngredientType;
 
+  // Unit of measure for facts per 100g
+  public unitPer100: UnitPer100;
+
   // Facts per 100g
-  public facts: FactPer100[];
+  public factsPer100: FactPer100[];
 
   // Product if ingredient is a product
   public product?: Product;

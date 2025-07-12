@@ -9,7 +9,6 @@ export enum FactIdV1 {
   SaturatedFat = 5,
   MonounsaturatedFat = 6,
   PolyunsaturatedFat = 7,
-  TransFat = 8,
 }
 
 export enum FactUnitV1 {

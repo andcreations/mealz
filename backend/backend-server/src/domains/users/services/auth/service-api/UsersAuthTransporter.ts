@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
-import { Transporter } from '#mealz/backend-transport';
+import { Context } from '@mealz/backend-core';
+import { Transporter } from '@mealz/backend-transport';
 
 import { USERS_AUTH_TRANSPORTER_TOKEN } from './inject-tokens';
 import { AuthUserRequestV1, AuthUserResponseV1 } from './dtos';

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
-import { GWIngredientMapper } from '#mealz/backend-ingredients-gateway-common';
+import { Context } from '@mealz/backend-core';
+import { GWIngredientMapper } from '@mealz/backend-ingredients-gateway-common';
 import {
   IngredientsCrudTransporter,
   ReadFromLastRequestV1,
-} from '#mealz/backend-ingredients-crud-service-api';
+} from '@mealz/backend-ingredients-crud-service-api';
 import { 
   ReadIngredientsFromLastGWResponseV1,
-} from '#mealz/backend-ingredients-crud-gateway-api';
+} from '@mealz/backend-ingredients-crud-gateway-api';
 
 import { ReadFromLastV1GWQueryParams } from '../dtos';
 

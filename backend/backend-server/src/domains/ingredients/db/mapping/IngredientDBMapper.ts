@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { InternalError, MealzError } from '#mealz/backend-common';
-import { Ingredient } from '#mealz/backend-ingredients-common';
+import { InternalError, MealzError } from '@mealz/backend-common';
+import { Ingredient } from '@mealz/backend-ingredients-common';
 
 import { IngredientDetailsVersion } from '../types';
 import { IngredientDBEntity } from '../entities';

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { getStrEnv, getBoolEnv } from '#mealz/backend-common';
+import { getStrEnv, getBoolEnv } from '@mealz/backend-common';
 
 import {
   Logger,

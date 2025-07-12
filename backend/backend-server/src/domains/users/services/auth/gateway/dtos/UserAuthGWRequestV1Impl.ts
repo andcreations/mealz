@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { UserAuthGWRequestV1 } from '#mealz/backend-users-auth-gateway-api';
+import { UserAuthGWRequestV1 } from '@mealz/backend-users-auth-gateway-api';
 
 export class UserAuthGWRequestV1Impl implements UserAuthGWRequestV1 {
   @ApiProperty({

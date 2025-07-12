@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 
 import { LogLevel } from '../enums';
 import { DefaultLogger } from './DefaultLogger';

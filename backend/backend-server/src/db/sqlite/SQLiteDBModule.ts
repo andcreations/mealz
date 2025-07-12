@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { Logger, LoggerModule } from '#mealz/backend-logger';
+import { Logger, LoggerModule } from '@mealz/backend-logger';
 
 import { getDBRepositoryToken } from '../core';
 import { 

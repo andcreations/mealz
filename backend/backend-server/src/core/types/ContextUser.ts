@@ -1,4 +1,4 @@
-import { UserRole } from '#mealz/backend-api';
+import { UserRole } from '@mealz/backend-api';
 
 export interface ContextUser {
   id: string;

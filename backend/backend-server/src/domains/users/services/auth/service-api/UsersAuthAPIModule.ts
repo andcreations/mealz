@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
-import { Transporter } from '#mealz/backend-transport';
+import { Transporter } from '@mealz/backend-transport';
 
 import { USERS_AUTH_TRANSPORTER_TOKEN } from './inject-tokens';
 import { UsersAuthTransporter } from './UsersAuthTransporter';

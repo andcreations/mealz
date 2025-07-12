@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InternalError, MealzError } from '#mealz/backend-common';
+import { InternalError, MealzError } from '@mealz/backend-common';
 import {
   FactId,
   FactPer100,
@@ -7,7 +7,7 @@ import {
   Ingredient,
   IngredientType,
   Product,
-} from '#mealz/backend-ingredients-common';
+} from '@mealz/backend-ingredients-common';
 import {
   GWFactId,
   GWFactPer100,
@@ -15,7 +15,7 @@ import {
   GWIngredient,
   GWIngredientType,
   GWProduct,
-} from '#mealz/backend-ingredients-gateway-api';
+} from '@mealz/backend-ingredients-gateway-api';
 
 @Injectable()
 export class GWIngredientMapper {
@@ -46,8 +46,6 @@ export class GWIngredientMapper {
         return GWFactId.MonounsaturatedFat;
       case FactId.PolyunsaturatedFat:
         return GWFactId.PolyunsaturatedFat;
-      case FactId.TransFat:
-        return GWFactId.TransFat;
       default:
         throw new InternalError(`Unknown fact ${MealzError.quote(id)}`);
     }
@@ -79,12 +77,11 @@ export class GWIngredientMapper {
   }
 
   public fromIngredient(ingredient: Ingredient): GWIngredient {
-    console.log(JSON.stringify(ingredient, null, 2));
     return {
       id: ingredient.id,
       name: ingredient.name,
       type: this.mapType(ingredient.type),
-      facts: ingredient.facts.map(fact => this.mapFact(fact)),
+      facts: ingredient.factsPer100.map(fact => this.mapFact(fact)),
       ...(ingredient.product
         ? { product: this.mapProduct(ingredient.product) }
         : {}

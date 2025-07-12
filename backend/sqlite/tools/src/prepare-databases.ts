@@ -39,7 +39,7 @@ async function prepareIngredientsDB(): Promise<void> {
 }
 
 async function run(): Promise<void> {
-  if (process.argv.length < 2) {
+  if (process.argv.length < 3) {
     Log.error('Re-run with arguments: [db-directory]');
     process.exit(1);
   }
@@ -55,7 +55,6 @@ async function run(): Promise<void> {
 }
 
 run().catch(error => {
-  const message = errorToMessage(error);
-  Log.error('Failed to prepare SQLite databases', '  ' + message);
+  Log.error('Failed to prepare SQLite databases', error);
   process.exit(1);
 });

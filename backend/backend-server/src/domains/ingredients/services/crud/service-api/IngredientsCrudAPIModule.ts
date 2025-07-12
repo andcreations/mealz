@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
-import { Transporter } from '#mealz/backend-transport';
+import { Transporter } from '@mealz/backend-transport';
 
 import { INGREDIENTS_CRUD_TRANSPORTER_TOKEN } from './inject-tokens';
 import { IngredientsCrudTransporter } from './IngredientsCrudTransporter';

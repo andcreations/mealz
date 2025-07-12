@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { Context, ContextUser } from '#mealz/backend-core';
+import { Context, ContextUser } from '@mealz/backend-core';
 import { getCorrelationIdFromRequest } from '../utils';
 
 export const GWContext = createParamDecorator(

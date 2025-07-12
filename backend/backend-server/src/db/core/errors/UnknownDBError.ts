@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { errorToString, MealzError } from '#mealz/backend-common';
+import { errorToString, MealzError } from '@mealz/backend-common';
 
 export class UnknownDBError extends MealzError {
   public static readonly CODE = UnknownDBError.name;

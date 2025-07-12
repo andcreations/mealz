@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { FastifyReply } from 'fastify';
-import { InternalError, isExpress, isFastify } from '#mealz/backend-common';
+import { InternalError, isExpress, isFastify } from '@mealz/backend-common';
 
 export interface CookieOptions {
   httpOnly?: boolean;

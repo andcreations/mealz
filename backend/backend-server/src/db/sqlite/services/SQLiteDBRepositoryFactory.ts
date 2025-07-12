@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { BOOTSTRAP_CONTEXT } from '#mealz/backend-core';
-import { Logger } from '#mealz/backend-logger';
+import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
+import { Logger } from '@mealz/backend-logger';
 
 import { getDBEntitySpec, getDBFieldSpec } from '../../core/spec';
 import { DBRepository } from '../../core/repositories';

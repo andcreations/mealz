@@ -1,4 +1,4 @@
-import { buildTopic } from '#mealz/backend-transport';
+import { buildTopic } from '@mealz/backend-transport';
 
 export const UsersAuthTopics: Record<string, string> = {
   AuthUserV1: topic('authUser', 'v1'),

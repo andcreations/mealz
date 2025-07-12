@@ -1,4 +1,4 @@
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 
 import { LogLevel } from '../enums';
 import { Logger } from './Logger';

@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { MealzError } from '#mealz/backend-common';
+import { MealzError } from '@mealz/backend-common';
 
 export class MissingRequiredDBFieldError extends MealzError {
   public static readonly CODE = MissingRequiredDBFieldError.name;

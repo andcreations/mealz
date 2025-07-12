@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MealzError } from '#mealz/backend-common';
+import { MealzError } from '@mealz/backend-common';
 
 import {
   DBFieldSpec,

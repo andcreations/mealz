@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
-import { Logger } from '#mealz/backend-logger';
+import { Context } from '@mealz/backend-core';
+import { Logger } from '@mealz/backend-logger';
 
 import { 
   DBEntityAlreadyExistsError,

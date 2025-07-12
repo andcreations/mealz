@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { Observable, ObservableInput, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { getLogger } from '#mealz/backend-logger';
-import { MealzError } from '#mealz/backend-common';
+import { getLogger } from '@mealz/backend-logger';
+import { MealzError } from '@mealz/backend-common';
 import { getCorrelationIdFromRequest } from '../utils';
 
 @Injectable()

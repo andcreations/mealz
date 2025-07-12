@@ -207,8 +207,7 @@ async function run(): Promise<void> {
 
 if (require.main === module) {
   run().catch(error => {
-    const message = errorToMessage(error);
-    Log.error('Failed to insert ingredients from JSON', '  ' + message);
+    Log.error('Failed to insert ingredients from JSON', error);
     process.exit(1);
   });
 }

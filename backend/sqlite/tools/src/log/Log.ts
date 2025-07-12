@@ -15,6 +15,9 @@ export class Log {
     if (hasError) {
       const message = errorToMessage(error);
       console.error(Colors.red(message));
+      if (error.stack) {
+        console.error(Colors.gray(error.stack));
+      }
     }
   }
 }

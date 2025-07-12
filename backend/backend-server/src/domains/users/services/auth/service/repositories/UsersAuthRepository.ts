@@ -1,12 +1,12 @@
-import { Context } from '#mealz/backend-core';
-import { InjectDBRepository, DBRepository } from '#mealz/backend-db';
-import { User } from '#mealz/backend-users-common';
+import { Context } from '@mealz/backend-core';
+import { InjectDBRepository, DBRepository } from '@mealz/backend-db';
+import { User } from '@mealz/backend-users-common';
 import {
   USERS_DB_NAME,
   USER_DB_ENTITY_NAME,
   UserDBEntity,
   UserDBMapper,
-} from '#mealz/backend-users-db';
+} from '@mealz/backend-users-db';
 
 export class UsersAuthRepository {
   public constructor(

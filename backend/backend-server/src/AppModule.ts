@@ -8,7 +8,7 @@ import {
 import { 
   CorrelationIdMiddleware,
   RequestLogMiddleware,
-} from '#mealz/backend-gateway-common';
+} from '@mealz/backend-gateway-common';
 
 import { UsersDomainModule, IngredientsDomainModule } from './domains';
 import { getServeStaticModule } from './web-app';

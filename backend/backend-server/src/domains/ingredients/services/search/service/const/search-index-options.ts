@@ -1,4 +1,4 @@
-import { SearchFieldType, SearchIndexOptions } from '#mealz/backend-common';
+import { SearchFieldType, SearchIndexOptions } from '@mealz/backend-common';
 import { IngredientSearchDocument } from '../types';
 
 export const SEARCH_INDEX_OPTIONS: SearchIndexOptions<

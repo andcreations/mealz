@@ -1,4 +1,4 @@
-import { SearchDocument } from '#mealz/backend-common';
+import { SearchDocument } from '@mealz/backend-common';
 
 export interface IngredientSearchDocument extends SearchDocument{
   id: string;

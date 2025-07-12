@@ -1,5 +1,5 @@
-import { SQLiteDBModuleOptions } from '#mealz/backend-db';
-import { requireStrEnv } from '#mealz/backend-common';
+import { SQLiteDBModuleOptions } from '@mealz/backend-db';
+import { requireStrEnv } from '@mealz/backend-common';
 
 import { USERS_DB_NAME } from '../const';
 import { USER_DB_ENTITY_NAME, USER_DB_TABLE_NAME } from '../entities';

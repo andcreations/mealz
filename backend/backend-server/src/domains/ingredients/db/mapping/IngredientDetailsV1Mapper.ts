@@ -7,7 +7,8 @@ import {
   Product,
   Ingredient,
   IngredientType,
-} from '#mealz/backend-ingredients-common';
+  UnitPer100,
+} from '@mealz/backend-ingredients-common';
 import {
   FactIdV1,
   FactUnitV1,
@@ -15,7 +16,8 @@ import {
   ProductV1,
   IngredientTypeV1,
   IngredientDetailsV1,
-} from '#mealz/backend-ingredients-db';
+  UnitPer100V1,
+} from '@mealz/backend-ingredients-db';
 import { InternalError } from '../../../../common';
 
 @Injectable()
@@ -28,6 +30,17 @@ export class IngredientDetailsV1Mapper {
         return IngredientType.Product;
       default:
         throw new InternalError(`Unknown ingredient type ${type}`);
+    }
+  }
+
+  private mapUnitPer100(unit: UnitPer100V1): UnitPer100 {
+    switch (unit) {
+      case UnitPer100V1.Grams:
+        return UnitPer100.Grams;
+      case UnitPer100V1.Milliliters:
+        return UnitPer100.Milliliters;
+      default:
+        throw new InternalError(`Unknown per 100 unit ${unit}`);
     }
   }
 
@@ -49,8 +62,6 @@ export class IngredientDetailsV1Mapper {
         return FactId.MonounsaturatedFat;
       case FactIdV1.PolyunsaturatedFat:
         return FactId.PolyunsaturatedFat;
-      case FactIdV1.TransFat:
-        return FactId.TransFat;
       default:
         throw new InternalError(`Unknown fact identifier ${id}`);
     }
@@ -86,7 +97,8 @@ export class IngredientDetailsV1Mapper {
     return {
       name: details.name,
       type: this.mapType(details.type),
-      facts: details.facts.map(fact => this.mapFact(fact)),
+      unitPer100: this.mapUnitPer100(details.unitPer100),
+      factsPer100: details.factsPer100.map(fact => this.mapFact(fact)),
       ...(details.product
         ? { product: this.mapProduct(details.product) }
         : {}

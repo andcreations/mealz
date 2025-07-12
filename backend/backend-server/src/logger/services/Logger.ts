@@ -1,5 +1,5 @@
 import * as YAML from 'yaml';
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 
 export abstract class Logger {
   protected now(): string {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '#mealz/backend-users-common';
+import { User } from '@mealz/backend-users-common';
 
 import { UserDBEntity } from '../entities';
 

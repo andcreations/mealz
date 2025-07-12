@@ -1,4 +1,4 @@
-import { DBEntity, DBField, DBFieldType } from '#mealz/backend-db';
+import { DBEntity, DBField, DBFieldType } from '@mealz/backend-db';
 
 export const INGREDIENT_DB_ENTITY_NAME = 'Ingredient';
 export const INGREDIENT_DB_TABLE_NAME = 'Ingredients';

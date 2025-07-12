@@ -1,4 +1,4 @@
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 
 import { callRequestHandler } from '../spec';
 import { Transporter } from './Transporter';

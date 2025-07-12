@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { MealzError } from '#mealz/backend-common';
+import { MealzError } from '@mealz/backend-common';
 import { DBFieldType } from '../types';
 
 export class InvalidDBFieldTypeError extends MealzError {

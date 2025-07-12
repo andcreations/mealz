@@ -1,9 +1,9 @@
 import * as path from 'path';
 import { DynamicModule } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { requireStrEnv, isProduction, isFastify, isExpress } from '#mealz/backend-common';
-import { BOOTSTRAP_CONTEXT } from '#mealz/backend-core';
-import { getLogger } from '#mealz/backend-logger';
+import { requireStrEnv, isFastify, isExpress } from '@mealz/backend-common';
+import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
+import { getLogger } from '@mealz/backend-logger';
 
 const CACHED_URL_PATTERNS: RegExp[] = [/.*css/, /.*js/];
 let staticFilesDir: string; 

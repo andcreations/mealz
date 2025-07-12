@@ -2,8 +2,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as sqlite3 from 'sqlite3';
 import { Inject, Injectable } from '@nestjs/common';
-import { BOOTSTRAP_CONTEXT } from '#mealz/backend-core';
-import { Logger } from '#mealz/backend-logger';
+import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
+import { Logger } from '@mealz/backend-logger';
 
 import { UnknownDBError } from '../../core';
 import { SQLITE_DBE_MODULE_OPTIONS } from '../const';

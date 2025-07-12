@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
-import { Logger } from '#mealz/backend-logger';
-import { SearchIndex } from '#mealz/backend-common';
+import { Context } from '@mealz/backend-core';
+import { Logger } from '@mealz/backend-logger';
+import { SearchIndex } from '@mealz/backend-common';
 
 import { IngredientsSearchRepository } from '../repositories';
 import { IngredientSearchDocument } from '../types';

@@ -1,4 +1,4 @@
-import { buildTopic } from '#mealz/backend-transport';
+import { buildTopic } from '@mealz/backend-transport';
 
 export const IngredientsCrudTopics: Record<string, string> = {
   ReadFromLastV1: topic('readFromLast', 'v1'),

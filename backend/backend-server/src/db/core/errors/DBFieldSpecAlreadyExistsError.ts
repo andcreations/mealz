@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { MealzError } from '#mealz/backend-common';
+import { MealzError } from '@mealz/backend-common';
 
 export class DBFieldSpecAlreadyExistsError extends MealzError {
   public static readonly CODE = 'DBFieldSpecAlreadyExistsError';

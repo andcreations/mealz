@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { generateCorrelationId } from '#mealz/backend-core';
-import { isExpress, isFastify } from '#mealz/backend-common';
+import { generateCorrelationId } from '@mealz/backend-core';
+import { isExpress, isFastify } from '@mealz/backend-common';
 
 @Injectable()
 export class CorrelationIdMiddleware implements NestMiddleware {

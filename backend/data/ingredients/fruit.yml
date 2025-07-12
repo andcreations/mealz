@@ -1,0 +1,34 @@
+- name:
+    en: Apple
+    pl: Jabłko
+  unit: g
+  type: generic
+  weight: 182
+  facts:
+    calories: 95
+    carbs: 25.0
+    sugars: 19
+    protein: 0.5
+    fat:
+      total: 0.3
+      saturated: 0.1
+      monounsaturated: 0.1
+      polyunsaturated: 0.0
+  link: https://www.nutritionix.com/food/apple
+- name:
+    en: Pear
+    pl: Gruszka
+  unit: g
+  type: generic
+  weight: 178
+  facts:
+    calories: 101
+    carbs: 27
+    sugars: 17
+    protein: 0.6
+    fat:
+      total: 0.3
+      saturated: 0
+      monounsaturated: 0.2
+      polyunsaturated: 0.2
+  link: https://www.nutritionix.com/food/apple

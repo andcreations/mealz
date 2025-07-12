@@ -15,7 +15,6 @@ async function run(): Promise<void> {
 }
 
 run().catch(error => {
-  const message = errorToMessage(error);
-  Log.error('Failed to run scripts from directory', '  ' + message);  
+  Log.error('Failed to run scripts from directory', error);  
   process.exit(1);
 });

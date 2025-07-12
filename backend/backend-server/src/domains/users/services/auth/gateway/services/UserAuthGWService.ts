@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Context } from '#mealz/backend-core';
+import { Context } from '@mealz/backend-core';
 import {
   AuthUserRequestV1,
   UsersAuthTransporter,
-} from '#mealz/backend-users-auth-service-api';
-import { UserAuthGWRequestV1 } from '#mealz/backend-users-auth-gateway-api';
+} from '@mealz/backend-users-auth-service-api';
+import { UserAuthGWRequestV1 } from '@mealz/backend-users-auth-gateway-api';
 
 import { UserAuthGWResponseV1Impl } from '../dtos';
 
