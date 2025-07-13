@@ -1,0 +1,55 @@
+.mealz-ingredient-picker {
+  position: relative;
+  z-index: 1; // above the overlay
+  @include mealz-border();
+  background-color: $mealz-theme-color-bg-dark;
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+}
+
+.mealz-ingredient-picker-amount {
+  width: 4rem;
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mealz-ingredient-picker-amount-value {
+  .form-control, .form-control:focus {
+    border: none;
+    box-shadow: none;
+    background-color: $mealz-theme-color-bg-dark;
+    text-align: right;
+    padding-right: 0;
+  }
+}
+
+.mealz-ingredient-picker-amount-unit {
+  padding-left: 0.125rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-ingredient-picker-name {
+  flex-grow: 1;
+
+  .form-control, .form-control:focus {
+    border: none;
+    box-shadow: none;
+    background-color: $mealz-theme-color-bg-dark;
+  }
+}
+
+.mealz-ingredient-picker-name-input {
+  border: none;
+}
+
+.mealz-ingredient-picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}

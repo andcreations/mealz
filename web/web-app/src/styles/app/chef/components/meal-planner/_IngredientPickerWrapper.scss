@@ -1,0 +1,17 @@
+.mealz-ingredient-picker-wrapper {
+  $padding: $mealz-page-wrapper-padding - 0.5rem;
+
+  position: fixed;
+  top: 0.5rem;
+  left: $padding;
+  width: calc(100vw - 2 * #{$padding});
+  padding-top: 1rem;
+  // background: white;
+  // border: solid 1px $light-gray;
+  // border-radius: 0.25rem;
+  z-index: 1;
+}
+
+.mealz-ingredient-picker-wrapper-hidden {
+  display: none;
+}

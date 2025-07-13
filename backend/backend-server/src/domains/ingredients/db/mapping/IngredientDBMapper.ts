@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InternalError, MealzError } from '@mealz/backend-common';
 import { Ingredient } from '@mealz/backend-ingredients-common';
 

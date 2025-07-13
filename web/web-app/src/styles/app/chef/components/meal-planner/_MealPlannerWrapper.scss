@@ -1,0 +1,8 @@
+.mealz-meal-planner-wrapper {
+  $padding: 0.875rem;
+  
+  left: $padding;
+  width: calc(100vw - 2 * #{$padding});
+  
+  // min-width: 24rem;
+}

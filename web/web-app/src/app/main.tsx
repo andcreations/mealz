@@ -6,6 +6,7 @@ import { LocationService } from '@andcreations/web-common';
 import { Log } from './log';
 import { AuthService } from './auth';
 import { AppRouter, PathTo, RoutingService } from './routing';
+import { IngredientsCrudService } from './ingredients';
 
 function failedToRunApp(error: any): void {
   console.log('Failed to run the application', error);
@@ -13,15 +14,15 @@ function failedToRunApp(error: any): void {
 
 async function bootstrapServices(): Promise<void> {
   IoC.resolve(RoutingService);
+  IoC.resolve(IngredientsCrudService);
   IoC.bootstrap();
 }
 
 async function checkLoggedIn(): Promise<void> {
   const authService = IoC.resolve(AuthService);
-  const isLoggedIn = await authService.checkLoggedIn();
-  Log.info(`User logged in: ${isLoggedIn}`);
+  const isSignedIn = await authService.checkSignedIn();
 
-  if (!isLoggedIn) {
+  if (!isSignedIn) {
     const locationService = IoC.resolve(LocationService);
     locationService.setHash(`#${PathTo.signIn()}`);
   }

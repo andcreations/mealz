@@ -3,9 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { IoC } from '@andcreations/common';
 
-import { usePatchState } from '../../hooks';
+import { usePatchState, useService } from '../../hooks';
 import {
   ifEnterKey,
   isEmail,
@@ -28,8 +27,6 @@ interface SignInFormState {
   status: string;
 }
 
-const authService = IoC.resolve(AuthService);
-
 export function SignInForm() {
   const [state, setState] = useState<SignInFormState>({
     email: '',
@@ -40,6 +37,7 @@ export function SignInForm() {
   const patchState = usePatchState(setState);
   const translate = useTranslations(SignInFormTranslations);
   const navigate = useNavigate();
+  const authService = useService(AuthService);
 
   const email = {
     ref: React.useRef(null),

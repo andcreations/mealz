@@ -1,0 +1,32 @@
+.mealz-meal-planner {
+  display: grid;
+  @include mealz-border();
+  padding: 0.875rem 0;
+  grid-template-columns: 4rem auto;
+}
+
+.mealz-meal-planner-amount {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.mealz-meal-planner-amount-value {
+}
+
+.mealz-meal-planner-amount-unit {
+  width: 1rem;
+  padding-left: 0.125rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-meal-planner-name {
+  margin-left: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mealz-meal-planner-not-picked {
+  color: $mealz-theme-color-bg;
+}
