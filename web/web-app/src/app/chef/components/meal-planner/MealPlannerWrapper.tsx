@@ -28,17 +28,17 @@ export function MealPlannerWrapper() {
       patchState({
         ingredients: [
           {
-            ingredient: ingredients[0],
+            fullIngredient: ingredients[0],
             enteredAmount: '100',
             calculatedAmount: 100,
           },
           {
-            ingredient: ingredients[1],
+            fullIngredient: ingredients[1],
             enteredAmount: '80',
             calculatedAmount: 80,
           },
           {
-            ingredient: ingredients[2],
+            fullIngredient: ingredients[2],
             enteredAmount: '75',
             calculatedAmount: 75,
           },

@@ -1,9 +1,9 @@
 import { AdHocIngredient } from '../types';
 
 export function parseAdHodIngredient(
-  ingredient: string,
+  str: string,
 ): AdHocIngredient | undefined {
-  const match = ingredient.match(/^([a-zA-Z_][a-zA-Z0-9_ ]*) (\d+(?:\.\d+)?)$/);
+  const match = str.match(/^([a-zA-Z_][a-zA-Z0-9_ ]*) (\d+(?:\.\d+)?)$/);
   if (!match) {
     return undefined;
   }
@@ -18,4 +18,11 @@ export function parseAdHodIngredient(
     name: name.trim(),
     calories,
   };
+}
+
+export function toAdHocIngredientStr(
+  ingredient: AdHocIngredient,
+  fractionDigits = 0,
+): string {
+  return `${ingredient.name} ${ingredient.calories.toFixed(fractionDigits)}`;
 }

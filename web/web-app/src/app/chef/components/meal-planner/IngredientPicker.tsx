@@ -5,17 +5,20 @@ import classNames = require('classnames');
 import {
   AdHocIngredient,
   parseAdHodIngredient,
+  toAdHocIngredientStr,
 } from '@mealz/backend-ingredients-shared';
 import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
-import { INGREDIENT_LANGUAGE } from '../../../common';
+import { INGREDIENT_LANGUAGE, AD_HOC_UNIT } from '../../../common';
 import { 
   ifEnterKey,
   Key,
   mapKey,
+  parsePositiveInteger,
   setRefFocus,
   stopBubble,
 } from '../../../utils';
+import { Log } from '../../../log';
 import { useTranslations } from '../../../i18n';
 import { usePatchState, useService } from '../../../hooks';
 import { MealPlannerIngredient } from '../../types';
@@ -31,36 +34,67 @@ import { IngredientPickerTranslations } from './IngredientPicker.translations';
 enum Focus { Amount, Name };
 
 const SEARCH_LIMIT = 10;
+const DEFAULT_AMOUNT = '100';
 
 export interface IngredientPickerProps {
   ingredient?: MealPlannerIngredient;
-  onPickIngredient: (ingredientId: string, amount: string) => void;
+  onPickIngredient: (ingredient: GWIngredient, amount: string) => void;
+  onPickAdHocIngredient: (ingredient: AdHocIngredient, amount: string) => void;
   onClose: () => void;
 }
 
 interface IngredientPickerState {
+  // Identifier of the selected full ingredient
   ingredientId?: string;
-  amount?: string;
+
+  // Indicates if an ingredient has been selected by pressing enter,
+  // selecting from the dropdown or passed in the properties
+  ingredientSelected: boolean;
+
+  // Entered ingredient name.
   name: string;
+
+  // Entered amount.
+  amount: string;
+
+  // Element which currently has focus
   focus: Focus;
-  matchingIngredients: GWIngredient[];
+
+  // Dropdown properties
   dropdownVisible: boolean;
-  dropdownSelectedIndex: number;
+  dropdownIndex: number;
+  dropdownIngredients: GWIngredient[];
 }
 
 export function IngredientPicker(props: IngredientPickerProps) {
-  const ingredientStateFromProps = () => ({
-    ingredientId: props.ingredient?.ingredient?.id,
-    amount: props.ingredient?.enteredAmount,
-    name: props.ingredient?.ingredient?.name[INGREDIENT_LANGUAGE] ?? '',
-  })
+  const ingredientStateFromProps = (): Pick<IngredientPickerState,
+    'ingredientId' | 'ingredientSelected' | 'name' | 'amount'
+  > => {
+    const { ingredient } = props;
+    const adHocIngredient = ingredient?.adHocIngredient;
+    if (adHocIngredient) {
+      return {
+        ingredientId: undefined,
+        ingredientSelected: true,
+        name: toAdHocIngredientStr(adHocIngredient),
+        amount: ingredient?.enteredAmount,
+      };
+    }
+    const fullIngredient = ingredient?.fullIngredient;
+    return {
+      ingredientId: fullIngredient?.id,
+      ingredientSelected: !!fullIngredient,
+      amount: ingredient?.enteredAmount,
+      name: fullIngredient?.name[INGREDIENT_LANGUAGE] ?? '',
+    }
+  };
 
   const [state, setState] = useState<IngredientPickerState>({
-    focus: Focus.Name,
-    matchingIngredients: [],
-    dropdownVisible: false,
-    dropdownSelectedIndex: 0,
     ...ingredientStateFromProps(),
+    focus: Focus.Name,
+    dropdownVisible: false,
+    dropdownIndex: 0,
+    dropdownIngredients: [],
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(IngredientPickerTranslations);
@@ -74,7 +108,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
       const ingredientState = ingredientStateFromProps();
       patchState({
         ...ingredientState,
-        matchingIngredients: search(ingredientState.name),
+        dropdownIngredients: search(ingredientState.name),
       });
     },
     [props.ingredient],
@@ -85,7 +119,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
     () => {
       switch (state.focus) {
         case Focus.Amount:
-          setRefFocus(amount.ref);
+          setRefFocus(amount.ref, { select: true });
           break;
         case Focus.Name:
           setRefFocus(name.ref);
@@ -99,26 +133,35 @@ export function IngredientPicker(props: IngredientPickerProps) {
     [],
   );
 
-  // select an ingredient by index
+  // select an ingredient
   const selectIngredientByIndex = (index: number) => {
-    const selectedIngredient = state.matchingIngredients[index];
-    if (!selectedIngredient) {
-      patchState({
-        focus: Focus.Amount,
-        dropdownVisible: false,
-        ingredientId: undefined,
-      });
+    const ingredient = state.dropdownIngredients[index];
+    if (!ingredient) {
+      Log.error('Ingredient not found when selecting by index');
       return;
     }
 
-    setRefFocus(amount.ref);
     patchState({
+      ingredientSelected: true,
+      amount: DEFAULT_AMOUNT,
       focus: Focus.Amount,
       dropdownVisible: false,
-      ingredientId: selectedIngredient.id,
-      name: selectedIngredient.name[INGREDIENT_LANGUAGE],
+      ingredientId: ingredient.id,
+      name: ingredient.name[INGREDIENT_LANGUAGE],
     });
   };
+  const selectIngredientByEnter = () => {
+    const isAdHoc = !!parseAdHodIngredient(state.name);
+    if (isAdHoc) {
+      patchState({
+        ingredientSelected: true,
+        amount: DEFAULT_AMOUNT,
+        focus: Focus.Amount,
+      });
+      return;
+    }
+    selectIngredientByIndex(state.dropdownIndex);
+  }
 
   // ingredient
   const ingredient = {
@@ -137,7 +180,10 @@ export function IngredientPicker(props: IngredientPickerProps) {
       );
     },
     unitPer100: () : string => {
-      // we don't have a unit for ad-hoc ingredients
+      if (!!ingredient.adHoc()) {
+        // we don't have the real unit for ad-hoc ingredients
+        return AD_HOC_UNIT;
+      }
       return ingredient.full()?.unitPer100 ?? '';
     },
     caloriesPer100: () : number | undefined => {
@@ -162,13 +208,32 @@ export function IngredientPicker(props: IngredientPickerProps) {
   const amount = {
     ref: React.useRef(null),
 
-    get: () : number | undefined => {
-      const amount = state.amount ? parseFloat(state.amount) : undefined;
+    visible: () => {
+      // We don't show the amount when a user selected an ingredient.
+      return (
+        !!ingredient.has() &&
+        state.focus !== Focus.Name
+      );
+    },
+
+    isEmpty: () => {
+      return !state.amount.length;
+    },
+
+    value: (): number | undefined => {
+      const amount = state.amount
+        ? parsePositiveInteger(state.amount)
+        : undefined;
       return isNaN(amount) ? undefined : amount;
     },
 
     isValid: () : boolean => {
-      return amount.get() !== undefined;
+      // Empty amount is fine. It means that the amount will be calculated.
+      if (!state.amount.length) {
+        return true;
+      }
+      const value = amount.value();
+      return value !== undefined && value > 0;
     },
 
     onFocus: () => {
@@ -183,10 +248,15 @@ export function IngredientPicker(props: IngredientPickerProps) {
     },
 
     onEnter: () => {
-      if (!ingredient.has()) {
+      if (!ingredient.has() || !amount.isValid()) {
         return;
       }
-      props.onPickIngredient(state.ingredientId, state.amount);
+      if (ingredient.adHoc()) {
+        props.onPickAdHocIngredient(ingredient.adHoc(), state.amount);
+      }
+      else {
+        props.onPickIngredient(ingredient.full(), state.amount);
+      }
     },
   };
 
@@ -201,47 +271,49 @@ export function IngredientPicker(props: IngredientPickerProps) {
       });
     },
 
-    onBlur: () => {
-      selectIngredientByIndex(state.dropdownSelectedIndex);
-    },
-
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
       const name = event.target.value;
-      const isAdHoc = !!parseAdHodIngredient(name);
+
+      const adHocIngredient = parseAdHodIngredient(name);
+      if (adHocIngredient) {
+        patchState({
+          ingredientId: undefined,
+          name,
+          dropdownVisible: false,
+          dropdownIngredients: [],
+        });
+        return;
+      }
+
+      const dropdownIngredients = search(name);
+      const dropdownIndex = 0;
       patchState({
+        ingredientId: dropdownIngredients[dropdownIndex]?.id,
         name,
-        matchingIngredients: search(name),
-        dropdownSelectedIndex: !isAdHoc ? 0 : -1,
+        dropdownVisible: true,
+        dropdownIndex,
+        dropdownIngredients,
       });
     },
 
     onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => {
-      const clamp = (index: number) => {
-        if (index < 0) {
-          return 0;
-        }
-        if (index >= state.matchingIngredients.length) {
-          return state.matchingIngredients.length - 1;
-        }
-        return index;
-      }
-
       switch (mapKey(event)) {
         case Key.Enter:
           stopBubble(event);
-          selectIngredientByIndex(state.dropdownSelectedIndex);
+          selectIngredientByEnter();
           return;
         case Key.ArrowDown:
           stopBubble(event);
+          const length = state.dropdownIngredients.length;
           patchState({
-            dropdownSelectedIndex: clamp(state.dropdownSelectedIndex + 1) },
-          );
+            dropdownIndex: Math.min(state.dropdownIndex + 1, length - 1)
+          });
           return;
         case Key.ArrowUp:
           stopBubble(event);
           patchState({
-            dropdownSelectedIndex: clamp(state.dropdownSelectedIndex - 1) },
-          );
+            dropdownIndex: Math.max(state.dropdownIndex - 1, 0),
+          });
           return;
       }
     }
@@ -254,68 +326,100 @@ export function IngredientPicker(props: IngredientPickerProps) {
       { 'mealz-error': !ingredient.has() || !amount.isValid() },
     ),
     label: (): string => {
+      if (state.focus === Focus.Name) {
+        // Always show ad-hoc ingredients to let the user know
+        // they properly entered an ad-hoc ingredient.
+        const isAdHoc = !!ingredient.adHoc();
+        if (isAdHoc) {
+          const calories = ingredient.caloriesPer100();
+          return (
+            `${calories.toFixed(0)} kcal ` +
+            `(${translate('ad-hoc-ingredient')})`
+          );
+        }
+        return '';
+      }
+
       if (!ingredient.has()) {
         return translate('unknown-ingredient');
+      }
+      if (amount.isEmpty()) {
+        return translate('blank-amount-to-calculate');
       }
       if (!amount.isValid()) {
         return translate('invalid-amount');
       }
-      const adHoc = !!ingredient.adHoc()
-        ? ` (${translate('ad-hoc-ingredient')})`
+
+      const adHocLabel = !!ingredient.adHoc()
+        ? ` ${translate('ad-hoc-ingredient')}`
         : '';
       const calories = ingredient.caloriesPer100();
-      return calories ? `${calories} kcal${adHoc}` : '-';
+      return calories ? `${calories.toFixed(0)} kcal${adHocLabel}` : '';
     },
   };
 
   // calories
   const calories = {
+    visible: () => {
+      return ingredient.has() && amount.value() !== undefined;
+    },
     value: () => {
-      if (!ingredient.has() || !amount.isValid()) {
-        return '';
-      }
       const calculatedCalories = calculateFact(
-        amount.get(),
+        amount.value(),
         ingredient.caloriesPer100(),
       );
       return `${calculatedCalories.toFixed(0)}`;
     },
     unit: () => {
-      if (!ingredient.has() || !amount.isValid()) {
-        return '';
-      }
       return 'kcal';
+    },
+  };
+
+  // dropdown
+  const dropdown = {
+    visible: () => {
+      return (
+        state.focus === Focus.Name &&
+        state.name.length > 0 &&
+        !ingredient.adHoc()
+      );
     },
   };
 
   return (
     <>
       <div className='mealz-ingredient-picker'>
-        <div className='mealz-ingredient-picker-amount'>
-          <div className='mealz-ingredient-picker-amount-value'>
-            <Form.Control
-              type='number'
-              placeholder='…'
-              ref={amount.ref}
-              value={state.amount ?? ''}
-              onFocus={amount.onFocus}
-              onChange={amount.onChange}
-              onKeyDown={ifEnterKey(amount.onEnter)}
-            />
-          </div>
-          <div className='mealz-ingredient-picker-amount-unit'>
-            { ingredient.unitPer100() }
-          </div>
-        </div>
+        { amount.visible() &&
+          <>
+            <div className='mealz-ingredient-picker-amount'>
+              <div className='mealz-ingredient-picker-amount-value'>
+                <Form.Control
+                  type='number'
+                  placeholder='…'
+                  ref={amount.ref}
+                  value={state.amount ?? ''}
+                  onFocus={amount.onFocus}
+                  onChange={amount.onChange}
+                  onKeyDown={ifEnterKey(amount.onEnter)}
+                />
+              </div>
+              <div className='mealz-ingredient-picker-amount-unit'>
+                { ingredient.unitPer100() }
+              </div>
+            </div>
 
-        <div className='mealz-ingredient-picker-amount-details'>
-          <div className='mealz-ingredient-picker-amount-calories'>
-            { calories.value() }
-          </div>
-          <div className='mealz-ingredient-picker-amount-calories-unit'>
-            { calories.unit() }
-          </div>
-        </div>
+            { calories.visible() &&
+              <div className='mealz-ingredient-picker-amount-details'>
+                <div className='mealz-ingredient-picker-amount-calories'>
+                  { calories.value() }
+                </div>
+                <div className='mealz-ingredient-picker-amount-calories-unit'>
+                  { calories.unit() }
+                </div>
+              </div>
+            }
+          </>
+        }
 
         <div className='mealz-ingredient-picker-name'>
           <Form.Control
@@ -324,7 +428,6 @@ export function IngredientPicker(props: IngredientPickerProps) {
             ref={name.ref}
             value={state.name}
             onFocus={name.onFocus}
-            onBlur={name.onBlur}
             onChange={name.onChange}
             onKeyDown={name.onKeyDown}
           />
@@ -334,10 +437,10 @@ export function IngredientPicker(props: IngredientPickerProps) {
           <div className={details.classNames()}>
             { details.label() }
           </div>
-          { state.dropdownVisible &&
+          { dropdown.visible() &&
             <IngredientsDropdown
-              ingredients={state.matchingIngredients}
-              selectedIndex={state.dropdownSelectedIndex}
+              ingredients={state.dropdownIngredients}
+              selectedIndex={state.dropdownIndex}
               onSelect={selectIngredientByIndex}
             />
           }

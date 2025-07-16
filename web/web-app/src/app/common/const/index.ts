@@ -1,1 +1,1 @@
-export * from './ingredient-language';
+export * from './ingredient';

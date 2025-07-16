@@ -1,1 +1,0 @@
-export const INGREDIENT_LANGUAGE = 'en';

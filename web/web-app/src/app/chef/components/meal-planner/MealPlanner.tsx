@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames';
+import { AdHocIngredient } from '@mealz/backend-ingredients-shared';
+import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
 import { patchAtIndex } from '../../../utils';
-import { INGREDIENT_LANGUAGE } from '../../../common';
+import { AD_HOC_UNIT, INGREDIENT_LANGUAGE } from '../../../common';
 import { useTranslations } from '../../../i18n';
-import { usePatchState, useService } from '../../../hooks';
-import { IngredientsCrudService } from '../../../ingredients';
+import { usePatchState } from '../../../hooks';
 import { MealPlannerIngredient } from '../../types';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { IngredientPickerWrapper } from './IngredientPickerWrapper';
+import { calculateAmounts } from '../../calculator';
 
 export interface MealPlannerProps {
   ingredients: MealPlannerIngredient[];
@@ -27,8 +29,6 @@ export function MealPlanner(props: MealPlannerProps) {
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
-  const ingredientsCrudService = useService(IngredientsCrudService);
-
 
   useEffect(
     () => {
@@ -44,20 +44,40 @@ export function MealPlanner(props: MealPlannerProps) {
     patchState({ pickIngredientIndex: null });
   };
 
-  const onPickIngredient = (ingredientId: string, amount: string) => {
+  const updateIngredient = (update: Partial<MealPlannerIngredient>): void => {
+    const ingredients = patchAtIndex(
+      state.ingredients,
+      state.pickIngredientIndex,
+      update,
+    );
+    patchState({
+      ingredients: calculateAmounts(ingredients),
+      pickIngredientIndex: null,
+    });    
+  }
+
+  const onPickIngredient = (
+    ingredient: GWIngredient,
+    amount: string,
+  ): void => {
     const update: Partial<MealPlannerIngredient> = {
-      ingredient: ingredientsCrudService.getById(ingredientId),
+      fullIngredient: ingredient,
+      adHocIngredient: undefined,
       enteredAmount: amount,
     };
-    // TODO Calculate the ingredients.
-    patchState({
-      ingredients: patchAtIndex(
-        state.ingredients,
-        state.pickIngredientIndex,
-        update,
-      ),
-      pickIngredientIndex: null,
-    });
+    updateIngredient(update);
+  };
+
+  const onPickAdHocIngredient = (
+    adHocIngredient: AdHocIngredient,
+    amount: string,
+  ): void => {
+    const update: Partial<MealPlannerIngredient> = {
+      fullIngredient: undefined,
+      adHocIngredient,
+      enteredAmount: amount,
+    };
+    updateIngredient(update);
   };
 
   const renderAmount = (
@@ -65,8 +85,19 @@ export function MealPlanner(props: MealPlannerProps) {
     ingredientIndex: number,
     ingredient: MealPlannerIngredient,
   ) => {
-    const amount = ingredient.calculatedAmount ?? '';
-    const unit = ingredient.ingredient?.unitPer100 ?? '';
+    const hasFullIngredient = !!ingredient.fullIngredient;
+    const hasAdHocIngredient = !!ingredient.adHocIngredient;
+
+    const amount = (hasFullIngredient || hasAdHocIngredient)
+      ? ingredient.calculatedAmount
+      : '';
+    let unit = '';
+    if (hasFullIngredient) {
+      unit = ingredient.fullIngredient.unitPer100;
+    }
+    if (hasAdHocIngredient) {
+      unit = AD_HOC_UNIT;
+    }
 
     return (
       <div
@@ -88,10 +119,19 @@ export function MealPlanner(props: MealPlannerProps) {
     ingredientIndex: number,
     ingredient: MealPlannerIngredient,
   ) => {
-    const hasIngredient = !!ingredient.ingredient;
-    const name = hasIngredient
-      ? ingredient.ingredient.name[INGREDIENT_LANGUAGE]
-      : translate('pick-ingredient');
+    const hasIngredient = (
+      !!ingredient.fullIngredient || 
+      !!ingredient.adHocIngredient
+    );
+
+    let name = translate('pick-ingredient');
+    if (!!ingredient.adHocIngredient) {
+      name = ingredient.adHocIngredient.name;
+    }
+    if (!!ingredient.fullIngredient) {
+      name = ingredient.fullIngredient.name[INGREDIENT_LANGUAGE];
+    }
+
     const nameClassNames = classNames(
       'mealz-meal-planner-name',
       { 'mealz-meal-planner-not-picked': !hasIngredient },
@@ -132,6 +172,7 @@ export function MealPlanner(props: MealPlannerProps) {
         visible={state.pickIngredientIndex !== null}
         ingredient={state.ingredients[state.pickIngredientIndex]}
         onPickIngredient={onPickIngredient}
+        onPickAdHocIngredient={onPickAdHocIngredient}
         onClose={onCloseIngredientPicker}
       />
     </>

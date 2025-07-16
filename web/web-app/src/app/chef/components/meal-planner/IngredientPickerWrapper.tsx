@@ -17,6 +17,7 @@ export function IngredientPickerWrapper(props: IngredientPickerWrapperProps) {
         <IngredientPicker
           ingredient={props.ingredient}
           onPickIngredient={props.onPickIngredient}
+          onPickAdHocIngredient={props.onPickAdHocIngredient}
           onClose={props.onClose}
         />
       }
