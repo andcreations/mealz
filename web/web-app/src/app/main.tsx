@@ -3,10 +3,9 @@ import * as ReactDOMClient from 'react-dom/client';
 import { IoC } from '@andcreations/common';
 import { LocationService } from '@andcreations/web-common';
 
-import { Log } from './log';
 import { AuthService } from './auth';
 import { AppRouter, PathTo, RoutingService } from './routing';
-import { IngredientsCrudService } from './ingredients';
+import { IngredientsCrudService, IngredientsSearch } from './ingredients';
 
 function failedToRunApp(error: any): void {
   console.log('Failed to run the application', error);
@@ -15,6 +14,7 @@ function failedToRunApp(error: any): void {
 async function bootstrapServices(): Promise<void> {
   IoC.resolve(RoutingService);
   IoC.resolve(IngredientsCrudService);
+  IoC.resolve(IngredientsSearch);
   IoC.bootstrap();
 }
 

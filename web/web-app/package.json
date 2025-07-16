@@ -23,6 +23,7 @@
     "classnames": "^2.5.1",
     "html-to-react": "^1.7.0",
     "lodash": "^4.17.21",
+    "minisearch": "^7.1.2",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.0",

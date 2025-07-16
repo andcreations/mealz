@@ -16,6 +16,7 @@ export function IngredientPickerWrapper(props: IngredientPickerWrapperProps) {
       { props.visible &&
         <IngredientPicker
           ingredient={props.ingredient}
+          onPickIngredient={props.onPickIngredient}
           onClose={props.onClose}
         />
       }

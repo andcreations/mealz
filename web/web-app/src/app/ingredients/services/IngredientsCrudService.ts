@@ -21,6 +21,7 @@ import { IngredientsTopics } from '../bus';
 @BusListener()
 export class IngredientsCrudService implements OnBootstrap {
   private ingredients: GWIngredient[] | undefined;
+  private ingredientsById: Record<string, GWIngredient> = {};
 
   public constructor(
     private readonly http: HTTPWebClientService,
@@ -55,6 +56,7 @@ export class IngredientsCrudService implements OnBootstrap {
     let lastId: string | undefined = undefined;
     const limit = 100;
 
+  // read
     while (true) {
       const response = await this.http.get<ReadIngredientsFromLastGWResponseV1>(
         IngredientsCrudAPI.url.readFromLastV1(lastId, limit),
@@ -68,8 +70,14 @@ export class IngredientsCrudService implements OnBootstrap {
       lastId = ingredients[ingredients.length - 1].id;
     }
 
+  // keep
     Log.info(`Read ${readIngredients.length} ingredients`);
     this.ingredients = readIngredients;
+    this.ingredients.forEach(ingredient => {
+      this.ingredientsById[ingredient.id] = ingredient;
+    });
+
+  // notify
     this.bus.emit(IngredientsTopics.IngredientsRead);
   }
 
@@ -82,6 +90,6 @@ export class IngredientsCrudService implements OnBootstrap {
   }
 
   public getById(id: string): GWIngredient | undefined {
-    return this.ingredients.find(itr => itr.id === id);
+    return this.ingredientsById[id];
   }
 }

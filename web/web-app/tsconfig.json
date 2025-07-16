@@ -15,6 +15,9 @@
       "@mealz/backend-users-auth-gateway-api": [
         "../../backend/backend-server/src/domains/users/services/auth/gateway-api"
       ],
+      "@mealz/backend-ingredients-shared": [
+        "../../backend/backend-server/src/domains/ingredients/shared"
+      ],
       "@mealz/backend-ingredients-gateway-api": [
         "../../backend/backend-server/src/domains/ingredients/gateway-api"
       ],

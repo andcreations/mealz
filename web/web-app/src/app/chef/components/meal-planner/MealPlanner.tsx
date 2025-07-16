@@ -2,9 +2,11 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames';
 
+import { patchAtIndex } from '../../../utils';
 import { INGREDIENT_LANGUAGE } from '../../../common';
 import { useTranslations } from '../../../i18n';
-import { usePatchState } from '../../../hooks';
+import { usePatchState, useService } from '../../../hooks';
+import { IngredientsCrudService } from '../../../ingredients';
 import { MealPlannerIngredient } from '../../types';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { IngredientPickerWrapper } from './IngredientPickerWrapper';
@@ -15,16 +17,18 @@ export interface MealPlannerProps {
 
 interface MealPlannerState {
   ingredients: MealPlannerIngredient[];
-  pickIngredient: MealPlannerIngredient | null;
+  pickIngredientIndex: number | null;
 }
 
 export function MealPlanner(props: MealPlannerProps) {
   const [state, setState] = useState<MealPlannerState>({
     ingredients: props.ingredients,
-    pickIngredient: null,
+    pickIngredientIndex: null,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
+  const ingredientsCrudService = useService(IngredientsCrudService);
+
 
   useEffect(
     () => {
@@ -33,13 +37,27 @@ export function MealPlanner(props: MealPlannerProps) {
     [props.ingredients],
   );
 
-  const onPickIngredient = (index: number) => {
-    const pickIngredient = state.ingredients[index];
-    patchState({ pickIngredient });
+  const onOpenIngredientPicker = (index: number) => {
+    patchState({ pickIngredientIndex: index });
+  };
+  const onCloseIngredientPicker = () => {
+    patchState({ pickIngredientIndex: null });
   };
 
-  const onCloseIngredientPicker = () => {
-    patchState({ pickIngredient: null });
+  const onPickIngredient = (ingredientId: string, amount: string) => {
+    const update: Partial<MealPlannerIngredient> = {
+      ingredient: ingredientsCrudService.getById(ingredientId),
+      enteredAmount: amount,
+    };
+    // TODO Calculate the ingredients.
+    patchState({
+      ingredients: patchAtIndex(
+        state.ingredients,
+        state.pickIngredientIndex,
+        update,
+      ),
+      pickIngredientIndex: null,
+    });
   };
 
   const renderAmount = (
@@ -54,7 +72,7 @@ export function MealPlanner(props: MealPlannerProps) {
       <div
         key={key}
         className='mealz-meal-planner-amount'
-        onClick={() => onPickIngredient(ingredientIndex)}
+        onClick={() => onOpenIngredientPicker(ingredientIndex)}
       >
         <div className='mealz-meal-planner-amount-value'>
           {amount}
@@ -82,7 +100,7 @@ export function MealPlanner(props: MealPlannerProps) {
       <div
         key={key}
         className={nameClassNames}
-        onClick={() => onPickIngredient(ingredientIndex)}
+        onClick={() => onOpenIngredientPicker(ingredientIndex)}
       >
         {name}
       </div>
@@ -92,7 +110,7 @@ export function MealPlanner(props: MealPlannerProps) {
   const renderEntries = () => {
     const entries = [];
     state.ingredients.forEach((ingredient, index) => {
-      const id = ingredient.ingredient?.id ?? `ingredient-${index}`;
+      const id = `ingredient-${index}`;
       entries.push(
         renderAmount(`${id}-amount`, index, ingredient),
         renderName(`${id}-name`, index, ingredient),
@@ -111,8 +129,9 @@ export function MealPlanner(props: MealPlannerProps) {
         {renderEntries()}
       </div>
       <IngredientPickerWrapper
-        visible={state.pickIngredient !== null}
-        ingredient={state.pickIngredient}
+        visible={state.pickIngredientIndex !== null}
+        ingredient={state.ingredients[state.pickIngredientIndex]}
+        onPickIngredient={onPickIngredient}
         onClose={onCloseIngredientPicker}
       />
     </>

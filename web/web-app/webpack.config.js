@@ -25,6 +25,10 @@ module.exports = {
         'domains/users/services/auth/gateway-api',
       ),
       ...backendAlias(
+        '@mealz/backend-ingredients-shared',
+        'domains/ingredients/shared',
+      ),
+      ...backendAlias(
         '@mealz/backend-ingredients-gateway-api',
         'domains/ingredients/gateway-api',
       ),

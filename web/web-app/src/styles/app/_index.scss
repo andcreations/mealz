@@ -1,6 +1,7 @@
 @import './html';
 @import './flex';
 @import './font';
+@import './colors';
 @import './border';
 @import './responsive';
 
@@ -19,3 +20,4 @@
 @import './chef/components/meal-planner/MealPlanner';
 @import './chef/components/meal-planner/IngredientPicker';
 @import './chef/components/meal-planner/IngredientPickerWrapper';
+@import './chef/components/meal-planner/IngredientsDropdown';
