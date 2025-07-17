@@ -1,0 +1,44 @@
+.mealz-ingredients-editor {
+  position: relative;
+}
+
+.mealz-ingredients-editor-entries {
+  display: grid;
+  @include mealz-border();
+  padding: 0.875rem 0;
+  grid-template-columns: 4rem auto;
+}
+
+.mealz-ingredients-editor-plus {
+  color: $mealz-theme-color-fg-dark;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.mealz-ingredients-editor-amount {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.mealz-ingredients-editor-amount-value {
+}
+
+.mealz-ingredients-editor-amount-unit {
+  width: 1rem;
+  padding-left: 0.125rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-ingredients-editor-name {
+  margin-left: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mealz-ingredients-editor-not-picked {
+  color: $mealz-theme-color-bg;
+}

@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import classNames = require('classnames');
 import {
   AdHocIngredient,
-  parseAdHodIngredient,
+  parseAdHocIngredient,
   toAdHocIngredientStr,
 } from '@mealz/backend-ingredients-shared';
 import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
@@ -30,6 +30,7 @@ import {
 } from '../../../ingredients';
 import { IngredientsDropdown } from './IngredientsDropdown';
 import { IngredientPickerTranslations } from './IngredientPicker.translations';
+import { MaterialIcon } from '../../../components';
 
 enum Focus { Amount, Name };
 
@@ -40,7 +41,8 @@ export interface IngredientPickerProps {
   ingredient?: MealPlannerIngredient;
   onPickIngredient: (ingredient: GWIngredient, amount: string) => void;
   onPickAdHocIngredient: (ingredient: AdHocIngredient, amount: string) => void;
-  onClose: () => void;
+  onDeleteIngredient: () => void;
+  onCancel: () => void;
 }
 
 interface IngredientPickerState {
@@ -71,21 +73,23 @@ export function IngredientPicker(props: IngredientPickerProps) {
     'ingredientId' | 'ingredientSelected' | 'name' | 'amount'
   > => {
     const { ingredient } = props;
+    const amount = ingredient?.enteredAmount ?? DEFAULT_AMOUNT;
+
     const adHocIngredient = ingredient?.adHocIngredient;
     if (adHocIngredient) {
       return {
         ingredientId: undefined,
         ingredientSelected: true,
         name: toAdHocIngredientStr(adHocIngredient),
-        amount: ingredient?.enteredAmount,
+        amount,
       };
     }
     const fullIngredient = ingredient?.fullIngredient;
     return {
       ingredientId: fullIngredient?.id,
       ingredientSelected: !!fullIngredient,
-      amount: ingredient?.enteredAmount,
       name: fullIngredient?.name[INGREDIENT_LANGUAGE] ?? '',
+      amount,
     }
   };
 
@@ -128,10 +132,10 @@ export function IngredientPicker(props: IngredientPickerProps) {
     },
     [state.focus],
   );
-  useEffect(
-    () => setRefFocus(name.ref, { select: true }),
-    [],
-  );
+  // useEffect(
+  //   () => setRefFocus(name.ref, { select: true }),
+  //   [],
+  // );
 
   // select an ingredient
   const selectIngredientByIndex = (index: number) => {
@@ -143,7 +147,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
 
     patchState({
       ingredientSelected: true,
-      amount: DEFAULT_AMOUNT,
+      amount: state.amount ?? DEFAULT_AMOUNT,
       focus: Focus.Amount,
       dropdownVisible: false,
       ingredientId: ingredient.id,
@@ -151,7 +155,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
     });
   };
   const selectIngredientByEnter = () => {
-    const isAdHoc = !!parseAdHodIngredient(state.name);
+    const isAdHoc = !!parseAdHocIngredient(state.name);
     if (isAdHoc) {
       patchState({
         ingredientSelected: true,
@@ -171,7 +175,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
         : undefined;
     },
     adHoc: (): AdHocIngredient | undefined => {
-      return parseAdHodIngredient(state.name);
+      return parseAdHocIngredient(state.name);
     },
     has: () : boolean => {
       return (
@@ -209,11 +213,8 @@ export function IngredientPicker(props: IngredientPickerProps) {
     ref: React.useRef(null),
 
     visible: () => {
-      // We don't show the amount when a user selected an ingredient.
-      return (
-        !!ingredient.has() &&
-        state.focus !== Focus.Name
-      );
+      // We don't show the amount when a user is selecting an ingredient.
+      return ingredient.has() && state.focus !== Focus.Name;
     },
 
     isEmpty: () => {
@@ -274,7 +275,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
       const name = event.target.value;
 
-      const adHocIngredient = parseAdHodIngredient(name);
+      const adHocIngredient = parseAdHocIngredient(name);
       if (adHocIngredient) {
         patchState({
           ingredientId: undefined,
@@ -445,10 +446,18 @@ export function IngredientPicker(props: IngredientPickerProps) {
             />
           }
         </div>
+
+        <div className='mealz-ingredient-picker-delete'>
+          <MaterialIcon
+            className='mealz-ingredient-picker-delete-icon'
+            icon='delete'
+            onClick={props.onDeleteIngredient}
+          />
+        </div>
       </div>
       <div
         className='mealz-ingredient-picker-overlay'
-        onClick={props.onClose}
+        onClick={props.onCancel}
       />
     </>
   );

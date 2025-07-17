@@ -2,13 +2,13 @@ import * as React from 'react';
 
 import { Center } from '../../components';
 import { PageWrapper } from '../../page';
-import { MealPlannerWrapper } from '../components';
+import { MealPlanner } from '../components';
 
 export function ChefPage() {
   return (
     <PageWrapper>
       <Center>
-        <MealPlannerWrapper/>
+        <MealPlanner/>
       </Center>
     </PageWrapper>
   );

@@ -12,3 +12,7 @@ export function patchAtIndex<T>(
     ...array.slice(index + 1),
   ];
 }
+
+export function removeFromIndex<T>(array: T[], index: number): T[] {
+  return array.filter((_, itemIndex) => index !== itemIndex);
+}

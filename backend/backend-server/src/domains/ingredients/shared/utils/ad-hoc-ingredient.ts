@@ -1,6 +1,6 @@
 import { AdHocIngredient } from '../types';
 
-export function parseAdHodIngredient(
+export function parseAdHocIngredient(
   str: string,
 ): AdHocIngredient | undefined {
   const match = str.match(/^([a-zA-Z_][a-zA-Z0-9_ ]*) (\d+(?:\.\d+)?)$/);

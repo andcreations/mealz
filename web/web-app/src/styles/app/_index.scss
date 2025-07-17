@@ -9,6 +9,7 @@
 @import './page/PageWrapper';
 
 @import './components/basic/Row';
+@import './components/basic/MaterialIcon';
 @import './components/layout/Center';
 @import './components/layout/FullScreen';
 @import './components/mealz/MealzLogo';
@@ -16,7 +17,7 @@
 @import './auth/components/SignInForm';
 @import './auth/pages/SignInPage';
 
-@import './chef/components/meal-planner/MealPlannerWrapper';
+@import './chef/components/meal-planner/IngredientsEditor';
 @import './chef/components/meal-planner/MealPlanner';
 @import './chef/components/meal-planner/IngredientPicker';
 @import './chef/components/meal-planner/IngredientPickerWrapper';

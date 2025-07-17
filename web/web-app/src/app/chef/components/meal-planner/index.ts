@@ -1,1 +1,1 @@
-export * from './MealPlannerWrapper';
+export * from './MealPlanner';
