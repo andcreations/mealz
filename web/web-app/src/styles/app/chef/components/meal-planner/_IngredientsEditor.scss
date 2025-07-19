@@ -2,11 +2,18 @@
   position: relative;
 }
 
-.mealz-ingredients-editor-entries {
+.mealz-ingredients-editor-ingredients {
   display: grid;
   @include mealz-border();
   padding: 0.875rem 0;
   grid-template-columns: 4rem auto;
+}
+
+.mealz-ingredients-editor-no-ingredients {
+  color: $mealz-theme-color-bg;
+  text-align: center;
+  grid-column: 1 / span 2;
+  grid-row: 1;
 }
 
 .mealz-ingredients-editor-plus {

@@ -1,3 +1,5 @@
+@import './normalize';
+
 @import './html';
 @import './flex';
 @import './font';
@@ -18,7 +20,9 @@
 @import './auth/pages/SignInPage';
 
 @import './chef/components/meal-planner/IngredientsEditor';
-@import './chef/components/meal-planner/MealPlanner';
 @import './chef/components/meal-planner/IngredientPicker';
 @import './chef/components/meal-planner/IngredientPickerWrapper';
 @import './chef/components/meal-planner/IngredientsDropdown';
+@import './chef/components/meal-planner/MealPlanner';
+@import './chef/components/meal-planner/MealSummary';
+

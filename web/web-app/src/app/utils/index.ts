@@ -1,4 +1,5 @@
 export * from './array';
+export * from './object';
 export * from './html-events';
 export * from './keys';
 export * from './react';

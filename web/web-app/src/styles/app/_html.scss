@@ -18,3 +18,15 @@ a, a:hover {
 a, a:visited {
   text-decoration: none;
 }
+
+// No spin buttons (arrow up/down)
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  // Chrome, Safari, Edge, Opera
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  // Firefox
+  -moz-appearance: textfield;
+}

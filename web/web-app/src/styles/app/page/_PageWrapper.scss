@@ -6,7 +6,8 @@ $mealz-page-wrapper-padding: 2.125rem;
 .mealz-page-wrapper-content {
   $padding: 3rem;
 
-  margin-top: $mealz-navbar-height;
+  // margin-top: $mealz-navbar-height;
+  margin-top: $mealz-page-wrapper-padding;
   width: 100%;
   padding: 0 $mealz-page-wrapper-padding;
   margin-left: auto;

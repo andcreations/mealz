@@ -1,0 +1,31 @@
+.mealz-meal-summary {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  width: 100%;
+  padding: 1rem 0;
+  margin: 0 $mealz-border-radius;
+}
+
+.mealz-meal-summary-status {
+  @include mealz-font-size-small();
+  @include mealz-flex-container();
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-meal-summary-facts {
+  display: grid;
+  grid-template-columns: 3rem 3rem auto;
+  grid-template-rows: auto;
+}
+
+.mealz-meal-summary-facts-amount {
+  text-align: right;
+}
+
+.mealz-meal-summary-facts-unit {
+  color: $mealz-theme-color-fg-dark;
+  padding-left: 0.25rem;
+}

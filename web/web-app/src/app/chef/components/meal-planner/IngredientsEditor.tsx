@@ -14,8 +14,10 @@ import {
 } from './IngredientsEditor.translations';
 import { IngredientPickerWrapper } from './IngredientPickerWrapper';
 import { MaterialIcon } from '../../../components';
+import { INVALID_AMOUNT } from '../../const';
 
 export interface IngredientsEditorProps {
+  className?: string;
   ingredients: MealPlannerIngredient[];
   onIngredientsChange: (ingredients: MealPlannerIngredient[]) => void;
 }
@@ -111,8 +113,14 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     const hasFullIngredient = !!ingredient.fullIngredient;
     const hasAdHocIngredient = !!ingredient.adHocIngredient;
 
+    const fromCalculatedAmount = () => {
+      return ingredient.calculatedAmount !== INVALID_AMOUNT
+        ? ingredient.calculatedAmount.toFixed(0)
+        : '?';
+    };
+
     const amount = (hasFullIngredient || hasAdHocIngredient)
-      ? ingredient.calculatedAmount
+      ? fromCalculatedAmount()
       : '';
     let unit = '';
     if (hasFullIngredient) {
@@ -171,7 +179,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     );
   };
 
-  const renderEntries = () => {
+  const renderIngredients = () => {
     const entries = [];
     state.ingredients.forEach((ingredient, index) => {
       const id = `ingredient-${index}`;
@@ -183,15 +191,31 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     return entries;
   };
 
-  const styles = {
-    gridTemplateRows: `repeat(${state.ingredients.length}, 1.5rem)`,
+  const rowCount = state.ingredients.length || 1;
+  const entriesStyles = {
+    gridTemplateRows: `repeat(${rowCount}, 1.5rem)`,
   };
+  const editorClassNames = classNames(
+    'mealz-ingredients-editor',
+    props.className,
+  );
 
   return (
     <>
-      <div className='mealz-ingredients-editor'>
-        <div className='mealz-ingredients-editor-entries' style={styles}>
-          {renderEntries()}
+      <div className={editorClassNames}>
+        <div
+          className='mealz-ingredients-editor-ingredients'
+          style={entriesStyles}
+        >
+          { state.ingredients.length > 0 && renderIngredients() }
+          { state.ingredients.length === 0 &&
+            <div
+              className='mealz-ingredients-editor-no-ingredients'
+              onClick={onAddIngredient}
+            >
+              {translate('no-ingredients')}
+            </div>
+          }
         </div>
         <div className='mealz-ingredients-editor-plus'>
           <MaterialIcon

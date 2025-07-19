@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -9,7 +9,7 @@ import {
   ifEnterKey,
   isEmail,
   isNonEmpty,
-  setRefFocus,
+  focusRef,
   validate,
 } from '../../utils';
 import { Row } from '../../components';
@@ -40,7 +40,7 @@ export function SignInForm() {
   const authService = useService(AuthService);
 
   const email = {
-    ref: React.useRef(null),
+    ref: useRef(null),
 
     onFocus: () => {
       patchState({ focus: Focus.Email });
@@ -54,12 +54,12 @@ export function SignInForm() {
     },
 
     onEnter: () => {
-      setRefFocus(password.ref);
+      focusRef(password.ref);
     },
   };
 
   const password = {
-    ref: React.useRef(null),
+    ref: useRef(null),
 
     onFocus: () => {
       patchState({ focus: Focus.Password });
@@ -108,10 +108,10 @@ export function SignInForm() {
   
   switch (state.focus) {
     case Focus.Email:
-      setRefFocus(email.ref);
+      focusRef(email.ref);
       break;
     case Focus.Password:
-      setRefFocus(password.ref);
+      focusRef(password.ref);
       break;
   }
 

@@ -1,4 +1,4 @@
 export interface AdHocIngredient {
   name: string;
-  calories: number;
+  caloriesPer100: number;
 }

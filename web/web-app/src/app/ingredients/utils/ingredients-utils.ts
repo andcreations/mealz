@@ -3,6 +3,7 @@ import {
   GWFactPer100,
   GWIngredient,
 } from '@mealz/backend-ingredients-gateway-api';
+import { IngredientFacts } from '../types';
 
 export function getFact(
   ingredient: GWIngredient,
@@ -17,16 +18,7 @@ export function getCaloriesPer100(
   return getFact(ingredient, GWFactId.Calories)?.amount;
 }
 
-export function getFacts(ingredient: GWIngredient): {
-  calories: number | undefined;
-  carbs: number | undefined;
-  sugars: number | undefined;
-  protein: number | undefined;
-  totalFat: number | undefined;
-  saturatedFat: number | undefined;
-  monounsaturatedFat: number | undefined;
-  polyunsaturatedFat: number | undefined;
-} {
+export function getFacts(ingredient: GWIngredient): IngredientFacts {
   const amount = (factId: GWFactId) => {
     return getFact(ingredient, factId)?.amount;
   };
@@ -47,4 +39,11 @@ export function calculateFact(
   factPer100: number,
 ): number {
   return (amount / 100) * factPer100;
+}
+
+export function calculateAmount(
+  factValue: number,
+  factPer100: number,
+): number {
+  return factValue * factPer100 / 100;
 }

@@ -16,7 +16,7 @@ export function parseAdHocIngredient(
 
   return {
     name: name.trim(),
-    calories,
+    caloriesPer100: calories,
   };
 }
 
@@ -24,5 +24,5 @@ export function toAdHocIngredientStr(
   ingredient: AdHocIngredient,
   fractionDigits = 0,
 ): string {
-  return `${ingredient.name} ${ingredient.calories.toFixed(fractionDigits)}`;
+  return `${ingredient.name} ${ingredient.caloriesPer100.toFixed(fractionDigits)}`;
 }

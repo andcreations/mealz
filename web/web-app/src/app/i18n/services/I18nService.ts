@@ -12,7 +12,11 @@ export class I18nService {
     return str;
   }
 
-  public translate(translations: Translations, key: string, ...values: string[]): string {
+  public translate(
+    translations: Translations,
+    key: string,
+    ...values: string[]
+  ): string {
     return this.format(translations[key] ?? key, values || []);
   }
 }

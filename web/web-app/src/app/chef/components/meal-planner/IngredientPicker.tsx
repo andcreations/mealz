@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import classNames = require('classnames');
 import {
@@ -15,7 +15,7 @@ import {
   Key,
   mapKey,
   parsePositiveInteger,
-  setRefFocus,
+  focusRef,
   stopBubble,
 } from '../../../utils';
 import { Log } from '../../../log';
@@ -123,17 +123,17 @@ export function IngredientPicker(props: IngredientPickerProps) {
     () => {
       switch (state.focus) {
         case Focus.Amount:
-          setRefFocus(amount.ref, { select: true });
+          focusRef(amount.ref, { select: true });
           break;
         case Focus.Name:
-          setRefFocus(name.ref);
+          focusRef(name.ref);
           break;
       }
     },
     [state.focus],
   );
   // useEffect(
-  //   () => setRefFocus(name.ref, { select: true }),
+  //   () => focusRef(name.ref, { select: true }),
   //   [],
   // );
 
@@ -193,7 +193,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
     caloriesPer100: () : number | undefined => {
       const adHocIngredient = ingredient.adHoc();
       if (adHocIngredient) {
-        return adHocIngredient.calories;
+        return adHocIngredient.caloriesPer100;
       }
 
       const fullIngredient = ingredient.full();
@@ -210,7 +210,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
 
   // amount
   const amount = {
-    ref: React.useRef(null),
+    ref: useRef(null),
 
     visible: () => {
       // We don't show the amount when a user is selecting an ingredient.
@@ -263,7 +263,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
 
   // name
   const name = {
-    ref: React.useRef(null),
+    ref: useRef(null),
 
     onFocus: () => {
       patchState({
