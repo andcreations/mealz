@@ -63,13 +63,11 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
   };
 
   const onDeleteIngredient = () => {
-    patchState({
-      ingredients: removeFromIndex(
-        state.ingredients,
-        state.pickIngredientIndex,
-      ),
-      pickIngredientIndex: null,
-    });
+    const ingredients = removeFromIndex(
+      state.ingredients,
+      state.pickIngredientIndex,
+    );
+    props.onIngredientsChange(ingredients);
   };
 
   const onIngredientChange = (update: Partial<MealPlannerIngredient>): void => {

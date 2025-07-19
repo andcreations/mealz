@@ -39,6 +39,6 @@
 }
 
 .mealz-ingredients-dropdown-no-results {
-  @include mealz-font-size-tiny();
+  @include mealz-font-tiny();
   color: $mealz-theme-color-error;
 }

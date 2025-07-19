@@ -87,7 +87,7 @@ export class MealCalculator {
       totalKnownCalories += calculateFact(amount, caloriesPer100);
     });
 
-    const missingCalories = calories - totalKnownCalories;
+    const missingCalories = Math.max(0, calories - totalKnownCalories);
     const missingCaloriesPerIngredient = missingCalories / missingAmountCount;
   // calculate amounts
     result
@@ -120,11 +120,12 @@ export class MealCalculator {
       total: {
         calories: 0,
       },
+      hasOptionalFacts: false,
     };
     const validIngredients = ingredients.filter(ingredient => {
       return this.isValidIngredient(ingredient);
     });
-    const allFull = validIngredients.every(ingredient => {
+    const hasOnlyFullIngredients = validIngredients.every(ingredient => {
       return !!ingredient.fullIngredient;
     });
 
@@ -145,11 +146,19 @@ export class MealCalculator {
         const facts = getFacts(ingredient.fullIngredient);
         summary.total.calories += calculateFact(amount, facts.calories);
 
-        if (allFull) {
+        // The optional facts are calculated only if all the ingredients
+        // are full ingredients. We have only calories for the ad-hoc ones.
+        if (hasOnlyFullIngredients) {
           const optionalFacts: Array<
             keyof Omit<IngredientFacts, 'calories'>
           > = [
-            'carbs'
+            'carbs',
+            'sugars',
+            'protein',
+            'totalFat',
+            'monounsaturatedFat',
+            'polyunsaturatedFat',
+            'saturatedFat',
           ];
           optionalFacts.forEach(fact => {
             const factValue = calculateFact(amount, facts[fact]);
@@ -159,6 +168,9 @@ export class MealCalculator {
       }
     });
 
-    return summary;
+    return {
+      ...summary,
+      hasOptionalFacts: hasOnlyFullIngredients,
+    };
   }
 }

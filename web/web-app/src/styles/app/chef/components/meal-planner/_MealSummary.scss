@@ -7,7 +7,7 @@
 }
 
 .mealz-meal-summary-status {
-  @include mealz-font-size-small();
+  @include mealz-font-small();
   @include mealz-flex-container();
   align-items: center;
   justify-content: center;
@@ -28,4 +28,19 @@
 .mealz-meal-summary-facts-unit {
   color: $mealz-theme-color-fg-dark;
   padding-left: 0.25rem;
+}
+
+.mealz-meal-summary-separator {
+  height: 0.375rem;
+  display: flex;
+  align-items: center;
+  width: 12rem;
+  margin-left: $mealz-border-radius;
+
+  &::before {
+    content: '';
+    height: 1px;
+    background-color: $mealz-theme-color-border;
+    width: 100%;
+  }
 }
