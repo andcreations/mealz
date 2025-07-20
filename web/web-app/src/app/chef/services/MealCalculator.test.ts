@@ -5,8 +5,9 @@ import {
   GWFactUnit,
   GWUnitPer100,
 } from '@mealz/backend-ingredients-gateway-api';
+
 import { I18nService } from '../../i18n';
-import { CalculateAmountsResult, MealPlannerIngredient } from '../types';
+import { MealPlannerIngredient } from '../types';
 import { MealCalculator } from './MealCalculator';
 
 const APPLE: GWIngredient = {
@@ -62,49 +63,88 @@ describe('MealCalculator.calculateAmounts', () => {
     mealCalculator = new MealCalculator(i18nService);
   });
 
-  test('One full ingredient with calories', () => {
-    const ingredients: MealPlannerIngredient[] = [
-      fullIngredient(APPLE, '100'),
-    ];
-    const result = mealCalculator.calculateAmounts(50, ingredients);
-    const expected: CalculateAmountsResult = {
+  const runTest = (
+    input: {
+      ingredients: MealPlannerIngredient[],
+      calories: number | undefined,
+      expected: MealPlannerIngredient[],
+    },
+  ) => {
+    const result = mealCalculator.calculateAmounts(
+      input.calories,
+      input.ingredients,
+    );
+    expect(result).toEqual({
       error: null,
+      ingredients: input.expected,
+    });
+  }
+
+  test('One full ingredient with calories', () => {
+    runTest({
       ingredients: [
+        fullIngredient(APPLE, '100'),
+      ],
+      calories: 50,
+      expected: [
         fullIngredient(APPLE, '100', 100),
-      ]
-    };
-    expect(result).toEqual(expected);
+      ],
+    });
   });
 
   test('One full ingredient without calories', () => {
-    const ingredients: MealPlannerIngredient[] = [
-      fullIngredient(APPLE, '100'),
-    ];
-    const result = mealCalculator.calculateAmounts(undefined, ingredients);
-    const expected: CalculateAmountsResult = {
-      error: null,
+    runTest({
       ingredients: [
+        fullIngredient(APPLE, '100'),
+      ],
+      calories: undefined,
+      expected: [
         fullIngredient(APPLE, '100', 100),
-      ]
-    };
-    expect(result).toEqual(expected);
+      ],
+    });
   });
 
   test('Two full ingredients with calories', () => {
-    const ingredients: MealPlannerIngredient[] = [
-      fullIngredient(APPLE, '100'),
-      fullIngredient(ROLLED_OATS, '25'),
-    ];
-    const result = mealCalculator.calculateAmounts(100, ingredients);
-    const expected: CalculateAmountsResult = {
-      error: null,
+    runTest({
       ingredients: [
+        fullIngredient(APPLE, '100'),
+        fullIngredient(ROLLED_OATS, '25'),
+      ],
+      calories: 75,
+      expected: [
         fullIngredient(APPLE, '100', 100),
         fullIngredient(ROLLED_OATS, '25', 25),
-      ]
-    };
-    expect(result).toEqual(expected);
+      ],
+    });
   });
+
+  test('Two full ingredients without calories', () => {
+    runTest({
+      ingredients: [
+        fullIngredient(APPLE, '100'),
+        fullIngredient(ROLLED_OATS, '25'),
+      ],
+      calories: undefined,
+      expected: [
+        fullIngredient(APPLE, '100', 100),
+        fullIngredient(ROLLED_OATS, '25', 25),
+      ],
+    });
+  });
+
+  test.only('Two full ingredients with enough calories', () => {
+    runTest({
+      ingredients: [
+        fullIngredient(APPLE, '100'),
+        fullIngredient(ROLLED_OATS, ''),
+      ],
+      calories: 300,
+      expected: [
+        fullIngredient(APPLE, '100', 100),
+        fullIngredient(ROLLED_OATS, '', 200),
+      ],
+    });
+  });  
 });
 
 describe('MealCalculator.summarize', () => {
