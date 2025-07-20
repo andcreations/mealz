@@ -12,7 +12,8 @@
     "build-all": "node dist/tools/build all",
     "build": "npm run build-tools && node dist/tools/build all",
     "clean": "rm -rf dist && rm -rf node_modules",
-    "watch": "node dist/tools/watch"
+    "watch": "node dist/tools/watch",
+    "test": "jest --passWithNoTests"
   },
   "author": "Mikolaj Gucki",
   "license": "MIT",
@@ -32,10 +33,12 @@
   },
   "devDependencies": {
     "@andcreations/web-builder": "^0.2.2",
+    "@types/jest": "^27.5.2",
     "@types/node": "^16.9.1",
     "@types/react": "^18.1.0",
     "@types/react-dom": "^18.1.0",
-    "ts-jest": "^27.0.5",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.5",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2",

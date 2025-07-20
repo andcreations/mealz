@@ -6,13 +6,13 @@ import {
   MealSummaryResult,
 } from '../types';
 import { I18nService } from '../../i18n';
+import { IngredientFacts } from '../../ingredients/types';
 import {
   calculateAmount,
   calculateFact,
   getCaloriesPer100,
   getFacts,
-  IngredientFacts
-} from '../../ingredients';
+} from '../../ingredients/utils';
 import { INVALID_AMOUNT } from '../const';
 import { MealCalculatorTranslations } from './MealCalculator.translations';
 
@@ -44,6 +44,17 @@ export class MealCalculator {
     // This should never happen.
   }
 
+  /**
+   * Amount calculation rules:
+   * - All the ingredients with entered amount aren't changed no matter
+   *   if the calories are passed or not (calculatedAmount = enteredAmount).
+   *   That is, we don't change what the user entered.
+   * - If the calories are given, the remaining calories are split evenly
+   *   among the ingredients without amount. The amount is calculated based
+   *   on the remaining calories per ingredient without amount.
+   * - Error is returned when there is at least one ingredient without
+   *   amount and the calories are not passed.
+   */
   public calculateAmounts(
     calories: number | undefined,
     ingredients: MealPlannerIngredient[],
@@ -55,12 +66,12 @@ export class MealCalculator {
       return this.isValidIngredient(ingredient);
     });
 
-    // It can be calculated only if the calories are given and
-    // all the ingredients have entered amount.
-    const allWithAmount = validIngredients.every(ingredient => {
-      return !!ingredient.enteredAmount;
+    // Return error if there is an ingredient without amount and the calories
+    // are not given.
+    const hasIngredientWithoutAmount = validIngredients.every(ingredient => {
+      return !ingredient.enteredAmount;
     });
-    if (!calories && !allWithAmount) {
+    if (!calories && hasIngredientWithoutAmount) {
       result.forEach(ingredient => {
         const amount = this.fromEnteredAmount(ingredient);
         ingredient.calculatedAmount = amount !== undefined
