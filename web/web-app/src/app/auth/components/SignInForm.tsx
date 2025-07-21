@@ -95,7 +95,7 @@ export function SignInForm() {
     }
     authService.signIn(state.email, state.password)
       .then(() => {
-        navigate(PathTo.home());
+        navigate(PathTo.dflt());
       })
       .catch((error) => {
         if (error.status === 401) {
