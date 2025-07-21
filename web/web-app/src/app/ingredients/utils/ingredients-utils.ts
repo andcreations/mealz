@@ -45,5 +45,5 @@ export function calculateAmount(
   factValue: number,
   factPer100: number,
 ): number {
-  return factValue * factPer100 / 100;
+  return factValue * 100 / factPer100;
 }

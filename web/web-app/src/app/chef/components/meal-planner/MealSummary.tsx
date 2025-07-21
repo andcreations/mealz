@@ -34,10 +34,7 @@ export function MealSummary(props: MealSummaryProps) {
   // initialize state
   useEffect(
     () => {
-      const summary = mealCalculator.summarize(
-        props.calories,
-        props.ingredients,
-      );
+      const summary = mealCalculator.summarize(props.ingredients);
       patchState({
         status: props.status,
         summary: props.ingredients.length > 0 ? summary : undefined,

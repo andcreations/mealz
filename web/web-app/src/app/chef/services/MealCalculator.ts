@@ -54,6 +54,7 @@ export class MealCalculator {
    *   on the remaining calories per ingredient without amount.
    * - Error is returned when there is at least one ingredient without
    *   amount and the calories are not passed.
+   * - Entries without either full or ad-hoc ingredients are passed to result.
    */
   public calculateAmounts(
     calories: number | undefined,
@@ -68,15 +69,15 @@ export class MealCalculator {
 
     // Return error if there is an ingredient without amount and the calories
     // are not given.
-    const hasIngredientWithoutAmount = validIngredients.every(ingredient => {
-      return !ingredient.enteredAmount;
+    const hasIngredientWithoutAmount = validIngredients.some(ingredient => {
+      return (
+        ingredient.enteredAmount == null ||
+        ingredient.enteredAmount.length === 0
+      );
     });
     if (!calories && hasIngredientWithoutAmount) {
       result.forEach(ingredient => {
-        const amount = this.fromEnteredAmount(ingredient);
-        ingredient.calculatedAmount = amount !== undefined
-          ? amount
-          : INVALID_AMOUNT;
+        ingredient.calculatedAmount = this.fromEnteredAmount(ingredient);
       });
       return {
         error: this.translate('no-calories-no-amounts'),
@@ -123,8 +124,11 @@ export class MealCalculator {
     };
   }
 
+  /**
+   * Summarize rules:
+   * - The optional facts are returned only when all the ingredients are full.
+   */
   public summarize(
-    calories: number | undefined,
     ingredients: MealPlannerIngredient[],
   ): MealSummaryResult {
     const summary: MealSummaryResult = {
@@ -136,6 +140,9 @@ export class MealCalculator {
     const validIngredients = ingredients.filter(ingredient => {
       return this.isValidIngredient(ingredient);
     });
+    if (!validIngredients.length) {
+      return summary;
+    }
     const hasOnlyFullIngredients = validIngredients.every(ingredient => {
       return !!ingredient.fullIngredient;
     });
