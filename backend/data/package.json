@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf node_modules dist"
+    "clean": "rm -rf node_modules dist",
+    "convert-to-json": "node dist/convert-to-json.js"
   },
   "author": "AndCreations",
   "license": "MIT",

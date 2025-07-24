@@ -7,6 +7,7 @@ import {
   Ingredient,
   IngredientType,
   Product,
+  UnitPer100,
 } from '@mealz/backend-ingredients-common';
 import {
   GWFactId,
@@ -15,6 +16,7 @@ import {
   GWIngredient,
   GWIngredientType,
   GWProduct,
+  GWUnitPer100,
 } from '@mealz/backend-ingredients-gateway-api';
 
 @Injectable()
@@ -25,6 +27,19 @@ export class GWIngredientMapper {
         return GWIngredientType.Generic;
       case IngredientType.Product:
         return GWIngredientType.Product;
+    }
+  }
+
+  private mapUnitPer100(unit: UnitPer100): GWUnitPer100 {
+    switch (unit) {
+      case UnitPer100.Grams:
+        return GWUnitPer100.Grams;
+      case UnitPer100.Milliliters:
+        return GWUnitPer100.Milliliters;
+      default:
+        throw new InternalError(
+          `Unknown unit per 100 ${MealzError.quote(unit)}`
+        );
     }
   }
 
@@ -81,7 +96,8 @@ export class GWIngredientMapper {
       id: ingredient.id,
       name: ingredient.name,
       type: this.mapType(ingredient.type),
-      facts: ingredient.factsPer100.map(fact => this.mapFact(fact)),
+      unitPer100: this.mapUnitPer100(ingredient.unitPer100),
+      factsPer100: ingredient.factsPer100.map(fact => this.mapFact(fact)),
       ...(ingredient.product
         ? { product: this.mapProduct(ingredient.product) }
         : {}

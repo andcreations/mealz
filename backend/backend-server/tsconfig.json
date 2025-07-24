@@ -26,6 +26,7 @@
       "@mealz/backend-users-auth-gateway-api": ["src/domains/users/services/auth/gateway-api"],
 
       "@mealz/backend-ingredients-common": ["src/domains/ingredients/common"],
+      "@mealz/backend-ingredients-shared": ["src/domains/ingredients/shared"],
       "@mealz/backend-ingredients-db": ["src/domains/ingredients/db"],
       "@mealz/backend-ingredients-gateway-api": ["src/domains/ingredients/gateway-api"],
       "@mealz/backend-ingredients-gateway-common": ["src/domains/ingredients/gateway-common"],

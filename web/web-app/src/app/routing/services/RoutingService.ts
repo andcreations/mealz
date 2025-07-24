@@ -11,7 +11,7 @@ export class RoutingService implements OnBootstrap {
   async onBootstrap(): Promise<void> {
     const hash = this.locationService.getHash();
     if (!hash.startsWith('#/') || hash === '#/') {
-      this.locationService.setHash(`#${PathTo.home()}`);
+      this.locationService.setHash(`#${PathTo.dflt()}`);
       return;
     }
   }

@@ -14,7 +14,7 @@ export interface PrivateProps extends React.PropsWithChildren {
 }
 
 export function Private(props: PrivateProps) {
-  if (!authService.isLoggedIn()) {
+  if (!authService.isSignedIn()) {
     const hash = routingService.getHash();
     Log.debug(
       `User not logged in. Cannot access private route ${Log.quote(hash)}`,

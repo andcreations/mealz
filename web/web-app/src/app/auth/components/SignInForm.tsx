@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { IoC } from '@andcreations/common';
 
-import { usePatchState } from '../../hooks';
+import { usePatchState, useService } from '../../hooks';
 import {
   ifEnterKey,
   isEmail,
   isNonEmpty,
-  setRefFocus,
+  focusRef,
   validate,
 } from '../../utils';
 import { Row } from '../../components';
@@ -28,8 +27,6 @@ interface SignInFormState {
   status: string;
 }
 
-const authService = IoC.resolve(AuthService);
-
 export function SignInForm() {
   const [state, setState] = useState<SignInFormState>({
     email: '',
@@ -40,9 +37,10 @@ export function SignInForm() {
   const patchState = usePatchState(setState);
   const translate = useTranslations(SignInFormTranslations);
   const navigate = useNavigate();
+  const authService = useService(AuthService);
 
   const email = {
-    ref: React.useRef(null),
+    ref: useRef(null),
 
     onFocus: () => {
       patchState({ focus: Focus.Email });
@@ -56,12 +54,12 @@ export function SignInForm() {
     },
 
     onEnter: () => {
-      setRefFocus(password.ref);
+      focusRef(password.ref);
     },
   };
 
   const password = {
-    ref: React.useRef(null),
+    ref: useRef(null),
 
     onFocus: () => {
       patchState({ focus: Focus.Password });
@@ -97,7 +95,8 @@ export function SignInForm() {
     }
     authService.signIn(state.email, state.password)
       .then(() => {
-        navigate(PathTo.home());
+        window.scrollTo(0, 0);
+        navigate(PathTo.dflt());
       })
       .catch((error) => {
         if (error.status === 401) {
@@ -110,10 +109,10 @@ export function SignInForm() {
   
   switch (state.focus) {
     case Focus.Email:
-      setRefFocus(email.ref);
+      focusRef(email.ref);
       break;
     case Focus.Password:
-      setRefFocus(password.ref);
+      focusRef(password.ref);
       break;
   }
 

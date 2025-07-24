@@ -1,0 +1,6 @@
+$mealz-border-radius: 0.5rem;
+
+@mixin mealz-border() {
+  border: 1px solid $mealz-theme-color-bg;
+  border-radius: $mealz-border-radius;
+}

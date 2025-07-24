@@ -1,6 +1,12 @@
 export class Log {
+  static isDebug(): boolean {
+    return true;
+  }
+
   static debug(msg: string): void {
-    console.log(`DBUG ${msg}`);
+    if (this.isDebug()) {
+      console.log(`DBUG ${msg}`);
+    }
   }
 
   static info(msg: string): void {

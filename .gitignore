@@ -3,6 +3,7 @@
 **/node_modules
 **/yalc.lock
 **/.yalc
+**/.DS_Store
 
 backend/.db/*
 backend/data/src/ingredients/v1

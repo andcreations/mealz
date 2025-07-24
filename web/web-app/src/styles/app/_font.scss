@@ -1,3 +1,15 @@
-@mixin mealz-font-size-small() {
+@mixin mealz-font-small() {
   font-size: 0.875rem;
+}
+
+@mixin mealz-font-tiny() {
+  font-size: 0.75rem;
+}
+
+.mealz-font-small {
+  @include mealz-font-small();
+}
+
+.mealz-font-tiny {
+  @include mealz-font-tiny();
 }

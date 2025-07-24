@@ -1,0 +1,44 @@
+.mealz-ingredients-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  width: 100%;
+  @include mealz-border();
+  background-color: $mealz-theme-color-bg-dark;
+  padding: 0.375rem 0;
+}
+
+.mealz-ingredients-dropdown-entry {
+  padding: 0 0.675rem;
+}
+
+.mealz-ingredients-dropdown-entry-selected {
+  background-color: $mealz-theme-color-bg;
+}
+
+.mealz-ingredients-dropdown-ingredient {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+}
+
+.mealz-ingredients-dropdown-ingredient-name {
+  flex-shrink: 1;
+  flex-grow: 0;
+}
+
+.mealz-ingredients-dropdown-ingredient-separator {
+  flex-shrink: 1;
+  flex-grow: 0;
+  padding: 0 0.25rem;
+}
+
+.mealz-ingredients-dropdown-ingredient-calories {
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+
+.mealz-ingredients-dropdown-no-results {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-error;
+}

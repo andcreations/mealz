@@ -54,7 +54,7 @@
       "en": "Avocado",
       "pl": "Awokado"
     },
-    "type": 1,
+    "type": 0,
     "unitPer100": 0,
     "factsPer100": [
       {
@@ -96,6 +96,56 @@
         "id": 7,
         "unit": 1,
         "amount": 9.95
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Coconut milk",
+      "pl": "Mleko kokosowe"
+    },
+    "type": 0,
+    "unitPer100": 1,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 196.9
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 2.83
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.04
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 21.24
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 19.03
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.22
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.09
       }
     ]
   },

@@ -19,6 +19,10 @@ $input-color: $mealz-color;
 $input-focus-color: $mealz-color;
 $input-placeholder-color: color.scale($mealz-theme-color-bg, $lightness: 16%);
 
+.form-control {
+  font-weight: 300 !important;
+}
+
 // Buttons
 .btn-primary,
 .btn-primary:hover,

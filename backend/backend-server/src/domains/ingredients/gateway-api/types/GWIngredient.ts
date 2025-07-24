@@ -6,6 +6,11 @@ export enum GWIngredientType {
   Product = 'product',
 }
 
+export enum GWUnitPer100 {
+  Grams = 'g',
+  Milliliters = 'ml',
+}
+
 export interface GWIngredient {
   // Ingredient unique identifier
   id: string;
@@ -16,8 +21,11 @@ export interface GWIngredient {
   // Type of ingredient
   type: GWIngredientType;
 
+  // Unit per 100g
+  unitPer100: GWUnitPer100;
+
   // Facts per 100g
-  facts: GWFactPer100[];
+  factsPer100: GWFactPer100[];
 
   // Product if ingredient is a product
   product?: GWProduct;
