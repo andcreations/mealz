@@ -60,7 +60,9 @@ function mergeIngredients(list: YamlIngredient[][]): YamlIngredient[] {
 function readIngredients(dir: string): YamlIngredient[] {
   let allIngredients: YamlIngredient[] = [];
 
-  const ymlFiles = fs.readdirSync(dir).filter((file) => file.endsWith('.yml'));
+  const ymlFiles = fs.readdirSync(dir).filter((file) => {
+    return file.endsWith('.yml') && !file.startsWith('.');
+  });
   ymlFiles.forEach(ymlFile => {
     const filePath = path.join(dir, ymlFile);
     Log.info(`Reading ${filePath}`);

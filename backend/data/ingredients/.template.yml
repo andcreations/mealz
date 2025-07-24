@@ -1,0 +1,17 @@
+- name:
+    en: -
+    pl: -
+  unit: g
+  type: generic
+  weight: -
+  facts:
+    calories: -
+    carbs: -
+    sugars: -
+    protein: -
+    fat:
+      total: -
+      saturated: -
+      monounsaturated: -
+      polyunsaturated: -
+  link: -
