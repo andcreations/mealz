@@ -3,5 +3,6 @@
 $mealz-color: color.adjust($mealz-theme-color-fg, $whiteness: 75%);
 
 $mealz-theme-color-fg-dark: darken($mealz-theme-color-fg, 16%);
-$mealz-theme-color-bg-dark: color.scale($mealz-theme-color-bg, $lightness: -64%);
+$mealz-theme-color-bg-dark: darken($mealz-theme-color-bg, 24%);
+$mealz-theme-color-bg-medium: darken($mealz-theme-color-bg, 18%);
 $mealz-theme-color-border: $mealz-theme-color-bg;

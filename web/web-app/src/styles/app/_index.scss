@@ -5,10 +5,11 @@
 @import './font';
 @import './colors';
 @import './border';
-@import './responsive';
+@import './breakpoints';
 
-@import './page/PageNavbar';
 @import './page/PageWrapper';
+@import './page/PageNavbar';
+@import './page/PageNavbarMenu';
 
 @import './components/basic/Row';
 @import './components/basic/MaterialIcon';

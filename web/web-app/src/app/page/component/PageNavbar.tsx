@@ -1,50 +1,83 @@
 import * as React from 'react';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-/** */
+import { useTranslations } from '../../i18n';
+import { usePatchState, useService } from '../../hooks';
+import { MaterialIcon } from '../../components';
+import { PathTo } from '../../routing';
+import { AuthService } from '../../auth';
+import { PageNavbarTranslations } from './PageNavbar.translations';
+import { PageNavbarMenu, PageNavbarMenuItem } from './PageNavbarMenu';
+
+interface PageNavbarState {
+  menuHidden: boolean;
+}
+
 export function PageNavbar() {
-  /** */
-  return (
-    <Navbar
-      className='mealz-navbar bg-body-tertiary'
-      fixed='top'
-    >
-      <Container className='mealz-navbar-container'>
-        {/* <Navbar.Brand href='#/dashboard'>
-          Netsparks
-        </Navbar.Brand> */}
-        {/* <Navbar.Toggle aria-controls='basic-navbar-nav'/> */}
-        <Navbar.Collapse
-          className='mealz-navbar-left'
-          role='toolbar'
-        >
-          <Nav>
-            <Nav.Link href='#/dashboard'>
-              Dashboard
-              {/* <MaterialIcon icon='dashboard'/> */}
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
+  const [state, setState] = useState<PageNavbarState>({
+    menuHidden: true,
+  });
+  const patchState = usePatchState(setState);  
+  const translate = useTranslations(PageNavbarTranslations);
+  const navigate = useNavigate();
+  const authService = useService(AuthService);
 
-        <Navbar.Collapse
-          className='mealz-navbar-right'
-          role='toolbar'
-        >
-          <Nav>
-            {/* <Nav.Link>
-              <BackupStatusIcon/>
-            </Nav.Link> */}
-            <Nav.Link href='#/settings'>
-              {/* <MaterialIcon
-                icon='settings'
-                title='Settings'
-              /> */}
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+  const onShowMenu = () => {
+    patchState({ menuHidden: false });
+  };
+  const onHideMenu = () => {
+    patchState({ menuHidden: true });
+  };
+  const onMenuItemClick = () => {
+    patchState({ menuHidden: true });
+  }
+
+  const signOut = () => {
+    authService.signOut()
+      .then(() => {
+        navigate(PathTo.signIn());
+      })
+      .catch(error => {
+        // TODO Handle error.
+      });
+  };
+
+  const menuItems: PageNavbarMenuItem[] = [
+    {
+      label: translate('chef'),
+      onClick: () => {
+        navigate(PathTo.chef());
+      },
+    },
+    {
+      label: translate('sign-out'),
+      onClick: signOut,
+    },
+  ];
+
+  return (
+    <div className='mealz-navbar'>
+      <div className='mealz-navbar-content'>
+        <div className='mealz-navbar-left-side-content'>
+          <div className='mealz-navbar-logo'>
+            { translate('mealz') }
+          </div>
+        </div>
+        <div className='mealz-navbar-right-side-content'>
+          <MaterialIcon 
+            icon='more_horiz'
+            className='mealz-navbar-menu'
+            onClick={onShowMenu}
+          />
+          <PageNavbarMenu
+            hidden={state.menuHidden}
+            items={menuItems}
+            onItemClick={onMenuItemClick}
+            onCancel={onHideMenu}
+          />
+        </div>
+      </div>
+    </div>
   );
 }

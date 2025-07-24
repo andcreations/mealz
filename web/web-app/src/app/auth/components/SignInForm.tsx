@@ -95,6 +95,7 @@ export function SignInForm() {
     }
     authService.signIn(state.email, state.password)
       .then(() => {
+        window.scrollTo(0, 0);
         navigate(PathTo.dflt());
       })
       .catch((error) => {

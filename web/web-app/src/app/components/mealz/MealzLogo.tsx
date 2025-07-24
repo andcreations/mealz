@@ -9,8 +9,8 @@ export interface MealzLogoProps {
 }
 
 export function MealzLogo(props: MealzLogoProps) {
-  const logoClassName = classNames('mealz-logo', props.className);
   const translate = useTranslations(MealzLogoTranslations);
+  const logoClassName = classNames('mealz-logo', props.className);
 
   return (
     <div className={logoClassName}>

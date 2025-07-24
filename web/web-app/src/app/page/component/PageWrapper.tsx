@@ -5,7 +5,6 @@ export interface PageWrapperProps {
 }
 
 export function PageWrapper(props: React.PropsWithChildren<PageWrapperProps>) {
-  /** */
   return (
     <div className='mealz-page-wrapper'>
       <PageNavbar/>

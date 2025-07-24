@@ -150,16 +150,19 @@ export function MealPlanner() {
           />
         </div>
       </div>
-      <IngredientsEditor
-        className='mealz-meal-planner-editor'
-        ingredients={state.ingredients}
-        onIngredientsChange={onIngredientsChange}
-      />
-      <MealSummary
-        status={state.calculateAmountsStatus}
-        calories={calories.get()}
-        ingredients={state.ingredients}
-      />
+      <div className='mealz-meal-planner-ingredients'>
+        <IngredientsEditor
+          className='mealz-meal-planner-editor'
+          ingredients={state.ingredients}
+          onIngredientsChange={onIngredientsChange}
+        />
+        <MealSummary
+          className='mealz-meal-planner-summary'
+          status={state.calculateAmountsStatus}
+          calories={calories.get()}
+          ingredients={state.ingredients}
+        />
+      </div>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
           ·
         </div>
         <div className='mealz-ingredients-dropdown-ingredient-calories'>
-          {calories ? `${calories} kcal` : ''}
+          {calories ? `${calories.toFixed(0)} kcal` : ''}
         </div>
       </div>
     );

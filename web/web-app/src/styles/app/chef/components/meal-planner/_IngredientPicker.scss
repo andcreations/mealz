@@ -79,7 +79,7 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
 }
 
 .mealz-ingredient-picker-delete-icon {
-  transform: translateY($mealz-ingredient-picker-padding-bottom / 2);
+  transform: translateY(calc($mealz-ingredient-picker-padding-bottom / 2));
 }
 
 .mealz-ingredient-picker-ingredient-details {

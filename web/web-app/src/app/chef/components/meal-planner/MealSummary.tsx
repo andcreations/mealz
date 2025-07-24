@@ -11,6 +11,7 @@ import { MealSummaryTranslations } from './MealSummary.translations';
 const MAX_CALORIES_DIFFERENCE = 20;
 
 export interface MealSummaryProps {
+  className?: string;
   status?: string;
   calories?: number;
   ingredients: MealPlannerIngredient[];
@@ -198,8 +199,13 @@ export function MealSummary(props: MealSummaryProps) {
     ];
   };
 
+  const mealSummaryClassNames = classNames([
+    'mealz-meal-summary',
+    props.className,
+  ]);
+
   return (
-    <div className='mealz-meal-summary'>
+    <div className={mealSummaryClassNames}>
       { !!state.status &&
         <div className='mealz-meal-summary-status'>
           { state.status }

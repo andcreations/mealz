@@ -1,7 +1,7 @@
 .mealz-logo {
   font-family: "Leckerli One", cursive;
   color: $mealz-theme-color-fg;
-  text-shadow: 0.125rem 0.125rem 0 black;
+  text-shadow: 0.125rem 0.125rem 0 rgba(black, 0.5);;
 
   @include mealz-flex-container();
   @include mealz-flex-vertical();
