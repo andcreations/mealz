@@ -40,7 +40,6 @@ export class MiniSearchIndex<T extends SearchDocument> extends SearchIndex<T> {
       pattern,
       {},
     );
-    console.log(items.slice(0, options.limit));
     return {
       ids: (items ?? [])
         .slice(0, options.limit)

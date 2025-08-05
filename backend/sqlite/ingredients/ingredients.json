@@ -51,6 +51,106 @@
   },
   {
     "name": {
+      "en": "Artichoke",
+      "pl": "Karczoch"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 53.33
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 11.67
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.92
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.33
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.08
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.17
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Asparagus",
+      "pl": "Szparagi"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 22.67
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.13
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.33
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.4
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.27
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.13
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Avocado",
       "pl": "Awokado"
     },
@@ -96,6 +196,456 @@
         "id": 7,
         "unit": 1,
         "amount": 9.95
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Banana",
+      "pl": "Banan"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 88.98
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 22.88
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 11.86
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.34
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.08
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Beet",
+      "pl": "Burak"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 44
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 10
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Blueberry",
+      "pl": "Borówka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 57
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 10
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Broccoli",
+      "pl": "Brokuł"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 35
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7.2
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.4
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Brussels sprout",
+      "pl": "Bukselka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 35.71
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7.14
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.73
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.56
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.48
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.12
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.24
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Cabbage",
+      "pl": "Kapusta"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 22.67
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 5.47
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.33
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Carrot",
+      "pl": "Marchew"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 34.78
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 8.26
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.48
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.87
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.22
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Cauliflower",
+      "pl": "Kalafior"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 22.96
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.17
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.09
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.91
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.45
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.07
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.03
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.21
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Celery",
+      "pl": "Seler"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 16
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.25
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.75
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.25
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
       }
     ]
   },
@@ -151,6 +701,1106 @@
   },
   {
     "name": {
+      "en": "Corn",
+      "pl": "Kukurydza"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 96.12
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 21.36
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.56
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.4
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.19
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.19
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.39
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.58
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Cucumber",
+      "pl": "Ogórek"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 14.93
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.63
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.69
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.65
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.05
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.05
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Eggplant",
+      "pl": "Bakłażan"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 34.98
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 8.66
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.18
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.83
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.23
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.05
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.02
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.09
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Garlic",
+      "pl": "Czosnek"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 149
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 33
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 6.4
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Grapes",
+      "pl": "Winogrono"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 69.39
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 18.16
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 15.51
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.82
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Green bean",
+      "pl": "Fasolka szparagowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 35.2
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7.92
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.92
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.32
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.08
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.16
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Green pea",
+      "pl": "Groszek"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 83.75
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 15.63
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 5.94
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 5.38
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.25
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.13
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Kiwi",
+      "pl": "Kiwi"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 61
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 15
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Kumquat",
+      "pl": "Kumkwat"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 71
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 16
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 9.4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.9
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Leek",
+      "pl": "Szczypiorek"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 30.65
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7.58
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.81
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.24
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Lemon",
+      "pl": "Cytryna"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 28.57
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 9.29
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": -2.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.07
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.36
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.12
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Lettuce",
+      "pl": "Sałata"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 17.02
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.3
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.17
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.28
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.32
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.21
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Lime",
+      "pl": "Limonka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 29.85
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 10.6
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.64
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.75
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.15
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Mango",
+      "pl": "Mango"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 60.12
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 14.88
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 13.69
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.83
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.39
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.09
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.15
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.06
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Melon",
+      "pl": "Melon"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 33.9
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7.91
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 7.91
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.85
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.17
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Nectarine",
+      "pl": "Nektarynka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 44.23
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 10.26
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 7.69
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.09
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.32
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.13
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Oat flakes",
+      "pl": "Płatki owsiane"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 373.17
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 64.88
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.98
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 12.93
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 6.34
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.22
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 2.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.95
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Okra",
+      "pl": "Okra"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 22.5
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.38
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.88
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.25
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Onion",
+      "pl": "Cebula"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 43.62
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 10.11
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.68
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.38
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.21
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.11
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Orange",
+      "pl": "Pomarańcza"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 49.29
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 12.86
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 8.57
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.93
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.14
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Papaya",
+      "pl": "Papaja"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 42.76
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 11.03
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 7.59
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.48
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.28
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.07
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.07
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.07
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Peach",
+      "pl": "Brzoskwinia"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 38.86
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 9.71
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 8.57
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.91
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.23
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.11
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Pear",
       "pl": "Gruszka"
     },
@@ -201,8 +1851,8 @@
   },
   {
     "name": {
-      "en": "Rolled oats",
-      "pl": "Płatki owsiane"
+      "en": "Pineapple",
+      "pl": "Ananas"
     },
     "type": 0,
     "unitPer100": 0,
@@ -210,42 +1860,792 @@
       {
         "id": 0,
         "unit": 0,
-        "amount": 373.17
+        "amount": 49.4
       },
       {
         "id": 1,
         "unit": 1,
-        "amount": 64.88
+        "amount": 13.25
       },
       {
         "id": 2,
         "unit": 1,
-        "amount": 0.98
+        "amount": 9.76
       },
       {
         "id": 3,
         "unit": 1,
-        "amount": 12.93
+        "amount": 0.6
       },
       {
         "id": 4,
         "unit": 1,
-        "amount": 6.34
+        "amount": 0.12
       },
       {
         "id": 5,
         "unit": 1,
-        "amount": 1.22
+        "amount": 0
       },
       {
         "id": 6,
         "unit": 1,
-        "amount": 2.2
+        "amount": 0
       },
       {
         "id": 7,
         "unit": 1,
-        "amount": 1.95
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Plum",
+      "pl": "Śliwka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 45.45
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 11.36
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 9.85
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.76
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.15
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pomegranate",
+      "pl": "Granat"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 82.98
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 18.79
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 13.83
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.67
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.17
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.11
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.11
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.07
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Potato",
+      "pl": "Ziemniak"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 93.06
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 21.39
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.16
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.49
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.12
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.06
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pumpkin",
+      "pl": "Dynia"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 20
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.08
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.73
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.08
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.04
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Radish",
+      "pl": "Rzodkiewka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 16
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.9
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Raspberry",
+      "pl": "Malina"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 52
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 12
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.4
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Red pepper",
+      "pl": "Papryka czerwona"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 28.07
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 6.67
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.39
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.88
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.18
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.09
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Spinach",
+      "pl": "Szpinak"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 22.78
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.78
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.44
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.94
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.28
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.06
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.11
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Strawberry",
+      "pl": "Truskawki"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 32.22
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7.67
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.89
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.67
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.33
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.11
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Sweet cherry",
+      "pl": "Czereśnia"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 63
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 16
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 13
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Sweet potato",
+      "pl": "Batat"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 90.35
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 21.05
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6.49
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.02
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.18
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.09
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.09
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Tomato",
+      "pl": "Pomidor"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 17.89
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.89
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.24
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Turnip",
+      "pl": "Rzepa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 22
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 5.1
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Watermelon",
+      "pl": "Arbuz"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 30.07
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7.69
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6.29
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.59
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.14
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.03
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.03
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.03
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Zucchini",
+      "pl": "Cukinia"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 15
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 2.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.7
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.15
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.35
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.05
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.15
       }
     ]
   }

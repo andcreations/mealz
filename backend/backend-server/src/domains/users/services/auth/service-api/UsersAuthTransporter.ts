@@ -16,7 +16,9 @@ export class UsersAuthTransporter {
     request: AuthUserRequestV1,
     context: Context,
   ): Promise<AuthUserResponseV1> {
-    return this.transporter.sendRequest(
+    return this.transporter.sendRequest<
+      AuthUserRequestV1, AuthUserResponseV1
+    >(
       UsersAuthTopics.AuthUserV1,
       request,
       context,

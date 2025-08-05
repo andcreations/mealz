@@ -1,0 +1,1 @@
+export const MEALS_USER_DB_NAME = 'meals-user';

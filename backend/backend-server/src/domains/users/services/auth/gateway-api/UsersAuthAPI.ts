@@ -7,7 +7,7 @@ export interface UsersAuthAPIURL {
 }
 
 export class UsersAuthAPI {
-  static readonly url: UsersAuthAPIURL = {
+  public static readonly url: UsersAuthAPIURL = {
     /**
      * @method POST
      * @request UserAuthGWRequestV1

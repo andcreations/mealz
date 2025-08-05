@@ -1,0 +1,10 @@
+$mealz-pot-color: darken($mealz-theme-color-bg, 20%);
+$mealz-pot-color-dark: darken($mealz-theme-color-bg, 16%);
+
+.mealz-pot-lid {
+  fill: $mealz-pot-color-dark;
+}
+
+.mealz-pot-body {
+  fill: $mealz-pot-color;
+}

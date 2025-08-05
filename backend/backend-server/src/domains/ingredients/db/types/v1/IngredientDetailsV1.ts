@@ -1,4 +1,3 @@
-
 import {
   IsArray,
   IsEnum,
@@ -31,11 +30,11 @@ export class IngredientDetailsV1 {
   @IsEnum(IngredientTypeV1)
   public type: IngredientTypeV1;
 
-  // Unit of measure for facts per 100g
+  // Unit of measure for facts per 100 grams/milliliters
   @IsEnum(UnitPer100V1)
   public unitPer100: UnitPer100V1;
 
-  // Facts per 100g
+  // Facts per 100 grams/milliliters
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => FactPer100V1)

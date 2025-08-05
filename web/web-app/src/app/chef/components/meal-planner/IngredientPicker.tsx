@@ -102,7 +102,6 @@ export function IngredientPicker(props: IngredientPickerProps) {
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(IngredientPickerTranslations);
-
   const ingredientsCrudService = useService(IngredientsCrudService);
   const ingredientsSearch = useService(IngredientsSearch);
 

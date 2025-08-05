@@ -21,10 +21,10 @@ export interface GWIngredient {
   // Type of ingredient
   type: GWIngredientType;
 
-  // Unit per 100g
+  // Unit per 100
   unitPer100: GWUnitPer100;
 
-  // Facts per 100g
+  // Facts per 100 grams/milliliters
   factsPer100: GWFactPer100[];
 
   // Product if ingredient is a product

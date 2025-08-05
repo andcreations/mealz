@@ -76,6 +76,7 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
   color: $mealz-theme-color-fg-dark;
   grid-column: 3;
   grid-row: 1 / span 2;
+  cursor: pointer;
 }
 
 .mealz-ingredient-picker-delete-icon {

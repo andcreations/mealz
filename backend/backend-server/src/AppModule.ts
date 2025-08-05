@@ -10,7 +10,11 @@ import {
   RequestLogMiddleware,
 } from '@mealz/backend-gateway-common';
 
-import { UsersDomainModule, IngredientsDomainModule } from './domains';
+import {
+  UsersDomainModule,
+  IngredientsDomainModule,
+  MealsDomainModule,
+} from './domains';
 import { getServeStaticModule } from './web-app';
 
 @Module({
@@ -18,6 +22,7 @@ import { getServeStaticModule } from './web-app';
     getServeStaticModule(),
     UsersDomainModule,
     IngredientsDomainModule,
+    MealsDomainModule,
   ],
 })
 export class AppModule implements NestModule {

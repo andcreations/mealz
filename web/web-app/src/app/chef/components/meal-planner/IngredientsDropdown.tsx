@@ -5,6 +5,8 @@ import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 import { INGREDIENT_LANGUAGE } from '../../../common';
 import { useTranslations } from '../../../i18n';
 import { getCaloriesPer100 } from '../../../ingredients';
+import { useService } from '../../../hooks';
+import { SettingsService } from '../../../settings';
 import {
   IngredientsDropdownTranslations,
 } from './IngredientsDropdown.translations';
@@ -17,6 +19,21 @@ export interface IngredientsDropdownProps {
 
 export function IngredientsDropdown(props: IngredientsDropdownProps) {
   const translate = useTranslations(IngredientsDropdownTranslations);
+  const settings = useService(SettingsService);
+
+  const buildName = (ingredient: GWIngredient) => {
+    let name = `${ingredient.name[INGREDIENT_LANGUAGE]}`;
+    const secondaryLanguage = settings.getIngredientsSecondaryLanguage();
+    if (secondaryLanguage) {
+      const secondaryName = secondaryLanguage
+        ? ingredient.name[secondaryLanguage]
+        : undefined;
+      if (secondaryName) {
+        name += ` · ${secondaryName}`;
+      }
+    }
+    return name;
+  }
 
   const renderIngredient = (ingredient: GWIngredient, index: number) => {
     const selected = index === props.selectedIndex;
@@ -25,7 +42,10 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
       'mealz-ingredients-dropdown-ingredient',
       { 'mealz-ingredients-dropdown-entry-selected': selected },
     );
+
+    const name = buildName(ingredient);
     const calories = getCaloriesPer100(ingredient);
+
     return (
       <div 
         key={ingredient.id}
@@ -33,13 +53,13 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
         onClick={() => props.onSelect(index)}
       >
         <div className='mealz-ingredients-dropdown-ingredient-name'>
-          {ingredient.name[INGREDIENT_LANGUAGE]}
+          { name }
         </div>
         <div className='mealz-ingredients-dropdown-ingredient-separator'>
           ·
         </div>
         <div className='mealz-ingredients-dropdown-ingredient-calories'>
-          {calories ? `${calories.toFixed(0)} kcal` : ''}
+          { calories ? `${calories.toFixed(0)} kcal` : '' }
         </div>
       </div>
     );

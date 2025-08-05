@@ -14,11 +14,11 @@ export class IngredientsCrudController {
     private readonly ingredientsCrudService: IngredientsCrudService,
   ) {}
 
-  @RequestHandler(IngredientsCrudTopics.ReadFromLast)
-  public async readFromLast(
+  @RequestHandler(IngredientsCrudTopics.ReadFromLastV1)
+  public async readFromLastV1(
     request: ReadFromLastRequestV1,
     context: Context,
   ): Promise<ReadFromLastResponseV1> {
-    return this.ingredientsCrudService.readFromLast(request, context);
+    return this.ingredientsCrudService.readFromLastV1(request, context);
   }
 }

@@ -22,5 +22,4 @@ export class IngredientDBEntity {
     type: DBFieldType.BINARY,
   })
   public details: Buffer;
-
 }

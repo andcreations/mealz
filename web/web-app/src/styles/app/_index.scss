@@ -10,8 +10,12 @@
 @import './page/PageWrapper';
 @import './page/PageNavbar';
 @import './page/PageNavbarMenu';
+@import './page/PageLoader';
 
 @import './components/basic/Row';
+@import './components/basic/Pot';
+@import './components/basic/TippedPot';
+@import './components/basic/Loader';
 @import './components/basic/MaterialIcon';
 @import './components/layout/Center';
 @import './components/layout/FullScreen';

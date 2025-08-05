@@ -31,7 +31,13 @@
       "@mealz/backend-ingredients-gateway-api": ["src/domains/ingredients/gateway-api"],
       "@mealz/backend-ingredients-gateway-common": ["src/domains/ingredients/gateway-common"],
       "@mealz/backend-ingredients-crud-service-api": ["src/domains/ingredients/services/crud/service-api"],
-      "@mealz/backend-ingredients-crud-gateway-api": ["src/domains/ingredients/services/crud/gateway-api"]
+      "@mealz/backend-ingredients-crud-gateway-api": ["src/domains/ingredients/services/crud/gateway-api"],
+
+      "@mealz/backend-meals-common": ["src/domains/meals/common"],
+      "@mealz/backend-meals-db": ["src/domains/meals/db"],
+      "@mealz/backend-meals-crud-service-api": ["src/domains/meals/services/crud/service-api"],
+
+      "@mealz/backend-meals-user-service-api": ["src/domains/meals/services/user/service-api"]
     }
   },
   "exclude": ["node_modules", "dist"]

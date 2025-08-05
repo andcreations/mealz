@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 import { usePatchState, useService } from '../../../hooks';
 import { useBusEventListener } from '../../../bus';
-import { IngredientsCrudService } from '../../../ingredients';
+import { IngredientsCrudService, IngredientsLoadStatusChangedEvent } from '../../../ingredients';
 import { MealPlannerIngredient } from '../../types';
 import { IngredientsTopics } from '../../../ingredients';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
@@ -42,26 +42,7 @@ export function MealPlanner() {
   useEffect(
     () => {
       // TODO Load ingredients from the cookies, local storage, backend...
-      // const ingredients = ingredientsCrudService.getIngredients();
-      patchState({
-        ingredients: [
-          // {
-          //   fullIngredient: ingredients[0],
-          //   enteredAmount: '100',
-          //   calculatedAmount: 100,
-          // },
-          // {
-          //   fullIngredient: ingredients[1],
-          //   enteredAmount: '80',
-          //   calculatedAmount: 80,
-          // },
-          // {
-          //   fullIngredient: ingredients[2],
-          //   enteredAmount: '75',
-          //   calculatedAmount: 75,
-          // },
-        ],
-      });
+      patchState({ ingredients: [] });
     },
     [state.ingredientsRead],
   );
@@ -83,8 +64,10 @@ export function MealPlanner() {
   );  
 
   useBusEventListener(
-    IngredientsTopics.IngredientsRead,
-    () => patchState({ ingredientsRead: true }),
+    IngredientsTopics.IngredientsLoadStatusChanged,
+    (event: IngredientsLoadStatusChangedEvent) => {
+      patchState({ ingredientsRead: true })
+    },
   );
 
   const recalculate = (
@@ -98,7 +81,10 @@ export function MealPlanner() {
     patchState({
       calories: caloriesStr,
       ingredients: result.ingredients,
-      ...ifValueDefined<MealPlannerState>('calculateAmountsStatus', result.error),
+      ...ifValueDefined<MealPlannerState>(
+        'calculateAmountsStatus',
+        result.error,
+      ),
     });
   };
 

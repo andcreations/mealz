@@ -13,7 +13,7 @@ export class IngredientsCrudService {
     private readonly ingredientsCrudRepository: IngredientsCrudRepository,
   ) {}
 
-  public async readFromLast(
+  public async readFromLastV1(
     request: ReadFromLastRequestV1,
     context: Context,
   ): Promise<ReadFromLastResponseV1> {
