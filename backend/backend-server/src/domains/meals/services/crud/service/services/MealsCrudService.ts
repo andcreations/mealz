@@ -83,7 +83,7 @@ export class MealsCrudService {
       //   },
       // );
 
-      console.log('<- done');
+      // console.log('<- done');
     }, 1024);
   }
 
@@ -103,11 +103,11 @@ export class MealsCrudService {
     request: CreateMealRequestV1,
     context: Context,
   ): Promise<CreateMealResponseV1> {
-    const result = await this.mealsCrudRepository.createMeal(
+    const { id } = await this.mealsCrudRepository.createMeal(
       request.meal,
       context,
     );
-    return { id: result.id };
+    return { id };
   }
 
   public async upsertMealV1(

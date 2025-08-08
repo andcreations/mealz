@@ -10,6 +10,7 @@ import {
   CreateMealRequestV1,
   CreateMealResponseV1,
   UpsertMealRequestV1,
+  DeleteMealByIdRequestV1,
 } from './dtos';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class MealsCrudTransporter {
     context: Context,
   ): Promise<ReadMealByIdResponseV1> {
     return this.transporter.sendRequest<
-    ReadMealByIdRequestV1, ReadMealByIdResponseV1
+      ReadMealByIdRequestV1, ReadMealByIdResponseV1
     >(
       MealsCrudTopics.ReadMealByIdV1,
       request,
@@ -53,6 +54,19 @@ export class MealsCrudTransporter {
       UpsertMealRequestV1, void
     >(
       MealsCrudTopics.UpsertMealV1,
+      request,
+      context,
+    );
+  }
+
+  public async deleteMealByIdRequestV1(
+    request: DeleteMealByIdRequestV1,
+    context: Context,
+  ): Promise<void> {
+    return this.transporter.sendRequest<
+    DeleteMealByIdRequestV1, void
+    >(
+      MealsCrudTopics.DeleteMealByIdV1,
       request,
       context,
     );

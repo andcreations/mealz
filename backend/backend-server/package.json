@@ -53,16 +53,5 @@
     "typescript": "^5.8.3"
   },
   "author": "AndCreations",
-  "license": "ISC",
-  "jest": {
-    "rootDir": "src",
-    "moduleFileExtensions": [
-      "js",
-      "ts"
-    ],
-    "testRegex": ".test.ts$",
-    "transform": {
-      "^.+\\.(t)s$": "ts-jest"
-    }
-  }
+  "license": "MIT"
 }

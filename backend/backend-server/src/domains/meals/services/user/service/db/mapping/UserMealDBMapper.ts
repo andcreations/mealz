@@ -8,7 +8,7 @@ export class UserMealDBMapper {
   public toEntity(userMeal: UserMeal): UserMealDBEntity {
     return {
       id: userMeal.id,
-      userId: userMeal.id,
+      userId: userMeal.userId,
       mealId: userMeal.mealId,
       type: userMeal.type,
     };
@@ -20,7 +20,7 @@ export class UserMealDBMapper {
     }
     return {
       id: entity.id,
-      userId: entity.id,
+      userId: entity.userId,
       mealId: entity.mealId,
       type: entity.type,
     }

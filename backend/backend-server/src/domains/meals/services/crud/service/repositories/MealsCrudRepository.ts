@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { IdGenerator, InjectIdGenerator  } from '@mealz/backend-common';
 import { InjectDBRepository, DBRepository, Where } from '@mealz/backend-db';
-import { Meal } from '@mealz/backend-meals-common';import {
+import { Meal } from '@mealz/backend-meals-common';
+import {
   MEALS_DB_NAME,
   MEAL_DB_ENTITY_NAME,
   MealDBEntity,
