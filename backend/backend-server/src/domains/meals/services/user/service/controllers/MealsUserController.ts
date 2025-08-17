@@ -2,9 +2,12 @@ import { Context } from '@mealz/backend-core';
 import { RequestHandler, TransportController } from '@mealz/backend-transport';
 import {
   MealsUserTopics,
+  ReadManyRequestV1,
+  ReadManyResponseV1,
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
+  UpsertUserMealResponseV1
 } from '@mealz/backend-meals-user-service-api';
 
 import { MealsUserService } from '../services';
@@ -12,6 +15,14 @@ import { MealsUserService } from '../services';
 @TransportController()
 export class MealsUserController {
   public constructor(private readonly mealsUserService: MealsUserService) {
+  }
+
+  @RequestHandler(MealsUserTopics.ReadManyV1)
+  public async readManyV1(
+    request: ReadManyRequestV1,
+    context: Context,
+  ): Promise<ReadManyResponseV1> {
+    return this.mealsUserService.readManyV1(request, context);
   }
 
   @RequestHandler(MealsUserTopics.CreateUserMealV1)
@@ -26,7 +37,7 @@ export class MealsUserController {
   public async upsertUserMealV1(
     request: UpsertUserMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<UpsertUserMealResponseV1> {
     return this.mealsUserService.upsertUserMealV1(request, context);
   }
 }

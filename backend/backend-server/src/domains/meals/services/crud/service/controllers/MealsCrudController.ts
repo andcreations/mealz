@@ -7,6 +7,7 @@ import {
   CreateMealResponseV1,
   MealsCrudTopics,
   UpsertMealRequestV1,
+  UpsertMealResponseV1,
   DeleteMealByIdRequestV1,
 } from '@mealz/backend-meals-crud-service-api';
 
@@ -37,7 +38,7 @@ export class MealsCrudController {
   public async upsertMealV1(
     request: UpsertMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<UpsertMealResponseV1> {
     return this.mealsCrudService.upsertMealV1(request, context);
   }
 

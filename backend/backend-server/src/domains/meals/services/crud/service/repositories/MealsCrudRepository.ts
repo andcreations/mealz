@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { IdGenerator, InjectIdGenerator  } from '@mealz/backend-common';
-import { InjectDBRepository, DBRepository, Where } from '@mealz/backend-db';
+import {
+  InjectDBRepository, 
+  DBRepository,
+  Where,
+  UpsertObject,
+} from '@mealz/backend-db';
 import { Meal } from '@mealz/backend-meals-common';
 import {
   MEALS_DB_NAME,
@@ -29,7 +34,6 @@ export class MealsCrudRepository {
     if (!entity) {
       return;
     }
-
     return this.mapper.fromEntity(entity);
   }
 
@@ -48,11 +52,13 @@ export class MealsCrudRepository {
   }
 
   public async upsertMeal(
-    meal: Meal,
+    meal: UpsertObject<Meal, 'id'>,
     context: Context,
-  ): Promise<void> {
-    const entity = this.mapper.toEntity(meal);
+  ): Promise<Pick<Meal, 'id'>> {
+    const id = meal.id ?? this.idGenerator();
+    const entity = this.mapper.toEntity({ ...meal, id });
     await this.repository.upsert(entity, context);
+    return { id };
   }
 
   public async deleteMealById(

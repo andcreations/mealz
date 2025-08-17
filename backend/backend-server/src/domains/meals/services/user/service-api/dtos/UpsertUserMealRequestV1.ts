@@ -3,7 +3,7 @@ import { UserMeal } from '../types';
 
 export class UpsertUserMealRequestV1 {
   // User meal identifier
-  public id: string;
+  public id?: string;
 
   // User identifier
   public userId: UserMeal['userId'];

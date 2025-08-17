@@ -12,8 +12,15 @@ class TestLogger extends Logger {
   error   = jest.fn<void, [string, Context, any]>();
 }
 
+type SagaContext = {
+  value0?: string;
+  value1?: string;
+  value2?: string;
+};
+
 describe('SagaService.run', () => {
   let logger: TestLogger;
+  let sagaContext: SagaContext;
   let sagaService: SagaService;
 
   const context: Context = {
@@ -22,15 +29,16 @@ describe('SagaService.run', () => {
 
   beforeEach(() => {
     logger = new TestLogger();
+    sagaContext = {};
     sagaService = new SagaService(logger);
   });
 
   test('Run successful saga', async () => {
-    const do0 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const do1 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const do2 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+    const do0 = jest.fn<Promise<void>, [SagaContext]>(() => Promise.resolve() );
+    const do1 = jest.fn<Promise<void>, [SagaContext]>(() => Promise.resolve() );
+    const do2 = jest.fn<Promise<void>, [SagaContext]>(() => Promise.resolve() );
 
-    const saga: Saga = {
+    const saga: Saga<SagaContext> = {
       id: 'test-saga',
       operations: [
         {
@@ -47,24 +55,45 @@ describe('SagaService.run', () => {
         },
       ],
     }
-    await sagaService.run(saga, context);
+    await sagaService.run(saga, sagaContext, context);
 
     expect(do0).toHaveBeenCalledTimes(1);
     expect(do1).toHaveBeenCalledTimes(1);
     expect(do2).toHaveBeenCalledTimes(1);
   });
 
-  test('Run undo', async () => {
-    const do0 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const undo0 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+  test('Run undo with passing saga context', async () => {
+    const do0 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
+    const undo0 = jest.fn<Promise<void>, [SagaContext]>(
+      () => {
+        sagaContext.value2 = 'undo0';
+        return Promise.resolve();
+      }
+    );
 
-    const do1 = jest.fn<Promise<void>, []>(() => Promise.reject('Ka-boom!') );
-    const undo1 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+    const do1 = jest.fn<Promise<void>, [SagaContext]>(
+      (sagaContext: SagaContext) => {
+        sagaContext.value0 = 'do1';
+        return Promise.reject(new Error('Ka-boom!'));
+      }
+    );
+    const undo1 = jest.fn<Promise<void>, [SagaContext]>(
+      (sagaContext: SagaContext) => {
+        sagaContext.value1 = 'undo1';
+        return Promise.resolve();
+      }
+    );
 
-    const do2 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const undo2 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+    const do2 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
+    const undo2 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
 
-    const saga: Saga = {
+    const saga: Saga<SagaContext> = {
       id: 'test-saga',
       operations: [
         {
@@ -84,28 +113,53 @@ describe('SagaService.run', () => {
         },
       ],
     }
-    await sagaService.run(saga, context);
+
+    let caughtError: any;
+    try {
+      await sagaService.run(saga, sagaContext, context);
+    } catch (error) {
+      caughtError = error; 
+    }
+
+    expect(caughtError).toBeInstanceOf(Error);
+    expect(caughtError.message).toEqual('Ka-boom!');
 
     expect(do0).toHaveBeenCalledTimes(1);
     expect(do1).toHaveBeenCalledTimes(1);
     expect(do2).toHaveBeenCalledTimes(0);
 
     expect(undo0).toHaveBeenCalledTimes(1);
-    expect(undo1).toHaveBeenCalledTimes(0);
+    expect(undo1).toHaveBeenCalledTimes(1);
     expect(undo2).toHaveBeenCalledTimes(0);
+
+    expect(sagaContext.value0).toEqual('do1');
+    expect(sagaContext.value1).toEqual('undo1');
+    expect(sagaContext.value2).toEqual('undo0');
   });
 
   test('Run fail-fast undo', async () => {
-    const do0 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const undo0 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+    const do0 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
+    const undo0 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
 
-    const do1 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const undo1 = jest.fn<Promise<void>, []>(() => Promise.reject('Undo failed') );
+    const do1 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
+    const undo1 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.reject(new Error('Undo failed'))
+    );
 
-    const do2 = jest.fn<Promise<void>, []>(() => Promise.reject('Ka-boom!') );
-    const undo2 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+    const do2 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.reject(new Error('Ka-boom!'))
+    );
+    const undo2 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
 
-    const saga: Saga = {
+    const saga: Saga<SagaContext> = {
       id: 'test-saga',
       operations: [
         {
@@ -125,13 +179,23 @@ describe('SagaService.run', () => {
         },
       ],
     }
-    await sagaService.run(
-      saga,
-      context,
-      {
-        undoStrategy: SagaUndoStrategy.FailFast,
-      },
-    );
+
+    let caughtError: any;
+    try {
+      await sagaService.run(
+        saga,
+        sagaContext,
+        context,
+        {
+          undoStrategy: SagaUndoStrategy.FailFast,
+        },
+      );
+    } catch (error) {
+      caughtError = error; 
+    }
+
+    expect(caughtError).toBeInstanceOf(Error);
+    expect(caughtError.message).toEqual('Ka-boom!');
 
     expect(do0).toHaveBeenCalledTimes(1);
     expect(do1).toHaveBeenCalledTimes(1);
@@ -139,20 +203,32 @@ describe('SagaService.run', () => {
 
     expect(undo0).toHaveBeenCalledTimes(0);
     expect(undo1).toHaveBeenCalledTimes(1);
-    expect(undo2).toHaveBeenCalledTimes(0);
+    expect(undo2).toHaveBeenCalledTimes(1);
   });
 
   test('Run best-effort undo', async () => {
-    const do0 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const undo0 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+    const do0 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
+    const undo0 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
 
-    const do1 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
-    const undo1 = jest.fn<Promise<void>, []>(() => Promise.reject('Undo failed') );
+    const do1 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
+    const undo1 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.reject(new Error('Undo failed'))
+    );
 
-    const do2 = jest.fn<Promise<void>, []>(() => Promise.reject('Ka-boom!') );
-    const undo2 = jest.fn<Promise<void>, []>(() => Promise.resolve() );
+    const do2 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.reject(new Error('Ka-boom!'))
+    );
+    const undo2 = jest.fn<Promise<void>, [SagaContext]>(
+      () => Promise.resolve()
+    );
 
-    const saga: Saga = {
+    const saga: Saga<SagaContext> = {
       id: 'test-saga',
       operations: [
         {
@@ -172,7 +248,16 @@ describe('SagaService.run', () => {
         },
       ],
     }
-    await sagaService.run(saga, context);
+
+    let caughtError: any;
+    try {
+      await sagaService.run(saga, sagaContext, context);
+    } catch (error) {
+      caughtError = error; 
+    }
+
+    expect(caughtError).toBeInstanceOf(Error);
+    expect(caughtError.message).toEqual('Ka-boom!');
 
     expect(do0).toHaveBeenCalledTimes(1);
     expect(do1).toHaveBeenCalledTimes(1);
@@ -180,6 +265,6 @@ describe('SagaService.run', () => {
 
     expect(undo0).toHaveBeenCalledTimes(1);
     expect(undo1).toHaveBeenCalledTimes(1);
-    expect(undo2).toHaveBeenCalledTimes(0);
+    expect(undo2).toHaveBeenCalledTimes(1);
   });
 });

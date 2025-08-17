@@ -1,6 +1,7 @@
 import { buildTopic } from '@mealz/backend-transport';
 
 export class MealsUserTopics {
+  public static readonly ReadManyV1 = topic('readMany', 'v1');
   public static readonly CreateUserMealV1 = topic('createUserMeal', 'v1');
   public static readonly UpsertUserMealV1 = topic('upsertUserMeal', 'v1');
 };

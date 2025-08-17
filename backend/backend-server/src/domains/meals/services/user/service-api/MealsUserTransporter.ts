@@ -5,6 +5,8 @@ import { Transporter } from '@mealz/backend-transport';
 import { MEALS_USER_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsUserTopics } from './MealsUserTopics';
 import {
+  ReadManyRequestV1,
+  ReadManyResponseV1,
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
@@ -16,6 +18,19 @@ export class MealsUserTransporter {
     @Inject(MEALS_USER_TRANSPORTER_TOKEN)
     private readonly transporter: Transporter,
   ) {}
+
+  public async readManyV1(
+    request: ReadManyRequestV1,
+    context: Context,
+  ): Promise<ReadManyResponseV1> {
+    return this.transporter.sendRequest<
+    ReadManyRequestV1, ReadManyResponseV1
+    >(
+      MealsUserTopics.ReadManyV1,
+      request,
+      context,
+    );
+  }
 
   public async createUserMealV1(
     request: CreateUserMealRequestV1,

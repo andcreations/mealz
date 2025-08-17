@@ -1,0 +1,41 @@
+import { URLBuilder } from '@andcreations/common';
+import { arrayToQueryParam } from '@mealz/backend-gateway-common';
+
+export const MEALS_USER_URL = '/api/meals/user';
+
+export interface MealsUserAPIURL {
+  readManyV1: (
+    lastId: string | undefined,
+    limit: number | undefined,
+    userId: string,
+    types: string[] | undefined,
+  ) => string;
+}
+
+export class MealsUserAPI {
+  static readonly url: MealsUserAPIURL = {
+    /**
+     * @method GET
+     * @param lastId Identifier of the last read user meal (optional).
+     * @param limit Number of user meals to read (optional).
+     * @param userId User identifier.
+     * @param types Types of user meal (optional).
+     */
+    readManyV1: (
+      lastId: string | undefined,
+      limit: number | undefined,
+      userId: string,
+      types: string[] | undefined,
+    ) => {
+      return URLBuilder.build(
+        `${MEALS_USER_URL}/many/v1`,
+        {
+          lastId,
+          limit,
+          userId,
+          types: arrayToQueryParam(types),
+        },
+      );
+    }
+  };
+}

@@ -10,17 +10,27 @@ export class SagaService {
   public constructor(private readonly logger: Logger) {
   }
 
-  public async run(
-    saga: Saga,
+  public async run<TContext>(
+    saga: Saga<TContext>,
+    sagaContext: TContext,
     context: Context,
     options?: RunSagaOptions,
   ): Promise<void> {
     let sagaError: any;
-    const completedOperations: SagaOperation[] = [];
+    const runOperations: SagaOperation<TContext>[] = [];
     for (const operation of saga.operations) {
       try {
-        await operation.do();
-        completedOperations.push(operation);
+        this.logger.verbose(
+          'Running saga operation',
+          {
+            ...context,
+            sagaId: saga.id,
+            operationId: operation.getId(),
+            sagaContext,
+          }
+        );
+        runOperations.push(operation);
+        await operation.do(sagaContext);
       } catch (error) {
         sagaError = error;
         this.logger.error(
@@ -29,6 +39,7 @@ export class SagaService {
             ...context,
             sagaId: saga.id,
             operationId: operation.getId(),
+            sagaContext,
           },
           error,
         );
@@ -40,10 +51,20 @@ export class SagaService {
       const strategy = options?.undoStrategy ?? SagaUndoStrategy.BestEffort;
       switch (strategy) {
         case SagaUndoStrategy.FailFast:
-          await this.undoFailFast(saga, completedOperations, context);
+          await this.undoFailFast(
+            saga,
+            sagaContext,
+            runOperations,
+            context,
+          );
           break;
         case SagaUndoStrategy.BestEffort:
-          await this.undoBestEffort(saga, completedOperations, context);
+          await this.undoBestEffort(
+            saga,
+            sagaContext,
+            runOperations,
+            context,
+          );
           break;
         default:
           throw new InternalError(`Unknown sage undo strategy`);
@@ -53,9 +74,10 @@ export class SagaService {
     }
   }
 
-  private async undoFailFast(
-    saga: Saga,
-    completedOperations: SagaOperation[],
+  private async undoFailFast<TContext>(
+    saga: Saga<TContext>,
+    sagaContext: TContext,
+    completedOperations: SagaOperation<TContext>[],
     context: Context,
   ): Promise<void> {
     for (const operation of completedOperations.reverse()) {
@@ -63,7 +85,16 @@ export class SagaService {
         continue;
       }
       try {
-        await operation.undo();
+        this.logger.verbose(
+          'Running saga undo',
+          {
+            ...context,
+            sagaId: saga.id,
+            operationId: operation.getId(),
+            sagaContext,
+          }
+        );
+        await operation.undo(sagaContext);
       } catch (error) {
         this.logger.error(
           'Failed to undo saga operation',
@@ -71,6 +102,7 @@ export class SagaService {
             ...context,
             sagaId: saga.id,
             operationId: operation.getId(),
+            sagaContext,
           },
           error,
         );
@@ -79,9 +111,10 @@ export class SagaService {
     }
   }
 
-  private async undoBestEffort(
-    saga: Saga,
-    completedOperations: SagaOperation[],
+  private async undoBestEffort<TContext>(
+    saga: Saga<TContext>,
+    sagaContext: TContext,
+    completedOperations: SagaOperation<TContext>[],
     context: Context,
   ): Promise<void> {
     for (const operation of completedOperations.reverse()) {
@@ -89,7 +122,16 @@ export class SagaService {
         continue;
       }
       try {
-        await operation.undo();
+        this.logger.verbose(
+          'Running saga undo',
+          {
+            ...context,
+            sagaId: saga.id,
+            operationId: operation.getId(),
+            sagaContext,
+          }
+        );
+        await operation.undo(sagaContext);
       } catch (error) {
         this.logger.error(
           'Failed to undo saga operation',
@@ -97,6 +139,7 @@ export class SagaService {
             ...context,
             sagaId: saga.id,
             operationId: operation.getId(),
+            sagaContext,
           },
           error,
         );

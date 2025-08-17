@@ -3,4 +3,5 @@ export * from './ReadMealByIdResponseV1';
 export * from './CreateMealRequestV1';
 export * from './CreateMealResponseV1';
 export * from './UpsertMealRequestV1';
+export * from './UpsertMealResponseV1';
 export * from './DeleteMealByIdRequestV1';
