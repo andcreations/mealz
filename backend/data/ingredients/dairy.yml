@@ -16,23 +16,200 @@
       polyunsaturated: 0.2
   link: https://www.nutritionix.com/food/coconut-milk
 
-# Milk  
-# Cheese  
-# Yogurt  
-# Butter  
-# Cream  
-# Sour Cream  
-# Cottage Cheese  
-# Cream Cheese  
-# Buttermilk  
-# Kefir  
-# Ghee  
-# Skyr  
-# Quark  
-# Ricotta  
-# Mascarpone  
-# Paneer  
-# Evaporated Milk  
-# Condensed Milk  
-# Half and Half  
-# Whipped Cream
+- name:
+    en: Milk
+    pl: Mleko
+  unit: g
+  type: generic
+  weight: 244
+  facts:
+    calories: 122
+    carbs: 12
+    sugars: 12
+    protein: 8.1
+    fat:
+      total: 4.8
+      saturated: 3.1
+      monounsaturated: 1.4
+      polyunsaturated: 0.2
+  link: https://www.nutritionix.com/food/milk
+
+- name:
+    en: Cottage cheese 1%
+    pl: Twaróg 1%
+  unit: g
+  type: generic
+  weight: 109
+  facts:
+    calories: 107
+    carbs: 3.7
+    sugars: 2.9
+    protein: 12
+    fat:
+      total: 4.7
+      saturated: 1.9
+      monounsaturated: 0.9
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/1-cottage-cheese
+
+- name:
+    en: Greek yogurt
+    pl: Jogurt grecki
+  unit: g
+  type: generic
+  weight: 170
+  facts:
+    calories: 100
+    carbs: 6.1
+    sugars: 5.5
+    protein: 17
+    fat:
+      total: 0.7
+      saturated: 0.2
+      monounsaturated: 0.1
+      polyunsaturated: 0
+  link: https://www.nutritionix.com/food/greek-yogurt
+
+- name:
+    en: Butter
+    pl: Masło
+  unit: g
+  type: generic
+  weight: 14
+  facts:
+    calories: 102
+    carbs: 0
+    sugars: 0
+    protein: 0.1
+    fat:
+      total: 12
+      saturated: 7.3
+      monounsaturated: 3
+      polyunsaturated: 0.4
+  link: https://www.nutritionix.com/food/butter
+
+- name:
+    en: Buttermilk
+    pl: Maślanka
+  unit: g
+  type: generic
+  weight: 245
+  facts:
+    calories: 98
+    carbs: 12
+    sugars: 12
+    protein: 8.1
+    fat:
+      total: 2.2
+      saturated: 1.3
+      monounsaturated: 0.6
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/buttermilk
+
+- name:
+    en: Kefir
+    pl: Kefir
+  unit: g
+  type: generic
+  weight: 249
+  facts:
+    calories: 112
+    carbs: 12
+    sugars: 12
+    protein: 11
+    fat:
+      total: 2.2
+      saturated: 1.4
+      monounsaturated: 0.6
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/kefir
+
+- name:
+    en: Ghee
+    pl: Masło klarowane ghee
+  unit: g
+  type: generic
+  weight: 13
+  facts:
+    calories: 112
+    carbs: 0
+    sugars: 0
+    protein: 0
+    fat:
+      total: 12
+      saturated: 7.9
+      monounsaturated: 3.7
+      polyunsaturated: 0.5
+  link: https://www.nutritionix.com/food/ghee
+
+- name:
+    en: Skyr
+    pl: Skyr
+  unit: g
+  type: generic
+  weight: 28
+  facts:
+    calories: 23
+    carbs: 3.4
+    sugars: 3.2
+    protein: 2.3
+    fat:
+      total: 0
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0
+  link: https://www.nutritionix.com/food/skyr
+
+- name:
+    en: Ricotta
+    pl: Ser ricotta
+  unit: g
+  type: generic
+  weight: 124
+  facts:
+    calories: 171
+    carbs: 6.4
+    sugars: 0.4
+    protein: 14
+    fat:
+      total: 9.8
+      saturated: 6.1
+      monounsaturated: 2.9
+      polyunsaturated: 0.3
+  link: https://www.nutritionix.com/food/ricotta
+
+- name:
+    en: Mascarpone
+    pl: Ser mascarpone
+  unit: g
+  type: generic
+  weight: 28
+  facts:
+    calories: 122
+    carbs: 0.9
+    sugars: 0.7
+    protein: 1.3
+    fat:
+      total: 13
+      saturated: 7.6
+      monounsaturated: 3.3
+      polyunsaturated: 0.5
+  link: https://www.nutritionix.com/food/mascarpone
+
+- name:
+    en: Paneer
+    pl: Ser paneer
+  unit: g
+  type: generic
+  weight: 122
+  facts:
+    calories: 365
+    carbs: 3.6
+    sugars: 2.8
+    protein: 22
+    fat:
+      total: 29
+      saturated: 16
+      monounsaturated: 7.3
+      polyunsaturated: 1.3
+  link: https://www.nutritionix.com/food/paneer

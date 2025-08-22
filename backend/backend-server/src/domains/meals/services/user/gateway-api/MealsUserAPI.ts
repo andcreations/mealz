@@ -10,6 +10,7 @@ export interface MealsUserAPIURL {
     userId: string,
     types: string[] | undefined,
   ) => string;
+  upsertV1: () => string;
 }
 
 export class MealsUserAPI {
@@ -20,6 +21,7 @@ export class MealsUserAPI {
      * @param limit Number of user meals to read (optional).
      * @param userId User identifier.
      * @param types Types of user meal (optional).
+     * @response ReadManyUserMealsGWResponseV1
      */
     readManyV1: (
       lastId: string | undefined,
@@ -36,6 +38,13 @@ export class MealsUserAPI {
           types: arrayToQueryParam(types),
         },
       );
-    }
+    },
+
+    /**
+     * @method POST
+     * @request UpsertUserMealGWRequestV1
+     * @response UpsertUserMealGWResponseV1
+     */
+    upsertV1: () => `${MEALS_USER_URL}/upsert/v1`,
   };
 }

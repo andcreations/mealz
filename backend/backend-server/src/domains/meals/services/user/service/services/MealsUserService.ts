@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { ifDefined, Saga, SagaService } from '@mealz/backend-common';
+import { ifDefined } from '@mealz/backend-shared';
+import { Saga, SagaService } from '@mealz/backend-common';
 import { Meal } from '@mealz/backend-meals-common';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import {
   UserMeal,
-  ReadManyRequestV1,
-  ReadManyResponseV1,
+  ReadManyUserMealsRequestV1,
+  ReadManyUserMealsResponseV1,
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
@@ -95,9 +96,9 @@ export class MealsUserService {
   }
 
   public async readManyV1(
-    request: ReadManyRequestV1,
+    request: ReadManyUserMealsRequestV1,
     context: Context,
-  ): Promise<ReadManyResponseV1> {
+  ): Promise<ReadManyUserMealsResponseV1> {
     const userMeals = await this.mealsUserRepository.readMany(
       request.lastId,
       request.limit,

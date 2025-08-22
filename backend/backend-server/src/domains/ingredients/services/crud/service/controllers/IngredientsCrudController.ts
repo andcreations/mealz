@@ -2,8 +2,8 @@ import { Context } from '@mealz/backend-core';
 import { RequestHandler, TransportController } from '@mealz/backend-transport';
 import {
   IngredientsCrudTopics,
-  ReadFromLastRequestV1,
-  ReadFromLastResponseV1,
+  ReadIngredientsFromLastRequestV1,
+  ReadIngredientsFromLastResponseV1,
 } from '@mealz/backend-ingredients-crud-service-api';
 
 import { IngredientsCrudService } from '../services';
@@ -16,9 +16,9 @@ export class IngredientsCrudController {
 
   @RequestHandler(IngredientsCrudTopics.ReadFromLastV1)
   public async readFromLastV1(
-    request: ReadFromLastRequestV1,
+    request: ReadIngredientsFromLastRequestV1,
     context: Context,
-  ): Promise<ReadFromLastResponseV1> {
+  ): Promise<ReadIngredientsFromLastResponseV1> {
     return this.ingredientsCrudService.readFromLastV1(request, context);
   }
 }

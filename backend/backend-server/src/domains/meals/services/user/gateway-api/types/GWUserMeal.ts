@@ -4,6 +4,12 @@ export interface GWUserMeal {
   // User meal identifier
   id: string;
 
+  // User identifier
+  userId: string;
+
   // Meal
   meal: GWMeal;
+
+  // User meal type
+  type: string;
 }

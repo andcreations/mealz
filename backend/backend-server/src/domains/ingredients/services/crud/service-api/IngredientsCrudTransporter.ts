@@ -1,24 +1,27 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { Transporter } from '@mealz/backend-transport';
+import { RequestTransporter } from '@mealz/backend-transport';
 
-import { INGREDIENTS_CRUD_TRANSPORTER_TOKEN } from './inject-tokens';
+import { INGREDIENTS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { IngredientsCrudTopics } from './IngredientsCrudTopics';
-import { ReadFromLastRequestV1, ReadFromLastResponseV1 } from './dtos';
+import {
+  ReadIngredientsFromLastRequestV1,
+  ReadIngredientsFromLastResponseV1,
+} from './dtos';
 
 @Injectable()
 export class IngredientsCrudTransporter {
   public constructor(
-    @Inject(INGREDIENTS_CRUD_TRANSPORTER_TOKEN)
-    private readonly transporter: Transporter,
+    @Inject(INGREDIENTS_CRUD_REQUEST_TRANSPORTER_TOKEN)
+    private readonly transporter: RequestTransporter,
   ) {}
 
   public async readFromLastV1(
-    request: ReadFromLastRequestV1,
+    request: ReadIngredientsFromLastRequestV1,
     context: Context,
-  ): Promise<ReadFromLastResponseV1> {
+  ): Promise<ReadIngredientsFromLastResponseV1> {
     return this.transporter.sendRequest<
-      ReadFromLastRequestV1, ReadFromLastResponseV1
+      ReadIngredientsFromLastRequestV1, ReadIngredientsFromLastResponseV1
     >(
       IngredientsCrudTopics.ReadFromLastV1,
       request,

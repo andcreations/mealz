@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { Transporter } from '@mealz/backend-transport';
+import { RequestTransporter } from '@mealz/backend-transport';
 
-import { MEALS_CRUD_TRANSPORTER_TOKEN } from './inject-tokens';
+import { MEALS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsCrudTopics } from './MealsCrudTopics';
 import {
   ReadMealByIdRequestV1,
   ReadMealByIdResponseV1,
+  ReadMealsByIdRequestV1,
+  ReadMealsByIdResponseV1,
   CreateMealRequestV1,
   CreateMealResponseV1,
   UpsertMealRequestV1,
@@ -17,8 +19,8 @@ import {
 @Injectable()
 export class MealsCrudTransporter {
   public constructor(
-    @Inject(MEALS_CRUD_TRANSPORTER_TOKEN)
-    private readonly transporter: Transporter,
+    @Inject(MEALS_CRUD_REQUEST_TRANSPORTER_TOKEN)
+    private readonly transporter: RequestTransporter,
   ) {}
 
   public async readMealByIdV1(
@@ -33,6 +35,19 @@ export class MealsCrudTransporter {
       context,
     );
   }
+
+  public async readMealsByIdV1(
+    request: ReadMealsByIdRequestV1,
+    context: Context,
+  ): Promise<ReadMealsByIdResponseV1> {
+    return this.transporter.sendRequest<
+      ReadMealsByIdRequestV1, ReadMealsByIdResponseV1
+    >(
+      MealsCrudTopics.ReadMealsByIdV1,
+      request,
+      context,
+    );
+  }  
 
   public async createMealV1(
     request: CreateMealRequestV1,

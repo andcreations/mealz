@@ -3,6 +3,8 @@ import { Context } from '@mealz/backend-core';
 import {
   ReadMealByIdRequestV1,
   ReadMealByIdResponseV1,  
+  ReadMealsByIdRequestV1,
+  ReadMealsByIdResponseV1,  
   CreateMealRequestV1,
   CreateMealResponseV1,
   UpsertMealRequestV1,
@@ -98,6 +100,19 @@ export class MealsCrudService {
       throw new MealByIdNotFoundError(id);
     }
     return { meal };
+  }
+
+  public async readMealsByIdV1(
+    request: ReadMealsByIdRequestV1,
+    context: Context,
+  ): Promise<ReadMealsByIdResponseV1> {
+    const { ids } = request;
+    const meals = await this.mealsCrudRepository.readMealsById(ids, context);
+    if (meals.length < ids.length) {
+      const idsNotFound = ids.filter(id => !meals.some(meal => meal.id === id));
+      
+    }
+    return { meals };
   }
 
   public async createMealV1(

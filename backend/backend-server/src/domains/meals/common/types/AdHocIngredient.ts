@@ -1,7 +1,7 @@
 export class AdHocIngredient {
   // Ingredient name
-  name: string;
+  public name: string;
 
   // Calories per 100 grams/milliliters
-  caloriesPer100: number;
+  public caloriesPer100: number;
 }

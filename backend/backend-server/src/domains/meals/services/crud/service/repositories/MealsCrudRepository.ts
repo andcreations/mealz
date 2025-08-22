@@ -37,6 +37,13 @@ export class MealsCrudRepository {
     return this.mapper.fromEntity(entity);
   }
 
+  public async readMealsById(
+    ids: string[],
+    context: Context,
+  ): Promise<Meal[]> {
+    return [];
+  }
+
   public async createMeal(
     meal: Omit<Meal, 'id'>,
     context: Context,

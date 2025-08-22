@@ -1,9 +1,9 @@
 import { Context } from '@mealz/backend-core';
 
 import { callRequestHandler } from '../spec';
-import { Transporter } from './Transporter';
+import { RequestTransporter } from './RequestTransporter';
 
-export class LocalTransporter extends Transporter {
+export class LocalRequestTransporter extends RequestTransporter {
   public constructor() {
     super();
   }

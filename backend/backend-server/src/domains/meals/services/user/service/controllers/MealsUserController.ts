@@ -2,8 +2,8 @@ import { Context } from '@mealz/backend-core';
 import { RequestHandler, TransportController } from '@mealz/backend-transport';
 import {
   MealsUserTopics,
-  ReadManyRequestV1,
-  ReadManyResponseV1,
+  ReadManyUserMealsRequestV1,
+  ReadManyUserMealsResponseV1,
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
@@ -19,9 +19,9 @@ export class MealsUserController {
 
   @RequestHandler(MealsUserTopics.ReadManyV1)
   public async readManyV1(
-    request: ReadManyRequestV1,
+    request: ReadManyUserMealsRequestV1,
     context: Context,
-  ): Promise<ReadManyResponseV1> {
+  ): Promise<ReadManyUserMealsResponseV1> {
     return this.mealsUserService.readManyV1(request, context);
   }
 

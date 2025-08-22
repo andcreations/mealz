@@ -1,5 +1,7 @@
 export * from './ReadMealByIdRequestV1';
 export * from './ReadMealByIdResponseV1';
+export * from './ReadMealsByIdRequestV1';
+export * from './ReadMealsByIdResponseV1';
 export * from './CreateMealRequestV1';
 export * from './CreateMealResponseV1';
 export * from './UpsertMealRequestV1';

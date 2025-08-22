@@ -2,11 +2,11 @@ import { MealIngredient } from './MealIngredient';
 
 export class Meal {
   // Meal identifier
-  id: string;
+  public id: string;
 
   // Meal calories
-  calories?: number;
+  public calories?: number;
 
   // Meal ingredients
-  ingredients: MealIngredient[];
+  public ingredients: MealIngredient[];
 }

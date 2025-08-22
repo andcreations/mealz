@@ -13,6 +13,7 @@
     "paths": {
       "@mealz/backend-core": ["src/core"],
       "@mealz/backend-common": ["src/common"],
+      "@mealz/backend-shared": ["src/shared"],
       "@mealz/backend-api": ["src/api"],
       "@mealz/backend-gateway-core": ["src/gateway/core"],
       "@mealz/backend-gateway-common": ["src/gateway/common"],
@@ -36,6 +37,7 @@
       "@mealz/backend-meals-common": ["src/domains/meals/common"],
       "@mealz/backend-meals-db": ["src/domains/meals/db"],
       "@mealz/backend-meals-gateway-api": ["src/domains/meals/gateway-api"],
+      "@mealz/backend-meals-gateway-common": ["src/domains/meals/gateway-common"],
       "@mealz/backend-meals-crud-service-api": ["src/domains/meals/services/crud/service-api"],
 
       "@mealz/backend-meals-user-service-api": ["src/domains/meals/services/user/service-api"],

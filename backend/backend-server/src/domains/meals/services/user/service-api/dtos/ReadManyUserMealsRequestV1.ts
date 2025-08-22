@@ -1,6 +1,6 @@
 import { UserMeal } from '../types';
 
-export class ReadManyRequestV1 {
+export class ReadManyUserMealsRequestV1 {
   // Identifier of the user meal read last
   public lastId?: string;
 

@@ -54,6 +54,7 @@ export class MealsUserRepository {
     if (types) {
       query.type = { $in: types };
     }
+    console.log('types', types);
     const entities = await this.repository.find(
       query,
       { 

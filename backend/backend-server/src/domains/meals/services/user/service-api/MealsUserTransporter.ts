@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { Transporter } from '@mealz/backend-transport';
+import { RequestTransporter } from '@mealz/backend-transport';
 
-import { MEALS_USER_TRANSPORTER_TOKEN } from './inject-tokens';
+import { MEALS_USER_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsUserTopics } from './MealsUserTopics';
 import {
-  ReadManyRequestV1,
-  ReadManyResponseV1,
+  ReadManyUserMealsRequestV1,
+  ReadManyUserMealsResponseV1,
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
@@ -15,16 +15,16 @@ import {
 @Injectable()
 export class MealsUserTransporter {
   public constructor(
-    @Inject(MEALS_USER_TRANSPORTER_TOKEN)
-    private readonly transporter: Transporter,
+    @Inject(MEALS_USER_REQUEST_TRANSPORTER_TOKEN)
+    private readonly transporter: RequestTransporter,
   ) {}
 
   public async readManyV1(
-    request: ReadManyRequestV1,
+    request: ReadManyUserMealsRequestV1,
     context: Context,
-  ): Promise<ReadManyResponseV1> {
+  ): Promise<ReadManyUserMealsResponseV1> {
     return this.transporter.sendRequest<
-    ReadManyRequestV1, ReadManyResponseV1
+    ReadManyUserMealsRequestV1, ReadManyUserMealsResponseV1
     >(
       MealsUserTopics.ReadManyV1,
       request,

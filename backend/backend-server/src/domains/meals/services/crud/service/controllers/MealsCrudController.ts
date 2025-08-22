@@ -3,6 +3,8 @@ import { RequestHandler, TransportController } from '@mealz/backend-transport';
 import {
   ReadMealByIdRequestV1,
   ReadMealByIdResponseV1,
+  ReadMealsByIdRequestV1,
+  ReadMealsByIdResponseV1,
   CreateMealRequestV1,
   CreateMealResponseV1,
   MealsCrudTopics,
@@ -24,6 +26,14 @@ export class MealsCrudController {
     context: Context,
   ): Promise<ReadMealByIdResponseV1> {
     return this.mealsCrudService.readMealByIdV1(request, context);
+  }
+
+  @RequestHandler(MealsCrudTopics.ReadMealsByIdV1)
+  public async readMealsByIdV1(
+    request: ReadMealsByIdRequestV1,
+    context: Context,
+  ): Promise<ReadMealsByIdResponseV1> {
+    return this.mealsCrudService.readMealsByIdV1(request, context);
   }
 
   @RequestHandler(MealsCrudTopics.CreateMealV1)

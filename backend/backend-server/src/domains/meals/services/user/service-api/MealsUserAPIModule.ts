@@ -1,11 +1,14 @@
-import { DynamicModule, Module, Type } from '@nestjs/common';
-import { Transporter } from '@mealz/backend-transport';
+import { DynamicModule, Module } from '@nestjs/common';
+import { 
+  RequestTransporter,
+  RequestTransporterResolver,
+} from '@mealz/backend-transport';
 
-import { MEALS_USER_TRANSPORTER_TOKEN } from './inject-tokens';
+import { MEALS_USER_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsUserTransporter } from './MealsUserTransporter';
 
 export interface MealsUserAPIModuleOptions {
-  transporter: Type<Transporter>;
+  requestTransporter?: RequestTransporter;
 }
 
 @Module({})
@@ -17,8 +20,12 @@ export class MealsUserAPIModule {
       module: MealsUserAPIModule,
       providers: [
         {
-          provide: MEALS_USER_TRANSPORTER_TOKEN,
-          useClass: options.transporter,
+          provide: MEALS_USER_REQUEST_TRANSPORTER_TOKEN,
+          useValue: RequestTransporterResolver.forService({
+            domain: 'meals',
+            service: 'user',
+            overrideTransporter: options.requestTransporter,
+          }),
         },
         MealsUserTransporter,
       ],

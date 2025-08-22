@@ -1,11 +1,14 @@
-import { DynamicModule, Module, Type } from '@nestjs/common';
-import { Transporter } from '@mealz/backend-transport';
+import { DynamicModule, Module } from '@nestjs/common';
+import { 
+  RequestTransporter,
+  RequestTransporterResolver,
+} from '@mealz/backend-transport';
 
-import { USERS_AUTH_TRANSPORTER_TOKEN } from './inject-tokens';
+import { USERS_AUTH_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { UsersAuthTransporter } from './UsersAuthTransporter';
 
 export interface UsersAuthAPIModuleOptions {
-  transporter: Type<Transporter>;
+  requestTransporter?: RequestTransporter;
 }
 
 @Module({})
@@ -17,8 +20,12 @@ export class UsersAuthAPIModule {
       module: UsersAuthAPIModule,
       providers: [
         {
-          provide: USERS_AUTH_TRANSPORTER_TOKEN,
-          useClass: options.transporter,
+          provide: USERS_AUTH_REQUEST_TRANSPORTER_TOKEN,
+          useValue: RequestTransporterResolver.forService({
+            domain: 'users',
+            service: 'auth',
+            overrideTransporter: options.requestTransporter,
+          }),
         },
         UsersAuthTransporter,
       ],

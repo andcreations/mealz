@@ -1,11 +1,14 @@
-import { DynamicModule, Module, Type } from '@nestjs/common';
-import { Transporter } from '@mealz/backend-transport';
+import { DynamicModule, Module } from '@nestjs/common';
+import {
+  RequestTransporter,
+  RequestTransporterResolver,
+} from '@mealz/backend-transport';
 
-import { INGREDIENTS_CRUD_TRANSPORTER_TOKEN } from './inject-tokens';
+import { INGREDIENTS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { IngredientsCrudTransporter } from './IngredientsCrudTransporter';
 
 export interface IngredientsCrudAPIModuleOptions {
-  transporter: Type<Transporter>;
+  requestTransporter?: RequestTransporter;
 }
 
 @Module({})
@@ -17,8 +20,12 @@ export class IngredientsCrudAPIModule {
       module: IngredientsCrudAPIModule,
       providers: [
         {
-          provide: INGREDIENTS_CRUD_TRANSPORTER_TOKEN,
-          useClass: options.transporter,
+          provide: INGREDIENTS_CRUD_REQUEST_TRANSPORTER_TOKEN,
+          useValue: RequestTransporterResolver.forService({
+            domain: 'ingredients',
+            service: 'crud',
+            overrideTransporter: options.requestTransporter,
+          }),
         },
         IngredientsCrudTransporter,
       ],

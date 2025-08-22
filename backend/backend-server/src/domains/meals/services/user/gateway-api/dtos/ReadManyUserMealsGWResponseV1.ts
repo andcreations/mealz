@@ -1,5 +1,5 @@
-import { UserMeal } from '@mealz/backend-meals-user-service-api';
+import { GWUserMeal } from '@mealz/backend-meals-user-gateway-api';
 
 export interface ReadManyUserMealsGWResponseV1 {
-  userMeals: UserMeal[];
+  userMeals: GWUserMeal[];
 }
