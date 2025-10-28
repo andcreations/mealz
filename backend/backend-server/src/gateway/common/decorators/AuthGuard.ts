@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
       throw new AccessForbiddenError();
     }
 
-    // user
+    // payload
     const payload = rawPayload as JwtPayload;
 
     // roles

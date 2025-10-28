@@ -24,7 +24,7 @@ export class MealsUserService {
     private readonly mealsUserRepository: MealsUserRepository,
   ) {
     // TODO Remove this
-    setTimeout(async () => {
+    // setTimeout(async () => {
       // try {
       //   await this.createUserMealV1(
       //     {
@@ -91,8 +91,8 @@ export class MealsUserService {
       //   console.log('-! failed', error);
       // }
 
-      console.log('<- done.2');
-    }, 1024);
+    //   console.log('<- done.2');
+    // }, 1024);
   }
 
   public async readManyV1(
@@ -181,7 +181,7 @@ export class MealsUserService {
     request: UpsertUserMealRequestV1,
     context: Context,
   ): Promise<UpsertUserMealResponseV1> {
-    // sags context
+    // saga context
     type SagaContext = {
       originalUserMeal?: UserMeal;
       originalMeal?: Meal;

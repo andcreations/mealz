@@ -23,6 +23,9 @@
       ],
       "@mealz/backend-ingredients-crud-gateway-api": [
         "../../backend/backend-server/src/domains/ingredients/services/crud/gateway-api"
+      ],
+      "@mealz/backend-meals-user-gateway-api": [
+        "../../backend/backend-server/src/domains/meals/services/user/gateway-api"
       ]
     }
   }

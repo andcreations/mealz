@@ -36,6 +36,10 @@ module.exports = {
         '@mealz/backend-ingredients-crud-gateway-api',
         'domains/ingredients/services/crud/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-meals-user-gateway-api',
+        'domains/meals/services/user/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser

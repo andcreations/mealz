@@ -4,6 +4,7 @@ import {
   UsersAuthAPI,
   UserAuthGWRequestV1,
   UserAuthGWResponseV1,
+  CheckUserAuthGWResponseV1,
 } from '@mealz/backend-users-auth-gateway-api';
 
 import { Log } from '../../log';
@@ -12,7 +13,8 @@ import { AuthTopics } from '../bus';
 
 @Service()
 export class AuthService {
-  private signedIn = false;
+  // private signedIn = false;
+  private userId: string | undefined;
 
   public constructor(
     private readonly http: HTTPWebClientService,
@@ -20,30 +22,34 @@ export class AuthService {
   ) {}
 
   public async signIn(email: string, password: string): Promise<void> {
-    await this.http.post<
+    const response = await this.http.post<
       UserAuthGWRequestV1,
       UserAuthGWResponseV1
     >(UsersAuthAPI.url.authV1(), {
       email,
       password,
     });
-    this.signedIn = true;
+    // this.signedIn = true;
+    this.userId = response.data.userId;
     this.notifySignedIn();
   }
 
   public async signOut(): Promise<void> {
     await this.http.delete<void>(UsersAuthAPI.url.signOutV1());
-    this.signedIn = false;
+    // this.signedIn = false;
+    this.userId = undefined;
   }
 
   public async checkSignedIn(): Promise<boolean> {
     Log.debug('Checking user signed in');
     try {
-      const response = await this.http.get<void>(UsersAuthAPI.url.checkV1());
+      const response = await this.http.get<CheckUserAuthGWResponseV1>(
+        UsersAuthAPI.url.checkV1()
+      );
       if (response.status === 200) {
         Log.debug('User already signed in');
-        const wasSignedIn = this.signedIn;
-        this.signedIn = true;
+        const wasSignedIn = this.isSignedIn();
+        this.userId = response.data.userId;
         if (!wasSignedIn) {
           this.notifySignedIn();
         }
@@ -58,7 +64,7 @@ export class AuthService {
   }
 
   public isSignedIn(): boolean {
-    return this.signedIn;
+    return this.userId !== undefined;
   }
 
   private notifySignedIn(): void {

@@ -24,7 +24,7 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
   const buildName = (ingredient: GWIngredient) => {
     let name = `${ingredient.name[INGREDIENT_LANGUAGE]}`;
     const secondaryLanguage = settings.getIngredientsSecondaryLanguage();
-    if (secondaryLanguage) {
+    if (secondaryLanguage && settings.showSecondaryLanguage()) {
       const secondaryName = secondaryLanguage
         ? ingredient.name[secondaryLanguage]
         : undefined;

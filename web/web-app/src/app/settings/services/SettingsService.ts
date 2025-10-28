@@ -6,4 +6,9 @@ export class SettingsService {
     // TODO Make it configurable.
     return 'pl';
   }
+
+  public showSecondaryLanguage(): boolean {
+    // TODO Make it configurable.
+    return false;
+  }
 }

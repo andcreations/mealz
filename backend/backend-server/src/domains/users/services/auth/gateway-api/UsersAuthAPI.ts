@@ -22,6 +22,7 @@ export class UsersAuthAPI {
 
     /**
      * @method GET
+     * @response CheckUserAuthGWResponseV1
      */
     checkV1: () => `${USERS_AUTH_URL}/check/v1`,
   };

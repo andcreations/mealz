@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 import { usePatchState, useService } from '../../../hooks';
 import { useBusEventListener } from '../../../bus';
-import { IngredientsCrudService, IngredientsLoadStatusChangedEvent } from '../../../ingredients';
+import { IngredientsLoadStatusChangedEvent } from '../../../ingredients';
 import { MealPlannerIngredient } from '../../types';
 import { IngredientsTopics } from '../../../ingredients';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
@@ -35,7 +35,6 @@ export function MealPlanner() {
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
 
-  const ingredientsCrudService = useService(IngredientsCrudService);
   const mealCalculator = useService(MealCalculator);
 
   // initialize state
@@ -61,11 +60,11 @@ export function MealPlanner() {
   useEffect(
     () => focusRef(calories.ref),
     [],
-  );  
+  );
 
   useBusEventListener(
     IngredientsTopics.IngredientsLoadStatusChanged,
-    (event: IngredientsLoadStatusChangedEvent) => {
+    (_event: IngredientsLoadStatusChangedEvent) => {
       patchState({ ingredientsRead: true })
     },
   );

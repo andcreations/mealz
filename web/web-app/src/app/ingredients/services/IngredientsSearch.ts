@@ -13,6 +13,7 @@ import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 import { SearchDocument, SearchIndex } from '../search';
 import { SettingsService } from '../../settings';
 import { IngredientsCrudService } from './IngredientsCrudService';
+import { stripDiacritics } from '../../utils';
 
 interface IngredientDocument extends SearchDocument {
   id: string;
@@ -57,9 +58,11 @@ export class IngredientsSearch implements OnBootstrap {
     ingredients.forEach(ingredient => {
       this.index.addDocument({
         id: ingredient.id,
-        primaryName: ingredient.name[INGREDIENT_LANGUAGE],
+        primaryName: stripDiacritics(ingredient.name[INGREDIENT_LANGUAGE]),
         ...((secondaryLanguage && ingredient.name[secondaryLanguage])
-          ? { secondaryName: ingredient.name[secondaryLanguage] }
+          ? {
+              secondaryName: stripDiacritics(ingredient.name[secondaryLanguage])
+            }
           : {}
       ),
       });
@@ -71,7 +74,7 @@ export class IngredientsSearch implements OnBootstrap {
   }
 
   public search(pattern: string, limit: number): GWIngredient[] {
-    const results = this.index.search(pattern, { limit });
+    const results = this.index.search(stripDiacritics(pattern), { limit });
     return results.ids.map(id => this.ingredientsCrudService.getById(id));
   }
 }

@@ -1,9 +1,11 @@
 import { Context } from '@mealz/backend-core';
 import { TransportController,RequestHandler } from '@mealz/backend-transport';
 import {
+  UsersAuthTopics,
   AuthUserRequestV1,
   AuthUserResponseV1,
-  UsersAuthTopics
+  CheckUserAuthRequestV1,
+  CheckUserAuthResponseV1,
 } from '@mealz/backend-users-auth-service-api';
 
 import { UsersAuthService } from '../services';
@@ -20,5 +22,12 @@ export class UsersAuthTransportController {
     context: Context,
   ): Promise<AuthUserResponseV1> {
     return this.usersAuthService.authUserV1(request, context);
+  }
+
+  @RequestHandler(UsersAuthTopics.CheckUserAuthV1)
+  public async checkUserAuthV1(
+    request: CheckUserAuthRequestV1,
+  ): Promise<CheckUserAuthResponseV1> {
+    return this.usersAuthService.checkUserAuthV1(request);
   }
 }
