@@ -9,6 +9,7 @@ import { ACCESS_TOKEN_COOKIE_NAME } from '@mealz/backend-api';
 import { requireStrEnv } from '@mealz/backend-common';
 import { JwtPayload, JWT_SECRET_ENV_NAME } from '@mealz/backend-gateway-core';
 
+import { getLogger } from '../../../logger';
 import { AccessForbiddenError } from '../errors';
 import { Roles } from './Roles';
 
@@ -36,7 +37,7 @@ export class AuthGuard implements CanActivate {
       throw new AccessForbiddenError();
     }
 
-    // user
+    // payload
     const payload = rawPayload as JwtPayload;
 
     // roles
@@ -48,6 +49,16 @@ export class AuthGuard implements CanActivate {
     // store in request
     const request = context.switchToHttp().getRequest();
     request.user = payload.user;
+    
+    // log user
+    const correlationId = (request as any).correlationId;
+    getLogger().debug('HTTP request user', {
+      correlationId,
+      user: {
+        id: payload.user.id,
+        roles: payload.user.roles,
+      },
+    });
   }
 
   /** */

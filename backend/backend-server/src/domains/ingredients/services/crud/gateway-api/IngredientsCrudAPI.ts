@@ -10,7 +10,7 @@ export class IngredientsCrudAPI {
   static readonly url: IngredientsCrudAPIURL = {
     /**
      * @method GET
-     * @param lastId Identifier of the last ingredient read.
+     * @param lastId Identifier of the last read ingredient (optional).
      * @param limit Number of ingredients to read.
      * @response ReadIngredientsFromLastGWResponseV1
      */

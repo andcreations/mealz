@@ -3,10 +3,8 @@ import { HTTPWebClientService } from '@andcreations/web-common';
 
 import { AuthService } from '../../auth';
 
-/** */
 @Service()
 export class BackendService {
-  /** */
   constructor(
     private readonly http: HTTPWebClientService,
     private readonly authService: AuthService,

@@ -21,6 +21,10 @@ module.exports = {
         'api',
       ),
       ...backendAlias(
+        '@mealz/backend-gateway-api',
+        'gateway/api',
+      ),
+      ...backendAlias(
         '@mealz/backend-users-auth-gateway-api',
         'domains/users/services/auth/gateway-api',
       ),
@@ -35,6 +39,14 @@ module.exports = {
       ...backendAlias(
         '@mealz/backend-ingredients-crud-gateway-api',
         'domains/ingredients/services/crud/gateway-api',
+      ),
+      ...backendAlias(
+        '@mealz/backend-meals-gateway-api',
+        'domains/meals/gateway-api',
+      ),
+      ...backendAlias(
+        '@mealz/backend-meals-user-gateway-api',
+        'domains/meals/services/user/gateway-api',
       ),
     },
     fallback: {

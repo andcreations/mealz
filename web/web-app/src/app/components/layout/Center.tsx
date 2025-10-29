@@ -5,7 +5,6 @@ export interface CenterProps {
   className?: string;
 }
 
-/** */
 export function Center(props: React.PropsWithChildren<CenterProps>) {
   const centerClassNames = classNames([
     'mealz-center',

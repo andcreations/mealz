@@ -9,7 +9,7 @@ export interface TopicParams {
 }
 
 function validateParam(value: string): void {
-  const regex = /[a-zA-Z0-9_]+/;
+  const regex = /[a-zA-Z0-9]+/;
   if (!value.match(regex)) {
     throw new MealzError(
       `Invalid topic parameter ${MealzError.quote(value)}`,

@@ -12,7 +12,6 @@ import { I18nService } from '../../i18n';
 import { INVALID_AMOUNT } from '../const';
 import { MealPlannerIngredient, MealSummaryResult } from '../types';
 import { MealCalculator } from './MealCalculator';
-import { appendFile } from 'fs';
 
 const factKcal = (id: GWFactId, amount: number): GWFactPer100 => {
   return { id, unit: GWFactUnit.Kcal, amount };

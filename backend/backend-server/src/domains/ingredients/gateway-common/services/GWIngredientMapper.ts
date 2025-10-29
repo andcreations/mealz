@@ -18,10 +18,11 @@ import {
   GWProduct,
   GWUnitPer100,
 } from '@mealz/backend-ingredients-gateway-api';
+import { ifDefined } from '../../../../shared';
 
 @Injectable()
 export class GWIngredientMapper {
-  private mapType(type: IngredientType): GWIngredientType {
+  private fromType(type: IngredientType): GWIngredientType {
     switch (type) {
       case IngredientType.Generic:
         return GWIngredientType.Generic;
@@ -30,7 +31,7 @@ export class GWIngredientMapper {
     }
   }
 
-  private mapUnitPer100(unit: UnitPer100): GWUnitPer100 {
+  private fromUnitPer100(unit: UnitPer100): GWUnitPer100 {
     switch (unit) {
       case UnitPer100.Grams:
         return GWUnitPer100.Grams;
@@ -43,7 +44,7 @@ export class GWIngredientMapper {
     }
   }
 
-  private mapFactId(id: FactId): GWFactId {
+  private fromFactId(id: FactId): GWFactId {
     switch (id) {
       case FactId.Calories:
         return GWFactId.Calories;
@@ -66,7 +67,7 @@ export class GWIngredientMapper {
     }
   }
 
-  private mapFactUnit(unit: FactUnit): GWFactUnit {
+  private fromFactUnit(unit: FactUnit): GWFactUnit {
     switch (unit) {
       case FactUnit.Kcal:
         return GWFactUnit.Kcal;
@@ -77,15 +78,18 @@ export class GWIngredientMapper {
     }
   }
 
-  private mapFact(fact: FactPer100): GWFactPer100 {
+  private fromFact(fact: FactPer100): GWFactPer100 {
     return {
-      id: this.mapFactId(fact.id),
-      unit: this.mapFactUnit(fact.unit),
+      id: this.fromFactId(fact.id),
+      unit: this.fromFactUnit(fact.unit),
       amount: fact.amount,
     };
   }
 
-  private mapProduct(product: Product): GWProduct {
+  private fromProduct(product?: Product): GWProduct | undefined {
+    if (!product) {
+      return;
+    }
     return {
       brand: product.brand,
     };
@@ -95,12 +99,12 @@ export class GWIngredientMapper {
     return {
       id: ingredient.id,
       name: ingredient.name,
-      type: this.mapType(ingredient.type),
-      unitPer100: this.mapUnitPer100(ingredient.unitPer100),
-      factsPer100: ingredient.factsPer100.map(fact => this.mapFact(fact)),
-      ...(ingredient.product
-        ? { product: this.mapProduct(ingredient.product) }
-        : {}
+      type: this.fromType(ingredient.type),
+      unitPer100: this.fromUnitPer100(ingredient.unitPer100),
+      factsPer100: ingredient.factsPer100.map(fact => this.fromFact(fact)),
+      ...ifDefined<GWIngredient>(
+        'product',
+        this.fromProduct(ingredient.product),
       ),
     };
   }

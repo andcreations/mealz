@@ -20,10 +20,10 @@ const requestHandlerSpecs: RequestHandlerSpec[] = [];
 export function addRequestHandlerSpec(
   spec: RequestHandlerSpec,
 ): void {
-  const { topic } = spec;
+  const { clazz, topic } = spec;
   const existing = requestHandlerSpecs.find(itr => itr.topic === topic);
   if (existing) {
-    throw new RequestHandlerSpecAlreadyExistsError(topic);
+    throw new RequestHandlerSpecAlreadyExistsError(clazz.name, topic);
   }
   requestHandlerSpecs.push(spec);
 }

@@ -1,4 +1,4 @@
-import { errorToMessage, Log } from './log';
+import { Log } from './log';
 import { SQLiteDB } from './sqlite';
 
 async function run(): Promise<void> {

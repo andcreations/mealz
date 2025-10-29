@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 import { backendPath } from './common';
-import { errorToMessage, Colors, Log } from './log';
+import { Colors, Log } from './log';
 import { SQLiteDB } from './sqlite';
 import { insertIngredientsFromJSON } from './insert-ingredients-from-json';
 
@@ -18,7 +18,7 @@ async function openDB(dbFilename: string): Promise<SQLiteDB> {
 
 async function prepareUsersDB(): Promise<void> {
   const dbFilename = path.join(databasesDir, 'users.sqlite');
-  Log.info(`Creating users DB ${dbFilename}`);
+  Log.info(`Creating DB ${dbFilename}`);
 
   const db = await openDB(dbFilename);
   await db.runScriptsFromDirectory(backendPath('sqlite/users'));
@@ -27,7 +27,7 @@ async function prepareUsersDB(): Promise<void> {
 
 async function prepareIngredientsDB(): Promise<void> {
   const dbFilename = path.join(databasesDir, 'ingredients.sqlite');
-  Log.info(`Creating ingredients DB ${dbFilename}`);
+  Log.info(`Creating DB ${dbFilename}`);
 
   const db = await openDB(dbFilename);
   await db.runScriptsFromDirectory(backendPath('sqlite/ingredients'));
@@ -35,6 +35,24 @@ async function prepareIngredientsDB(): Promise<void> {
     db,
     backendPath('sqlite/ingredients/ingredients.json'),
   );
+  await db.close();
+}
+
+async function prepareMealsDB(): Promise<void> {
+  const dbFilename = path.join(databasesDir, 'meals.sqlite');
+  Log.info(`Creating DB ${dbFilename}`);
+
+  const db = await openDB(dbFilename);
+  await db.runScriptsFromDirectory(backendPath('sqlite/meals'));
+  await db.close();
+}
+
+async function prepareMealsUserDB(): Promise<void> {
+  const dbFilename = path.join(databasesDir, 'meals-user.sqlite');
+  Log.info(`Creating DB ${dbFilename}`);
+
+  const db = await openDB(dbFilename);
+  await db.runScriptsFromDirectory(backendPath('sqlite/meals-user'));
   await db.close();
 }
 
@@ -52,6 +70,8 @@ async function run(): Promise<void> {
 
   await prepareUsersDB();
   await prepareIngredientsDB();
+  await prepareMealsDB();
+  await prepareMealsUserDB();
 }
 
 run().catch(error => {

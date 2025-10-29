@@ -1,4 +1,3 @@
-/** */
 export class MealzError extends Error {
   /** */
   public constructor(
@@ -21,7 +20,15 @@ export class MealzError extends Error {
     return this.httpStatus;
   }
 
-  public static quote(str: string): string {
-    return `"${str}"`;
+  public static quote(value: string | string[]): string {
+    if (Array.isArray(value)) {
+      const count = 4;
+      const items = value.slice(0, count);
+      const rest = value.length > items.length
+        ? `... (${value.length - items.length} more)`
+        : '';
+      return `"${items.join(',')}${rest}"`;
+    }
+    return `"${value}"`;
   }
 }

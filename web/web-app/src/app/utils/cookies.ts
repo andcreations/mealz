@@ -1,9 +1,5 @@
 export function deleteCookie(name: string): void {
-  const a = getCookie(name);
-  console.log('a', a);
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost`;
-  const b = getCookie(name);
-  console.log('b', b);
+  // TODO
 }
 
 export function getCookie(name: string): string | null {
@@ -14,5 +10,5 @@ export function getCookie(name: string): string | null {
       return value;
     }
   }
-  return null; // Not found
+  return null; // not found
 }

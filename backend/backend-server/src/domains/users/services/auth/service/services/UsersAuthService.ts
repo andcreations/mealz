@@ -13,7 +13,6 @@ import { InvalidEmailOrPasswordError } from '../errors';
 import { comparePassword } from '../utils';
 import { UsersAuthRepository } from '../repositories';
 
-
 @Injectable()
 export class UsersAuthService {
   private static readonly ACCESS_TOKEN_PERIOD = '365h';
@@ -68,7 +67,10 @@ export class UsersAuthService {
       },
     );
 
-    return { accessToken };
+    return {
+      userId: user.id,
+      accessToken,
+    };
   }
 
   private toSeconds(milliseconds: number): number {

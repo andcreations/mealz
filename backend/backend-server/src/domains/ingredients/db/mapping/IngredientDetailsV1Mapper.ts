@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { decode } from '@msgpack/msgpack';
+import { InternalError } from '@mealz/backend-common';
 import {
   FactId,
   FactPer100,
@@ -18,11 +19,10 @@ import {
   IngredientDetailsV1,
   UnitPer100V1,
 } from '@mealz/backend-ingredients-db';
-import { InternalError } from '../../../../common';
 
 @Injectable()
 export class IngredientDetailsV1Mapper {
-  private mapType(type: IngredientTypeV1): IngredientType {
+  private fromTypeV1(type: IngredientTypeV1): IngredientType {
     switch (type) {
       case IngredientTypeV1.Generic:
         return IngredientType.Generic;
@@ -33,7 +33,7 @@ export class IngredientDetailsV1Mapper {
     }
   }
 
-  private mapUnitPer100(unit: UnitPer100V1): UnitPer100 {
+  private fromUnitPer100V1(unit: UnitPer100V1): UnitPer100 {
     switch (unit) {
       case UnitPer100V1.Grams:
         return UnitPer100.Grams;
@@ -44,7 +44,7 @@ export class IngredientDetailsV1Mapper {
     }
   }
 
-  private mapFactId(id: FactIdV1): FactId {
+  private fromFactIdV1(id: FactIdV1): FactId {
     switch (id) {
       case FactIdV1.Calories:
         return FactId.Calories;
@@ -67,7 +67,7 @@ export class IngredientDetailsV1Mapper {
     }
   }
 
-  private mapFactUnit(unit: FactUnitV1): FactUnit {
+  private fromFactUnitV1(unit: FactUnitV1): FactUnit {
     switch (unit) {
       case FactUnitV1.Grams:
         return FactUnit.Grams;
@@ -78,16 +78,16 @@ export class IngredientDetailsV1Mapper {
     }
   }
 
-  private mapProduct(product: ProductV1): Product {
+  private fromProductV1(product: ProductV1): Product {
     return {
       brand: product.brand,
     };
   }
 
-  private mapFact(fact: FactPer100V1): FactPer100 {
+  private fromFactV1(fact: FactPer100V1): FactPer100 {
     return {
-      id: this.mapFactId(fact.id),
-      unit: this.mapFactUnit(fact.unit),
+      id: this.fromFactIdV1(fact.id),
+      unit: this.fromFactUnitV1(fact.unit),
       amount: fact.amount,
     };
   } 
@@ -96,11 +96,11 @@ export class IngredientDetailsV1Mapper {
     const details = decode(buffer) as IngredientDetailsV1;
     return {
       name: details.name,
-      type: this.mapType(details.type),
-      unitPer100: this.mapUnitPer100(details.unitPer100),
-      factsPer100: details.factsPer100.map(fact => this.mapFact(fact)),
+      type: this.fromTypeV1(details.type),
+      unitPer100: this.fromUnitPer100V1(details.unitPer100),
+      factsPer100: details.factsPer100.map(fact => this.fromFactV1(fact)),
       ...(details.product
-        ? { product: this.mapProduct(details.product) }
+        ? { product: this.fromProductV1(details.product) }
         : {}
       ),
     };

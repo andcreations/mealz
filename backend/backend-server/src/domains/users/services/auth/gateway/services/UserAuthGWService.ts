@@ -27,6 +27,7 @@ export class UserAuthGWService {
       context,
     );
     return {
+      userId: response.userId,
       accessToken: response.accessToken,
     };
   }

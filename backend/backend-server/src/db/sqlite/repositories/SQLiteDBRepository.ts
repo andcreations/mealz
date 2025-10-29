@@ -78,7 +78,6 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     try {
       await this.db.run(statement);
     } catch (error) {
-      console.log(error);
       if (error instanceof SQLiteError) {
         if (error.errno === SQLiteResultCodes.CONSTRAINT) {
           throw new DBEntityAlreadyExistsError(this.getEntityName());
@@ -86,6 +85,37 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       }
       throw error;
     }
+  }
+
+  public async upsert(entity: T, context: Context): Promise<void> {
+    const statement = this.sqlBuilder.buildInsert(
+      this.tableName,
+      this.getEntityName(),
+      this.getFieldsSpec(),
+      entity,
+      {
+        upsert: true,
+      },
+    );
+
+    this.logger.verbose(
+      'Running SQL upsert',
+      {
+        ...context,
+        ...statement.toContext(),
+      },
+    );
+
+    try {
+      await this.db.run(statement);
+    } catch (error) {
+      if (error instanceof SQLiteError) {
+        if (error.errno === SQLiteResultCodes.CONSTRAINT) {
+          throw new DBEntityAlreadyExistsError(this.getEntityName());
+        }
+      }
+      throw error;
+    }    
   }
 
   public async find<K extends keyof T>(

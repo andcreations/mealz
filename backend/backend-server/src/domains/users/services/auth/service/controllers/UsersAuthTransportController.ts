@@ -1,9 +1,9 @@
 import { Context } from '@mealz/backend-core';
 import { TransportController,RequestHandler } from '@mealz/backend-transport';
 import {
+  UsersAuthTopics,
   AuthUserRequestV1,
   AuthUserResponseV1,
-  UsersAuthTopics
 } from '@mealz/backend-users-auth-service-api';
 
 import { UsersAuthService } from '../services';

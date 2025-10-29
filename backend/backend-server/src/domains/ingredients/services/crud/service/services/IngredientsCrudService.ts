@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import {
-  ReadFromLastRequestV1,
-  ReadFromLastResponseV1,
+  ReadIngredientsFromLastRequestV1,
+  ReadIngredientsFromLastResponseV1,
 } from '@mealz/backend-ingredients-crud-service-api';
 
 import { IngredientsCrudRepository } from '../repositories';
@@ -13,10 +13,10 @@ export class IngredientsCrudService {
     private readonly ingredientsCrudRepository: IngredientsCrudRepository,
   ) {}
 
-  public async readFromLast(
-    request: ReadFromLastRequestV1,
+  public async readFromLastV1(
+    request: ReadIngredientsFromLastRequestV1,
     context: Context,
-  ): Promise<ReadFromLastResponseV1> {
+  ): Promise<ReadIngredientsFromLastResponseV1> {
     const ingredients = await this.ingredientsCrudRepository.readFromLast(
       request.lastId,
       request.limit,

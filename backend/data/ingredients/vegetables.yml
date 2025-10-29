@@ -286,35 +286,237 @@
       polyunsaturated: 0.1
   link: https://www.nutritionix.com/food/beet/100-g
 
-# Avocado [done]
-# Cucumber [done]
-# Carrot [done]
-# Broccoli [done]
-# Cauliflower [done]
-# Spinach [done]
-# Lettuce [done]
-# Cabbage [done]
-# Zucchini [done]
-# Eggplant [done]
-# Onion [done]
-# Garlic [done]
-# Celery [done]
-# Radish [done]
-# Turnip [done] 
-# Beet [done]
-# Sweet Potato  
-# Potato  
-# Green Bean  
-# Pea  
-# Corn  
-# Brussels Sprout  
-# Asparagus  
-# Mushroom  
-# Artichoke  
-# Leek  
-# Okra  
-# Pumpkin  
-# Squash
-# Tomato 
-# Kale  
-# Bell Pepper  
+- name:
+    en: Sweet potato
+    pl: Batat
+  unit: g
+  type: generic
+  weight: 114
+  facts:
+    calories: 103
+    carbs: 24
+    sugars: 7.4
+    protein: 2.3
+    fat:
+      total: 0.2
+      saturated: 0.1
+      monounsaturated: 0
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/sweet-potato
+
+- name:
+    en: Potato
+    pl: Ziemniak
+  unit: g
+  type: generic
+  weight: 173
+  facts:
+    calories: 161
+    carbs: 37
+    sugars: 2
+    protein: 4.3
+    fat:
+      total: 0.2
+      saturated: 0.1
+      monounsaturated: 0
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/potato
+
+- name:
+    en: Green bean
+    pl: Fasolka szparagowa
+  unit: g
+  type: generic
+  weight: 125
+  facts:
+    calories: 44
+    carbs: 9.9
+    sugars: 4.5
+    protein: 2.4
+    fat:
+      total: 0.4
+      saturated: 0.1
+      monounsaturated: 0
+      polyunsaturated: 0.2
+  link: https://www.nutritionix.com/food/green-bean
+
+- name:
+    en: Green pea
+    pl: Groszek
+  unit: g
+  type: generic
+  weight: 160
+  facts:
+    calories: 134
+    carbs: 25
+    sugars: 9.5
+    protein: 8.6
+    fat:
+      total: 0.4
+      saturated: 0.1
+      monounsaturated: 0
+      polyunsaturated: 0.2
+  link: https://www.nutritionix.com/food/pea
+
+- name:
+    en: Corn
+    pl: Kukurydza
+  unit: g
+  type: generic
+  weight: 103
+  facts:
+    calories: 99
+    carbs: 22
+    sugars: 4.7
+    protein: 3.5
+    fat:
+      total: 0.2
+      saturated: 0.2
+      monounsaturated: 0.4
+      polyunsaturated: 0.6
+  link: https://www.nutritionix.com/food/corn
+
+- name:
+    en: Brussels sprout
+    pl: Bukselka
+  unit: g
+  type: generic
+  weight: 168
+  facts:
+    calories: 60
+    carbs: 12
+    sugars: 2.9
+    protein: 4.3
+    fat:
+      total: 0.8
+      saturated: 0.2
+      monounsaturated: 0.1
+      polyunsaturated: 0.4
+  link: https://www.nutritionix.com/food/brussels-sprout
+
+- name:
+    en: Asparagus
+    pl: Szparagi
+  unit: g
+  type: generic
+  weight: 75
+  facts:
+    calories: 17
+    carbs: 3.1
+    sugars: 1
+    protein: 1.8
+    fat:
+      total: 0.2
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/asparagus
+
+- name:
+    en: Artichoke
+    pl: Karczoch
+  unit: g
+  type: generic
+  weight: 120
+  facts:
+    calories: 64
+    carbs: 14
+    sugars: 1.2
+    protein: 3.5
+    fat:
+      total: 0.4
+      saturated: 0.1
+      monounsaturated: 0
+      polyunsaturated: 0.2
+  link: https://www.nutritionix.com/food/artichoke
+
+- name:
+    en: Leek
+    pl: Szczypiorek
+  unit: g
+  type: generic
+  weight: 124
+  facts:
+    calories: 38
+    carbs: 9.4
+    sugars: 2.6
+    protein: 1
+    fat:
+      total: 0.3
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/leek
+
+- name:
+    en: Pumpkin
+    pl: Dynia
+  unit: g
+  type: generic
+  weight: 245
+  facts:
+    calories: 49
+    carbs: 12
+    sugars: 5.1
+    protein: 1.8
+    fat:
+      total: 0.2
+      saturated: 0.1
+      monounsaturated: 0
+      polyunsaturated: 0
+  link: https://www.nutritionix.com/food/pumpkin
+
+- name:
+    en: Okra
+    pl: Okra
+  unit: g
+  type: generic
+  weight: 80
+  facts:
+    calories: 18
+    carbs: 3.6
+    sugars: 1.9
+    protein: 1.5
+    fat:
+      total: 0.2
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0
+  link: https://www.nutritionix.com/food/okra
+
+- name:
+    en: Tomato
+    pl: Pomidor
+  unit: g
+  type: generic
+  weight: 123
+  facts:
+    calories: 22
+    carbs: 4.8
+    sugars: 3.2
+    protein: 1.1
+    fat:
+      total: 0.3
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/tomato
+
+- name:
+    en: Red pepper
+    pl: Papryka czerwona
+  unit: g
+  type: generic
+  weight: 114
+  facts:
+    calories: 32
+    carbs: 7.6
+    sugars: 5
+    protein: 1
+    fat:
+      total: 0.2
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0.1
+  link: https://www.nutritionix.com/food/red-pepper
+

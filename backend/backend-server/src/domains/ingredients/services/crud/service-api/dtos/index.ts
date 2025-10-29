@@ -1,2 +1,2 @@
-export * from './ReadFromLastRequestV1';
-export * from './ReadFromLastResponseV1';
+export * from './ReadIngredientsFromLastRequestV1';
+export * from './ReadIngredientsFromLastResponseV1';

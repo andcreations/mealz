@@ -15,6 +15,7 @@ export interface DBFieldOptions {
   primaryKey?: boolean;
   optional?: boolean;
   mapping?: DBFieldMapping<unknown, unknown>;
+  description?: string;
 }
 
 export const DBField = (

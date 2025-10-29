@@ -9,7 +9,7 @@ import { IngredientDetailsV1Mapper } from './IngredientDetailsV1Mapper';
 @Injectable()
 export class IngredientDBMapper {
   public constructor(
-    private readonly ingredientsDetailsV1Mapper: IngredientDetailsV1Mapper,
+    private readonly ingredientDetailsV1Mapper: IngredientDetailsV1Mapper,
   ) {}
 
   public fromEntity(
@@ -24,14 +24,14 @@ export class IngredientDBMapper {
 
     throw new InternalError(
       `Unknown ingredient details version ` +
-      `${MealzError.quote(entity.detailsVersion.toString())}
-    `);
+      `${MealzError.quote(entity.detailsVersion.toString())}`
+    );
   }
 
   private fromDetailsV1(entity: IngredientDBEntity): Ingredient {
     return {
       id: entity.id,
-      ...this.ingredientsDetailsV1Mapper.fromBuffer(entity.details),
+      ...this.ingredientDetailsV1Mapper.fromBuffer(entity.details),
     };
   }
 }

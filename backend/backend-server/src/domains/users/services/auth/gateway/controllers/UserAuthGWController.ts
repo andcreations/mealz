@@ -12,16 +12,22 @@ import { FastifyReply } from 'fastify';
 import { Response } from 'express';
 import { ACCESS_TOKEN_COOKIE_NAME, UserRole } from '@mealz/backend-api';
 import { Context } from '@mealz/backend-core';
-import { daysToMs, isSecure } from '@mealz/backend-common';
+import { isSecure } from '@mealz/backend-common';
+import { AuthUser } from '@mealz/backend-gateway-core';
 import {
   Auth,
   GWContext,
+  GWUser,
   Roles,
   setCookie,
 } from '@mealz/backend-gateway-common';
 import { USERS_AUTH_URL } from '@mealz/backend-users-auth-gateway-api';
 
-import { UserAuthGWRequestV1Impl, UserAuthGWResponseV1Impl } from '../dtos';
+import {
+  UserAuthGWRequestV1Impl,
+  UserAuthGWResponseV1Impl,
+  CheckUserAuthGWResponseV1Impl,
+} from '../dtos';
 import { UserAuthGWService } from '../services';
 
 @Controller(USERS_AUTH_URL)
@@ -48,7 +54,7 @@ export class UserAuthGWController {
         httpOnly: true,
         secure: isSecure(),
         sameSite: 'strict',
-        maxAge: daysToMs(365),
+        maxAge: 0,
       },
     ); 
    
@@ -80,7 +86,9 @@ export class UserAuthGWController {
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('check/v1')
   @HttpCode(HttpStatus.OK)
-  public async checkV1(): Promise<void> {
-    // Nothing here, just to check if the user is logged in.
+  public async checkV1(
+    @GWUser() gwUser: AuthUser,
+  ): Promise<CheckUserAuthGWResponseV1Impl> {
+    return { userId: gwUser.id };
   }
 }

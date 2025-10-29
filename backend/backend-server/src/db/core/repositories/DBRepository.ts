@@ -79,6 +79,13 @@ export abstract class DBRepository<T> {
   public abstract insert(entity: T, context: Context): Promise<void>;
 
   /**
+   * Upsert an entity into the database.
+   * @param entity - The entity to upsert.
+   * @param context - The context of the upsert operation.
+   */
+  public abstract upsert(entity: T, context: Context): Promise<void>;
+
+  /**
    * Find entities in the database.
    * @param where - The where clause.
    * @param options - The options of the find operation.

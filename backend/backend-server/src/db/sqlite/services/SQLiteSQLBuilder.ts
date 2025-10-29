@@ -506,12 +506,16 @@ export class SQLiteSQLBuilder {
     entityName: string,
     fieldsSpec: DBFieldSpec[],
     entity: T,
+    options?: {
+      upsert?: boolean;
+    },
   ): SQLiteStatement {
     const isDefined = (value: any) => value != null;
+    const { upsert = false } = options ?? {};
 
     const context = new SQLiteStatementContext();
     let statement: SQLiteStatement = new SQLiteStatement(
-      `INSERT INTO ${tableName} `,
+      `INSERT ${upsert ? 'OR REPLACE' : ''} INTO ${tableName} `,
     );
 
     const values: Array<{

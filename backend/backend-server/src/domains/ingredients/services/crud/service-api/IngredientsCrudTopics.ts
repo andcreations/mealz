@@ -1,7 +1,7 @@
 import { buildTopic } from '@mealz/backend-transport';
 
-export const IngredientsCrudTopics: Record<string, string> = {
-  ReadFromLastV1: topic('readFromLast', 'v1'),
+export class IngredientsCrudTopics {
+  public static readonly ReadFromLastV1 = topic('readFromLast', 'v1');
 };
 
 function topic(method: string, version: string): string {

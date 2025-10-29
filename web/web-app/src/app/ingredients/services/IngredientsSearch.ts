@@ -8,13 +8,17 @@ import {
 import { Log } from '../../log';
 import { INGREDIENT_LANGUAGE } from '../../common';
 import { IngredientsTopics } from '../bus';
+import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
+
 import { SearchDocument, SearchIndex } from '../search';
+import { SettingsService } from '../../settings';
 import { IngredientsCrudService } from './IngredientsCrudService';
-import { GWIngredient } from '../../../../../../backend/backend-server/src/domains/ingredients/gateway-api';
+import { stripDiacritics } from '../../utils';
 
 interface IngredientDocument extends SearchDocument {
   id: string;
-  name: string;
+  primaryName: string;
+  secondaryName?: string;
 }
 
 @Service()
@@ -23,34 +27,44 @@ export class IngredientsSearch implements OnBootstrap {
   private index: SearchIndex<IngredientDocument>;
 
   public constructor(
+    private readonly settings: SettingsService,
     private readonly ingredientsCrudService: IngredientsCrudService,
   ) {}
 
   public async onBootstrap(): Promise<void> {
-    this.buildIndex();
+    this.tryBuildIndex();
   }
 
-  @BusEvent(IngredientsTopics.IngredientsRead)
-  public onIngredientsRead(): void {
+  @BusEvent(IngredientsTopics.IngredientsLoadStatusChanged)
+  public onIngredientsLoadStatusChanged(): void {
+    this.tryBuildIndex();
+  }
+
+  private tryBuildIndex(): void {
+    if (!this.ingredientsCrudService.loaded()) {
+      return;
+    }
     this.buildIndex();
   }
 
   private buildIndex(): void {
-  // get ingredients
-    if (!this.ingredientsCrudService.hasIngredients()) {
-      return;
-    }
     const ingredients = this.ingredientsCrudService.getIngredients();
-
+    const secondaryLanguage = this.settings.getIngredientsSecondaryLanguage();
     const startTime = Date.now();
   // create index
     this.index = new SearchIndex<IngredientDocument>({
-      fields: ['name'],
+      fields: ['primaryName', 'secondaryName'],
     });
     ingredients.forEach(ingredient => {
       this.index.addDocument({
         id: ingredient.id,
-        name: ingredient.name[INGREDIENT_LANGUAGE],
+        primaryName: stripDiacritics(ingredient.name[INGREDIENT_LANGUAGE]),
+        ...((secondaryLanguage && ingredient.name[secondaryLanguage])
+          ? {
+              secondaryName: stripDiacritics(ingredient.name[secondaryLanguage])
+            }
+          : {}
+      ),
       });
     });
     Log.debug(
@@ -60,7 +74,7 @@ export class IngredientsSearch implements OnBootstrap {
   }
 
   public search(pattern: string, limit: number): GWIngredient[] {
-    const results = this.index.search(pattern, { limit });
+    const results = this.index.search(stripDiacritics(pattern), { limit });
     return results.ids.map(id => this.ingredientsCrudService.getById(id));
   }
 }

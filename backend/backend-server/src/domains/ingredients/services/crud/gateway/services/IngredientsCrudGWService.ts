@@ -3,13 +3,13 @@ import { Context } from '@mealz/backend-core';
 import { GWIngredientMapper } from '@mealz/backend-ingredients-gateway-common';
 import {
   IngredientsCrudTransporter,
-  ReadFromLastRequestV1,
+  ReadIngredientsFromLastRequestV1,
 } from '@mealz/backend-ingredients-crud-service-api';
 import { 
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
-import { ReadFromLastV1GWQueryParams } from '../dtos';
+import { ReadIngredientsFromLastGWQueryParamsV1 } from '../dtos';
 
 @Injectable()
 export class IngredientsCrudGWService {
@@ -19,14 +19,14 @@ export class IngredientsCrudGWService {
   ) {}
 
   public async readFromLast(
-    gwParams: ReadFromLastV1GWQueryParams,
+    gwParams: ReadIngredientsFromLastGWQueryParamsV1,
     context: Context,
   ): Promise<ReadIngredientsFromLastGWResponseV1> {
-    const request: ReadFromLastRequestV1 = {
+    const request: ReadIngredientsFromLastRequestV1 = {
       lastId: gwParams.lastId,
       limit: gwParams.limit,
     };
-    const response = await this.ingredientsCrudTransporter.readFromLast(
+    const response = await this.ingredientsCrudTransporter.readFromLastV1(
       request,
       context,
     );

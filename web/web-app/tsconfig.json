@@ -12,6 +12,9 @@
       "@mealz/backend-api": [
         "../../backend/backend-server/src/api"
       ],
+      "@mealz/backend-gateway-api": [
+        "../../backend/backend-server/src/gateway/api"
+      ],
       "@mealz/backend-users-auth-gateway-api": [
         "../../backend/backend-server/src/domains/users/services/auth/gateway-api"
       ],
@@ -23,6 +26,12 @@
       ],
       "@mealz/backend-ingredients-crud-gateway-api": [
         "../../backend/backend-server/src/domains/ingredients/services/crud/gateway-api"
+      ],
+      "@mealz/backend-meals-gateway-api": [
+        "../../backend/backend-server/src/domains/meals/gateway-api"
+      ],
+      "@mealz/backend-meals-user-gateway-api": [
+        "../../backend/backend-server/src/domains/meals/services/user/gateway-api"
       ]
     }
   }

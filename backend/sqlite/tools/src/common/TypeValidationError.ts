@@ -9,10 +9,6 @@ export class TypeValidationError {
     property = '',
     typeValidationErrors: TypeValidationError[] = [],
   ): TypeValidationError[] {
-    if (property === '') {
-      console.log('errors', JSON.stringify(errors, null, 2));
-    }
-
     const buildProperty = (property: string, error: ValidationError) => {
       return property + (error.property ? '/' + error.property : '');
     };

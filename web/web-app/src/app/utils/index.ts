@@ -7,3 +7,4 @@ export * from './react';
 export * from './validation';
 export * from './cookies';
 export * from './number-parsing';
+export * from './debounce';

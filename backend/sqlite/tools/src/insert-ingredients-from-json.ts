@@ -5,7 +5,7 @@ import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { IngredientDetailsV1 } from './ingredients';
 
-import { Colors, errorToMessage, Log } from './log';
+import { Colors, Log } from './log';
 import { generateId, TypeValidationError } from './common';
 import { SQLiteDB } from './sqlite';
 
