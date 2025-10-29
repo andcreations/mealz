@@ -5,7 +5,7 @@ export interface UpsertUserMealGWRequestV1 {
   id?: string;
 
   // User meal type
-  type: string;
+  typeId: string;
 
   // Meal
   meal: Omit<GWMeal, 'id'>;

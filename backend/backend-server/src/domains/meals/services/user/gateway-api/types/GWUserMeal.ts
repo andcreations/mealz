@@ -10,6 +10,6 @@ export interface GWUserMeal {
   // Meal
   meal: GWMeal;
 
-  // User meal type
-  type: string;
+  // User meal type identifier
+  typeId: string;
 }

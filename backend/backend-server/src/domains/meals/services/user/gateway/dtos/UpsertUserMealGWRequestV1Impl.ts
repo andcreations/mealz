@@ -1,7 +1,7 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { GWMealImpl } from '@mealz/backend-meals-gateway-common';
+import { GWMealWithoutIdImpl } from '@mealz/backend-meals-gateway-common';
 import { IsId } from '@mealz/backend-gateway-common';
 import {
   UpsertUserMealGWRequestV1,
@@ -22,12 +22,12 @@ export class UpsertUserMealGWRequestV1Impl
       use cases.`,
   })
   @IsString()
-  public type: string;
+  public typeId: string;
 
   @ApiProperty({
     description: 'Meal'
   })
   @ValidateNested()
-  @Type(() => GWMealImpl)
-  public meal: GWMealImpl;
+  @Type(() => GWMealWithoutIdImpl)
+  public meal: GWMealWithoutIdImpl;
 }

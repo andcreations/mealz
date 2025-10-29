@@ -7,7 +7,7 @@ export class UserMeal {
 
   // Indicates the type of the meal (e.g. meal cached in the web, meal saved
   // by the user...)
-  public type: string;
+  public typeId: string;
 
   // Meal identifier
   public mealId: string;

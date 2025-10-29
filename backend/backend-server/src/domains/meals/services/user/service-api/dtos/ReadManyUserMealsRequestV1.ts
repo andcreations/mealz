@@ -11,5 +11,5 @@ export class ReadManyUserMealsRequestV1 {
   public userId: UserMeal['userId'];
 
   // Meal types
-  public types?: UserMeal['type'][];
+  public typeIds?: UserMeal['typeId'][];
 }

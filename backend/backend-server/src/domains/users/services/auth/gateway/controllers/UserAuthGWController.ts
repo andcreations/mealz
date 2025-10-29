@@ -6,17 +6,18 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   Res,
 } from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply } from 'fastify';
 import { Response } from 'express';
 import { ACCESS_TOKEN_COOKIE_NAME, UserRole } from '@mealz/backend-api';
 import { Context } from '@mealz/backend-core';
 import { isSecure } from '@mealz/backend-common';
+import { AuthUser } from '@mealz/backend-gateway-core';
 import {
   Auth,
   GWContext,
+  GWUser,
   Roles,
   setCookie,
 } from '@mealz/backend-gateway-common';
@@ -86,10 +87,8 @@ export class UserAuthGWController {
   @Get('check/v1')
   @HttpCode(HttpStatus.OK)
   public async checkV1(
-    @Req() req: FastifyRequest,
-    @GWContext() context: Context,
+    @GWUser() gwUser: AuthUser,
   ): Promise<CheckUserAuthGWResponseV1Impl> {
-    const { userId } = await this.userAuthGWService.check(req, context);
-    return { userId };
+    return { userId: gwUser.id };
   }
 }

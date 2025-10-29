@@ -24,8 +24,8 @@ export class UserMealDBEntity {
   public mealId: string;
 
   @DBField({
-    name: 'type',
+    name: 'typeId',
     type: DBFieldType.STRING,
   })
-  public type: string;
+  public typeId: string;
 }

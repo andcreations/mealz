@@ -4,12 +4,17 @@ import Form from 'react-bootstrap/Form';
 
 import { usePatchState, useService } from '../../../hooks';
 import { useBusEventListener } from '../../../bus';
-import { IngredientsLoadStatusChangedEvent } from '../../../ingredients';
-import { MealPlannerIngredient } from '../../types';
-import { IngredientsTopics } from '../../../ingredients';
+import { CalculateAmountsResult, MealPlannerIngredient } from '../../types';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
+import { Log } from '../../../log';
+import { 
+  IngredientsTopics,
+  IngredientsCrudService,
+  IngredientsLoadStatusChangedEvent,
+} from '../../../ingredients';
+import { MealsUserService } from '../../../meals';
 import { useTranslations } from '../../../i18n';
-import { MealCalculator } from '../../services';
+import { MealCalculator, MealMapper } from '../../services';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
@@ -25,9 +30,14 @@ interface MealPlannerState {
 }
 
 export function MealPlanner() {
+  const ingredientsCrudService = useService(IngredientsCrudService);
+  const mealsUserService = useService(MealsUserService);
+  const mealMapper = useService(MealMapper);
+  const mealCalculator = useService(MealCalculator);
+
   const [state, setState] = useState<MealPlannerState>({
     ingredients: [],
-    ingredientsRead: false,
+    ingredientsRead: ingredientsCrudService.loaded(),
     focus: Focus.Calories,
     calories: '',
     calculateAmountsStatus: null,
@@ -35,13 +45,19 @@ export function MealPlanner() {
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
 
-  const mealCalculator = useService(MealCalculator);
-
-  // initialize state
+  // read draft meal
   useEffect(
     () => {
-      // TODO Load ingredients from the cookies, local storage, backend...
-      patchState({ ingredients: [] });
+      if (!state.ingredientsRead) {
+        return;
+      }
+      userMealDraft.read()
+        .then(({ ingredients, caloriesStr }) => {
+          recalculate(caloriesStr, ingredients);
+        })
+        .catch(error => {
+          Log.error('Failed to read user draft meal', error);
+        });
     },
     [state.ingredientsRead],
   );
@@ -72,7 +88,7 @@ export function MealPlanner() {
   const recalculate = (
     caloriesStr: string,
     ingredients: MealPlannerIngredient[],
-  ) => {
+  ): CalculateAmountsResult => {
     const result = mealCalculator.calculateAmounts(
       calories.fromStr(caloriesStr),
       ingredients,
@@ -85,10 +101,50 @@ export function MealPlanner() {
         result.error,
       ),
     });
+    return result;
+  };
+
+  const userMealDraft = {
+    read: () => {
+      return new Promise<{
+        ingredients: MealPlannerIngredient[];
+        caloriesStr: string;
+      }>((resolve, reject) => {
+        mealsUserService.readUserDraftMeal()
+          .then(userMeal => {
+            if (!userMeal) {
+              resolve({ ingredients: [], caloriesStr: '' });
+              return;
+            }
+            const ingredients = mealMapper.toMealPlannerIngredients(
+              userMeal.meal.ingredients
+            );     
+            const caloriesStr = userMeal.meal.calories?.toString() ?? '';
+            resolve({ ingredients, caloriesStr });
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+
+    upsert: (ingredients: MealPlannerIngredient[]) => {
+      const gwIngredients = ingredients.map(ingredient => {
+        return mealMapper.toGWMealIngredient(ingredient);
+      });
+      mealsUserService.upsertUserDraftMeal({
+        calories: calories.get(),
+        ingredients: gwIngredients,
+      })
+      .catch(error => {
+        Log.error('Failed to upsert user draft meal', error);
+      });
+    },
   };
 
   const onIngredientsChange = (ingredients: MealPlannerIngredient[]) => {
     recalculate(state.calories, ingredients);
+    userMealDraft.upsert(ingredients);
   };
 
   const calories = {

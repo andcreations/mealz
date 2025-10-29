@@ -1,13 +1,10 @@
 const SEPARATOR = ',';
 
-export function arrayToQueryParam(values?: string[]): string {
-  if (!values) {
-    return '';
+// @see arrayToQueryParam
+export function arrayFromQueryParam(queryParam?: string | string[]): string[] {
+  if (Array.isArray(queryParam)) {
+    return queryParam;
   }
-  return values.join(SEPARATOR);
-}
-
-export function arrayFromQueryParam(queryParam?: string): string[] {
   if (!queryParam) {
     return [];
   }

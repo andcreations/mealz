@@ -41,7 +41,9 @@ export class MealsCrudRepository {
     ids: string[],
     context: Context,
   ): Promise<Meal[]> {
-    return [];
+    const query: Where<MealDBEntity> = { id: { $in: ids } };
+    const entities = await this.repository.find(query, {}, context);
+    return this.mapper.fromEntities(entities);
   }
 
   public async createMeal(

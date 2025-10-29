@@ -67,6 +67,10 @@ export class AuthService {
     return this.userId !== undefined;
   }
 
+  public getUserId(): string | undefined {
+    return this.userId;
+  }
+
   private notifySignedIn(): void {
     Log.debug('Notifying user signed in');
     this.bus.emit(AuthTopics.UserSignedIn);

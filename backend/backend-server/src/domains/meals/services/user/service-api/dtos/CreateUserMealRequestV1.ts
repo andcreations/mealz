@@ -6,7 +6,7 @@ export class CreateUserMealRequestV1 {
   public userId: UserMeal['userId'];
 
   // User meal type
-  public type: UserMeal['type'];
+  public typeId: UserMeal['typeId'];
 
   // Meal
   public meal: Omit<Meal, 'id'>;

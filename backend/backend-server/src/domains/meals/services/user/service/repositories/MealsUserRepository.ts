@@ -42,7 +42,7 @@ export class MealsUserRepository {
     lastId: string | undefined,
     limit: number,
     userId: string,
-    types: string[] | undefined,
+    typeIds: string[] | undefined,
     context: Context,
   ): Promise<UserMeal[]> {
     const query: Where<UserMealDBEntity> = {
@@ -51,10 +51,9 @@ export class MealsUserRepository {
     if (lastId) {
       query.id = { $gt: lastId };
     }
-    if (types) {
-      query.type = { $in: types };
+    if (typeIds) {
+      query.typeId = { $in: typeIds };
     }
-    console.log('types', types);
     const entities = await this.repository.find(
       query,
       { 

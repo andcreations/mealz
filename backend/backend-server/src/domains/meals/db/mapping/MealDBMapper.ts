@@ -40,4 +40,8 @@ export class MealDBMapper {
       ...this.mealDetailsV1Mapper.fromBuffer(entity.details),
     }
   }
+
+  public fromEntities(entities: MealDBEntity[]): Meal[] {
+    return entities.map(entity => this.fromEntity(entity));
+  }
 }

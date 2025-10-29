@@ -10,7 +10,7 @@ export class UserMealDBMapper {
       id: userMeal.id,
       userId: userMeal.userId,
       mealId: userMeal.mealId,
-      type: userMeal.type,
+      typeId: userMeal.typeId,
     };
   }
 
@@ -22,7 +22,7 @@ export class UserMealDBMapper {
       id: entity.id,
       userId: entity.userId,
       mealId: entity.mealId,
-      type: entity.type,
+      typeId: entity.typeId,
     }
   }
 }

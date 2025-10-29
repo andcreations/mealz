@@ -1,5 +1,5 @@
 import { URLBuilder } from '@andcreations/common';
-import { arrayToQueryParam } from '@mealz/backend-gateway-common';
+import { arrayToQueryParam } from '@mealz/backend-gateway-api';
 
 export const MEALS_USER_URL = '/api/meals/user';
 

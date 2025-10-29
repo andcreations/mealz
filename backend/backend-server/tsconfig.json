@@ -15,6 +15,7 @@
       "@mealz/backend-common": ["src/common"],
       "@mealz/backend-shared": ["src/shared"],
       "@mealz/backend-api": ["src/api"],
+      "@mealz/backend-gateway-api": ["src/gateway/api"],
       "@mealz/backend-gateway-core": ["src/gateway/core"],
       "@mealz/backend-gateway-common": ["src/gateway/common"],
       "@mealz/backend-logger": ["src/logger"],

@@ -12,83 +12,14 @@ import {
   DeleteMealByIdRequestV1,
 } from '@mealz/backend-meals-crud-service-api';
 
-import { MealByIdNotFoundError } from '../errors';
+import { MealByIdNotFoundError, MealsByIdNotFoundError } from '../errors';
 import { MealsCrudRepository } from '../repositories';
 
 @Injectable()
 export class MealsCrudService {
   public constructor(
     private readonly mealsCrudRepository: MealsCrudRepository,
-  ) {
-    // TODO Remove this
-    setTimeout(async () => {
-      // await this.createMealV1(
-      //   {
-      //     meal: {
-      //       calories: 148,
-      //       ingredients: [
-      //         {
-      //           ingredientId: 'test-001',
-      //           enteredAmount: '100',
-      //         },
-      //         {
-      //           ingredientId: 'test-002',
-      //         },
-      //         {
-      //           adHocIngredient: {
-      //             name: 'ad-hoc-1',
-      //             caloriesPer100: 198,
-      //           }
-      //         }
-      //       ]
-      //     }
-      //   },
-      //   {
-      //     correlationId: 'test',
-      //   },
-      // )
-
-      // const r = await this.readMealByIdV1(
-      //   {
-      //     // id: '01985b68-723d-7734-94a0-c98705934590',
-      //     id: 'meal-001',
-      //   },
-      //   {
-      //     correlationId: 'test',
-      //   },
-      // );
-      // console.log(JSON.stringify(r, null, 2));
-
-      // await this.upsertMealV1(
-      //   {
-      //     meal: {
-      //       id: 'meal-001',
-      //       calories: 10,
-      //       ingredients: [
-      //         {
-      //           ingredientId: 'ingredient-001',
-      //           enteredAmount: '345'
-      //         },
-      //       ]
-      //     }
-      //   },
-      //   {
-      //     correlationId: 'test',
-      //   },
-      // )
-
-      // await this.deleteMealByIdV1(
-      //   {
-      //     id: 'meal-001', 
-      //   },
-      //   {
-      //     correlationId: 'test',
-      //   },
-      // );
-
-      // console.log('<- done');
-    }, 1024);
-  }
+  ) {}
 
   public async readMealByIdV1(
     request: ReadMealByIdRequestV1,
@@ -110,7 +41,7 @@ export class MealsCrudService {
     const meals = await this.mealsCrudRepository.readMealsById(ids, context);
     if (meals.length < ids.length) {
       const idsNotFound = ids.filter(id => !meals.some(meal => meal.id === id));
-      
+      throw new MealsByIdNotFoundError(idsNotFound);
     }
     return { meals };
   }

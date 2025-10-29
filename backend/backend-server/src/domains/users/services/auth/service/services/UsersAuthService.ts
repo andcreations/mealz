@@ -4,12 +4,9 @@ import * as jwt from 'jsonwebtoken';
 import { Context } from '@mealz/backend-core';
 import { requireStrEnv } from '@mealz/backend-common';
 import { JwtPayload } from '@mealz/backend-gateway-core';
-import { AccessForbiddenError } from '@mealz/backend-gateway-common';
 import {
   AuthUserRequestV1,
   AuthUserResponseV1,
-  CheckUserAuthRequestV1,
-  CheckUserAuthResponseV1,
 } from '@mealz/backend-users-auth-service-api';
 
 import { InvalidEmailOrPasswordError } from '../errors';
@@ -73,34 +70,6 @@ export class UsersAuthService {
     return {
       userId: user.id,
       accessToken,
-    };
-  }
-
-
-  public async checkUserAuthV1(
-    request: CheckUserAuthRequestV1,
-  ): Promise<CheckUserAuthResponseV1> {
-    const { accessToken } = request;
-    if (!accessToken) {
-      throw new AccessForbiddenError();
-    }
-
-    // verify
-    let rawPayload: jwt.JwtPayload | string;
-    try {
-      rawPayload = jwt.verify(accessToken, this.jwtSecret);
-    } catch (error) {
-      throw new AccessForbiddenError();
-    }
-    if (typeof rawPayload === 'string') {
-      throw new AccessForbiddenError();
-    }    
-
-    // payload
-    const payload = rawPayload as JwtPayload;
-
-    return {
-      userId: payload.user.id,
     };
   }
 

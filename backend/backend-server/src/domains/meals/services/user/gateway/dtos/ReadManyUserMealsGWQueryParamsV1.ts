@@ -28,5 +28,5 @@ export class ReadManyUserMealsGWQueryParamsV1 {
   @IsOptional()
   @IsString({ each: true })
   @Transform(({ value }) => arrayFromQueryParam(value))
-  public types?: string[];
+  public typeIds?: string[];
 }

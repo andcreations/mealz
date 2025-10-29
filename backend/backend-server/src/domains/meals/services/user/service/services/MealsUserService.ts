@@ -22,78 +22,7 @@ export class MealsUserService {
     private readonly sagaService: SagaService,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsUserRepository: MealsUserRepository,
-  ) {
-    // TODO Remove this
-    // setTimeout(async () => {
-      // try {
-      //   await this.createUserMealV1(
-      //     {
-      //       meal: {
-      //         calories: 148,
-      //         ingredients: [
-      //           {
-      //             ingredientId: 'test-001',
-      //             enteredAmount: '100',
-      //           },
-      //           {
-      //             ingredientId: 'test-002',
-      //           },
-      //           {
-      //             adHocIngredient: {
-      //               name: 'ad-hoc-1',
-      //               caloriesPer100: 198,
-      //             }
-      //           }
-      //         ]
-      //       },
-      //       type: 'web-cache',
-      //       userId: 'ffff'
-      //     },
-      //     {
-      //       correlationId: 'test',
-      //     },
-      //   )
-      // } catch (error) {
-      //   console.log('-! failed', error);
-      // }
-
-      // try {
-      //   const response = await this.upsertUserMealV1(
-      //     {
-      //       id: '01989416-8684-7649-a75a-f7e74b3effff',
-      //       meal: {
-      //         calories: 100,
-      //         ingredients: [
-      //           {
-      //             ingredientId: 'test-001',
-      //             enteredAmount: '101',
-      //           },
-      //           {
-      //             ingredientId: 'test-002',
-      //           },
-      //           {
-      //             adHocIngredient: {
-      //               name: 'ad-hoc-1',
-      //               caloriesPer100: 198,
-      //             }
-      //           }
-      //         ]
-      //       },
-      //       type: 'web-app-cache',
-      //       userId: 'ffffeeeedddd'
-      //     },
-      //     {
-      //       correlationId: 'test',
-      //     }
-      //   );
-      //   console.log(response);
-      // } catch (error) {
-      //   console.log('-! failed', error);
-      // }
-
-    //   console.log('<- done.2');
-    // }, 1024);
-  }
+  ) {}
 
   public async readManyV1(
     request: ReadManyUserMealsRequestV1,
@@ -103,7 +32,7 @@ export class MealsUserService {
       request.lastId,
       request.limit,
       request.userId,
-      request.types,
+      request.typeIds,
       context,
     );
     return { userMeals };
@@ -151,7 +80,7 @@ export class MealsUserService {
             const { id } = await this.mealsUserRepository.createUserMeal(
               {
                 mealId: sagaContext.newMealId,
-                type: request.type,
+                typeId: request.typeId,
                 userId: request.userId,
               },
               context,
@@ -268,7 +197,7 @@ export class MealsUserService {
             const { id } = await this.mealsUserRepository.upsertUserMeal(
               {
                 mealId,
-                type: request.type,
+                typeId: request.typeId,
                 userId: request.userId,
                 ...ifDefined<UserMeal>('id', userMealId),
               },

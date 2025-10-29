@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FastifyRequest } from 'fastify';
 import { Context } from '@mealz/backend-core';
-import { ACCESS_TOKEN_COOKIE_NAME } from '@mealz/backend-api';
 import {
   AuthUserRequestV1,
   UsersAuthTransporter,
@@ -32,17 +30,5 @@ export class UserAuthGWService {
       userId: response.userId,
       accessToken: response.accessToken,
     };
-  }
-
-  public async check(
-    req: FastifyRequest,
-    context: Context,
-  ): Promise<{ userId: string }> {
-    const accessToken = req.cookies[ACCESS_TOKEN_COOKIE_NAME];
-    const { userId } = await this.usersAuthTransporter.checkUserAuthV1(
-      { accessToken },
-      context,
-    );
-    return { userId };
   }
 }

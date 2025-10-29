@@ -31,7 +31,7 @@ export class MealsUserGWService {
       userId,
       limit: gwParams.limit,
       ...ifDefined<ReadManyUserMealsRequestV1>('lastId', gwParams.lastId),
-      ...ifDefined<ReadManyUserMealsRequestV1>('types', gwParams.types),
+      ...ifDefined<ReadManyUserMealsRequestV1>('typeIds', gwParams.typeIds),
     };
     const response = await this.mealsUserTransporter.readManyV1(
       request,
@@ -52,10 +52,10 @@ export class MealsUserGWService {
     const request: UpsertUserMealRequestV1 = {
       ...ifDefined<UpsertUserMealRequestV1>('id', gwRequest.id),
       userId,
-      type: gwRequest.type,
+      typeId: gwRequest.typeId,
       meal: gwRequest.meal,
     };
-
-    return null;
+    await this.mealsUserTransporter.upsertUserMealV1(request, context);
+    return {};
   }
 }

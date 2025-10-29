@@ -43,6 +43,7 @@ export class MealsUserGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<UpsertUserMealGWResponseV1Impl> {
-    return await this.mealsUserGWService.upsert(gwRequest, gwUser.id, context);
+    await this.mealsUserGWService.upsert(gwRequest, gwUser.id, context);
+    return {};
   }
 }
