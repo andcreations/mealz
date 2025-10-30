@@ -1,5 +1,5 @@
 export enum IngredientsLoadStatus {
-  Loading,
-  Loaded,
-  FailedToLoad,
+  Loading = 'Loading',
+  Loaded = 'Loaded',
+  FailedToLoad = 'FailedToLoad',
 }

@@ -43,3 +43,9 @@
     width: 100%;
   }
 }
+
+.mealz-meal-planner-facts-details {
+  @include mealz-font-small();
+  padding-left: 0.175rem;
+  color: $mealz-theme-color-fg-dark;
+}

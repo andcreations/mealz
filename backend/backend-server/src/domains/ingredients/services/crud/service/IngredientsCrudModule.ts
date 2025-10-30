@@ -8,7 +8,7 @@ import {
 
 import { IngredientsCrudRepository } from './repositories';
 import { IngredientsCrudService } from './services';
-import { IngredientsCrudController } from './controllers';
+import { IngredientsCrudRequestController } from './controllers';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { IngredientsCrudController } from './controllers';
   providers: [
     IngredientsCrudRepository,
     IngredientsCrudService,
-    IngredientsCrudController,
+    IngredientsCrudRequestController,
   ],
 })
 export class IngredientsCrudModule {

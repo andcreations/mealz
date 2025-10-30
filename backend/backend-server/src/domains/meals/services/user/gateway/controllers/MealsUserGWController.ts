@@ -32,7 +32,11 @@ export class MealsUserGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadManyUserMealsGWResponseV1Impl> {
-    return await this.mealsUserGWService.readMany(gwParams, gwUser.id, context);
+    return await this.mealsUserGWService.readManyV1(
+      gwParams,
+      gwUser.id,
+      context,
+    );
   }
 
   @Auth()
@@ -43,7 +47,7 @@ export class MealsUserGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<UpsertUserMealGWResponseV1Impl> {
-    await this.mealsUserGWService.upsert(gwRequest, gwUser.id, context);
+    await this.mealsUserGWService.upsertV1(gwRequest, gwUser.id, context);
     return {};
   }
 }

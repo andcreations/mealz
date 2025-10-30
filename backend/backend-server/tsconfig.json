@@ -42,7 +42,10 @@
       "@mealz/backend-meals-crud-service-api": ["src/domains/meals/services/crud/service-api"],
 
       "@mealz/backend-meals-user-service-api": ["src/domains/meals/services/user/service-api"],
-      "@mealz/backend-meals-user-gateway-api": ["src/domains/meals/services/user/gateway-api"]
+      "@mealz/backend-meals-user-gateway-api": ["src/domains/meals/services/user/gateway-api"],
+
+      "@mealz/backend-meals-log-service-api": ["src/domains/meals/services/log/service-api"],
+      "@mealz/backend-meals-log-gateway-api": ["src/domains/meals/services/log/gateway-api"]
     }
   },
   "exclude": ["node_modules", "dist"]

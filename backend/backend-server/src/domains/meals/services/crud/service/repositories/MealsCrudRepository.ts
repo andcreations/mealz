@@ -7,7 +7,7 @@ import {
   Where,
   UpsertObject,
 } from '@mealz/backend-db';
-import { Meal } from '@mealz/backend-meals-common';
+import { Meal, MealWithoutId } from '@mealz/backend-meals-common';
 import {
   MEALS_DB_NAME,
   MEAL_DB_ENTITY_NAME,
@@ -47,7 +47,7 @@ export class MealsCrudRepository {
   }
 
   public async createMeal(
-    meal: Omit<Meal, 'id'>,
+    meal: MealWithoutId,
     context: Context,
   ): Promise<Pick<Meal,'id'>> {
     const id = this.idGenerator();

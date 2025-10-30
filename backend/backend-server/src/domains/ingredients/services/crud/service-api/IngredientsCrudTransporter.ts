@@ -3,7 +3,7 @@ import { Context } from '@mealz/backend-core';
 import { RequestTransporter } from '@mealz/backend-transport';
 
 import { INGREDIENTS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
-import { IngredientsCrudTopics } from './IngredientsCrudTopics';
+import { IngredientsCrudRequestTopics } from './IngredientsCrudRequestTopics';
 import {
   ReadIngredientsFromLastRequestV1,
   ReadIngredientsFromLastResponseV1,
@@ -23,7 +23,7 @@ export class IngredientsCrudTransporter {
     return this.transporter.sendRequest<
       ReadIngredientsFromLastRequestV1, ReadIngredientsFromLastResponseV1
     >(
-      IngredientsCrudTopics.ReadFromLastV1,
+      IngredientsCrudRequestTopics.ReadFromLastV1,
       request,
       context,
     );

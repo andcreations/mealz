@@ -18,7 +18,7 @@ export class IngredientsCrudGWService {
     private readonly gwIngredientMapper: GWIngredientMapper,
   ) {}
 
-  public async readFromLast(
+  public async readFromLastV1(
     gwParams: ReadIngredientsFromLastGWQueryParamsV1,
     context: Context,
   ): Promise<ReadIngredientsFromLastGWResponseV1> {

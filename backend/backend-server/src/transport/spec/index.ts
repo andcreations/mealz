@@ -1,2 +1,2 @@
-export * from './TransportControllerSpec';
+export * from './RequestControllerSpec';
 export * from './RequestHandlerSpec';

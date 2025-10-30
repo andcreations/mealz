@@ -1,19 +1,20 @@
 import { Service } from '@andcreations/common';
 
-import {
-  CalculateAmountsResult,
-  MealPlannerIngredient,
-  MealSummaryResult,
-} from '../types';
 import { I18nService } from '../../i18n';
-import { IngredientFacts } from '../../ingredients/types';
 import {
+  IngredientFacts,
   calculateAmount,
   calculateFact,
   getCaloriesPer100,
   getFacts,
-} from '../../ingredients/utils';
+} from '../../ingredients';
 import { INVALID_AMOUNT } from '../const';
+import {
+  CalculateAmountsResult,
+  Macros,
+  MealPlannerIngredient,
+  MealSummaryResult,
+} from '../types';
 import { MealCalculatorTranslations } from './MealCalculator.translations';
 
 @Service()
@@ -34,14 +35,16 @@ export class MealCalculator {
     return !isNaN(amount) ? amount : INVALID_AMOUNT;
   }
 
-  private getCaloriesPer100(ingredient: MealPlannerIngredient): number {
+  public getCaloriesPer100(
+    ingredient: MealPlannerIngredient,
+  ): number | undefined {
     if (ingredient.fullIngredient) {
       return getCaloriesPer100(ingredient.fullIngredient);
     }
     if (ingredient.adHocIngredient) {
       return ingredient.adHocIngredient.caloriesPer100;
     }
-    // This should never happen.
+    return undefined;
   }
 
   /**
@@ -124,9 +127,37 @@ export class MealCalculator {
     };
   }
 
+  public calculateMacrosRates(
+    carbs: number,
+    protein: number,
+    fat: number,
+  ): Macros {
+    const total = carbs + protein + fat;
+    return {
+      carbs: carbs / total,
+      protein: protein / total,
+      fat: fat / total,
+    };
+  }
+
+  public calculateMacrosPercentages(
+    carbs: number,
+    protein: number,
+    fat: number,
+  ): Macros {
+    const total = carbs + protein + fat;
+    const carbsPercent = carbs * 100 / total;
+    const proteinPercent = protein * 100 / total;
+    return {
+      carbs: carbsPercent,
+      protein: proteinPercent,
+      fat: 100 - carbsPercent - proteinPercent,
+    };
+  }
+
   /**
    * Summarize rules:
-   * - The optional facts are returned only when all the ingredients are full.
+   * - Facts other than calories are returned only if there are full ingredients.
    */
   public summarize(
     ingredients: MealPlannerIngredient[],
@@ -134,8 +165,16 @@ export class MealCalculator {
     const summary: MealSummaryResult = {
       total: {
         calories: 0,
+        carbs: 0,
+        sugars: 0,
+        protein: 0,
+        totalFat: 0,
+        saturatedFat: 0,
+        monounsaturatedFat: 0,
+        polyunsaturatedFat: 0,
       },
-      hasOptionalFacts: false,
+      hasFullIngredients: false,
+      hasAdHocIngredients: false,
     };
     const validIngredients = ingredients.filter(ingredient => {
       return this.isValidIngredient(ingredient);
@@ -143,9 +182,6 @@ export class MealCalculator {
     if (!validIngredients.length) {
       return summary;
     }
-    const hasOnlyFullIngredients = validIngredients.every(ingredient => {
-      return !!ingredient.fullIngredient;
-    });
 
     // summarize
     validIngredients.forEach(ingredient => {
@@ -164,31 +200,32 @@ export class MealCalculator {
         const facts = getFacts(ingredient.fullIngredient);
         summary.total.calories += calculateFact(amount, facts.calories);
 
-        // The optional facts are calculated only if all the ingredients
-        // are full ingredients. We have only calories for the ad-hoc ones.
-        if (hasOnlyFullIngredients) {
-          const optionalFacts: Array<
-            keyof Omit<IngredientFacts, 'calories'>
-          > = [
-            'carbs',
-            'sugars',
-            'protein',
-            'totalFat',
-            'monounsaturatedFat',
-            'polyunsaturatedFat',
-            'saturatedFat',
-          ];
-          optionalFacts.forEach(fact => {
-            const factValue = calculateFact(amount, facts[fact]);
-            summary.total[fact] = (summary.total[fact] || 0) + factValue;
-          });
-        }
+        const optionalFacts: Array<
+          keyof Omit<IngredientFacts, 'calories'>
+        > = [
+          'carbs',
+          'sugars',
+          'protein',
+          'totalFat',
+          'monounsaturatedFat',
+          'polyunsaturatedFat',
+          'saturatedFat',
+        ];
+        optionalFacts.forEach(fact => {
+          const factValue = calculateFact(amount, facts[fact]);
+          summary.total[fact] = (summary.total[fact] || 0) + factValue;
+        });
       }
     });
 
     return {
       ...summary,
-      hasOptionalFacts: hasOnlyFullIngredients,
+      hasFullIngredients: validIngredients.some(ingredient => {
+        return !!ingredient.fullIngredient;
+      }),
+      hasAdHocIngredients: validIngredients.some(ingredient => {
+        return !!ingredient.adHocIngredient;
+      }),
     };
   }
 }

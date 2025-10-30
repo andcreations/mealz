@@ -1,1 +1,1 @@
-export * from './IngredientsCrudController';
+export * from './IngredientsCrudRequestController';

@@ -451,6 +451,106 @@
   },
   {
     "name": {
+      "en": "Butter",
+      "pl": "Masło"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 728.57
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.71
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 85.71
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 52.14
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 21.43
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2.86
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Buttermilk",
+      "pl": "Maślanka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 40
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.9
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.31
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.9
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.53
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.24
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.04
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Cabbage",
       "pl": "Kapusta"
     },
@@ -751,6 +851,56 @@
   },
   {
     "name": {
+      "en": "Cottage cheese 1%",
+      "pl": "Twaróg 1%"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 98.17
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.39
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.66
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 11.01
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4.31
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.74
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.83
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.09
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Cucumber",
       "pl": "Ogórek"
     },
@@ -901,6 +1051,56 @@
   },
   {
     "name": {
+      "en": "Ghee",
+      "pl": "Masło klarowane ghee"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 861.54
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 92.31
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 60.77
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 28.46
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 3.85
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Grapes",
       "pl": "Winogrono"
     },
@@ -941,6 +1141,56 @@
         "id": 6,
         "unit": 1,
         "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Greek yogurt",
+      "pl": "Jogurt grecki"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 58.82
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.59
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.24
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 10
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.41
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.12
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.06
       },
       {
         "id": 7,
@@ -1046,6 +1296,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.13
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Kefir",
+      "pl": "Kefir"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 44.98
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.82
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.82
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 4.42
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.88
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.56
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.24
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.04
       }
     ]
   },
@@ -1401,6 +1701,56 @@
   },
   {
     "name": {
+      "en": "Mascarpone",
+      "pl": "Ser mascarpone"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 435.71
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.21
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 4.64
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 46.43
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 27.14
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 11.79
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.79
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Melon",
       "pl": "Melon"
     },
@@ -1446,6 +1796,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Milk",
+      "pl": "Mleko"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 50
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.92
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.92
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.32
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.97
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.27
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.57
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
       }
     ]
   },
@@ -1696,6 +2096,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Paneer",
+      "pl": "Ser paneer"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 299.18
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 2.95
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 18.03
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 23.77
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 13.11
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 5.98
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.07
       }
     ]
   },
@@ -2246,6 +2696,106 @@
         "id": 7,
         "unit": 1,
         "amount": 0.09
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Ricotta",
+      "pl": "Ser ricotta"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 137.9
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 5.16
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.32
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 11.29
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 7.9
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 4.92
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 2.34
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.24
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Skyr",
+      "pl": "Skyr"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 82.14
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 12.14
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 11.43
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8.21
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
       }
     ]
   },

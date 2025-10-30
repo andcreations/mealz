@@ -1,4 +1,4 @@
-import { Meal } from '@mealz/backend-meals-common';
+import { MealWithoutId } from '@mealz/backend-meals-common';
 import { UserMeal } from '../types';
 
 export class UpsertUserMealRequestV1 {
@@ -12,5 +12,5 @@ export class UpsertUserMealRequestV1 {
   public typeId: UserMeal['typeId'];
 
   // Meal
-  public meal: Omit<Meal, 'id'>;
+  public meal: MealWithoutId;
 }

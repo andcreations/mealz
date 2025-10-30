@@ -1,0 +1,1 @@
+export const MEALS_LOG_DB_NAME = 'meals-log';

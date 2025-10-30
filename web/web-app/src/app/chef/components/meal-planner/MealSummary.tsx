@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
+import { UserSettingsService } from '../../../user';
 import { MealCalculator } from '../../services';
 import { MealSummaryTranslations } from './MealSummary.translations';
 
@@ -23,14 +24,15 @@ interface MealSummaryState {
 }
 
 export function MealSummary(props: MealSummaryProps) {
+  const userSettings = useService(UserSettingsService);
+  const mealCalculator = useService(MealCalculator);
+
   const [state, setState] = useState<MealSummaryState>({
     status: null,
     summary: null,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealSummaryTranslations);
-
-  const mealCalculator = useService(MealCalculator);
 
   // initialize state
   useEffect(
@@ -46,6 +48,18 @@ export function MealSummary(props: MealSummaryProps) {
 
   const renderFacts = () => {
     const { summary } = state;
+
+    const percentages = mealCalculator.calculateMacrosPercentages(
+      summary.total.carbs,
+      summary.total.protein,
+      summary.total.totalFat,
+    );
+    const percentageToDetails = (percentage: number) => {
+      if (!userSettings.showPercentageInMealSummary()) {
+        return undefined;
+      }
+      return `(${percentage.toFixed(0)}%)`;
+    }
     
     let row = 1;
     const nextGridRow = () => {
@@ -55,10 +69,11 @@ export function MealSummary(props: MealSummaryProps) {
     const addFact = (
       amount: number | undefined,
       unit: string,
-      name: string,
+      nameKey: string,
       options?: {
-        tiny?: boolean,
-        highlight?: boolean,
+        tiny?: boolean;
+        highlight?: boolean;
+        details?: string;
       },
     ) => {
       if (amount === undefined) {
@@ -78,17 +93,16 @@ export function MealSummary(props: MealSummaryProps) {
         { 'mealz-error': options?.highlight },
       );
 
-      const key = name.toLowerCase().replace(/ /g, '-');
       return [
         <div
-          key={`${key}-amount`}
+          key={`${nameKey}-amount`}
           className={`mealz-meal-summary-facts-amount ${commonClassNames}`}
           style={styles('1')}
         >
           { amount.toFixed(0) }
         </div>,
         <div
-          key={`${key}-unit`}
+          key={`${nameKey}-unit`}
           className={`mealz-meal-summary-facts-unit ${commonClassNames}`}
           style={styles('2')}
         >
@@ -96,10 +110,17 @@ export function MealSummary(props: MealSummaryProps) {
         </div>,
         <div
           className={nameClassNames}
-          key={`${key}-name`}
+          key={`${nameKey}-name`}
           style={styles('3')}
         >
-          { translate(name) }
+          <span>
+            { translate(nameKey) }
+          </span>
+          { options?.details &&
+            <span className='mealz-meal-planner-facts-details'>
+              { options.details }
+            </span>
+          }
         </div>
       ];
     }
@@ -166,35 +187,50 @@ export function MealSummary(props: MealSummaryProps) {
         )
       ),
 
-      ...factsIf(
-        summary.hasOptionalFacts,
-        [
-          ...addSeparator(),
-          ...addFact(summary.total.carbs, 'g', 'carbs'),
-          ...addFact(summary.total.sugars, 'g', 'sugars', { tiny: true }),
-          ...addSeparator(),
-          ...addFact(summary.total.protein, 'g', 'Protein'),
-          ...addSeparator(),
-          ...addFact(summary.total.totalFat, 'g', 'fat'),
-          ...addFact(
-            summary.total.monounsaturatedFat,
-            'g',
-            'monosaturated-fat',
-            { tiny: true },
-          ),
-          ...addFact(
-            summary.total.polyunsaturatedFat,
-            'g',
-            'polysaturated-fat',
-            { tiny: true },
-          ),
-          ...addFact(
-            summary.total.saturatedFat,
-            'g',
-            'saturated-fat',
-            { tiny: true },
-          ),
-        ],
+      ...addSeparator(),
+      ...addFact(
+        summary.total.carbs,
+        'g',
+        'carbs',
+        {
+          details: percentageToDetails(percentages.carbs)
+        }),
+      ...addFact(summary.total.sugars, 'g', 'sugars', { tiny: true }),
+      ...addSeparator(),
+      ...addFact(
+        summary.total.protein,
+        'g',
+        'protein',
+        {
+           details: percentageToDetails(percentages.protein) 
+        }
+      ),
+      ...addSeparator(),
+      ...addFact(
+        summary.total.totalFat,
+        'g',
+        'fat',
+        {
+          details: percentageToDetails(percentages.fat)
+        }
+      ),
+      ...addFact(
+        summary.total.monounsaturatedFat,
+        'g',
+        'monosaturated-fat',
+        { tiny: true },
+      ),
+      ...addFact(
+        summary.total.polyunsaturatedFat,
+        'g',
+        'polysaturated-fat',
+        { tiny: true },
+      ),
+      ...addFact(
+        summary.total.saturatedFat,
+        'g',
+        'saturated-fat',
+        { tiny: true },
       ),
     ];
   };

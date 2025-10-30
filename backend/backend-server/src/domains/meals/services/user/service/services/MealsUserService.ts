@@ -123,6 +123,7 @@ export class MealsUserService {
       id: `upsert-user-meal-v1`,
       operations: [
         {
+          // Read the user meal to get the meal identifier.
           getId: () => 'read-user-meal',
           do: async (sagaContext: SagaContext) => {
             if (!request.id) {
@@ -136,6 +137,8 @@ export class MealsUserService {
           },
         },
         {
+          // Read the meal, so that it can upserted in case of a failure
+          // in order to rollback the changes.
           getId: () => 'read-meal',
           do: async (sagaContext: SagaContext) => {
             if (!sagaContext.originalUserMeal) {

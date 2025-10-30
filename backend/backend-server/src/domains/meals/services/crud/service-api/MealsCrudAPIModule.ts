@@ -5,6 +5,7 @@ import {
 } from '@mealz/backend-transport';
 
 import { MEALS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
+import { MEALS_CRUD_DOMAIN, MEALS_CRUD_SERVICE } from './domain-and-service';
 import { MealsCrudTransporter } from './MealsCrudTransporter';
 
 export interface MealsCrudAPIModuleOptions {
@@ -22,8 +23,8 @@ export class MealsCrudAPIModule {
         {
           provide: MEALS_CRUD_REQUEST_TRANSPORTER_TOKEN,
           useValue: RequestTransporterResolver.forService({
-            domain: 'meals',
-            service: 'crud',
+            domain: MEALS_CRUD_DOMAIN,
+            service: MEALS_CRUD_SERVICE,
             overrideTransporter: options.requestTransporter,
           }),
         },

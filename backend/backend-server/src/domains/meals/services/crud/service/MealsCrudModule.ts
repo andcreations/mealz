@@ -9,7 +9,7 @@ import {
 
 import { MealsCrudRepository } from './repositories';
 import { MealsCrudService } from './services';
-import { MealsCrudController } from './controllers';
+import { MealsCrudRequestController } from './controllers';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { MealsCrudController } from './controllers';
     IdGeneratorProvider,
     MealsCrudRepository,
     MealsCrudService,
-    MealsCrudController,
+    MealsCrudRequestController,
   ],
 })
 export class MealsCrudModule {

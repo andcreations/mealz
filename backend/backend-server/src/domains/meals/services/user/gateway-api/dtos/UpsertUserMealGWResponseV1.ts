@@ -1,2 +1,1 @@
-export interface UpsertUserMealGWResponseV1 {
-}
+export interface UpsertUserMealGWResponseV1 {}

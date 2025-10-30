@@ -7,7 +7,7 @@ import {
 
 import { UsersAuthRepository } from './repositories';
 import { UsersAuthService } from './services';
-import { UsersAuthTransportController } from './controllers';
+import { UsersAuthRequestController } from './controllers';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { UsersAuthTransportController } from './controllers';
     UserDBMapper,
     UsersAuthRepository,
     UsersAuthService,
-    UsersAuthTransportController,
+    UsersAuthRequestController,
   ],
 })
 export class UsersAuthModule {
