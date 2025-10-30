@@ -5,6 +5,7 @@ import {
 } from '@mealz/backend-transport';
 
 import { MEALS_USER_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
+import { MEALS_USER_DOMAIN, MEALS_USER_SERVICE } from './domain-and-service';
 import { MealsUserTransporter } from './MealsUserTransporter';
 
 export interface MealsUserAPIModuleOptions {
@@ -22,8 +23,8 @@ export class MealsUserAPIModule {
         {
           provide: MEALS_USER_REQUEST_TRANSPORTER_TOKEN,
           useValue: RequestTransporterResolver.forService({
-            domain: 'meals',
-            service: 'user',
+            domain: MEALS_USER_DOMAIN,
+            service: MEALS_USER_SERVICE,
             overrideTransporter: options.requestTransporter,
           }),
         },

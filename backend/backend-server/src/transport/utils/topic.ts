@@ -19,7 +19,10 @@ function validateParam(value: string): void {
   }
 }
 
-export function buildTopic(params: TopicParams): string {
+export function buildRequestTopic(params: TopicParams): string {
   Object.values(params).forEach(validateParam);
-  return `${params.domain}_${params.service}_${params.method}_${params.version}`;
+  return (
+    `${params.domain}_${params.service}_` +
+    `${params.method}$request_${params.version}`
+  );
 }

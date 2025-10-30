@@ -1,15 +1,15 @@
 import { Context } from '@mealz/backend-core';
 
-import { TransportControllerClass } from '../types';
+import { RequestControllerClass } from '../types';
 import {
   RequestHandlerSpecAlreadyExistsError,
   RequestHandlerSpecNotFoundError,
-  DuplicatedTransportHandlerError,
+  DuplicatedRequestHandlerError,
   RequestHandlerNotFoundError,
 } from '../errors';
 
 export interface RequestHandlerSpec {
-  clazz: TransportControllerClass;
+  clazz: RequestControllerClass;
   topic: string;
   methodName: string;
   classInstance?: object;
@@ -29,7 +29,7 @@ export function addRequestHandlerSpec(
 }
 
 export function getRequestHandlerSpecs(
-  clazz: TransportControllerClass,
+  clazz: RequestControllerClass,
 ): RequestHandlerSpec[] {
   return requestHandlerSpecs.filter(itr => itr.clazz === clazz);
 }
@@ -43,7 +43,7 @@ export function setRequestHandlerClassInstance(
     throw new RequestHandlerSpecNotFoundError(topic);
   }
   if (spec.classInstance) {
-    throw new DuplicatedTransportHandlerError(topic);
+    throw new DuplicatedRequestHandlerError(topic);
   }
   spec.classInstance = classInstance;
 }

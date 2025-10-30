@@ -34,7 +34,7 @@ export function Loader(props: LoaderProps) {
 
   useEffect(
     () => {      
-      const timer = props.delay
+      const timer = delay
         ? setTimeout(
             () => patchState({ visible: true }),
             delay,

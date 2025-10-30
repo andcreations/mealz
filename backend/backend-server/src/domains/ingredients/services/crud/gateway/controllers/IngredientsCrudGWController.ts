@@ -27,6 +27,9 @@ export class IngredientsCrudGWController {
     @Query() gwParams: ReadIngredientsFromLastGWQueryParamsV1,
     @GWContext() context: Context,
   ): Promise<ReadIngredientsFromLastGWResponseV1> {
-    return await this.ingredientsCrudGWService.readFromLast(gwParams, context);
+    return await this.ingredientsCrudGWService.readFromLastV1(
+      gwParams,
+      context,
+    );
   }
 }

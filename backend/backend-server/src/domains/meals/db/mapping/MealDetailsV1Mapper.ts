@@ -5,6 +5,7 @@ import {
   AdHocIngredient,
   MealIngredient,
   Meal,
+  MealWithoutId,
 } from '@mealz/backend-meals-common';
 
 import { AdHocIngredientV1, MealDetailsV1, MealIngredientV1 } from '../types';
@@ -82,7 +83,7 @@ export class MealDetailsV1Mapper {
     }
   }
 
-  public fromBuffer(buffer: Buffer): Omit<Meal, 'id'> {
+  public fromBuffer(buffer: Buffer): MealWithoutId {
     const details = decode(buffer) as MealDetailsV1;
     return {
       ...ifDefined<Meal>('calories', details.calories),

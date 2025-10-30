@@ -5,7 +5,13 @@ import {
 } from '@mealz/backend-transport';
 
 import { INGREDIENTS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
-import { IngredientsCrudTransporter } from './IngredientsCrudTransporter';
+import {
+  INGREDIENTS_CRUD_DOMAIN,
+  INGREDIENTS_CRUD_SERVICE,
+} from './domain-and-service';
+import {
+  IngredientsCrudTransporter,
+} from './IngredientsCrudTransporter';
 
 export interface IngredientsCrudAPIModuleOptions {
   requestTransporter?: RequestTransporter;
@@ -22,8 +28,8 @@ export class IngredientsCrudAPIModule {
         {
           provide: INGREDIENTS_CRUD_REQUEST_TRANSPORTER_TOKEN,
           useValue: RequestTransporterResolver.forService({
-            domain: 'ingredients',
-            service: 'crud',
+            domain: INGREDIENTS_CRUD_DOMAIN,
+            service: INGREDIENTS_CRUD_SERVICE,
             overrideTransporter: options.requestTransporter,
           }),
         },

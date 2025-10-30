@@ -1,19 +1,30 @@
-import { IsString } from 'class-validator';
+import {
+  IsArray,
+  IsDefined,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsCalories } from '@mealz/backend-gateway-common';
 import { GWMeal } from '@mealz/backend-meals-gateway-api';
 
 import { GWMealIngredientImpl } from './GWMealIngredientImpl';
+import { Type } from 'class-transformer';
 
 export class GWMealWithoutIdImpl implements Omit<GWMeal, 'id'> {
   @ApiProperty({
     description: 'Number of calories in the meal'
   })
+  @IsOptional()
   @IsCalories()
   calories?: number;
 
   @ApiProperty({
     description: 'Meal ingredients'
   })
+  @IsDefined()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => GWMealIngredientImpl)
   ingredients: GWMealIngredientImpl[];
 }

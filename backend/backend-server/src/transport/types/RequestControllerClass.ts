@@ -1,0 +1,1 @@
+export type RequestControllerClass<T = any> = new (...args: any[]) => T;

@@ -3,7 +3,7 @@ import { Context } from '@mealz/backend-core';
 import { RequestTransporter } from '@mealz/backend-transport';
 
 import { MEALS_USER_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
-import { MealsUserTopics } from './MealsUserTopics';
+import { MealsUserRequestTopics } from './MealsUserRequestTopics';
 import {
   ReadManyUserMealsRequestV1,
   ReadManyUserMealsResponseV1,
@@ -26,7 +26,7 @@ export class MealsUserTransporter {
     return this.transporter.sendRequest<
     ReadManyUserMealsRequestV1, ReadManyUserMealsResponseV1
     >(
-      MealsUserTopics.ReadManyV1,
+      MealsUserRequestTopics.ReadManyV1,
       request,
       context,
     );
@@ -39,7 +39,7 @@ export class MealsUserTransporter {
     return this.transporter.sendRequest<
     CreateUserMealRequestV1, CreateUserMealResponseV1
     >(
-      MealsUserTopics.CreateUserMealV1,
+      MealsUserRequestTopics.CreateUserMealV1,
       request,
       context,
     );
@@ -52,7 +52,7 @@ export class MealsUserTransporter {
     return this.transporter.sendRequest<
       UpsertUserMealRequestV1, void
     >(
-      MealsUserTopics.UpsertUserMealV1,
+      MealsUserRequestTopics.UpsertUserMealV1,
       request,
       context,
     );

@@ -24,7 +24,7 @@ export class MealsUserRepository {
     private readonly mapper: UserMealDBMapper,
     @InjectIdGenerator()
     private readonly idGenerator: IdGenerator,
-  ) { }
+  ) {}
 
   public async readUserMealById(
     id: string,

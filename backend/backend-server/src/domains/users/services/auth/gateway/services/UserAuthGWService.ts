@@ -14,7 +14,7 @@ export class UserAuthGWService {
     private readonly usersAuthTransporter: UsersAuthTransporter,
   ) {}
 
-  public async userAuth(
+  public async userAuthV1(
     gwRequest: UserAuthGWRequestV1,
     context: Context,
   ): Promise<UserAuthGWResponseV1Impl> {

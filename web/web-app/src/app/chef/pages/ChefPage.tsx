@@ -63,6 +63,7 @@ export function ChefPage() {
             type={LoaderType.Error}
             title={translate('try-again-later')}
             subTitle={translate('failed-to-load-ingredients')}
+            delay={0}
           />
         }
       </Center>

@@ -20,10 +20,13 @@ export class SQLiteDB {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    Log.info(`Opening SQLite database ${Colors.cyan(dbFilename)}`);
     const db = new SQLiteDB();
     await db.init(dbFilename);
     return db;
+  }
+
+  public getDB(): sqlite3.Database {
+    return this.db;
   }
 
   public async close(): Promise<void> {

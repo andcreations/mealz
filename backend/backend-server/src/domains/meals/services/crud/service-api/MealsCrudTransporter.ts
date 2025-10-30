@@ -3,7 +3,7 @@ import { Context } from '@mealz/backend-core';
 import { RequestTransporter } from '@mealz/backend-transport';
 
 import { MEALS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
-import { MealsCrudTopics } from './MealsCrudTopics';
+import { MealsCrudRequestTopics } from './MealsCrudRequestTopics';
 import {
   ReadMealByIdRequestV1,
   ReadMealByIdResponseV1,
@@ -30,7 +30,7 @@ export class MealsCrudTransporter {
     return this.transporter.sendRequest<
       ReadMealByIdRequestV1, ReadMealByIdResponseV1
     >(
-      MealsCrudTopics.ReadMealByIdV1,
+      MealsCrudRequestTopics.ReadMealByIdV1,
       request,
       context,
     );
@@ -43,7 +43,7 @@ export class MealsCrudTransporter {
     return this.transporter.sendRequest<
       ReadMealsByIdRequestV1, ReadMealsByIdResponseV1
     >(
-      MealsCrudTopics.ReadMealsByIdV1,
+      MealsCrudRequestTopics.ReadMealsByIdV1,
       request,
       context,
     );
@@ -56,7 +56,7 @@ export class MealsCrudTransporter {
     return this.transporter.sendRequest<
     CreateMealRequestV1, CreateMealResponseV1
     >(
-      MealsCrudTopics.CreateMealV1,
+      MealsCrudRequestTopics.CreateMealV1,
       request,
       context,
     );
@@ -69,7 +69,7 @@ export class MealsCrudTransporter {
     return this.transporter.sendRequest<
       UpsertMealRequestV1, UpsertMealResponseV1
     >(
-      MealsCrudTopics.UpsertMealV1,
+      MealsCrudRequestTopics.UpsertMealV1,
       request,
       context,
     );
@@ -82,7 +82,7 @@ export class MealsCrudTransporter {
     return this.transporter.sendRequest<
     DeleteMealByIdRequestV1, void
     >(
-      MealsCrudTopics.DeleteMealByIdV1,
+      MealsCrudRequestTopics.DeleteMealByIdV1,
       request,
       context,
     );

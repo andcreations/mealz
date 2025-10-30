@@ -39,11 +39,14 @@ export class UserAuthGWController {
   @Post('v1')
   @HttpCode(HttpStatus.OK)
   public async signInV1(
-    @Body() body: UserAuthGWRequestV1Impl,
+    @Body() gwRequest: UserAuthGWRequestV1Impl,
     @GWContext() context: Context,
     @Res({ passthrough: true }) response: Response | FastifyReply,
   ): Promise<UserAuthGWResponseV1Impl> {
-    const authResponse = await this.userAuthGWService.userAuth(body, context);
+    const authResponse = await this.userAuthGWService.userAuthV1(
+      gwRequest,
+      context,
+    );
     
     setCookie(
       response,

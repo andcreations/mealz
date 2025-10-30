@@ -9,14 +9,18 @@ export class Log {
   public static error(message: string, error?: any): void {
     const hasError = !!error;
 
-    const color = hasError ? Colors.none : Colors.red;
-    console.log(color(message));
+    if (!hasError) {
+      console.error(Colors.red(message));
+    }
 
     if (hasError) {
-      const message = errorToMessage(error);
-      console.error(Colors.red(message));
+      const errorMessage = errorToMessage(error);
+      console.error(message + ' | ' + Colors.red(errorMessage));
       if (error.stack) {
-        console.error(Colors.gray(error.stack));
+        const lines = error.stack.split('\n');
+        for (const line of lines) {
+          console.error(Colors.gray(line));
+        }
       }
     }
   }

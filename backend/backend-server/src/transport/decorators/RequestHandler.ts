@@ -1,5 +1,5 @@
 import { addRequestHandlerSpec } from '../spec';
-import { TransportControllerClass } from '../types';
+import { RequestControllerClass } from '../types';
 
 export const RequestHandler = (
   topic: string,
@@ -13,7 +13,7 @@ export const RequestHandler = (
     }
 
     addRequestHandlerSpec({
-      clazz: target.constructor as TransportControllerClass,
+      clazz: target.constructor as RequestControllerClass,
       methodName: propertyKey,
       topic,
     });

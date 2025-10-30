@@ -392,8 +392,16 @@ describe('MealCalculator.summarize', () => {
       expected: {
         total: {
           calories: 0,
+          carbs: 0,
+          sugars: 0,
+          protein: 0,
+          totalFat: 0,
+          saturatedFat: 0,
+          monounsaturatedFat: 0,
+          polyunsaturatedFat: 0,
         },
-        hasOptionalFacts: false,
+        hasFullIngredients: false,
+        hasAdHocIngredients: false,
       },
     })
   });
@@ -414,7 +422,8 @@ describe('MealCalculator.summarize', () => {
           monounsaturatedFat: 6,
           polyunsaturatedFat: 2,
         },
-        hasOptionalFacts: true,
+        hasFullIngredients: true,
+        hasAdHocIngredients: false,
       },
     })
   });
@@ -436,7 +445,8 @@ describe('MealCalculator.summarize', () => {
           monounsaturatedFat: 3 + 2,
           polyunsaturatedFat: 1 + 1,
         },
-        hasOptionalFacts: true,
+        hasFullIngredients: true,
+        hasAdHocIngredients: false,
       },
     })
   });
@@ -449,8 +459,16 @@ describe('MealCalculator.summarize', () => {
       expected: {
         total: {
           calories: 64,
+          carbs: 0,
+          sugars: 0,
+          protein: 0,
+          totalFat: 0,
+          saturatedFat: 0,
+          monounsaturatedFat: 0,
+          polyunsaturatedFat: 0,
         },
-        hasOptionalFacts: false,
+        hasFullIngredients: false,
+        hasAdHocIngredients: true,
       },
     })
   });
@@ -464,8 +482,16 @@ describe('MealCalculator.summarize', () => {
       expected: {
         total: {
           calories: 64 + 60,
+          carbs: 0,
+          sugars: 0,
+          protein: 0,
+          totalFat: 0,
+          saturatedFat: 0,
+          monounsaturatedFat: 0,
+          polyunsaturatedFat: 0,
         },
-        hasOptionalFacts: false,
+        hasFullIngredients: false,
+        hasAdHocIngredients: true,
       },
     })
   });
@@ -479,8 +505,16 @@ describe('MealCalculator.summarize', () => {
       expected: {
         total: {
           calories: 75 + 60,
+          carbs: 11.25,
+          sugars: 7.5,
+          protein: 3,
+          totalFat: 4.5,
+          saturatedFat: 3,
+          monounsaturatedFat: 2.25,
+          polyunsaturatedFat: 0.75,
         },
-        hasOptionalFacts: false,
+        hasFullIngredients: true,
+        hasAdHocIngredients: true,
       },
     })
   });  

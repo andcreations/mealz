@@ -1,1 +1,1 @@
-export * from './UsersAuthTransportController';
+export * from './UsersAuthRequestController';

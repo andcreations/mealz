@@ -7,7 +7,8 @@ import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 import { patchAtIndex, removeFromIndex } from '../../../utils';
 import { AD_HOC_UNIT, INGREDIENT_LANGUAGE } from '../../../common';
 import { useTranslations } from '../../../i18n';
-import { usePatchState } from '../../../hooks';
+import { usePatchState, useService } from '../../../hooks';
+import { UserSettingsService } from '../../../user';
 import { MealPlannerIngredient } from '../../types';
 import {
   IngredientsEditorTranslations,
@@ -15,6 +16,7 @@ import {
 import { IngredientPickerWrapper } from './IngredientPickerWrapper';
 import { MaterialIcon } from '../../../components';
 import { INVALID_AMOUNT } from '../../const';
+import { MealCalculator } from '../../services';
 
 export interface IngredientsEditorProps {
   className?: string;
@@ -28,6 +30,9 @@ interface IngredientsEditorState {
 }
 
 export function IngredientsEditor(props: IngredientsEditorProps) {
+  const userSettings = useService(UserSettingsService);
+  const mealCalculator = useService(MealCalculator);
+
   const [state, setState] = useState<IngredientsEditorState>({
     ingredients: props.ingredients,
     pickIngredientIndex: null,
@@ -144,7 +149,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     );
   };
 
-  const renderName = (
+  const renderNameWithDetails = (
     key: string,
     ingredientIndex: number,
     ingredient: MealPlannerIngredient,
@@ -162,6 +167,12 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
       name = ingredient.fullIngredient.name[INGREDIENT_LANGUAGE];
     }
 
+    const caloriesPer100 = mealCalculator.getCaloriesPer100(ingredient);
+    const showCalories = userSettings.showCaloriesInIngredientsEditor();
+    const details = caloriesPer100 && showCalories
+      ? `(${caloriesPer100.toFixed(0)} kcal)`
+      : undefined;
+
     const nameClassNames = classNames(
       'mealz-ingredients-editor-name',
       { 'mealz-ingredients-editor-not-picked': !hasIngredient },
@@ -172,7 +183,14 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
         className={nameClassNames}
         onClick={() => onOpenIngredientPicker(ingredientIndex)}
       >
-        {name}
+        <span>
+          {name}
+        </span>
+        { details &&
+          <span className='mealz-ingredients-editor-name-details'>
+            {details}
+          </span>
+        }
       </div>
     );
   };
@@ -183,7 +201,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
       const id = `ingredient-${index}`;
       entries.push(
         renderAmount(`${id}-amount`, index, ingredient),
-        renderName(`${id}-name`, index, ingredient),
+        renderNameWithDetails(`${id}-name`, index, ingredient),
       );
     });
     return entries;

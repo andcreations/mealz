@@ -1,2 +1,2 @@
 export * from './EmptyTransporterResponse';
-export * from './TransportControllerClass';
+export * from './RequestControllerClass';

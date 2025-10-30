@@ -47,6 +47,12 @@
   cursor: pointer;
 }
 
+.mealz-ingredients-editor-name-details {
+  @include mealz-font-small();
+  padding-left: 0.175rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
 .mealz-ingredients-editor-not-picked {
   color: $mealz-theme-color-bg;
 }

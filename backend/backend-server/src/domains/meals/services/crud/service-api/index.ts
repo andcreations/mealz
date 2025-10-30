@@ -1,4 +1,4 @@
 export * from './dtos';
-export * from './MealsCrudTopics';
+export * from './MealsCrudRequestTopics';
 export * from './MealsCrudTransporter';
 export * from './MealsCrudAPIModule';

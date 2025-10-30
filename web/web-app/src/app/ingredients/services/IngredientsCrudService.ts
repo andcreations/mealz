@@ -32,7 +32,7 @@ export class IngredientsCrudService implements OnBootstrap {
   ) {}
 
   public async onBootstrap(): Promise<void> {
-    // read all the ingredients in the background
+  // read all the ingredients in the background
     if (this.authService.isSignedIn()) {
       Log.info('Reading all ingredients on bootstrap');
       this.readAllIngredients();

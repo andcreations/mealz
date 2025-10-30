@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
+
 import { MealsCrudModule } from './services/crud';
-import { MealsUserGWModule, MealsUserModule } from './services/user';
+import { MealsUserModule, MealsUserGWModule } from './services/user';
+import { MealsLogModule, MealsLogGWModule } from './services/log';
 
 @Module({
   imports: [
     MealsCrudModule,
     MealsUserModule,
     MealsUserGWModule,
+    MealsLogModule,
+    MealsLogGWModule,
   ],
 })
 export class MealsDomainModule {

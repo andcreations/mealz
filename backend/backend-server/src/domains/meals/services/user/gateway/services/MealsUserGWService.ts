@@ -22,7 +22,7 @@ export class MealsUserGWService {
     private readonly gwUserMealMapper: GWUserMealMapper,
   ) {}
 
-  public async readMany(
+  public async readManyV1(
     gwParams: ReadManyUserMealsGWQueryParamsV1,
     userId: string,
     context: Context
@@ -44,7 +44,7 @@ export class MealsUserGWService {
     return { userMeals };
   }
 
-  public async upsert(
+  public async upsertV1(
     gwRequest: UpsertUserMealGWRequestV1,
     userId: string,
     context: Context,
