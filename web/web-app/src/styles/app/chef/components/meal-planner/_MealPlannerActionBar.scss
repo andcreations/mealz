@@ -1,0 +1,10 @@
+.mealz-meal-planner-action-bar {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  margin-right: $mealz-border-radius;
+  color: $mealz-theme-color-fg-dark;
+}

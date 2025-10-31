@@ -1,9 +1,11 @@
 import { Service } from '@andcreations/common';
 import { AdHocIngredient } from '@mealz/backend-ingredients-shared';
-import { GWMealIngredient } from '@mealz/backend-meals-gateway-api';
+import { 
+  GWMealWithoutId,
+  GWMealIngredient,
+} from '@mealz/backend-meals-gateway-api';
 
 import { ifValueDefined } from '../../utils';
-
 import { IngredientsCrudService } from '../../ingredients';
 import { MealPlannerIngredient } from '../types';
 
@@ -91,6 +93,18 @@ export class MealMapper {
         'enteredAmount',
         enteredAmount,
       ),
+    }
+  }
+
+  public toGWMeal(
+    calories: number | undefined,
+    mealPlannerIngredients: MealPlannerIngredient[],
+  ): GWMealWithoutId {
+    return {
+      calories,
+      ingredients: mealPlannerIngredients.map(ingredient => {
+        return this.toGWMealIngredient(ingredient);
+      }),
     }
   }
 }

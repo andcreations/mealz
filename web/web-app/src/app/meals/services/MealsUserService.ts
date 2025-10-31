@@ -1,5 +1,6 @@
 import { Service } from '@andcreations/common';
 import { HTTPWebClientService } from '@andcreations/web-common';
+import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 import {
   GWUserMeal,
   ReadManyUserMealsGWResponseV1,
@@ -7,7 +8,6 @@ import {
   UpsertUserMealGWRequestV1,
   UpsertUserMealGWResponseV1,
 } from '@mealz/backend-meals-user-gateway-api';
-import { GWMeal } from '@mealz/backend-meals-gateway-api';
 
 import { AuthService } from '../../auth';
 
@@ -39,7 +39,7 @@ export class MealsUserService {
     return data.userMeals[0];
   }
 
-  public async upsertUserDraftMeal(meal: Omit<GWMeal, 'id'>): Promise<void> {
+  public async upsertUserDraftMeal(meal: GWMealWithoutId): Promise<void> {
     await this.http.post<
       UpsertUserMealGWRequestV1,
       UpsertUserMealGWResponseV1

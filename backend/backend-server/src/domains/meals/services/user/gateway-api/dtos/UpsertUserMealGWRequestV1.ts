@@ -1,4 +1,4 @@
-import { GWMeal } from '@mealz/backend-meals-gateway-api';
+import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 
 export interface UpsertUserMealGWRequestV1 {
   // User meal identifier
@@ -8,5 +8,5 @@ export interface UpsertUserMealGWRequestV1 {
   typeId: string;
 
   // Meal
-  meal: Omit<GWMeal, 'id'>;
+  meal: GWMealWithoutId;
 }

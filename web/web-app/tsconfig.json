@@ -32,6 +32,9 @@
       ],
       "@mealz/backend-meals-user-gateway-api": [
         "../../backend/backend-server/src/domains/meals/services/user/gateway-api"
+      ],
+      "@mealz/backend-meals-log-gateway-api": [
+        "../../backend/backend-server/src/domains/meals/services/log/gateway-api"
       ]
     }
   }
