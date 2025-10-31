@@ -48,6 +48,10 @@ module.exports = {
         '@mealz/backend-meals-user-gateway-api',
         'domains/meals/services/user/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-meals-log-gateway-api',
+        'domains/meals/services/log/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser

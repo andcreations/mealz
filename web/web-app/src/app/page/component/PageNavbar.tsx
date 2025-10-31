@@ -39,7 +39,7 @@ export function PageNavbar() {
         navigate(PathTo.signIn());
       })
       .catch(error => {
-        // TODO Handle error.
+        // TODO Notify about the error.
       });
   };
 

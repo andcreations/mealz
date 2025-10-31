@@ -159,6 +159,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
       !!ingredient.adHocIngredient
     );
 
+    // name
     let name = translate('pick-ingredient');
     if (!!ingredient.adHocIngredient) {
       name = ingredient.adHocIngredient.name;
@@ -167,10 +168,11 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
       name = ingredient.fullIngredient.name[INGREDIENT_LANGUAGE];
     }
 
+    // calories
     const caloriesPer100 = mealCalculator.getCaloriesPer100(ingredient);
-    const showCalories = userSettings.showCaloriesInIngredientsEditor();
-    const details = caloriesPer100 && showCalories
-      ? `(${caloriesPer100.toFixed(0)} kcal)`
+    const calories = caloriesPer100 * ingredient.calculatedAmount / 100;
+    const details = userSettings.showCaloriesInIngredientsEditor()
+      ? `(${calories.toFixed(0)} kcal)`
       : undefined;
 
     const nameClassNames = classNames(

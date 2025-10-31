@@ -12,12 +12,13 @@ import {
   IngredientsCrudService,
   IngredientsLoadStatusChangedEvent,
 } from '../../../ingredients';
-import { MealsUserService } from '../../../meals';
+import { MealsLogService, MealsUserService } from '../../../meals';
 import { useTranslations } from '../../../i18n';
 import { MealCalculator, MealMapper } from '../../services';
-import { MealPlannerTranslations } from './MealPlanner.translations';
+import { MealPlannerActionBar } from './MealPlannerActionBar';
 import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
+import { MealPlannerTranslations } from './MealPlanner.translations';
 
 enum Focus { Calories };
 
@@ -32,6 +33,7 @@ interface MealPlannerState {
 export function MealPlanner() {
   const ingredientsCrudService = useService(IngredientsCrudService);
   const mealsUserService = useService(MealsUserService);
+  const mealsLogService = useService(MealsLogService);
   const mealMapper = useService(MealMapper);
   const mealCalculator = useService(MealCalculator);
 
@@ -56,6 +58,7 @@ export function MealPlanner() {
           recalculate(caloriesStr, ingredients);
         })
         .catch(error => {
+          // TODO Notify about the error.
           Log.error('Failed to read user draft meal', error);
         });
     },
@@ -129,14 +132,13 @@ export function MealPlanner() {
     },
 
     upsert: (ingredients: MealPlannerIngredient[]) => {
-      const gwIngredients = ingredients.map(ingredient => {
-        return mealMapper.toGWMealIngredient(ingredient);
-      });
-      mealsUserService.upsertUserDraftMeal({
-        calories: calories.get(),
-        ingredients: gwIngredients,
-      })
+      const gwMeal = mealMapper.toGWMeal(
+        calories.get(),
+        ingredients,
+      );
+      mealsUserService.upsertUserDraftMeal(gwMeal)
       .catch(error => {
+        // TODO Notify about the error.
         Log.error('Failed to upsert user draft meal', error);
       });
     },
@@ -171,25 +173,47 @@ export function MealPlanner() {
     },
   };
 
+  const meal = {
+    onLog: () => {
+      const gwMeal = mealMapper.toGWMeal(
+        calories.get(),
+        state.ingredients,
+      );
+      mealsLogService.logMeal(gwMeal)
+        .then(() => {
+          Log.debug('Meal logged');
+        })
+        .catch(error => {
+          // TODO Notify about the error.
+          Log.error('Failed to log meal', error);
+        });
+    }
+  }
+
   return (
     <div className='mealz-meal-planner'>
-      <div className='mealz-meal-planner-calories'>
-        <div>
-          { translate('calories') }
+      <div className='mealz-meal-planner-top-bar'>
+        <div className='mealz-meal-planner-calories'>
+          <div>
+            { translate('calories') }
+          </div>
+          <div className='mealz-meal-planner-calories-unit'>
+            { `(${translate('kcal')})` }
+          </div>
+          <div className='mealz-meal-planner-calories-value'>
+            <Form.Control
+              type='number'
+              placeholder=''
+              ref={calories.ref}
+              value={state.calories}
+              onChange={calories.onChange}
+              onKeyDown={ifEnterKey(calories.onEnter)}
+            />
+          </div>
         </div>
-        <div className='mealz-meal-planner-calories-unit'>
-          { `(${translate('kcal')})` }
-        </div>
-        <div className='mealz-meal-planner-calories-value'>
-          <Form.Control
-            type='number'
-            placeholder=''
-            ref={calories.ref}
-            value={state.calories}
-            onChange={calories.onChange}
-            onKeyDown={ifEnterKey(calories.onEnter)}
-          />
-        </div>
+        <MealPlannerActionBar
+          onLogMeal={meal.onLog}
+        />
       </div>
       <div className='mealz-meal-planner-ingredients'>
         <IngredientsEditor

@@ -6,12 +6,12 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsCalories } from '@mealz/backend-gateway-common';
-import { GWMeal } from '@mealz/backend-meals-gateway-api';
+import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 
 import { GWMealIngredientImpl } from './GWMealIngredientImpl';
 import { Type } from 'class-transformer';
 
-export class GWMealWithoutIdImpl implements Omit<GWMeal, 'id'> {
+export class GWMealWithoutIdImpl implements GWMealWithoutId {
   @ApiProperty({
     description: 'Number of calories in the meal'
   })

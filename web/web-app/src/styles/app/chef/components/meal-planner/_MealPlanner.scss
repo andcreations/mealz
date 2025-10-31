@@ -9,9 +9,18 @@
   width: calc(100vw - 2 * #{$padding});
 }
 
+.mealz-meal-planner-top-bar {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  width: 100%;
+}
+
 .mealz-meal-planner-calories {
   @include mealz-flex-container();
   @include mealz-flex-horizontal();
+  flex-grow: 0;
+  flex-shrink: 1;
   align-items: center;
   width: 100%;
   padding: 1rem 0;
