@@ -1,1 +1,1 @@
-export interface LogMealGWResponseV1 {}
+export class LogMealGWResponseV1 {}

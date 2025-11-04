@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { PageWrapper } from '../../page';
 import { Center } from '../../components';
+import { PageWrapper } from '../../page';
 
-export function HomePage() {
+export function DashboardPage() {
   return (
     <PageWrapper>
       <Center>
-        The home page content goes here
+        <h1>Dashboard</h1>
       </Center>
     </PageWrapper>
   );

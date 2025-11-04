@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TimePeriod } from '@andcreations/common';
 import { Context } from '@mealz/backend-core';
-import { ifDefined } from '@mealz/backend-shared';
 import { Logger } from '@mealz/backend-logger';
 import { 
   InternalError,
@@ -18,17 +17,17 @@ import {
   LogMealResponseV1,
 } from '@mealz/backend-meals-log-service-api';
 
-import { MealsLogRepository } from '../repositories';
+import { MealsLogCrudRepository } from '../repositories';
 
 @Injectable()
-export class MealsLogService {
+export class MealsLogCrudService {
   private readonly upsertOnLogMealPeriod: number;
   
   public constructor(
     private readonly logger: Logger,
     private readonly sagaService: SagaService,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
-    private readonly mealsLogRepository: MealsLogRepository,
+    private readonly mealsLogCrudRepository: MealsLogCrudRepository,
   ) {
     this.upsertOnLogMealPeriod = TimePeriod.fromStr(
       requireStrEnv('MEALZ_UPSERT_ON_LOG_MEAL_PERIOD')
@@ -76,7 +75,7 @@ export class MealsLogService {
         {
           getId: () => 'create-meal-log',
           do: async (sagaContext: SagaContext) => {
-            const { id } = await this.mealsLogRepository.createMealLog(
+            const { id } = await this.mealsLogCrudRepository.createMealLog(
               {
                 mealId: sagaContext.newMealId,
                 userId,
@@ -88,7 +87,7 @@ export class MealsLogService {
           },
           undo: async (sagaContext: SagaContext) => {
             if (sagaContext.newMealLogId) {
-              await this.mealsLogRepository.deleteMealLogById(
+              await this.mealsLogCrudRepository.deleteMealLogById(
                 sagaContext.newMealLogId,
                 context,
               );
@@ -105,7 +104,7 @@ export class MealsLogService {
     return { id: sagaContext.newMealLogId };
   }
 
-  private async updateMealLog(
+  private async upsertMealLog(
     mealLogId: string,
     userId: string,
     loggedAt: number,
@@ -127,7 +126,7 @@ export class MealsLogService {
           // to be able to rollback the changes.
           getId: () => 'read-meal-log',
           do: async (sagaContext: SagaContext) => {
-            const mealLog = await this.mealsLogRepository.readMealLogById(
+            const mealLog = await this.mealsLogCrudRepository.readMealLogById(
               mealLogId,
               context,
             );
@@ -179,7 +178,7 @@ export class MealsLogService {
         {
           getId: () => 'upsert-meal-log',
           do: async (sagaContext: SagaContext) => {
-            const { id } = await this.mealsLogRepository.upsertMealLog(
+            const { id } = await this.mealsLogCrudRepository.upsertMealLog(
               {
                 id: mealLogId,
                 mealId: sagaContext.originalMealLog.mealId,
@@ -190,7 +189,7 @@ export class MealsLogService {
             );
           },
           undo: async (sagaContext: SagaContext) => {
-            await this.mealsLogRepository.upsertMealLog(
+            await this.mealsLogCrudRepository.upsertMealLog(
               sagaContext.originalMealLog,
               context,
             );
@@ -208,25 +207,25 @@ export class MealsLogService {
     request: LogMealRequestV1,
     context: Context,
   ): Promise<LogMealResponseV1> {
-    const latest = await this.mealsLogRepository.readLatestMealLogByUserId(
+    const latest = await this.mealsLogCrudRepository.readLatestMealLogByUserId(
       request.userId,
       context,
     );
     const now = Date.now();
 
-    // upsert
-    const upsert = (
+    // update existing meal log?
+    const update = (
       latest &&
       now - latest.loggedAt < this.upsertOnLogMealPeriod
     );
-    if (upsert) {
-      this.logger.debug(`Upserting meal log`, {
+    if (update) {
+      this.logger.debug(`Updating meal log`, {
         ...context,
         userId: request.userId,
         meal: request.meal,
         latest,
       });
-      await this.updateMealLog(
+      await this.upsertMealLog(
         latest.id,
         request.userId,
         now,

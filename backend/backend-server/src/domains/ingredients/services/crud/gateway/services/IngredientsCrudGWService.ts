@@ -26,7 +26,7 @@ export class IngredientsCrudGWService {
       lastId: gwParams.lastId,
       limit: gwParams.limit,
     };
-    const response = await this.ingredientsCrudTransporter.readFromLastV1(
+    const response = await this.ingredientsCrudTransporter.readIngredientsFromLastV1(
       request,
       context,
     );

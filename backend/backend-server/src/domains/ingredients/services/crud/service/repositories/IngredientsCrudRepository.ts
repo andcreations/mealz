@@ -17,6 +17,15 @@ export class IngredientsCrudRepository {
     private readonly mapper: IngredientDBMapper,
   ) {}
 
+  public async readManyById(
+    ids: string[],
+    context: Context,
+  ): Promise<Ingredient[]> {
+    const query: Where<IngredientDBEntity> = { id: { $in: ids } };
+    const entities = await this.repository.find(query, {}, context);
+    return entities.map(entity => this.mapper.fromEntity(entity));
+  }
+
   public async readFromLast(
     lastId: string | undefined,
     limit: number,

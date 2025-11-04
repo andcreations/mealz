@@ -7,4 +7,13 @@
   justify-content: flex-end;
   margin-right: $mealz-border-radius;
   color: $mealz-theme-color-fg-dark;
+
+  @include mealz-breakpoint-min(md) {
+    justify-content: flex-start;
+    margin-left: $mealz-border-radius;
+  }
+}
+
+.mealz-meal-planner-action-bar-icon {
+  cursor: pointer;
 }

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import classNames = require('classnames');
 import {
+  calculateFact,
   AdHocIngredient,
   parseAdHocIngredient,
   toAdHocIngredientStr,
@@ -24,7 +25,6 @@ import { usePatchState, useService } from '../../../hooks';
 import { MealPlannerIngredient } from '../../types';
 import {
   getCaloriesPer100,
-  calculateFact,
   IngredientsCrudService,
   IngredientsSearch,
 } from '../../../ingredients';

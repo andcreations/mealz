@@ -5,6 +5,5 @@ export * from './html-events';
 export * from './keys';
 export * from './react';
 export * from './validation';
-export * from './cookies';
 export * from './number-parsing';
 export * from './debounce';

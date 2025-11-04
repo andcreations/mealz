@@ -1,1 +1,2 @@
-export * from './MealsLogService';
+export * from './MealsLogCrudService';
+export * from './MealsLogHistoryService';

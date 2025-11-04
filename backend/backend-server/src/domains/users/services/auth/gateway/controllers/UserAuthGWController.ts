@@ -57,7 +57,6 @@ export class UserAuthGWController {
         httpOnly: true,
         secure: isSecure(),
         sameSite: 'strict',
-        maxAge: 0,
       },
     ); 
    

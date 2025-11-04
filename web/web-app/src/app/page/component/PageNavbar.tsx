@@ -2,10 +2,12 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Log } from '../../log';
 import { useTranslations } from '../../i18n';
 import { usePatchState, useService } from '../../hooks';
 import { MaterialIcon } from '../../components';
 import { PathTo } from '../../routing';
+import { NotificationsService } from '../../notifications';
 import { AuthService } from '../../auth';
 import { PageNavbarTranslations } from './PageNavbar.translations';
 import { PageNavbarMenu, PageNavbarMenuItem } from './PageNavbarMenu';
@@ -15,13 +17,15 @@ interface PageNavbarState {
 }
 
 export function PageNavbar() {
+  const notificationsService = useService(NotificationsService);
+  const authService = useService(AuthService);
+
   const [state, setState] = useState<PageNavbarState>({
     menuHidden: true,
   });
   const patchState = usePatchState(setState);  
   const translate = useTranslations(PageNavbarTranslations);
   const navigate = useNavigate();
-  const authService = useService(AuthService);
 
   const onShowMenu = () => {
     patchState({ menuHidden: false });
@@ -39,11 +43,18 @@ export function PageNavbar() {
         navigate(PathTo.signIn());
       })
       .catch(error => {
-        // TODO Notify about the error.
+        notificationsService.error(translate('failed-to-sign-out'));
+        Log.error('Failed to sign out', error);
       });
   };
 
   const menuItems: PageNavbarMenuItem[] = [
+    {
+      label: translate('dashboard'),
+      onClick: () => {
+        navigate(PathTo.dashboard());
+      },
+    },
     {
       label: translate('chef'),
       onClick: () => {

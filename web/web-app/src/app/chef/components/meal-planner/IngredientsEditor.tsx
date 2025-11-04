@@ -168,12 +168,18 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
       name = ingredient.fullIngredient.name[INGREDIENT_LANGUAGE];
     }
 
-    // calories
-    const caloriesPer100 = mealCalculator.getCaloriesPer100(ingredient);
-    const calories = caloriesPer100 * ingredient.calculatedAmount / 100;
-    const details = userSettings.showCaloriesInIngredientsEditor()
-      ? `(${calories.toFixed(0)} kcal)`
-      : undefined;
+    // details
+    let details = '';
+
+    // calories as details
+    if (
+      userSettings.showCaloriesInIngredientsEditor() &&
+      ingredient.calculatedAmount !== INVALID_AMOUNT
+    ) {
+      const caloriesPer100 = mealCalculator.getCaloriesPer100(ingredient);
+      const calories = caloriesPer100 * ingredient.calculatedAmount / 100;
+      details = `(${calories.toFixed(0)} kcal)`
+    }
 
     const nameClassNames = classNames(
       'mealz-ingredients-editor-name',

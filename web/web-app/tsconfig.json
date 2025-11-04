@@ -27,6 +27,9 @@
       "@mealz/backend-ingredients-crud-gateway-api": [
         "../../backend/backend-server/src/domains/ingredients/services/crud/gateway-api"
       ],
+      "@mealz/backend-meals-common": [
+        "../../backend/backend-server/src/domains/meals/common"
+      ],
       "@mealz/backend-meals-gateway-api": [
         "../../backend/backend-server/src/domains/meals/gateway-api"
       ],

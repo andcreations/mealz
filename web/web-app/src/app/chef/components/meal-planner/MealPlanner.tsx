@@ -7,6 +7,7 @@ import { useBusEventListener } from '../../../bus';
 import { CalculateAmountsResult, MealPlannerIngredient } from '../../types';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
 import { Log } from '../../../log';
+import { NotificationsService } from '../../../notifications';
 import { 
   IngredientsTopics,
   IngredientsCrudService,
@@ -27,10 +28,11 @@ interface MealPlannerState {
   ingredientsRead: boolean;
   focus: Focus,
   calories: string;
-  calculateAmountsStatus: string | null;
+  calculateAmountsError: string | null;
 }
 
 export function MealPlanner() {
+  const notificationsService = useService(NotificationsService);
   const ingredientsCrudService = useService(IngredientsCrudService);
   const mealsUserService = useService(MealsUserService);
   const mealsLogService = useService(MealsLogService);
@@ -42,7 +44,7 @@ export function MealPlanner() {
     ingredientsRead: ingredientsCrudService.loaded(),
     focus: Focus.Calories,
     calories: '',
-    calculateAmountsStatus: null,
+    calculateAmountsError: null,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -58,7 +60,9 @@ export function MealPlanner() {
           recalculate(caloriesStr, ingredients);
         })
         .catch(error => {
-          // TODO Notify about the error.
+          notificationsService.error(
+            translate('failed-to-read-user-draft-meal')
+          );
           Log.error('Failed to read user draft meal', error);
         });
     },
@@ -100,7 +104,7 @@ export function MealPlanner() {
       calories: caloriesStr,
       ingredients: result.ingredients,
       ...ifValueDefined<MealPlannerState>(
-        'calculateAmountsStatus',
+        'calculateAmountsError',
         result.error,
       ),
     });
@@ -131,22 +135,24 @@ export function MealPlanner() {
       });
     },
 
-    upsert: (ingredients: MealPlannerIngredient[]) => {
-      const gwMeal = mealMapper.toGWMeal(
-        calories.get(),
-        ingredients,
-      );
+    upsert: (
+      calories: number | undefined,
+      ingredients: MealPlannerIngredient[],
+    ) => {
+      const gwMeal = mealMapper.toGWMeal(calories, ingredients);
       mealsUserService.upsertUserDraftMeal(gwMeal)
-      .catch(error => {
-        // TODO Notify about the error.
-        Log.error('Failed to upsert user draft meal', error);
-      });
+        .catch(error => {
+          notificationsService.error(
+            translate('failed-to-upsert-user-draft-meal')
+          );
+          Log.error('Failed to save your draft meal', error);
+        });
     },
   };
 
   const onIngredientsChange = (ingredients: MealPlannerIngredient[]) => {
     recalculate(state.calories, ingredients);
-    userMealDraft.upsert(ingredients);
+    userMealDraft.upsert(calories.get(), ingredients);
   };
 
   const calories = {
@@ -165,7 +171,9 @@ export function MealPlanner() {
     },
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-      recalculate(event.target.value, state.ingredients);
+      const caloriesStr = event.target.value;
+      recalculate(caloriesStr, state.ingredients);
+      userMealDraft.upsert(calories.fromStr(caloriesStr), state.ingredients);
     },
 
     onEnter: () => {
@@ -175,6 +183,13 @@ export function MealPlanner() {
 
   const meal = {
     onLog: () => {
+      if (state.calculateAmountsError) {
+        notificationsService.error(
+          translate('cannot-log-meal-with-errors')
+        );
+        return;
+      }
+
       const gwMeal = mealMapper.toGWMeal(
         calories.get(),
         state.ingredients,
@@ -182,9 +197,12 @@ export function MealPlanner() {
       mealsLogService.logMeal(gwMeal)
         .then(() => {
           Log.debug('Meal logged');
+          notificationsService.info(translate('meal-logged'));
         })
         .catch(error => {
-          // TODO Notify about the error.
+          notificationsService.error(
+            translate('failed-to-log-meal')
+          );
           Log.error('Failed to log meal', error);
         });
     }
@@ -223,7 +241,7 @@ export function MealPlanner() {
         />
         <MealSummary
           className='mealz-meal-planner-summary'
-          status={state.calculateAmountsStatus}
+          status={state.calculateAmountsError}
           calories={calories.get()}
           ingredients={state.ingredients}
         />
