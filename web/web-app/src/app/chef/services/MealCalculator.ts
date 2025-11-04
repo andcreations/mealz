@@ -1,10 +1,12 @@
 import { Service } from '@andcreations/common';
+import {
+  calculateFact,
+  calculateAmount,
+} from '@mealz/backend-ingredients-shared';
 
 import { I18nService } from '../../i18n';
 import {
   IngredientFacts,
-  calculateAmount,
-  calculateFact,
   getCaloriesPer100,
   getFacts,
 } from '../../ingredients';

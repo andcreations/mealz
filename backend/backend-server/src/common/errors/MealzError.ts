@@ -1,5 +1,4 @@
 export class MealzError extends Error {
-  /** */
   public constructor(
     private readonly msg: string,
     private readonly code: string,

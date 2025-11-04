@@ -9,4 +9,7 @@ export class MealIngredient {
 
   // Amount entered by the user
   public enteredAmount?: string;
+
+  // Calculated amount of the ingredient
+  calculatedAmount?: number;  
 }

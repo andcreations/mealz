@@ -4,11 +4,13 @@ import {
   AdHocIngredient,
   MealIngredient,
   Meal,
+  MealWithoutId,
 } from '@mealz/backend-meals-common';
 import {
   GWAdHocIngredient,
   GWMealIngredient,
   GWMeal,
+  GWMealWithoutId,
 } from '@mealz/backend-meals-gateway-api';
 
 @Injectable()
@@ -84,6 +86,15 @@ export class GWMealMapper {
   public toMeal(gwMeal: GWMeal): Meal {
     return {
       id: gwMeal.id,
+      ingredients: gwMeal.ingredients.map(gwMealIngredient => {
+        return this.toMealIngredient(gwMealIngredient);
+      }),
+      ...ifDefined<Meal>('calories', gwMeal.calories),
+    }
+  }
+
+  public toMealWithoutId(gwMeal: GWMealWithoutId): MealWithoutId {
+    return {
       ingredients: gwMeal.ingredients.map(gwMealIngredient => {
         return this.toMealIngredient(gwMealIngredient);
       }),

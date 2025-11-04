@@ -14,7 +14,7 @@ export function getFact(
 
 export function getCaloriesPer100(
   ingredient: GWIngredient,
-): number | undefined{
+): number | undefined {
   return getFact(ingredient, GWFactId.Calories)?.amount;
 }
 
@@ -32,18 +32,4 @@ export function getFacts(ingredient: GWIngredient): IngredientFacts {
     monounsaturatedFat: amount(GWFactId.MonounsaturatedFat),
     polyunsaturatedFat: amount(GWFactId.PolyunsaturatedFat),
   };
-}
-
-export function calculateFact(
-  amount: number,
-  factPer100: number,
-): number {
-  return (amount / 100) * factPer100;
-}
-
-export function calculateAmount(
-  factValue: number,
-  factPer100: number,
-): number {
-  return factValue * 100 / factPer100;
 }

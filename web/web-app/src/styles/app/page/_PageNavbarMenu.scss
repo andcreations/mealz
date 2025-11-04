@@ -1,32 +1,35 @@
 .mealz-page-navbar-menu {
+  $transition-duration: 0.3s;
+
   min-width: 12rem;
   padding: 0.5rem 0;
   @include mealz-border();
   background-color: $mealz-theme-color-bg-dark;
   position: absolute;
   z-index: 9; // above the overlay
+  right: 0;
+
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.25s ease-out;  
 
   @include mealz-breakpoint-max(md) {
-    right: 0;
     bottom: calc(100% + 1rem);
-    transition: bottom 0.3s ease;
   }
 
   @include mealz-breakpoint-min(md) {
-    right: 0;
     top: calc(100% + 1rem);
-    transition: top 0.3s ease;
   }
 }
 
 .mealz-page-navbar-menu-hidden {
-  @include mealz-breakpoint-max(md) {
-    bottom: -250%;
-  }
-
-  @include mealz-breakpoint-min(md) {
-    top: -250%;
-  }
+  opacity: 0;
+  transform: translateX(-8rem);
+  transition:
+    transform 0.3s ease-in,
+    opacity 0.25s ease-in;
 }
 
 .mealz-page-navbar-menu-overlay {

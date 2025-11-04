@@ -13,6 +13,7 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
   return (
     <div className='mealz-meal-planner-action-bar'>
       <MaterialIcon
+        className='mealz-meal-planner-action-bar-icon'
         icon='note_add'
         onClick={onLogMeal}
       />

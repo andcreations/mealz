@@ -1,9 +1,9 @@
 export const PathTo: { [key: string]: Function } = {
   dflt:() => {
-    return PathTo.chef();
+    return PathTo.dashboard();
   },
 
-  home: () => {
+  dashboard: () => {
     return '/';
   },
 

@@ -17,7 +17,7 @@ import {
 } from '../db'
 
 @Injectable()
-export class MealsLogRepository {
+export class MealsLogCrudRepository {
   public constructor(
     @InjectDBRepository(MEALS_LOG_DB_NAME, MEAL_LOG_DB_ENTITY_NAME)
     private readonly repository: DBRepository<MealLogDBEntity>,

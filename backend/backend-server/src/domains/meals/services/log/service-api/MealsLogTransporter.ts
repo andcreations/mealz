@@ -7,6 +7,8 @@ import { MealsLogRequestTopics } from './MealsLogRequestTopics';
 import {
   LogMealRequestV1,
   LogMealResponseV1,
+  SummarizeMealLogRequestV1,
+  SummarizeMealLogResponseV1,
 } from './dtos';
 
 @Injectable()
@@ -24,6 +26,19 @@ export class MealsLogTransporter {
       LogMealRequestV1, LogMealResponseV1
     >(
       MealsLogRequestTopics.LogMealV1,
+      request,
+      context,
+    );
+  }
+
+  public async summarizeMacrosV1(
+    request: SummarizeMealLogRequestV1,
+    context: Context,
+  ): Promise<SummarizeMealLogResponseV1> {
+    return this.transporter.sendRequest<
+      SummarizeMealLogRequestV1, SummarizeMealLogResponseV1
+    >(
+      MealsLogRequestTopics.SummarizeMacrosV1,
       request,
       context,
     );

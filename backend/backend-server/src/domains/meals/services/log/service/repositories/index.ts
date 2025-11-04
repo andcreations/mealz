@@ -1,1 +1,2 @@
-export * from './MealsLogRepository';
+export * from './MealsLogCrudRepository';
+export * from './MealsLogHistoryRepository';

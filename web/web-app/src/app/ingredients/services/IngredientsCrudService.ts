@@ -65,7 +65,7 @@ export class IngredientsCrudService implements OnBootstrap {
   // read
     while (true) {
       const response = await this.http.get<ReadIngredientsFromLastGWResponseV1>(
-        IngredientsCrudAPI.url.readFromLastV1(lastId, limit),
+        IngredientsCrudAPI.url.readFromLastV1({ lastId, limit }),
       );
       const ingredients = response.data.ingredients;
       readIngredients.push(...ingredients);

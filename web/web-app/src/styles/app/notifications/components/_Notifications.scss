@@ -1,0 +1,44 @@
+.mealz-notifications {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  @include mealz-flex-center();
+  position: fixed;
+  bottom: $mealz-navbar-height;
+  margin-bottom: 1rem;
+  width: 100%;
+  z-index: 11; // above the page content
+
+  @include mealz-breakpoint-min(md) {
+    bottom: 0;
+  }
+}
+
+.mealz-notifications-notification {
+  background-color: rgba($mealz-theme-color-bg-medium, 0.25);
+  padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+  @include mealz-font-small();
+  @include mealz-border();
+  width: 32rem;
+  max-width: 80%;
+  position: relative;
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.25s ease-out;
+  will-change: transform, opacity;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mealz-notifications-notification-hidden {
+  transition:
+    transform 0.3s ease-in,
+    opacity 0.25s ease-in;
+  will-change: transform, opacity;
+  transform: translateY(calc(100% + 2rem));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mealz-notifications-notification-error {
+  color: $mealz-theme-color-error;
+}
