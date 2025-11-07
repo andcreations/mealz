@@ -1,0 +1,15 @@
+.mealz-page-header {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  @include mealz-flex-center();
+  margin-bottom: 2rem;
+}
+
+.mealz-page-header-title {
+  font-weight: bold;
+  border-bottom: 1px solid rgba($mealz-theme-color-border, 0.5);
+  width: 100%;
+  text-align: center;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}

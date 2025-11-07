@@ -27,7 +27,7 @@ export class MealsLogAPI {
     /**
      * @method GET
      * @params MealsLogAPISummarizeV1Params
-     * @response MealsLogAPISummarizeV1Response
+     * @response SummarizeMealLogResponseV1
      */
     summarizeV1: (params: MealsLogAPISummarizeV1Params) => {
       return URLBuilder.build(`${MEALS_LOG_URL}/summarize/v1`, { ...params });

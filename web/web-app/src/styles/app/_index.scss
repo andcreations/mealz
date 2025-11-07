@@ -7,10 +7,11 @@
 @import './border';
 @import './breakpoints';
 
-@import './page/PageWrapper';
-@import './page/PageNavbar';
-@import './page/PageNavbarMenu';
-@import './page/PageLoader';
+@import './page/components/PageHeader';
+@import './page/components/PageWrapper';
+@import './page/components/PageNavbar';
+@import './page/components/PageNavbarMenu';
+@import './page/components/PageLoader';
 
 @import './notifications/components/Notifications';
 
@@ -21,10 +22,22 @@
 @import './components/basic/MaterialIcon';
 @import './components/layout/Center';
 @import './components/layout/FullScreen';
+@import './components/charts/LineChart';
+@import './components/charts/BarChart';
+@import './components/charts/ChartLegend';
 @import './components/mealz/MealzLogo';
 
 @import './auth/components/SignInForm';
 @import './auth/pages/SignInPage';
+
+@import './dashboard/components/DashboardSectionTitle';
+@import './dashboard/components/DashboardSectionSeparator';
+@import './dashboard/components/DashboardSection';
+@import './dashboard/components/MacrosSummary';
+@import './dashboard/components/MacrosSummaryBox';
+@import './dashboard/components/DailySummary';
+@import './dashboard/components/WeeklySummary';
+@import './dashboard/components/MacrosSummaryChart';
 
 @import './chef/components/meal-planner/IngredientsEditor';
 @import './chef/components/meal-planner/IngredientPicker';

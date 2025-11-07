@@ -1,0 +1,14 @@
+.mealz-chart-legend {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+  @include mealz-flex-horizontal();
+  margin-top: 0.5rem;
+}
+
+.mealz-chart-legend-item {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  @include mealz-flex-center();
+  @include mealz-font-small();
+  padding: 0 1rem;
+}

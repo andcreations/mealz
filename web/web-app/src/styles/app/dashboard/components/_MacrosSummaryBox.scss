@@ -1,0 +1,52 @@
+$mealz-macros-summary-box-bg-opacity: 1.0;
+
+.mealz-macros-summary-box {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  border-radius: $mealz-border-radius;
+  padding: 0 1rem;
+  width: 6rem;
+}
+
+.mealz-macros-summary-separator {
+  $height: 0.25rem;
+  height: $height;
+  width: 100%;
+  border-radius: $height / 2;
+  margin: 0.25rem 0;
+}
+
+.mealz-macros-summary-separator-calories {
+  background-color: rgba(
+    $mealz-theme-color-calories-bg,
+    $mealz-macros-summary-box-bg-opacity,
+  );
+}
+
+.mealz-macros-summary-separator-carbs {
+  background-color: rgba(
+    $mealz-theme-color-carbs-bg,
+    $mealz-macros-summary-box-bg-opacity,
+  );
+}
+
+.mealz-macros-summary-separator-protein {
+  background-color: rgba(
+    $mealz-theme-color-protein-bg,
+    $mealz-macros-summary-box-bg-opacity,
+  );
+}
+
+.mealz-macros-summary-separator-fat {
+  background-color: rgba(
+    $mealz-theme-color-fat-bg,
+    $mealz-macros-summary-box-bg-opacity,
+  );
+}
+
+.mealz-macros-summary-box-unit {
+  color: $mealz-theme-color-fg-dark;
+  padding-left: 0.25rem;
+}

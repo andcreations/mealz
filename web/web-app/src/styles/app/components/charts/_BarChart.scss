@@ -1,0 +1,15 @@
+.mealz-bar-chart-wrapper {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+  @include mealz-flex-vertical();
+  width: 100%;
+}
+
+.mealz-bar-chart {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+
+  svg {
+    outline: none;
+  }
+}

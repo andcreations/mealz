@@ -46,7 +46,7 @@ export function ChefPage() {
 
   const { ingredientsLoadStatus } = state;
   return (
-    <PageWrapper>
+    <PageWrapper title={translate('title')}>
       <Center>
         { ingredientsLoadStatus === IngredientsLoadStatus.Loaded &&
           <MealPlanner/>

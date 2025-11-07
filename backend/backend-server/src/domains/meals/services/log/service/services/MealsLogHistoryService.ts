@@ -26,6 +26,7 @@ export class MealsLogHistoryService {
     toDate: number,
     context: Context,
   ): Promise<MacrosSummary> {
+    console.log('summarizeMacrosFromToDate', userId, fromDate, toDate);
   // read meal logs
     const mealLogs = await this.mealsLogHistoryRepository.readMealLogsFromToDate(
       userId,
@@ -34,6 +35,8 @@ export class MealsLogHistoryService {
       context,
     );
 
+    console.log('mealLogs', mealLogs);
+
   // read meals
     const { meals } = await this.mealsCrudTransporter.readMealsByIdV1(
       {
@@ -41,6 +44,7 @@ export class MealsLogHistoryService {
       },
       context,
     );
+    console.log('meals', JSON.stringify(meals, null, 2));
 
   // summary
     const macrosSummary: MacrosSummary = {
@@ -66,6 +70,7 @@ export class MealsLogHistoryService {
         meal,
         context,
       );
+      console.log('mealWithAmounts', JSON.stringify(mealWithAmounts, null, 2));
       mealWithAmounts.ingredients.forEach(mealIngredient => {
         if (mealIngredient.ingredientId) {
           const ingredient = ingredients.find(ingredient => {

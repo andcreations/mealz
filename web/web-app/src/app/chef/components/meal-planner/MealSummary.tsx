@@ -74,6 +74,7 @@ export function MealSummary(props: MealSummaryProps) {
         tiny?: boolean;
         highlight?: boolean;
         details?: string;
+        nameClassName?: string;
       },
     ) => {
       if (amount === undefined) {
@@ -113,7 +114,7 @@ export function MealSummary(props: MealSummaryProps) {
           key={`${nameKey}-name`}
           style={styles('3')}
         >
-          <span>
+          <span className={options?.nameClassName}>
             { translate(nameKey) }
           </span>
           { options?.details &&
@@ -161,7 +162,14 @@ export function MealSummary(props: MealSummaryProps) {
     }
 
     return [
-      ...addFact(summary.total.calories, 'kcal', 'calories'),
+      ...addFact(
+        summary.total.calories,
+        'kcal',
+        'calories',
+        {
+          nameClassName: 'mealz-color-calories',
+        },
+      ),
       ...factsIf(
         moreThanPlanned > 0,
         addFact(
@@ -193,16 +201,25 @@ export function MealSummary(props: MealSummaryProps) {
         'g',
         'carbs',
         {
-          details: percentageToDetails(percentages.carbs)
+          details: percentageToDetails(percentages.carbs),
+          nameClassName: 'mealz-color-carbs',
         }),
-      ...addFact(summary.total.sugars, 'g', 'sugars', { tiny: true }),
+      ...addFact(
+        summary.total.sugars,
+        'g',
+        'sugars',
+        {
+          tiny: true,
+          nameClassName: 'mealz-color-sugars',
+        }),
       ...addSeparator(),
       ...addFact(
         summary.total.protein,
         'g',
         'protein',
         {
-           details: percentageToDetails(percentages.protein) 
+           details: percentageToDetails(percentages.protein),
+           nameClassName: 'mealz-color-protein',
         }
       ),
       ...addSeparator(),
@@ -211,7 +228,8 @@ export function MealSummary(props: MealSummaryProps) {
         'g',
         'fat',
         {
-          details: percentageToDetails(percentages.fat)
+          details: percentageToDetails(percentages.fat),
+          nameClassName: 'mealz-color-fat',
         }
       ),
       ...addFact(
