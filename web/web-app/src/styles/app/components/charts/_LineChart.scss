@@ -1,0 +1,24 @@
+.mealz-line-chart-wrapper {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+  @include mealz-flex-vertical();
+  width: 100%;
+}
+
+.mealz-line-chart {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+
+  svg {
+    outline: none;
+  }
+}
+
+.mealz-line-chart-grid {
+  stroke: #222;
+  stroke-dasharray: 2 8;
+}
+
+.mealz-line-chart-line {
+  stroke-width: 0.8rem;
+}

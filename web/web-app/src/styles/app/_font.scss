@@ -6,10 +6,18 @@
   font-size: 0.75rem;
 }
 
+@mixin mealz-font-big() {
+  font-size: 1.25rem;
+}
+
 .mealz-font-small {
   @include mealz-font-small();
 }
 
 .mealz-font-tiny {
   @include mealz-font-tiny();
+}
+
+.mealz-font-big {
+  @include mealz-font-big();
 }

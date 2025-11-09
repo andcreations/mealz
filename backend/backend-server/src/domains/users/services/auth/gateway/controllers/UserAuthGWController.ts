@@ -28,6 +28,7 @@ import {
   UserAuthGWResponseV1Impl,
   CheckUserAuthGWResponseV1Impl,
 } from '../dtos';
+import { ACCESS_TOKEN_COOKIE_MAX_AGE } from '../consts';
 import { UserAuthGWService } from '../services';
 
 @Controller(USERS_AUTH_URL)
@@ -57,6 +58,7 @@ export class UserAuthGWController {
         httpOnly: true,
         secure: isSecure(),
         sameSite: 'strict',
+        maxAge: ACCESS_TOKEN_COOKIE_MAX_AGE,
       },
     ); 
    

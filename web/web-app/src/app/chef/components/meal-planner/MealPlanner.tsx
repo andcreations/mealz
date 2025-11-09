@@ -139,6 +139,9 @@ export function MealPlanner() {
       calories: number | undefined,
       ingredients: MealPlannerIngredient[],
     ) => {
+      if (!calories) {
+        return;
+      } 
       const gwMeal = mealMapper.toGWMeal(calories, ingredients);
       mealsUserService.upsertUserDraftMeal(gwMeal)
         .catch(error => {

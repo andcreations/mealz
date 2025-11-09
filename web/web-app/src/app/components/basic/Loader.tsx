@@ -11,10 +11,16 @@ export enum LoaderType {
   Error
 }
 
+export enum LoaderSize {
+  Small,
+  Normal,
+}
+
 export interface LoaderProps {
   title?: string;
   subTitle?: string;
   type?: LoaderType;
+  size?: LoaderSize;
   delay?: number;
 }
 
@@ -22,10 +28,14 @@ interface LoaderState {
   visible: boolean;
 }
 
-const DEFAULT_DELAY = 384;
+export const LOADER_DEFAULT_DELAY = 384;
 
 export function Loader(props: LoaderProps) {
-  const { type = LoaderType.Info, delay = DEFAULT_DELAY } = props;
+  const {
+    type = LoaderType.Info,
+    size = LoaderSize.Normal,
+    delay = LOADER_DEFAULT_DELAY,
+  } = props;
 
   const [state, setState] = useState<LoaderState>({
     visible: !delay,
@@ -53,6 +63,10 @@ export function Loader(props: LoaderProps) {
     'mealz-loader-wrapper',
     { 'mealz-loader-wrapper-hidden': !state.visible }
   ]);
+  const loaderClassNames = classNames([
+    'mealz-loader',
+    { 'mealz-loader-small': size === LoaderSize.Small },
+  ]);
   const titleClassNames = classNames([
     'mealz-loader-title',
     { 'mealz-error': type === LoaderType.Error },
@@ -64,7 +78,7 @@ export function Loader(props: LoaderProps) {
 
   return (
     <div className={wrapperClassNames}>
-      <div className='mealz-loader'>
+      <div className={loaderClassNames}>
         { type === LoaderType.Info &&
           <>
             <div className='mealz-loader-steam'></div>

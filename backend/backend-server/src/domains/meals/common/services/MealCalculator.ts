@@ -33,19 +33,41 @@ export class MealCalculator {
    * the calories are passed. Amounts without entered amount can be
    * calculated if the calories are passed.
    */
-  public canCalculateAmounts(meal: MealWithoutId): boolean {
+  public canCalculateAmounts(meal: MealWithoutId): {
+    reason: string | undefined,
+    canCalculate: boolean,
+  } {
+    let reason: string | undefined;
+    const pushReason = (newReason: string) => {
+      if (!reason) {
+        reason = '';
+      }
+      reason += reason ? ' | ' : '';
+      reason += newReason;
+    };
+
     const hasInvalidIngredients = meal.ingredients.some(ingredient => {
       return (
         ingredient.ingredientId == null &&
         ingredient.adHocIngredient == null
       );
     });
+    if (hasInvalidIngredients) {
+      pushReason('Invalid ingredients');
+    }
+
     const hasInvalidAmounts = meal.ingredients.some(ingredient => {
       return this.fromEnteredAmount(ingredient) === INVALID_AMOUNT;
     });
     const hasCalories = meal.calories != null;
+    if (hasInvalidAmounts && !hasCalories) {
+      pushReason('Invalid amounts and no calories');
+    }
 
-    return !hasInvalidIngredients && !hasInvalidAmounts && hasCalories;
+    return {
+      reason,
+      canCalculate: !reason,
+    };
   }
 
   /**
@@ -63,8 +85,11 @@ export class MealCalculator {
     meal: MealWithoutId,
     context: Context,
   ): Promise<CalculateAmountsResult> {
-    if (!this.canCalculateAmounts(meal)) {
-      throw new InternalError('Cannot calculate amounts for the meal');
+    const { reason, canCalculate } = this.canCalculateAmounts(meal);
+    if (!canCalculate) {
+      throw new InternalError(
+        `Cannot calculate amounts for the meal: ${reason}`
+      );
     }
 
     const ingredientIds = meal.ingredients
@@ -84,7 +109,7 @@ export class MealCalculator {
     const getMealIngredientCaloriesPer100 = (
       mealIngredient: MealIngredient
     ): number | undefined => {
-      // full ingredient
+    // full ingredient
       if (mealIngredient.ingredientId) {
         const ingredient = ingredients.find(ingredient => {
           return ingredient.id === mealIngredient.ingredientId;
@@ -92,7 +117,7 @@ export class MealCalculator {
         return getCaloriesPer100(ingredient);
       }
 
-      // ad-hoc ingredient
+    // ad-hoc ingredient
       if (mealIngredient.adHocIngredient) {
         return mealIngredient.adHocIngredient.caloriesPer100;
       }
@@ -120,8 +145,10 @@ export class MealCalculator {
     const newIngredients = meal.ingredients.map(ingredient => {
       const amount = this.fromEnteredAmount(ingredient);
       if (amount !== INVALID_AMOUNT) {
-        ingredient.calculatedAmount = amount;
-        return;
+        return {
+          ...ingredient,
+          calculatedAmount: amount,
+        };
       }
 
       const caloriesPer100 = getMealIngredientCaloriesPer100(ingredient);

@@ -1,0 +1,23 @@
+{
+  "name": "@mealz/backend-server-tests",
+  "version": "1.0.0",
+  "description": "Mealz backend tests",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf node_modules dist",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@andcreations/common": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.9.1",
+    "ts-jest": "^29.3.4",
+    "ts-node": "^10.2.1",
+    "typescript": "^5.8.3"
+  },
+  "author": "AndCreations",
+  "license": "MIT"
+}

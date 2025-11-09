@@ -7,6 +7,7 @@ import {
   SummarizeMealLogResponseV1,
 } from '@mealz/backend-meals-log-service-api';
 import { LogMealGWRequestV1 } from '@mealz/backend-meals-log-gateway-api';
+import { roundToTwoDecimals } from '@mealz/backend-gateway-common';
 
 import { SummarizeMealLogQueryParamsV1 } from '../dtos';
 
@@ -44,10 +45,10 @@ export class MealsLogGWService {
     );
     return {
       summary: {
-        calories: summary.calories,
-        carbs: summary.carbs,
-        protein: summary.protein,
-        fat: summary.fat,
+        calories: roundToTwoDecimals(summary.calories),
+        carbs: roundToTwoDecimals(summary.carbs),
+        protein: roundToTwoDecimals(summary.protein),
+        fat: roundToTwoDecimals(summary.fat),
       },
     };
   }

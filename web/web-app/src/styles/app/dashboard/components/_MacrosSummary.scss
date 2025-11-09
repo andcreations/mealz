@@ -1,0 +1,8 @@
+.mealz-macros-summary {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+}

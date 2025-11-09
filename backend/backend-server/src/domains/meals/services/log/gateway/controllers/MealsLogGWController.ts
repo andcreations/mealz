@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { AuthUser } from '@mealz/backend-gateway-core';
 import { UserRole } from '@mealz/backend-api';
@@ -33,7 +33,7 @@ export class MealsLogGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Post('summarize/v1')
+  @Get('summarize/v1')
   public async summarizeMacrosV1(
     @Query() gwParams: SummarizeMealLogQueryParamsV1,
     @GWUser() gwUser: AuthUser,

@@ -1,0 +1,71 @@
+$mealz-macros-summary-inactive-bar-opacity: 0.3;
+
+.mealz-macros-summary-chart {
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+  width: 100%;
+}
+
+.mealz-macros-summary-chart-bar-carbs {
+  fill: $mealz-theme-color-carbs-bg;
+}
+
+.mealz-macros-summary-chart-bar-protein {
+  fill: $mealz-theme-color-protein-bg;
+}
+
+.mealz-macros-summary-chart-bar-fat {
+  fill: $mealz-theme-color-fat-bg;
+}
+
+.mealz-macros-summary-chart-bar-calories {
+  fill: $mealz-theme-color-calories-bg;
+}
+
+.mealz-macros-summary-chart-bar-carbs-inactive {
+  fill: rgba(
+    $mealz-theme-color-carbs-bg,
+    $mealz-macros-summary-inactive-bar-opacity,
+  );
+}
+
+.mealz-macros-summary-chart-bar-protein-inactive {
+  fill: rgba(
+    $mealz-theme-color-protein-bg,
+    $mealz-macros-summary-inactive-bar-opacity,
+  );
+}
+
+.mealz-macros-summary-chart-bar-fat-inactive {
+  fill: rgba(
+    $mealz-theme-color-fat-bg,
+    $mealz-macros-summary-inactive-bar-opacity,
+  );
+}
+
+.mealz-macros-summary-chart-bar-calories-inactive {
+  fill: rgba(
+    $mealz-theme-color-calories-bg,
+    $mealz-macros-summary-inactive-bar-opacity,
+  );
+}
+
+.mealz-macros-summary-chart-bar-carbs-legend-item {
+  color: $mealz-theme-color-carbs;
+}
+
+.mealz-macros-summary-chart-bar-protein-legend-item {
+  color: $mealz-theme-color-protein;
+}
+
+.mealz-macros-summary-chart-bar-fat-legend-item {
+  color: $mealz-theme-color-fat;
+}
+
+.mealz-macros-summary-chart-bar-calories-legend-item {
+  color: $mealz-theme-color-calories;
+}
+
+.mealz-macros-summary-chart-x-axis {
+  @include mealz-font-tiny();
+}

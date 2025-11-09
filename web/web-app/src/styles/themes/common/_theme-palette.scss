@@ -6,3 +6,8 @@ $mealz-theme-color-fg-dark: darken($mealz-theme-color-fg, 16%);
 $mealz-theme-color-bg-dark: darken($mealz-theme-color-bg, 24%);
 $mealz-theme-color-bg-medium: darken($mealz-theme-color-bg, 18%);
 $mealz-theme-color-border: $mealz-theme-color-bg;
+
+$mealz-theme-color-calories-bg: darken($mealz-theme-color-calories, 16%);
+$mealz-theme-color-carbs-bg: darken($mealz-theme-color-carbs, 16%);
+$mealz-theme-color-protein-bg: darken($mealz-theme-color-protein, 16%);
+$mealz-theme-color-fat-bg: darken($mealz-theme-color-fat, 16%);
