@@ -7,7 +7,7 @@ import { useBusEventListener } from '../../../bus';
 import { CalculateAmountsResult, MealPlannerIngredient } from '../../types';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
 import { Log } from '../../../log';
-import { NotificationsService } from '../../../notifications';
+import { NotificationsService, NotificationType } from '../../../notifications';
 import { 
   IngredientsTopics,
   IngredientsCrudService,
@@ -29,6 +29,10 @@ interface MealPlannerState {
   focus: Focus,
   calories: string;
   calculateAmountsError: string | null;
+  clearUndo?: {
+    ingredients: MealPlannerIngredient[];
+    calories: string;
+  }
 }
 
 export function MealPlanner() {
@@ -48,6 +52,15 @@ export function MealPlanner() {
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
+
+  // dirty flag
+  const isDirty = useRef(false);
+  const markDirty = () => {
+    isDirty.current = true;
+  };
+  const clearDirty = () => {
+    isDirty.current = false;
+  };
 
   // read draft meal
   useEffect(
@@ -84,6 +97,20 @@ export function MealPlanner() {
     () => focusRef(calories.ref),
     [],
   );
+
+  // store the draft meal when the meal changes
+  useEffect(
+    () => {
+      if (!isDirty.current) {
+        return;
+      }
+      if (state.calculateAmountsError) {
+        return;
+      }
+      userMealDraft.tryUpsert();
+    },
+    [state.ingredients, state.calories, state.calculateAmountsError],
+  )
 
   useBusEventListener(
     IngredientsTopics.IngredientsLoadStatusChanged,
@@ -135,15 +162,27 @@ export function MealPlanner() {
       });
     },
 
+    tryUpsert: () => {
+      if (state.calculateAmountsError) {
+        return;
+      }
+      const caloriesValue = calories.get();
+      if (!caloriesValue) {
+        userMealDraft.delete();
+        return;
+      } 
+      userMealDraft.upsert(caloriesValue, state.ingredients);
+    },
+    
     upsert: (
       calories: number | undefined,
       ingredients: MealPlannerIngredient[],
     ) => {
-      if (!calories) {
-        return;
-      } 
       const gwMeal = mealMapper.toGWMeal(calories, ingredients);
       mealsUserService.upsertUserDraftMeal(gwMeal)
+        .then(() => {
+          clearDirty();
+        })
         .catch(error => {
           notificationsService.error(
             translate('failed-to-upsert-user-draft-meal')
@@ -151,11 +190,21 @@ export function MealPlanner() {
           Log.error('Failed to save your draft meal', error);
         });
     },
+
+    delete: () => {
+      mealsUserService.deleteUserDraftMeal()
+        .catch(error => {
+          notificationsService.error(
+            translate('failed-to-delete-user-draft-meal')
+          );
+          Log.error('Failed to delete user draft meal', error);
+        });
+    },
   };
 
   const onIngredientsChange = (ingredients: MealPlannerIngredient[]) => {
+    markDirty();
     recalculate(state.calories, ingredients);
-    userMealDraft.upsert(calories.get(), ingredients);
   };
 
   const calories = {
@@ -176,11 +225,14 @@ export function MealPlanner() {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
       const caloriesStr = event.target.value;
       recalculate(caloriesStr, state.ingredients);
-      userMealDraft.upsert(calories.fromStr(caloriesStr), state.ingredients);
     },
 
     onEnter: () => {
       blurRef(calories.ref);
+    },
+
+    onBlur: () => {
+      userMealDraft.tryUpsert();
     },
   };
 
@@ -208,7 +260,39 @@ export function MealPlanner() {
           );
           Log.error('Failed to log meal', error);
         });
-    }
+    },
+
+    onClear: () => {
+    // clear
+      markDirty();
+      setState(prevState => ({
+        ...prevState,
+        ingredients: [],
+        calories: '',
+        clearUndo: {
+          ingredients: prevState.ingredients,
+          calories: prevState.calories,
+        },
+      }));
+
+    // undo
+      const undo = () => {
+        markDirty();
+        setState(prevState => ({
+          ...prevState,
+          ingredients: prevState.clearUndo?.ingredients ?? [],
+          calories: prevState.clearUndo?.calories ?? '',
+          clearUndo: undefined,
+        }));
+      };
+
+    // notify
+      notificationsService.pushNotification({
+        message: translate('meal-cleared'),
+        type: NotificationType.Info,
+        undo,
+      });
+    },
   }
 
   return (
@@ -229,11 +313,13 @@ export function MealPlanner() {
               value={state.calories}
               onChange={calories.onChange}
               onKeyDown={ifEnterKey(calories.onEnter)}
+              onBlur={calories.onBlur}
             />
           </div>
         </div>
         <MealPlannerActionBar
           onLogMeal={meal.onLog}
+          onClearMeal={meal.onClear}
         />
       </div>
       <div className='mealz-meal-planner-ingredients'>

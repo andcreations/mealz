@@ -51,4 +51,10 @@ export class MealsUserService {
       }
     );
   }
+
+  public async deleteUserDraftMeal(): Promise<void> {
+    await this.http.delete<void>(
+      MealsUserAPI.url.deleteByTypeV1(MealsUserService.DRAFT_TYPE)
+    );
+  }
 }

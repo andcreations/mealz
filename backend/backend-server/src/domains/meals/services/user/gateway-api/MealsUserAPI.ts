@@ -11,6 +11,7 @@ export interface MealsUserAPIURL {
     types: string[] | undefined,
   ) => string;
   upsertV1: () => string;
+  deleteByTypeV1: (typeId: string) => string;
 }
 
 export class MealsUserAPI {
@@ -46,5 +47,16 @@ export class MealsUserAPI {
      * @response UpsertUserMealGWResponseV1
      */
     upsertV1: () => `${MEALS_USER_URL}/upsert/v1`,
+
+    /**
+     * @method DELETE
+     * @param typeId Type of user meal.
+     */
+    deleteByTypeV1: (typeId: string) => {
+      return URLBuilder.build(
+        `${MEALS_USER_URL}/delete-by-type/v1`,
+        { typeId },
+      );
+    },
   };
 }

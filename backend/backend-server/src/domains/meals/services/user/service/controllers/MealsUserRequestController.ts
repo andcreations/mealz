@@ -7,7 +7,9 @@ import {
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
-  UpsertUserMealResponseV1
+  UpsertUserMealResponseV1,
+  DeleteUserMealResponseV1,
+  DeleteUserMealRequestV1,
 } from '@mealz/backend-meals-user-service-api';
 
 import { MealsUserService } from '../services';
@@ -39,5 +41,13 @@ export class MealsUserRequestController {
     context: Context,
   ): Promise<UpsertUserMealResponseV1> {
     return this.mealsUserService.upsertUserMealV1(request, context);
+  }
+
+  @RequestHandler(MealsUserRequestTopics.DeleteUserMealV1)
+  public async deleteUserMealV1(
+    request: DeleteUserMealRequestV1,
+    context: Context,
+  ): Promise<DeleteUserMealResponseV1> {
+    return this.mealsUserService.deleteUserMealV1(request, context);
   }
 }

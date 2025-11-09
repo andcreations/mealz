@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Query, Body } from '@nestjs/common';
+import { 
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Query,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { UserRole } from '@mealz/backend-api';
 import { Context } from '@mealz/backend-core';
 import { AuthUser} from '@mealz/backend-gateway-core';
@@ -49,5 +57,20 @@ export class MealsUserGWController {
   ): Promise<UpsertUserMealGWResponseV1Impl> {
     await this.mealsUserGWService.upsertV1(gwRequest, gwUser.id, context);
     return {};
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Delete('delete-by-type/v1')
+  public async deleteByTypeV1(
+    @Query('typeId') typeId: string,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<void> {
+    await this.mealsUserGWService.deleteByTypeV1(
+      typeId,
+      gwUser.id,
+      context,
+    );
   }
 }

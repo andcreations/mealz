@@ -5,6 +5,7 @@ import {
   ReadManyUserMealsRequestV1,
   MealsUserTransporter,
   UpsertUserMealRequestV1,
+  DeleteUserMealRequestV1,
 } from '@mealz/backend-meals-user-service-api';
 import {
   ReadManyUserMealsGWResponseV1,
@@ -57,5 +58,14 @@ export class MealsUserGWService {
     };
     await this.mealsUserTransporter.upsertUserMealV1(request, context);
     return {};
+  }
+
+  public async deleteByTypeV1(
+    typeId: string,
+    userId: string,
+    context: Context,
+  ): Promise<void> {
+    const request: DeleteUserMealRequestV1 = { userId, typeId };
+    await this.mealsUserTransporter.deleteUserMealV1(request, context);
   }
 }

@@ -12,6 +12,8 @@ import {
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
   UpsertUserMealResponseV1,
+  DeleteUserMealRequestV1,
+  DeleteUserMealResponseV1,
 } from '@mealz/backend-meals-user-service-api';
 
 import { MealsUserRepository } from '../repositories';
@@ -239,5 +241,66 @@ export class MealsUserService {
       sagaContext.newUserMealId
     );
     return { id: userMealId };
+  }
+
+  public async deleteUserMealV1(
+    request: DeleteUserMealRequestV1,
+    context: Context,
+  ): Promise<DeleteUserMealResponseV1> {
+    // saga context
+    type SagaContext = {
+      originalUserMeal?: UserMeal;
+    };
+
+    // saga
+    const saga: Saga<SagaContext> = {
+      id: `delete-user-meal-v1`,
+      operations: [
+        {
+          getId: () => 'read-user-meal',
+          do: async (sagaContext: SagaContext) => {
+            const userMeal = await this.mealsUserRepository.readUserMeal(
+              request.userId,
+              request.typeId,
+              context,
+            );
+            sagaContext.originalUserMeal = userMeal;
+          },
+        },
+        {
+          getId: () => 'delete-user-meal',
+          do: async (_sagaContext: SagaContext) => {
+            await this.mealsUserRepository.deleteUserMeal(
+              request.userId,
+              request.typeId,
+              context,
+            );
+          },
+        },
+        {
+          getId: () => 'delete-meal',
+          do: async (sagaContext: SagaContext) => {
+            await this.mealsCrudTransporter.deleteMealByIdV1(
+              { id: sagaContext.originalUserMeal.mealId },
+              context,
+            );
+          },
+          undo: async (sagaContext: SagaContext) => {
+            if (sagaContext.originalUserMeal) {
+              await this.mealsUserRepository.upsertUserMeal(
+                sagaContext.originalUserMeal,
+                context,
+              );
+            }
+          },
+        },
+      ],
+    };
+
+    // run the saga
+    const sagaContext: SagaContext = {};
+    await this.sagaService.run(saga, sagaContext, context);
+
+    return {};
   }
 }

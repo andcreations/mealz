@@ -88,6 +88,7 @@ export function BarChart(props: BarChartProps) {
 
   const renderBar = (key: string) => {
     return <Bar
+      key={`bar-${key}`}
       dataKey={key}
       stackId={props.stackIds[key]}
       maxBarSize={barSize}

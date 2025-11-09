@@ -6,4 +6,5 @@ export enum NotificationType {
 export interface Notification {
   message: string;
   type: NotificationType;
+  undo?: () => void;
 }

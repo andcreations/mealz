@@ -10,6 +10,8 @@ import {
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
+  DeleteUserMealRequestV1,
+  DeleteUserMealResponseV1,
 } from './dtos';
 
 @Injectable()
@@ -53,6 +55,19 @@ export class MealsUserTransporter {
       UpsertUserMealRequestV1, void
     >(
       MealsUserRequestTopics.UpsertUserMealV1,
+      request,
+      context,
+    );
+  }
+
+  public async deleteUserMealV1(
+    request: DeleteUserMealRequestV1,
+    context: Context,
+  ): Promise<DeleteUserMealResponseV1> {
+    return this.transporter.sendRequest<
+      DeleteUserMealRequestV1, DeleteUserMealResponseV1
+    >(
+      MealsUserRequestTopics.DeleteUserMealV1,
       request,
       context,
     );

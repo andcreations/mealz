@@ -4,8 +4,11 @@ import classNames from 'classnames';
 
 import { useBusEventListener } from '../../bus';
 import { usePatchState } from '../../hooks';
+import { useTranslations } from '../../i18n';
+import { LinkButton } from '../../components';
 import { NotificationsTopics } from '../bus';
 import { Notification, NotificationType } from '../types';
+import { NotificationsTranslations } from './Notifications.translations';
 
 interface NotificationsState {
   notification?: Notification;
@@ -13,6 +16,8 @@ interface NotificationsState {
 }
 
 export function Notifications() {
+  const translate = useTranslations(NotificationsTranslations);
+
   const [state, setState] = useState<NotificationsState>({
     visible: false,
   });
@@ -48,7 +53,17 @@ export function Notifications() {
   return (
     <div className='mealz-notifications'>
       <div className={notificationClassNames}>
-        { state.notification?.message ?? ''}
+        <div className='mealz-notifications-notification-content'>
+          { state.notification?.message ?? ''}
+        </div>
+        <div className='mealz-notifications-notification-action-bar'>
+          { state.notification?.undo &&
+            <LinkButton
+              label={translate('undo')}
+              onClick={state.notification.undo}
+            />
+          }
+        </div>
       </div>
     </div>
   );
