@@ -12,3 +12,8 @@
   @include mealz-font-small();
   padding: 0 1rem;
 }
+
+.mealz-chart-legend-item-unit {
+  color: $mealz-theme-color-fg-dark;
+  padding-left: 0.25rem;
+}

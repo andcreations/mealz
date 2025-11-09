@@ -173,6 +173,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
 
     // calories as details
     if (
+      hasIngredient &&
       userSettings.showCaloriesInIngredientsEditor() &&
       ingredient.calculatedAmount !== INVALID_AMOUNT
     ) {

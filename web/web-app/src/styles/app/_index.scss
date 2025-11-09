@@ -7,10 +7,11 @@
 @import './border';
 @import './breakpoints';
 
+@import './page/components/const';
 @import './page/components/PageHeader';
-@import './page/components/PageWrapper';
 @import './page/components/PageNavbar';
 @import './page/components/PageNavbarMenu';
+@import './page/components/PageWrapper';
 @import './page/components/PageLoader';
 
 @import './notifications/components/Notifications';

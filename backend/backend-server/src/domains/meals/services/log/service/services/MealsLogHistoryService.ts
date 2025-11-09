@@ -26,7 +26,6 @@ export class MealsLogHistoryService {
     toDate: number,
     context: Context,
   ): Promise<MacrosSummary> {
-    console.log('summarizeMacrosFromToDate', userId, fromDate, toDate);
   // read meal logs
     const mealLogs = await this.mealsLogHistoryRepository.readMealLogsFromToDate(
       userId,

@@ -14,7 +14,7 @@ $mealz-macros-summary-box-bg-opacity: 1.0;
   $height: 0.25rem;
   height: $height;
   width: 100%;
-  border-radius: $height / 2;
+  border-radius: calc($height / 2);
   margin: 0.25rem 0;
 }
 

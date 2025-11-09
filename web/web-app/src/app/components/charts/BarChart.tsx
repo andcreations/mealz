@@ -17,6 +17,7 @@ export interface BarChartData {
 
 export interface BarChartProps {
   data: BarChartData[];
+  scale?: Record<string, number>;
   keys: string[];
   stackIds: Record<string, string>;
   style: React.CSSProperties;
@@ -100,15 +101,32 @@ export function BarChart(props: BarChartProps) {
     });
   }
 
+  const scaleData = () => {
+    return props.data.map(item => {
+      const scaled = { ...item };
+      Object.entries(props.scale ?? {}).forEach(([ key, value ]) => {
+        if (typeof scaled[key] === 'number') {
+          scaled[key] = (scaled[key] as number) * value;
+        }
+      });
+      return scaled;
+    });
+  }
+
   const buildLegendItems = () => {
     if (!props.legendItems) {
       return;
+    }
+    const total = (key: string): number | undefined => {
+      return props.data.reduce((acc, item) => {
+        return acc + (item[key] as number);
+      }, 0);
     }
     return props.keys.map((key) => {
       const data = activeName
         ? props.data.find((item) => item.name === activeName)
         : undefined;
-      const value = data?.[key];
+      const value = data?.[key] ?? total(key);
       return {
         ...props.legendItems[key],
         value: typeof value === 'number' ? value : undefined,
@@ -121,7 +139,7 @@ export function BarChart(props: BarChartProps) {
     <div className='mealz-bar-chart-wrapper'>
       <RechartsBarChart
         className='mealz-bar-chart'
-        data={props.data}
+        data={scaleData()}
         style={props.style}
         margin={{ top: margin, right: margin, left: margin, bottom: margin }}
         barCategoryGap={props.barCategoryGap}

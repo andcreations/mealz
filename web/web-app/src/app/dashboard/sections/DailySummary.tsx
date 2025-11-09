@@ -33,7 +33,6 @@ export function DailySummary(props: DailySummaryProps) {
     () => {
       props.readSummaryFunc()
         .then((summary) => {
-          console.log('summary', summary);
           patchState({
             summary,
             summaryLoadStatus: LoadStatus.Loaded,

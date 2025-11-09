@@ -12,6 +12,7 @@ import {
 
 import { SystemService } from '../../system';
 import { Log } from '../../log';
+import { GWMacrosSummaryWithDayOfWeek } from '../types';
 
 @Service()
 export class MealsLogService {
@@ -27,7 +28,7 @@ export class MealsLogService {
     );
   }
 
-  public async summarize(
+  private async summarize(
     fromDate: number,
     toDate: number,
   ): Promise<GWMacrosSummary> {
@@ -37,12 +38,18 @@ export class MealsLogService {
     return data.summary;
   }
 
-  public async summarizeToday(): Promise<GWMacrosSummary> {
+  private getTodayFromToDate(): { fromDate: number, toDate: number } {
     const timeZone = this.systemService.getTimeZone();
     const now = DateTime.now().setZone(timeZone);
 
     const fromDate = now.startOf('day').toMillis();
     const toDate = now.endOf('day').toMillis();
+
+    return { fromDate, toDate };
+  }
+
+  public async fetchTodaySummary(): Promise<GWMacrosSummary> {
+    const { fromDate, toDate } = this.getTodayFromToDate();
     Log.debug(
       `Summarizing today's meal log from ` +
       `${new Date(fromDate).toISOString()} to ` +
@@ -50,5 +57,30 @@ export class MealsLogService {
     );
 
     return this.summarize(fromDate, toDate);
+  }
+
+  public async fetchWeeklySummary(): Promise<GWMacrosSummaryWithDayOfWeek[]> {
+    const DAYS_COUNT = 7;
+    
+    const timeZone = this.systemService.getTimeZone();
+    const summaries: GWMacrosSummaryWithDayOfWeek[] = [];
+
+    // summarize the days
+    for (let index = 0; index < DAYS_COUNT; index++) {
+      const date = DateTime.now().setZone(timeZone).minus({ days: index });
+      const dayOfWeek = date.toFormat('ccc');
+
+      const fromDate = date.startOf('day').toMillis();
+      const toDate = date.endOf('day').toMillis();
+
+      const summary = await this.summarize(fromDate, toDate);
+      summaries.push({
+        ...summary,
+        dayOfWeek,
+      });
+    }
+
+    // changes the order from the oldest to the newest day
+    return summaries.reverse();
   }
 }

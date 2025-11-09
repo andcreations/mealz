@@ -14,19 +14,36 @@ export interface MacrosSummaryChartProps {
   data: MacrosSummaryChartData[];
 }
 
+const MACROS_TO_CALORIES_RATIO = 0.8;
+
 export function MacrosSummaryChart(props: MacrosSummaryChartProps) {
+  const calculateMacrosScale = () => {
+    const caloriesMax = Math.max(...props.data.map((item) => item.calories));
+    const macrosMax = Math.max(...props.data.map((item) => {
+      return item.carbs + item.protein + item.fat;
+    }));
+    const dstMacrosMax = caloriesMax * MACROS_TO_CALORIES_RATIO;
+    return dstMacrosMax / macrosMax;
+  }
+  const macrosScale = calculateMacrosScale();
+
   return (
     <div className='mealz-macros-summary-chart'>
       <BarChart
         data={props.data}
         keys={['calories', 'carbs', 'protein', 'fat']}
+        scale={{
+          carbs: macrosScale,
+          protein: macrosScale,
+          fat: macrosScale,
+        }}
         stackIds={{
+          calories: 'calories',
           carbs: 'macros',
           protein: 'macros',
           fat: 'macros',
-          calories: 'calories',
         }}
-        style={{ width: '100%', height: 200 }}
+        style={{ width: '100%', aspectRatio: 3.236 }}
         barClassNames={{
           carbs: 'mealz-macros-summary-chart-bar-carbs',
           protein: 'mealz-macros-summary-chart-bar-protein',
@@ -46,21 +63,25 @@ export function MacrosSummaryChart(props: MacrosSummaryChartProps) {
         xAxisKey='label'
         xAxisClassName='mealz-macros-summary-chart-x-axis'
         legendItems={{
+          calories: {
+            label: 'Calories',
+            className: 'mealz-macros-summary-chart-bar-calories-legend-item',
+            unit: 'kcal',
+          },
           carbs: {
             label: 'Carbs',
             className: 'mealz-macros-summary-chart-bar-carbs-legend-item',
+            unit: 'g',
           },
           protein: {
             label: 'Protein',
             className: 'mealz-macros-summary-chart-bar-protein-legend-item',
+            unit: 'g',
           },
           fat: {
             label: 'Fat',
             className: 'mealz-macros-summary-chart-bar-fat-legend-item',
-          },
-          calories: {
-            label: 'Calories',
-            className: 'mealz-macros-summary-chart-bar-calories-legend-item',
+            unit: 'g',
           },
         }}
       />

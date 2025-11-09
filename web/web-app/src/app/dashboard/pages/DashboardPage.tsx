@@ -23,7 +23,7 @@ export function DashboardPage() {
           title={translate('today-summary-title')}
         />
         <DailySummary
-          readSummaryFunc={() => mealsLogService.summarizeToday()}
+          readSummaryFunc={() => mealsLogService.fetchTodaySummary()}
         />
       </DashboardSection>
       <DashboardSectionSeparator/>
