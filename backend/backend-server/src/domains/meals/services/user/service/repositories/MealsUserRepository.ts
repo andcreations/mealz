@@ -38,6 +38,22 @@ export class MealsUserRepository {
     return this.mapper.fromEntity(entity);
   }
 
+  public async readUserMeal(
+    userId: string,
+    typeId: string,
+    context: Context,
+  ): Promise<UserMeal | undefined> {
+    const query: Where<UserMealDBEntity> = {
+      userId: { $eq: userId },
+      typeId: { $eq: typeId },
+    };
+    const entity = await this.repository.findOne(query, {}, context);
+    if (!entity) {
+      return;
+    }
+    return this.mapper.fromEntity(entity);
+  }
+
   public async readMany(
     lastId: string | undefined,
     limit: number,
@@ -95,6 +111,18 @@ export class MealsUserRepository {
     context: Context,
   ): Promise<void> {
     const query: Where<UserMealDBEntity> = { id: { $eq: id } };
+    await this.repository.delete(query, context);
+  }
+
+  public async deleteUserMeal(
+    userId: string,
+    typeId: string,
+    context: Context,
+  ): Promise<void> {
+    const query: Where<UserMealDBEntity> = {
+      userId: { $eq: userId },
+      typeId: { $eq: typeId },
+    };
     await this.repository.delete(query, context);
   }
 }

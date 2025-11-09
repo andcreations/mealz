@@ -1,3 +1,3 @@
-export * from './use-patch-state';
-export * from './use-service';
-export * from './use-debounce';
+export * from './usePatchState';
+export * from './useService';
+export * from './useDebounce';

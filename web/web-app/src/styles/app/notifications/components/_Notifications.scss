@@ -14,6 +14,9 @@
 }
 
 .mealz-notifications-notification {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  @include mealz-flex-center();
   background-color: rgba($mealz-theme-color-bg-medium, 0.25);
   padding: 0.25rem 0.75rem 0.25rem 0.75rem;
   @include mealz-font-small();
@@ -41,4 +44,18 @@
 
 .mealz-notifications-notification-error {
   color: $mealz-theme-color-error;
+}
+
+.mealz-notifications-notification-content {
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.mealz-notifications-notification-action-bar {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  @include mealz-flex-center();
+  @include mealz-font-small();
+  flex-grow: 0;
+  flex-shrink: 1;
 }
