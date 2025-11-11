@@ -19,12 +19,12 @@ export class MealsUserRequestController {
   public constructor(private readonly mealsUserService: MealsUserService) {
   }
 
-  @RequestHandler(MealsUserRequestTopics.ReadManyV1)
-  public async readManyV1(
+  @RequestHandler(MealsUserRequestTopics.ReadManyUserMealsV1)
+  public async readManyUserMealsV1(
     request: ReadManyUserMealsRequestV1,
     context: Context,
   ): Promise<ReadManyUserMealsResponseV1> {
-    return this.mealsUserService.readManyV1(request, context);
+    return this.mealsUserService.readManyUserMealsV1(request, context);
   }
 
   @RequestHandler(MealsUserRequestTopics.CreateUserMealV1)

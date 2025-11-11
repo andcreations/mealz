@@ -3,8 +3,8 @@ import { LocalRequestTransporter } from '@mealz/backend-transport';
 import { MealsCrudAPIModule } from '@mealz/backend-meals-crud-service-api';
 import { MealsGWCommonModule } from '@mealz/backend-meals-gateway-common';
 
-import { GWUserMealMapper, MealsUserGWService } from './services';
-import { MealsUserGWController } from './controllers';
+import { GWUserMealMapper, MealsUserV1GWService } from './services';
+import { MealsUserV1GWController } from './controllers';
 import { MealsUserAPIModule } from '../service-api';
 
 @Module({
@@ -15,9 +15,9 @@ import { MealsUserAPIModule } from '../service-api';
   ],
   providers: [
     GWUserMealMapper,
-    MealsUserGWService,
+    MealsUserV1GWService,
   ],
-  controllers: [MealsUserGWController],
+  controllers: [MealsUserV1GWController],
 })
 export class MealsUserGWModule {
 }

@@ -21,6 +21,10 @@ module.exports = {
         'api',
       ),
       ...backendAlias(
+        '@mealz/backend-shared',
+        'shared',
+      ),
+      ...backendAlias(
         '@mealz/backend-gateway-api',
         'gateway/api',
       ),

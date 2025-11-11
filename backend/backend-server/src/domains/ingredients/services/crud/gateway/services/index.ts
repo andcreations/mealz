@@ -1,1 +1,1 @@
-export * from './IngredientsCrudGWService';
+export * from './IngredientsCrudV1GWService';

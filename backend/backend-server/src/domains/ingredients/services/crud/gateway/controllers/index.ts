@@ -1,1 +1,1 @@
-export * from './IngredientsCrudGWController';
+export * from './IngredientsCrudV1GWController';

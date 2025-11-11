@@ -8,8 +8,8 @@ import {
   IngredientsCrudAPIModule,
 } from '@mealz/backend-ingredients-crud-service-api';
 
-import { IngredientsCrudGWService } from './services';
-import { IngredientsCrudGWController } from './controllers';
+import { IngredientsCrudV1GWService } from './services';
+import { IngredientsCrudV1GWController } from './controllers';
 
 @Module({
   imports: [
@@ -17,10 +17,10 @@ import { IngredientsCrudGWController } from './controllers';
     IngredientsGWCommonModule,
   ],
   providers: [
-    IngredientsCrudGWService,
+    IngredientsCrudV1GWService,
   ],
   controllers: [
-    IngredientsCrudGWController,
+    IngredientsCrudV1GWController,
   ],
 })
 export class IngredientsCrudGWModule {}

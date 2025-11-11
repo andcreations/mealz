@@ -6,8 +6,8 @@ import {
   GWMacrosSummary,
   LogMealGWRequestV1,
   LogMealGWResponseV1,
-  SummarizeMealLogResponseV1,
-  MealsLogAPI,
+  SummarizeMealLogGWResponseV1,
+  MealsLogV1API,
 } from '@mealz/backend-meals-log-gateway-api';
 
 import { SystemService } from '../../system';
@@ -23,7 +23,7 @@ export class MealsLogService {
 
   public async logMeal(meal: GWMealWithoutId): Promise<void> {
     await this.http.post<LogMealGWRequestV1, LogMealGWResponseV1>(
-      MealsLogAPI.url.logMealV1(),
+      MealsLogV1API.url.logMealV1(),
       { meal },
     );
   }
@@ -32,8 +32,8 @@ export class MealsLogService {
     fromDate: number,
     toDate: number,
   ): Promise<GWMacrosSummary> {
-    const { data } = await this.http.get<SummarizeMealLogResponseV1>(
-      MealsLogAPI.url.summarizeV1({ fromDate, toDate }),
+    const { data } = await this.http.get<SummarizeMealLogGWResponseV1>(
+      MealsLogV1API.url.summarizeV1({ fromDate, toDate }),
     );
     return data.summary;
   }

@@ -1,2 +1,2 @@
 export * from './GWUserMealMapper';
-export * from './MealsUserGWService';
+export * from './MealsUserV1GWService';

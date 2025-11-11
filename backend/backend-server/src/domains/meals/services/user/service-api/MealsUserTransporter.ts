@@ -28,7 +28,7 @@ export class MealsUserTransporter {
     return this.transporter.sendRequest<
     ReadManyUserMealsRequestV1, ReadManyUserMealsResponseV1
     >(
-      MealsUserRequestTopics.ReadManyV1,
+      MealsUserRequestTopics.ReadManyUserMealsV1,
       request,
       context,
     );

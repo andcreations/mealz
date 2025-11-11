@@ -1,3 +1,3 @@
 export * from './types';
 export * from './dtos';
-export * from './MealsLogAPI';
+export * from './MealsLogV1API';

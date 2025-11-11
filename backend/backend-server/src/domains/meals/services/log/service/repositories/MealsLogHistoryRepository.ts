@@ -22,7 +22,7 @@ export class MealsLogHistoryRepository {
     private readonly mapper: MealLogDBMapper,
   ) {}
 
-  public async readMealLogsFromToDate(
+  public async readByDateRange(
     userId: string,
     fromDate: number,
     toDate: number,

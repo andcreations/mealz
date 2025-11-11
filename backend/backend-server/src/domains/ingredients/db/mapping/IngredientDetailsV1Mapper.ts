@@ -20,6 +20,8 @@ import {
   UnitPer100V1,
 } from '@mealz/backend-ingredients-db';
 
+export type IngredientForBuffer = Omit<Ingredient, 'id'>;
+
 @Injectable()
 export class IngredientDetailsV1Mapper {
   private fromTypeV1(type: IngredientTypeV1): IngredientType {
@@ -92,7 +94,7 @@ export class IngredientDetailsV1Mapper {
     };
   } 
 
-  public fromBuffer(buffer: Buffer): Omit<Ingredient, 'id'> {
+  public fromBuffer(buffer: Buffer): IngredientForBuffer {
     const details = decode(buffer) as IngredientDetailsV1;
     return {
       name: details.name,

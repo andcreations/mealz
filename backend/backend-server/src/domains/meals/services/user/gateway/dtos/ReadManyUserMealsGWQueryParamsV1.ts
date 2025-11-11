@@ -6,8 +6,13 @@ import {
   IsLimit,
   arrayFromQueryParam,
 } from '@mealz/backend-gateway-common';
+import {
+  MealsUserV1APIReadManyParams,
+} from '@mealz/backend-meals-user-gateway-api';
 
-export class ReadManyUserMealsGWQueryParamsV1 {
+export class MealsUserV1APIReadManyParamsImpl
+  implements MealsUserV1APIReadManyParams
+{
   @ApiProperty({
     description: 'Identifier of the last user meal read',
   })

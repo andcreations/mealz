@@ -9,6 +9,9 @@
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "paths": {
+      "@mealz/backend-shared": [
+        "../../backend/backend-server/src/shared"
+      ],
       "@mealz/backend-api": [
         "../../backend/backend-server/src/api"
       ],

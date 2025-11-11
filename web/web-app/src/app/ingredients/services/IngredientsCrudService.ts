@@ -7,7 +7,7 @@ import {
 import { HTTPWebClientService } from '@andcreations/web-common';
 import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 import {
-  IngredientsCrudAPI,
+  IngredientsCrudV1API,
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
@@ -65,7 +65,7 @@ export class IngredientsCrudService implements OnBootstrap {
   // read
     while (true) {
       const response = await this.http.get<ReadIngredientsFromLastGWResponseV1>(
-        IngredientsCrudAPI.url.readFromLastV1({ lastId, limit }),
+        IngredientsCrudV1API.url.readFromLastV1({ lastId, limit }),
       );
       const ingredients = response.data.ingredients;
       readIngredients.push(...ingredients);
