@@ -26,7 +26,7 @@ export class MealsUserService {
     private readonly mealsUserRepository: MealsUserRepository,
   ) {}
 
-  public async readManyV1(
+  public async readManyUserMealsV1(
     request: ReadManyUserMealsRequestV1,
     context: Context,
   ): Promise<ReadManyUserMealsResponseV1> {

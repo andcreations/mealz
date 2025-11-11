@@ -12,7 +12,7 @@ import {
 import { ReadIngredientsFromLastGWQueryParamsV1 } from '../dtos';
 
 @Injectable()
-export class IngredientsCrudGWService {
+export class IngredientsCrudV1GWService {
   public constructor(
     private readonly ingredientsCrudTransporter: IngredientsCrudTransporter,
     private readonly gwIngredientMapper: GWIngredientMapper,

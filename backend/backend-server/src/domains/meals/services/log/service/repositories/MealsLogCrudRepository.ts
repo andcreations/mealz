@@ -26,7 +26,7 @@ export class MealsLogCrudRepository {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  public async readMealLogById(
+  public async readById(
     id: string,
     context: Context,
   ): Promise<MealLog | undefined> {
@@ -38,7 +38,7 @@ export class MealsLogCrudRepository {
     return this.mapper.fromEntity(entity);
   }
 
-  public async readLatestMealLogByUserId(
+  public async readLatestByUserId(
     userId: string,
     context: Context,
   ): Promise<MealLog | undefined> {
@@ -55,7 +55,7 @@ export class MealsLogCrudRepository {
     return this.mapper.fromEntity(entity);
   }
   
-  public async createMealLog(
+  public async create(
     mealLog: Omit<MealLog, 'id'>,
     context: Context,
   ): Promise<Pick<MealLog, 'id'>> {
@@ -68,7 +68,7 @@ export class MealsLogCrudRepository {
     return { id };
   }
 
-  public async deleteMealLogById(
+  public async delete(
     id: string,
     context: Context,
   ): Promise<void> {
@@ -76,7 +76,7 @@ export class MealsLogCrudRepository {
     await this.repository.delete(query, context);
   }
 
-  public async upsertMealLog(
+  public async upsert(
     userMeal: UpsertObject<MealLog, 'id'>,
     context: Context,
   ): Promise<Pick<MealLog, 'id'>> {

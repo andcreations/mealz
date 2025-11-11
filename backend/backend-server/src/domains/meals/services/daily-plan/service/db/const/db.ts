@@ -1,0 +1,1 @@
+export const MEALS_DAILY_PLAN_DB_NAME = 'meals-daily-plan';

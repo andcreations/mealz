@@ -5,7 +5,7 @@
 **/.yalc
 **/.DS_Store
 
-backend/.db/*
+backend/_db/*
 backend/data/src/ingredients/v1
 backend/sqlite/tools/src/ingredients/v1
 backend/etc/https/*.crt

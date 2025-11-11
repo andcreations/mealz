@@ -75,7 +75,7 @@ export class MealsLogCrudService {
         {
           getId: () => 'create-meal-log',
           do: async (sagaContext: SagaContext) => {
-            const { id } = await this.mealsLogCrudRepository.createMealLog(
+            const { id } = await this.mealsLogCrudRepository.create(
               {
                 mealId: sagaContext.newMealId,
                 userId,
@@ -87,7 +87,7 @@ export class MealsLogCrudService {
           },
           undo: async (sagaContext: SagaContext) => {
             if (sagaContext.newMealLogId) {
-              await this.mealsLogCrudRepository.deleteMealLogById(
+              await this.mealsLogCrudRepository.delete(
                 sagaContext.newMealLogId,
                 context,
               );
@@ -126,7 +126,7 @@ export class MealsLogCrudService {
           // to be able to rollback the changes.
           getId: () => 'read-meal-log',
           do: async (sagaContext: SagaContext) => {
-            const mealLog = await this.mealsLogCrudRepository.readMealLogById(
+            const mealLog = await this.mealsLogCrudRepository.readById(
               mealLogId,
               context,
             );
@@ -178,7 +178,7 @@ export class MealsLogCrudService {
         {
           getId: () => 'upsert-meal-log',
           do: async (sagaContext: SagaContext) => {
-            const { id } = await this.mealsLogCrudRepository.upsertMealLog(
+            const { id } = await this.mealsLogCrudRepository.upsert(
               {
                 id: mealLogId,
                 mealId: sagaContext.originalMealLog.mealId,
@@ -189,7 +189,7 @@ export class MealsLogCrudService {
             );
           },
           undo: async (sagaContext: SagaContext) => {
-            await this.mealsLogCrudRepository.upsertMealLog(
+            await this.mealsLogCrudRepository.upsert(
               sagaContext.originalMealLog,
               context,
             );
@@ -207,7 +207,7 @@ export class MealsLogCrudService {
     request: LogMealRequestV1,
     context: Context,
   ): Promise<LogMealResponseV1> {
-    const latest = await this.mealsLogCrudRepository.readLatestMealLogByUserId(
+    const latest = await this.mealsLogCrudRepository.readLatestByUserId(
       request.userId,
       context,
     );

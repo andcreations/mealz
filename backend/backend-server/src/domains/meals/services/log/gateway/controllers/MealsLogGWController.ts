@@ -3,7 +3,7 @@ import { Context } from '@mealz/backend-core';
 import { AuthUser } from '@mealz/backend-gateway-core';
 import { UserRole } from '@mealz/backend-api';
 import { Auth, GWContext, GWUser, Roles } from '@mealz/backend-gateway-common';
-import { MEALS_LOG_URL } from '@mealz/backend-meals-log-gateway-api';
+import { MEALS_LOG_V1_URL } from '@mealz/backend-meals-log-gateway-api';
 
 import { MealsLogGWService } from '../services';
 import {
@@ -13,7 +13,7 @@ import {
   SummarizeMealLogResponseV1Impl,
 } from '../dtos';
 
-@Controller(MEALS_LOG_URL)
+@Controller(MEALS_LOG_V1_URL)
 export class MealsLogGWController {
   public constructor(
     private readonly mealsLogGWService: MealsLogGWService,
@@ -21,7 +21,7 @@ export class MealsLogGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Post('log-meal/v1')
+  @Post('')
   public async logMealV1(
     @Body() gwRequest: LogMealGWRequestV1Impl,
     @GWUser() gwUser: AuthUser,
@@ -33,7 +33,7 @@ export class MealsLogGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Get('summarize/v1')
+  @Get('summary')
   public async summarizeMacrosV1(
     @Query() gwParams: SummarizeMealLogQueryParamsV1,
     @GWUser() gwUser: AuthUser,

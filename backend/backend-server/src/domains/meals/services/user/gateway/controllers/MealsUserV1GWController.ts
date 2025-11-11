@@ -5,7 +5,6 @@ import {
   Delete,
   Query,
   Body,
-  Param,
 } from '@nestjs/common';
 import { UserRole } from '@mealz/backend-api';
 import { Context } from '@mealz/backend-core';
@@ -16,31 +15,31 @@ import {
   GWUser,
   Roles,
 } from '@mealz/backend-gateway-common';
-import { MEALS_USER_URL } from '@mealz/backend-meals-user-gateway-api';
+import { MEALS_USER_V1_URL } from '@mealz/backend-meals-user-gateway-api';
 
 import {
-  ReadManyUserMealsGWQueryParamsV1,
+  MealsUserV1APIReadManyParamsImpl,
   ReadManyUserMealsGWResponseV1Impl,
   UpsertUserMealGWRequestV1Impl,
   UpsertUserMealGWResponseV1Impl,
 } from '../dtos';
-import { MealsUserGWService } from '../services';
+import { MealsUserV1GWService } from '../services';
 
-@Controller(MEALS_USER_URL)
-export class MealsUserGWController {
+@Controller(MEALS_USER_V1_URL)
+export class MealsUserV1GWController {
   public constructor(
-    private readonly mealsUserGWService: MealsUserGWService,
+    private readonly mealsUserV1GWService: MealsUserV1GWService,
   ) {}
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Get('many/v1')
+  @Get('many')
   public async readManyV1(
-    @Query() gwParams: ReadManyUserMealsGWQueryParamsV1,
+    @Query() gwParams: MealsUserV1APIReadManyParamsImpl,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadManyUserMealsGWResponseV1Impl> {
-    return await this.mealsUserGWService.readManyV1(
+    return await this.mealsUserV1GWService.readManyV1(
       gwParams,
       gwUser.id,
       context,
@@ -49,25 +48,25 @@ export class MealsUserGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Post('upsert/v1')
+  @Post('')
   public async upsertV1(
     @Body() gwRequest: UpsertUserMealGWRequestV1Impl,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<UpsertUserMealGWResponseV1Impl> {
-    await this.mealsUserGWService.upsertV1(gwRequest, gwUser.id, context);
+    await this.mealsUserV1GWService.upsertV1(gwRequest, gwUser.id, context);
     return {};
   }
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Delete('delete-by-type/v1')
+  @Delete('delete-by-type')
   public async deleteByTypeV1(
     @Query('typeId') typeId: string,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<void> {
-    await this.mealsUserGWService.deleteByTypeV1(
+    await this.mealsUserV1GWService.deleteByTypeV1(
       typeId,
       gwUser.id,
       context,

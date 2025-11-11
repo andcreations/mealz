@@ -13,18 +13,18 @@ import {
   UpsertUserMealGWResponseV1,
 } from '@mealz/backend-meals-user-gateway-api';
 
-import { ReadManyUserMealsGWQueryParamsV1 } from '../dtos';
+import { MealsUserV1APIReadManyParamsImpl } from '../dtos';
 import { GWUserMealMapper } from './GWUserMealMapper';
 
 @Injectable()
-export class MealsUserGWService {
+export class MealsUserV1GWService {
   public constructor(
     private readonly mealsUserTransporter: MealsUserTransporter,
     private readonly gwUserMealMapper: GWUserMealMapper,
   ) {}
 
   public async readManyV1(
-    gwParams: ReadManyUserMealsGWQueryParamsV1,
+    gwParams: MealsUserV1APIReadManyParamsImpl,
     userId: string,
     context: Context
   ): Promise<ReadManyUserMealsGWResponseV1> {

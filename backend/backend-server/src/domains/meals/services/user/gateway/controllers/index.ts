@@ -1,1 +1,1 @@
-export * from './MealsUserGWController';
+export * from './MealsUserV1GWController';

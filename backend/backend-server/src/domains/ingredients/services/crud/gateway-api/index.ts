@@ -1,2 +1,2 @@
 export * from './dtos';
-export * from './IngredientsCrudAPI';
+export * from './IngredientsCrudV1API';

@@ -13,10 +13,11 @@ SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 export MEALZ_JWT_SECRET="E!1HLzZM-CjloOsrm5'v#9/dHd;FCq./"
 export MEALZ_WEB_APP_DIR="$SCRIPT_DIR/../../web/web-app/dist/app"
 
-export MEALZ_USERS_SQLITE_DB_FILE="$SCRIPT_DIR/../.db/users.sqlite";
-export MEALZ_INGREDIENTS_SQLITE_DB_FILE="$SCRIPT_DIR/../.db/ingredients.sqlite";
-export MEALZ_MEALS_SQLITE_DB_FILE="$SCRIPT_DIR/../.db/meals.sqlite";
-export MEALZ_MEALS_USER_SQLITE_DB_FILE="$SCRIPT_DIR/../.db/meals-user.sqlite";
-export MEALZ_MEALS_LOG_SQLITE_DB_FILE="$SCRIPT_DIR/../.db/meals-log.sqlite";
+export MEALZ_USERS_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/users.sqlite"
+export MEALZ_INGREDIENTS_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/ingredients.sqlite"
+export MEALZ_MEALS_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/meals.sqlite"
+export MEALZ_MEALS_USER_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/meals-user.sqlite"
+export MEALZ_MEALS_LOG_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/meals-log.sqlite"
+export MEALZ_MEALS_DAILY_PLAN_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/meals-daily-plan.sqlite"
 
-export MEALZ_UPSERT_ON_LOG_MEAL_PERIOD="1m"
+export MEALZ_UPSERT_ON_LOG_MEAL_PERIOD="15m"

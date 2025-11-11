@@ -4,7 +4,7 @@ import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 import {
   GWUserMeal,
   ReadManyUserMealsGWResponseV1,
-  MealsUserAPI,
+  MealsUserV1API,
   UpsertUserMealGWRequestV1,
   UpsertUserMealGWResponseV1,
 } from '@mealz/backend-meals-user-gateway-api';
@@ -13,7 +13,7 @@ import { AuthService } from '../../auth';
 
 @Service()
 export class MealsUserService {
-  private static readonly DRAFT_TYPE = 'draft';
+  private static readonly DRAFT_TYPE_ID = 'draft';
 
   public constructor(
     private readonly http: HTTPWebClientService,
@@ -29,12 +29,11 @@ export class MealsUserService {
     }
 
     const { data } = await this.http.get<ReadManyUserMealsGWResponseV1>(
-      MealsUserAPI.url.readManyV1(
+      MealsUserV1API.url.readManyV1({
         lastId,
-        limit,
-        userId,
-        [MealsUserService.DRAFT_TYPE]
-      )
+        limit: 1,
+        typeIds: [MealsUserService.DRAFT_TYPE_ID],
+      }),
     );
     return data.userMeals[0];
   }
@@ -44,9 +43,9 @@ export class MealsUserService {
       UpsertUserMealGWRequestV1,
       UpsertUserMealGWResponseV1
     >(
-      MealsUserAPI.url.upsertV1(),
+      MealsUserV1API.url.upsertV1(),
       {
-        typeId: MealsUserService.DRAFT_TYPE,
+        typeId: MealsUserService.DRAFT_TYPE_ID,
         meal,
       }
     );
@@ -54,7 +53,7 @@ export class MealsUserService {
 
   public async deleteUserDraftMeal(): Promise<void> {
     await this.http.delete<void>(
-      MealsUserAPI.url.deleteByTypeV1(MealsUserService.DRAFT_TYPE)
+      MealsUserV1API.url.deleteByTypeV1(MealsUserService.DRAFT_TYPE_ID)
     );
   }
 }
