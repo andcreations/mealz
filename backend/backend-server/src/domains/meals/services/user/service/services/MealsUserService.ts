@@ -201,10 +201,11 @@ export class MealsUserService {
             );
             const { id } = await this.mealsUserRepository.upsertUserMeal(
               {
+                ...ifDefined<UserMeal>('id', userMealId),
                 mealId,
                 typeId: request.typeId,
                 userId: request.userId,
-                ...ifDefined<UserMeal>('id', userMealId),
+                metadata: request.metadata,
               },
               context,
             );

@@ -1,9 +1,10 @@
 async function up(db) {
   await db.run(`
     CREATE TABLE MealLogs (
-      id TEXT PRIMARY KEY,
+      id TEXT PRIMARY KEY UNIQUE NOT NULL,
       userId TEXT NOT NULL,
       mealId TEXT NOT NULL,
+      dailyPlanMealName TEXT,
       loggedAt INTEGER NOT NULL
     );
   `);

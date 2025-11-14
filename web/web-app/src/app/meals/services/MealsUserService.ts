@@ -20,17 +20,16 @@ export class MealsUserService {
     private readonly authService: AuthService,
   ) {}
 
-  public async readUserDraftMeal(): Promise<GWUserMeal | undefined> {
-    const lastId: string | undefined = undefined;
-    const limit = 1;
-    const userId = this.authService.getUserId();
-    if (!userId) {
+  public async readUserDraftMeal(): Promise<
+    GWUserMeal<UserDraftMealMetadata> | undefined
+  > {
+    if (!this.authService.isSignedIn()) {
       return undefined;
     }
 
     const { data } = await this.http.get<ReadManyUserMealsGWResponseV1>(
       MealsUserV1API.url.readManyV1({
-        lastId,
+        lastId: undefined,
         limit: 1,
         typeIds: [MealsUserService.DRAFT_TYPE_ID],
       }),
@@ -38,7 +37,13 @@ export class MealsUserService {
     return data.userMeals[0];
   }
 
-  public async upsertUserDraftMeal(meal: GWMealWithoutId): Promise<void> {
+  public async upsertUserDraftMeal(
+    meal: GWMealWithoutId,
+    mealName?: string,
+  ): Promise<void> {
+    const metadata: UserDraftMealMetadata = {
+      mealName,
+    };
     await this.http.post<
       UpsertUserMealGWRequestV1,
       UpsertUserMealGWResponseV1
@@ -47,6 +52,7 @@ export class MealsUserService {
       {
         typeId: MealsUserService.DRAFT_TYPE_ID,
         meal,
+        metadata,
       }
     );
   }
@@ -56,4 +62,8 @@ export class MealsUserService {
       MealsUserV1API.url.deleteByTypeV1(MealsUserService.DRAFT_TYPE_ID)
     );
   }
+}
+
+export interface UserDraftMealMetadata {
+  mealName?: string;
 }

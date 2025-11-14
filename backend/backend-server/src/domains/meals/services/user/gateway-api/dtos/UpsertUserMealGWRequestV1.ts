@@ -9,4 +9,7 @@ export interface UpsertUserMealGWRequestV1 {
 
   // Meal
   meal: GWMealWithoutId;
+
+  // Metadata
+  metadata?: any;
 }

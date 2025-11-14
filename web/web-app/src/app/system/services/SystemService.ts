@@ -6,6 +6,7 @@ export class SystemService implements OnBootstrap {
   public async onBootstrap(): Promise<void> {
     Log.info(`Time zone is ${this.getTimeZone()}`);
   }
+
   public getTimeZone(): string {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   }

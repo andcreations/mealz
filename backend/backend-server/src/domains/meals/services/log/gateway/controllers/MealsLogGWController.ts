@@ -27,8 +27,7 @@ export class MealsLogGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<LogMealGWResponseV1Impl> {
-    await this.mealsLogGWService.logMealV1(gwRequest, gwUser.id, context);
-    return {};
+    return this.mealsLogGWService.logMealV1(gwRequest, gwUser.id, context);
   }
 
   @Auth()

@@ -13,11 +13,13 @@ import { DailySummaryTranslations } from './DailySummary.translations';
 
 export interface DailySummaryProps {
   readSummaryFunc: () => Promise<GWMacrosSummary>;
+  fromDate: number;
+  toDate: number;
 }
 
 interface DailySummaryState {
   summary?: GWMacrosSummary;
-  summaryLoadStatus: LoadStatus;
+  loadStatus: LoadStatus;
 }
 
 export function DailySummary(props: DailySummaryProps) {
@@ -25,7 +27,7 @@ export function DailySummary(props: DailySummaryProps) {
   const translate = useTranslations(DailySummaryTranslations);
 
   const [state, setState] = useState<DailySummaryState>({
-    summaryLoadStatus: LoadStatus.Loading,
+    loadStatus: LoadStatus.Loading,
   });
   const patchState = usePatchState(setState);
   
@@ -35,7 +37,7 @@ export function DailySummary(props: DailySummaryProps) {
         .then((summary) => {
           patchState({
             summary,
-            summaryLoadStatus: LoadStatus.Loaded,
+            loadStatus: LoadStatus.Loaded,
           });
         })
         .catch(error => {
@@ -44,7 +46,7 @@ export function DailySummary(props: DailySummaryProps) {
             translate('failed-to-load-meal-log-summary')
           );
           patchState({
-            summaryLoadStatus: LoadStatus.FailedToLoad,
+            loadStatus: LoadStatus.FailedToLoad,
           });
         });
     },
@@ -54,10 +56,10 @@ export function DailySummary(props: DailySummaryProps) {
   return (
     <div className='mealz-daily-summary'>
       <LoaderByStatus
-        loadStatus={state.summaryLoadStatus}
+        loadStatus={state.loadStatus}
         size={LoaderSize.Small}
       />
-      { state.summaryLoadStatus === LoadStatus.Loaded &&
+      { state.loadStatus === LoadStatus.Loaded &&
         <MacrosSummary macrosSummary={state.summary}/>
       }
     </div>

@@ -27,8 +27,8 @@ export abstract class DBRepository<T> {
 
   /**
    * Initialize the repository.
-   * @param entitySpec - The specification of the entity.
-   * @param fieldsSpec - The specification of the fields of the entity.
+   * @param entitySpec Specification of the entity.
+   * @param fieldsSpec Specification of the fields of the entity.
    */
   public async init(
     entitySpec: DBEntitySpec,
@@ -73,24 +73,24 @@ export abstract class DBRepository<T> {
 
   /**
    * Insert an entity into the database.
-   * @param entity - The entity to insert.
-   * @param context - The context of the insert operation.
+   * @param entity Entity to insert.
+   * @param context Context of the insert operation.
    */
   public abstract insert(entity: T, context: Context): Promise<void>;
 
   /**
    * Upsert an entity into the database.
-   * @param entity - The entity to upsert.
-   * @param context - The context of the upsert operation.
+   * @param entity Entity to upsert.
+   * @param context Context of the upsert operation.
    */
   public abstract upsert(entity: T, context: Context): Promise<void>;
 
   /**
    * Find entities in the database.
-   * @param where - The where clause.
-   * @param options - The options of the find operation.
-   * @param context - The context of the find operation.
-   * @returns The entities found.
+   * @param where Where clause.
+   * @param options Options of the find operation.
+   * @param context Context of the find operation.
+   * @returns Found entities.
    */
   public abstract find<K extends keyof T>(
     where: Where<T>,
@@ -100,9 +100,9 @@ export abstract class DBRepository<T> {
     
   /**
    * Find one entity in the database.
-   * @param where - The where clause.
-   * @param options - The options of the find operation.
-   * @returns The entity found.
+   * @param where Where clause.
+   * @param options Options of the find operation.
+   * @returns Found entity.
    */  
   public async findOne<K extends keyof T>(
     where: Where<T>,
@@ -122,10 +122,10 @@ export abstract class DBRepository<T> {
 
   /**
    * Iterate over the entities in the database.
-   * @param where - The where clause.
-   * @param options - The options of the iterate operation.
-   * @param callback - The callback to be called for each entity.
-   * @param context - The context of the iterate operation.
+   * @param where Where clause.
+   * @param options Options of the iterate operation.
+   * @param callback Callback to be called for each entity.
+   * @param context Context of the iterate operation.
    */
   public abstract iterate<K extends keyof T>(
     where: Where<T>,
@@ -136,9 +136,9 @@ export abstract class DBRepository<T> {
 
   /**
    * Update entities in the database.
-   * @param where - The where clause.
-   * @param update - The update operator.
-   * @param context - The context of the update operation.
+   * @param where Where clause.
+   * @param update Update operator.
+   * @param context Context of the update operation.
    */
   public abstract update(
     where: Where<T>,
@@ -148,8 +148,8 @@ export abstract class DBRepository<T> {
 
   /**
    * Delete entities from the database.
-   * @param where - The where clause.
-   * @param context - The context of the delete operation.
+   * @param where Where clause.
+   * @param context Context of the delete operation.
    */
   public abstract delete(
     where: Where<T>,

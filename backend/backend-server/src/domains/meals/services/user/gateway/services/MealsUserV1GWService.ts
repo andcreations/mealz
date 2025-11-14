@@ -55,6 +55,7 @@ export class MealsUserV1GWService {
       userId,
       typeId: gwRequest.typeId,
       meal: gwRequest.meal,
+      metadata: gwRequest.metadata,
     };
     await this.mealsUserTransporter.upsertUserMealV1(request, context);
     return {};

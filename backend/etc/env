@@ -20,4 +20,4 @@ export MEALZ_MEALS_USER_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/meals-user.sqlite"
 export MEALZ_MEALS_LOG_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/meals-log.sqlite"
 export MEALZ_MEALS_DAILY_PLAN_SQLITE_DB_FILE="$SCRIPT_DIR/../_db/meals-daily-plan.sqlite"
 
-export MEALZ_UPSERT_ON_LOG_MEAL_PERIOD="15m"
+export MEALZ_UPSERT_ON_LOG_MEAL_PERIOD="30m"

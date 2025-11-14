@@ -77,11 +77,11 @@ export class MealsLogCrudRepository {
   }
 
   public async upsert(
-    userMeal: UpsertObject<MealLog, 'id'>,
+    mealLog: UpsertObject<MealLog, 'id'>,
     context: Context,
   ): Promise<Pick<MealLog, 'id'>> {
-    const id = userMeal.id ?? this.idGenerator();
-    const entity = this.mapper.toEntity({ ...userMeal, id });
+    const id = mealLog.id ?? this.idGenerator();
+    const entity = this.mapper.toEntity({ ...mealLog, id });
     await this.repository.upsert(entity, context);
     return { id };
   }  

@@ -72,11 +72,11 @@ async function bootstrap() {
   if (isExpress()) {
     getLogger().info('Creating express application', BOOTSTRAP_CONTEXT);
     app = await NestFactory
-    .create<NestExpressApplication>(
-      AppModule,
-      new ExpressAdapter(),
-      { httpsOptions: readCertificateAndKey() },
-    );  
+      .create<NestExpressApplication>(
+        AppModule,
+        new ExpressAdapter(),
+        { httpsOptions: readCertificateAndKey() },
+      );  
     app.use(cookieParser());
   }
 

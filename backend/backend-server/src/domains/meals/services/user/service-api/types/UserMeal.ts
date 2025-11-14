@@ -1,4 +1,4 @@
-export class UserMeal {
+export class UserMeal<T = any> {
   // User meal identifier
   public id: string;
 
@@ -11,4 +11,7 @@ export class UserMeal {
 
   // Meal identifier
   public mealId: string;
+
+  // Metadata (serialized to message pack)
+  public metadata?: T;
 }

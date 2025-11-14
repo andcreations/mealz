@@ -8,6 +8,7 @@ export class MealLogDBEntity {
   @DBField({
     name: 'id',
     type: DBFieldType.STRING,
+    primaryKey: true,
   })
   public id: string;
 
@@ -22,6 +23,13 @@ export class MealLogDBEntity {
     type: DBFieldType.STRING,
   })
   public mealId: string;
+
+  @DBField({
+    name: 'dailyPlanMealName',
+    type: DBFieldType.STRING,
+    optional: true,
+  })
+  public dailyPlanMealName?: string;
 
   @DBField({
     name: 'loggedAt',

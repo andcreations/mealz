@@ -8,6 +8,7 @@ export class UserMealDBEntity {
   @DBField({
     name: 'id',
     type: DBFieldType.STRING,
+    primaryKey: true,
   })
   public id: string;
 
@@ -28,4 +29,11 @@ export class UserMealDBEntity {
     type: DBFieldType.STRING,
   })
   public typeId: string;
+
+  @DBField({
+    name: 'metadata',
+    type: DBFieldType.BINARY,
+    optional: true,
+  })
+  public metadata?: Buffer;
 }

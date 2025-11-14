@@ -41,7 +41,16 @@ export class MealsDailyPlanCrudRepository {
     const query: Where<MealDailyPlanDBEntity> = {
       userId: { $eq: userId },
     };
-    const entities = await this.repository.find(query, { limit }, context);
+    const entities = await this.repository.find(
+      query,
+      { 
+        limit,
+        sort: [
+          { createdAt: 'desc' },
+        ],
+      },
+      context,
+    );
     return entities.map(entity => this.mapper.fromEntity(entity));
   }
 

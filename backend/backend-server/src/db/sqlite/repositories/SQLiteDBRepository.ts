@@ -3,7 +3,7 @@ import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
 
 import { 
-  DBEntityAlreadyExistsError,
+  DBEntityConstraintError,
   DBEntitySpec,
   DBFieldSpec,
   DBRepository,
@@ -80,7 +80,10 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     } catch (error) {
       if (error instanceof SQLiteError) {
         if (error.errno === SQLiteResultCodes.CONSTRAINT) {
-          throw new DBEntityAlreadyExistsError(this.getEntityName());
+          throw new DBEntityConstraintError(
+            this.getEntityName(),
+            this.primaryKeyAsString(entity),
+          );
         }
       }
       throw error;
@@ -111,7 +114,11 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     } catch (error) {
       if (error instanceof SQLiteError) {
         if (error.errno === SQLiteResultCodes.CONSTRAINT) {
-          throw new DBEntityAlreadyExistsError(this.getEntityName());
+          throw new DBEntityConstraintError(
+            this.getEntityName(),
+            this.primaryKeyAsString(entity),
+            `error code is ${error.code}`,
+          );
         }
       }
       throw error;

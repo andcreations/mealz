@@ -13,4 +13,7 @@ export class UpsertUserMealRequestV1 {
 
   // Meal
   public meal: MealWithoutId;
+
+  // Metadata
+  public metadata?: any;
 }

@@ -13,6 +13,7 @@ import { Meal, MealWithoutId } from '@mealz/backend-meals-common';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import {
   MealLog,
+  LogMealResponseStatusV1,
   LogMealRequestV1,
   LogMealResponseV1,
 } from '@mealz/backend-meals-log-service-api';
@@ -38,6 +39,7 @@ export class MealsLogCrudService {
     userId: string,
     meal: MealWithoutId,
     loggedAt: number,
+    dailyPlanMealName: string | undefined,
     context: Context,
   ): Promise<Pick<MealLog, 'id'>> {
     // saga context
@@ -79,6 +81,7 @@ export class MealsLogCrudService {
               {
                 mealId: sagaContext.newMealId,
                 userId,
+                dailyPlanMealName,
                 loggedAt,
               },
               context,
@@ -109,6 +112,7 @@ export class MealsLogCrudService {
     userId: string,
     loggedAt: number,
     meal: MealWithoutId,
+    dailyPlanMealName: string | undefined,
     context: Context,
   ): Promise<void> {
     // saga context
@@ -183,6 +187,7 @@ export class MealsLogCrudService {
                 id: mealLogId,
                 mealId: sagaContext.originalMealLog.mealId,
                 userId,
+                dailyPlanMealName,
                 loggedAt,
               },
               context,
@@ -216,8 +221,11 @@ export class MealsLogCrudService {
     // update existing meal log?
     const update = (
       latest &&
-      now - latest.loggedAt < this.upsertOnLogMealPeriod
+      (now - latest.loggedAt < this.upsertOnLogMealPeriod ||
+      latest.dailyPlanMealName === request.dailyPlanMealName)
     );
+
+    // update
     if (update) {
       this.logger.debug(`Updating meal log`, {
         ...context,
@@ -230,9 +238,13 @@ export class MealsLogCrudService {
         request.userId,
         now,
         request.meal,
+        request.dailyPlanMealName,
         context,
       );
-      return { id: latest.id };
+      return {
+        id: latest.id,
+        status: LogMealResponseStatusV1.Updated,
+      };
     }
 
     // create
@@ -245,8 +257,12 @@ export class MealsLogCrudService {
       request.userId,
       request.meal,
       now,
+      request.dailyPlanMealName,
       context,
     );
-    return { id };
+    return {
+      id,
+      status: LogMealResponseStatusV1.Created,
+    };
   }
 }
