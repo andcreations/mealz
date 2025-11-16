@@ -8,6 +8,7 @@ export class MealDBEntity {
   @DBField({
     name: 'id',
     type: DBFieldType.STRING,
+    primaryKey: true,
   })
   public id: string;
 

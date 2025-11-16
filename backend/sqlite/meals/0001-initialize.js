@@ -1,7 +1,7 @@
 async function up(db) {
   await db.run(`
     CREATE TABLE Meals (
-      id TEXT PRIMARY KEY,
+      id TEXT PRIMARY KEY UNIQUE NOT NULL,
       detailsVersion INTEGER NOT NULL,
       details BLOB NOT NULL
     );

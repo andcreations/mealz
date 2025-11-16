@@ -1,64 +1,71 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
+import { LoadStatus } from '../../common';
+import { Log } from '../../log';
 import { useTranslations } from '../../i18n';
 import { usePatchState, useService } from '../../hooks';
-import { useBusEventListener } from '../../bus';
 import { Center, LoaderType } from '../../components';
 import { PageLoader, PageWrapper } from '../../page';
-import {
-  IngredientsCrudService,
-  IngredientsLoadStatus,
-  IngredientsTopics,
-} from '../../ingredients';
+import { IngredientsCrudService } from '../../ingredients';
+import { MealsDailyPlanService } from '../../meals';
 import { MealPlanner } from '../components';
 import { ChefPageTranslations } from './ChefPage.translations';
 
 interface ChefPageState {
-  ingredientsLoadStatus: IngredientsLoadStatus;
+  loadStatus: LoadStatus;
+  ingredients?: GWIngredient[];
 }
 
 export function ChefPage() {
   const ingredientsCrudService = useService(IngredientsCrudService);
+  const mealsDailyPlanService = useService(MealsDailyPlanService);
 
   const [state, setState] = useState<ChefPageState>({
-    ingredientsLoadStatus: ingredientsCrudService.getLoadStatus(),
+    loadStatus: LoadStatus.Loading,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(ChefPageTranslations);
 
+  // initial load
   useEffect(
     () => {
-      patchState({
-        ingredientsLoadStatus: ingredientsCrudService.getLoadStatus(),
+      Promise.all([
+        Log.logAndRethrow(
+          () => ingredientsCrudService.loadIngredients(),
+          'Failed to load ingredients',
+        ),
+      ])
+      .then(([ingredients]) => {
+        patchState({
+          loadStatus: LoadStatus.Loaded,
+          ingredients,
+        });
+      })
+      .catch(() => {
+        patchState({
+          loadStatus: LoadStatus.FailedToLoad,
+        });
       });
     },
     [],
-  );
-  useBusEventListener(
-    IngredientsTopics.IngredientsLoadStatusChanged,
-    () => {
-      patchState({
-        ingredientsLoadStatus: ingredientsCrudService.getLoadStatus(),
-      });
-    }
-  );
+  )
 
-  const { ingredientsLoadStatus } = state;
   return (
     <PageWrapper title={translate('title')}>
       <Center>
-        { ingredientsLoadStatus === IngredientsLoadStatus.Loaded &&
+        { state.loadStatus === LoadStatus.Loaded &&
           <MealPlanner/>
         }
-        { ingredientsLoadStatus === IngredientsLoadStatus.Loading &&
+        { state.loadStatus === LoadStatus.Loading &&
           <PageLoader
             type={LoaderType.Info}
             title={translate('hang-tight')}
             subTitle={translate('loading-ingredients')}
           />
         }
-        { ingredientsLoadStatus === IngredientsLoadStatus.FailedToLoad &&
+        { state.loadStatus === LoadStatus.FailedToLoad &&
           <PageLoader
             type={LoaderType.Error}
             title={translate('try-again-later')}

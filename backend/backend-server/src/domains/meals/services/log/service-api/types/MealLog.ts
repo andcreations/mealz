@@ -6,7 +6,10 @@ export class MealLog {
   public userId: string;
 
   // Meal identifier
-  public mealId: string;  
+  public mealId: string; 
+  
+  // Daily plan meal name
+  public dailyPlanMealName?: string;
 
   // Timestamp (UTC) when the meal was logged
   public loggedAt: number;

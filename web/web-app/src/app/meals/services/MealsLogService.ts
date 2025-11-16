@@ -10,7 +10,7 @@ import {
   MealsLogV1API,
 } from '@mealz/backend-meals-log-gateway-api';
 
-import { SystemService } from '../../system';
+import { DateService, SystemService } from '../../system';
 import { Log } from '../../log';
 import { GWMacrosSummaryWithDayOfWeek } from '../types';
 
@@ -19,16 +19,23 @@ export class MealsLogService {
   public constructor(
     private readonly http: HTTPWebClientService,
     private readonly systemService: SystemService,
+    private readonly dateService: DateService,
   ) {}
 
-  public async logMeal(meal: GWMealWithoutId): Promise<void> {
-    await this.http.post<LogMealGWRequestV1, LogMealGWResponseV1>(
+  public async logMeal(
+    meal: GWMealWithoutId,
+    dailyPlanMealName?: string,
+  ): Promise<LogMealGWResponseV1> {
+    const response = await this.http.post<
+    LogMealGWRequestV1, LogMealGWResponseV1
+    >(
       MealsLogV1API.url.logMealV1(),
-      { meal },
+      { meal, dailyPlanMealName },
     );
+    return response.data;
   }
 
-  private async summarize(
+  public async summarize(
     fromDate: number,
     toDate: number,
   ): Promise<GWMacrosSummary> {
@@ -38,18 +45,18 @@ export class MealsLogService {
     return data.summary;
   }
 
-  private getTodayFromToDate(): { fromDate: number, toDate: number } {
-    const timeZone = this.systemService.getTimeZone();
-    const now = DateTime.now().setZone(timeZone);
+  // private getTodayFromToDate(): { fromDate: number, toDate: number } {
+  //   const timeZone = this.systemService.getTimeZone();
+  //   const now = DateTime.now().setZone(timeZone);
 
-    const fromDate = now.startOf('day').toMillis();
-    const toDate = now.endOf('day').toMillis();
+  //   const fromDate = now.startOf('day').toMillis();
+  //   const toDate = now.endOf('day').toMillis();
 
-    return { fromDate, toDate };
-  }
+  //   return { fromDate, toDate };
+  // }
 
   public async fetchTodaySummary(): Promise<GWMacrosSummary> {
-    const { fromDate, toDate } = this.getTodayFromToDate();
+    const { fromDate, toDate } = this.dateService.getTodayFromToDate();
     Log.debug(
       `Summarizing today's meal log from ` +
       `${new Date(fromDate).toISOString()} to ` +

@@ -7,4 +7,7 @@ export class LogMealRequestV1 {
 
   // Meal
   public meal: MealWithoutId;
+
+  // Daily plan meal name
+  public dailyPlanMealName?: MealLog['dailyPlanMealName'];
 }

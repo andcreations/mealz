@@ -36,6 +36,7 @@ export class GWUserMealMapper {
         userId: userMeal.userId,
         typeId: userMeal.typeId,
         meal: this.gwMealMapper.fromMeal(meal),
+        metadata: userMeal.metadata,
       }
     });
   }

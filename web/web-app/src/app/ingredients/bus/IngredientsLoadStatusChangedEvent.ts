@@ -1,5 +1,5 @@
-import { IngredientsLoadStatus } from '../types';
+import { LoadStatus } from '../../common';
 
 export interface IngredientsLoadStatusChangedEvent {
-  ingredientsLoadStatus: IngredientsLoadStatus;
+  ingredientsLoadStatus: LoadStatus;
 }

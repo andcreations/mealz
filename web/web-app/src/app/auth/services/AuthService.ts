@@ -1,10 +1,10 @@
 import { Service } from '@andcreations/common';
 import { HTTPWebClientService } from '@andcreations/web-common';
 import {
-  UsersAuthAPI,
   UserAuthGWRequestV1,
   UserAuthGWResponseV1,
   CheckUserAuthGWResponseV1,
+  UsersAuthV1API,
 } from '@mealz/backend-users-auth-gateway-api';
 
 import { Log } from '../../log';
@@ -13,7 +13,6 @@ import { AuthTopics } from '../bus';
 
 @Service()
 export class AuthService {
-  // private signedIn = false;
   private userId: string | undefined;
 
   public constructor(
@@ -25,18 +24,16 @@ export class AuthService {
     const response = await this.http.post<
       UserAuthGWRequestV1,
       UserAuthGWResponseV1
-    >(UsersAuthAPI.url.authV1(), {
+    >(UsersAuthV1API.url.authV1(), {
       email,
       password,
     });
-    // this.signedIn = true;
     this.userId = response.data.userId;
     this.notifySignedIn();
   }
 
   public async signOut(): Promise<void> {
-    await this.http.delete<void>(UsersAuthAPI.url.signOutV1());
-    // this.signedIn = false;
+    await this.http.delete<void>(UsersAuthV1API.url.signOutV1());
     this.userId = undefined;
   }
 
@@ -44,7 +41,7 @@ export class AuthService {
     Log.debug('Checking user signed in');
     try {
       const response = await this.http.get<CheckUserAuthGWResponseV1>(
-        UsersAuthAPI.url.checkV1()
+        UsersAuthV1API.url.checkV1()
       );
       if (response.status === 200) {
         Log.debug('User already signed in');

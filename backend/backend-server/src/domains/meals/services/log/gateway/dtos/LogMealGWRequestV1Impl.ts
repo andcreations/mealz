@@ -1,4 +1,9 @@
-import { IsDefined, ValidateNested } from 'class-validator';
+import { 
+  IsDefined,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { GWMealWithoutIdImpl } from '@mealz/backend-meals-gateway-common';
@@ -12,4 +17,11 @@ export class LogMealGWRequestV1Impl implements LogMealGWRequestV1 {
   @ValidateNested()
   @Type(() => GWMealWithoutIdImpl)
   public meal: GWMealWithoutIdImpl;
+
+  @ApiProperty({
+    description: 'The daily plan meal name'
+  })
+  @IsOptional()
+  @IsString()
+  public dailyPlanMealName?: string;
 }

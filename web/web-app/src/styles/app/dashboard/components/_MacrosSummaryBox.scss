@@ -50,3 +50,18 @@ $mealz-macros-summary-box-bg-opacity: 1.0;
   color: $mealz-theme-color-fg-dark;
   padding-left: 0.25rem;
 }
+
+.mealz-macros-summary-box-goal-container {
+  @include mealz-font-tiny();
+}
+
+.mealz-macros-summary-box-goal-label {
+  margin-top: 0.25rem;
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-bg;
+  text-align: center;
+}
+
+.mealz-macros-summary-box-goal-label-error {
+  color: $mealz-theme-color-error;
+}

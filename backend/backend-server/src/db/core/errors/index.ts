@@ -2,6 +2,7 @@ export * from './DBEntitySpecNotFoundError';
 export * from './DBEntitySpecAlreadyExistsError';
 export * from './DBFieldSpecAlreadyExistsError';
 export * from './DBEntityNotFoundError';
+export * from './DBEntityConstraintError';
 export * from './InvalidDBFieldTypeError';
 export * from './MissingRequiredDBFieldError';
 export * from './DBEntityAlreadyExistsError';

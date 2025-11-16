@@ -4,13 +4,10 @@
   "description": "Mealz backend",
   "main": "dist/index.js",
   "scripts": {
-    "copy-files": "copyfiles -u 1 ./src/**/*.proto ./dist",
     "build": "nest build",
     "clean": "rm -rf node_modules dist",
     "test": "jest",
-    "prestart": "npm run copy-files",
     "start": "nest start",
-    "prestart:dev": "npm run copy-files",
     "start:dev": "nest start --watch"
   },
   "dependencies": {

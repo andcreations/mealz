@@ -21,7 +21,7 @@ import {
   Roles,
   setCookie,
 } from '@mealz/backend-gateway-common';
-import { USERS_AUTH_URL } from '@mealz/backend-users-auth-gateway-api';
+import { USERS_AUTH_V1_URL } from '@mealz/backend-users-auth-gateway-api';
 
 import {
   UserAuthGWRequestV1Impl,
@@ -31,13 +31,13 @@ import {
 import { ACCESS_TOKEN_COOKIE_MAX_AGE } from '../consts';
 import { UserAuthGWService } from '../services';
 
-@Controller(USERS_AUTH_URL)
+@Controller(USERS_AUTH_V1_URL)
 export class UserAuthGWController {
   public constructor(
     private readonly userAuthGWService: UserAuthGWService,
   ) {}
 
-  @Post('v1')
+  @Post('')
   @HttpCode(HttpStatus.OK)
   public async signInV1(
     @Body() gwRequest: UserAuthGWRequestV1Impl,
@@ -67,7 +67,7 @@ export class UserAuthGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Delete('v1')
+  @Delete('')
   @HttpCode(HttpStatus.OK)
   public async signOutV1(
     @Res({ passthrough: true }) response: Response | FastifyReply,
@@ -88,7 +88,7 @@ export class UserAuthGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Get('check/v1')
+  @Get('check')
   @HttpCode(HttpStatus.OK)
   public async checkV1(
     @GWUser() gwUser: AuthUser,

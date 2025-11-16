@@ -36,4 +36,10 @@ export class UpsertUserMealGWRequestV1Impl
   @ValidateNested()
   @Type(() => GWMealWithoutIdImpl)
   public meal: GWMealWithoutIdImpl;
+
+  @ApiProperty({
+    description: 'Metadata'
+  })
+  @IsOptional()
+  public metadata?: any;
 }

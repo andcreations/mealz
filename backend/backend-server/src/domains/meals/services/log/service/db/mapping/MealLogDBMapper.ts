@@ -5,12 +5,13 @@ import { MealLogDBEntity } from '../entities';
 
 @Injectable()
 export class MealLogDBMapper {
-  public toEntity(userMeal: MealLog): MealLogDBEntity {
+  public toEntity(mealLog: MealLog): MealLogDBEntity {
     return {
-      id: userMeal.id,
-      userId: userMeal.userId,
-      mealId: userMeal.mealId,
-      loggedAt: userMeal.loggedAt,
+      id: mealLog.id,
+      userId: mealLog.userId,
+      mealId: mealLog.mealId,
+      dailyPlanMealName: mealLog.dailyPlanMealName,
+      loggedAt: mealLog.loggedAt,
     };
   }
 
@@ -22,6 +23,7 @@ export class MealLogDBMapper {
       id: entity.id,
       userId: entity.userId,
       mealId: entity.mealId,
+      dailyPlanMealName: entity.dailyPlanMealName,
       loggedAt: entity.loggedAt,
     }
   }

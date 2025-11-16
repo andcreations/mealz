@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslations } from '../../i18n';
 import { useService } from '../../hooks';
 import { PageWrapper } from '../../page';
-import { MealsLogService } from '../../meals';
+import { DateService } from '../../system';
 import { 
   DashboardSection,
   DashboardSectionSeparator,
@@ -13,8 +13,10 @@ import { DailySummary, WeeklySummary } from '../sections';
 import { DashboardPageTranslations } from './DashboardPage.translations';
 
 export function DashboardPage() {
-  const mealsLogService = useService(MealsLogService);
+  const dateService = useService(DateService);
   const translate = useTranslations(DashboardPageTranslations);
+
+  const { fromDate, toDate } = dateService.getTodayFromToDate();
 
   return (
     <PageWrapper title={translate('title')}>
@@ -23,7 +25,8 @@ export function DashboardPage() {
           title={translate('today-summary-title')}
         />
         <DailySummary
-          readSummaryFunc={() => mealsLogService.fetchTodaySummary()}
+          fromDate={fromDate}
+          toDate={toDate}
         />
       </DashboardSection>
       <DashboardSectionSeparator/>

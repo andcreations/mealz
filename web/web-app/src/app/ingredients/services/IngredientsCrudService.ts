@@ -12,18 +12,19 @@ import {
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
 import { Log } from '../../log';
+import { LoadStatus } from '../../common';
 import { BusService } from '../../bus';
 import { AuthService } from '../../auth';
 import { AuthTopics } from '../../auth';
 import { IngredientsLoadStatusChangedEvent, IngredientsTopics } from '../bus';
-import { IngredientsLoadStatus } from '../types';
 
 @Service()
 @BusListener()
 export class IngredientsCrudService implements OnBootstrap {
-  private loadStatus = IngredientsLoadStatus.Loading;
+  private loadStatus = LoadStatus.Loading;
   private ingredients: GWIngredient[] | undefined;
   private ingredientsById: Record<string, GWIngredient> = {};
+  private pendingLoads: PendingLoad[] = [];
 
   public constructor(
     private readonly http: HTTPWebClientService,
@@ -48,10 +49,18 @@ export class IngredientsCrudService implements OnBootstrap {
   private async readAllIngredients(): Promise<void> {
     try {
       await this.doReadAllIngredients();
-      this.changeLoadStatus(IngredientsLoadStatus.Loaded);
+      this.changeLoadStatus(LoadStatus.Loaded);
+      this.pendingLoads.forEach(pendingLoad => {
+        pendingLoad.resolve(this.getIngredients());
+      });
     } catch (error) {
-      this.changeLoadStatus(IngredientsLoadStatus.FailedToLoad);
+      this.changeLoadStatus(LoadStatus.FailedToLoad);
       Log.error('Failed to read all ingredients', error);
+      this.pendingLoads.forEach(pendingLoad => {
+        pendingLoad.reject(error);
+      });
+    } finally {
+      this.pendingLoads = [];
     }
   }
 
@@ -90,7 +99,7 @@ export class IngredientsCrudService implements OnBootstrap {
     });
   }
 
-  private changeLoadStatus(loadStatus: IngredientsLoadStatus): void {
+  private changeLoadStatus(loadStatus: LoadStatus): void {
     this.loadStatus = loadStatus;
 
   // notify
@@ -100,12 +109,22 @@ export class IngredientsCrudService implements OnBootstrap {
     this.bus.emit(IngredientsTopics.IngredientsLoadStatusChanged, event);
   }
 
-  public getLoadStatus(): IngredientsLoadStatus {
+  public async loadIngredients(): Promise<GWIngredient[]> {
+    if (this.loaded()) {
+      return this.getIngredients();
+    }
+
+    return new Promise<GWIngredient[]>((resolve, reject) => {
+      this.pendingLoads.push({ resolve, reject });
+    });
+  }
+
+  public getLoadStatus(): LoadStatus {
     return this.loadStatus;
   }
 
   public loaded(): boolean {
-    return this.getLoadStatus() === IngredientsLoadStatus.Loaded;
+    return this.getLoadStatus() === LoadStatus.Loaded;
   }
 
   public getIngredients(): GWIngredient[] {
@@ -115,4 +134,9 @@ export class IngredientsCrudService implements OnBootstrap {
   public getById(id: string): GWIngredient | undefined {
     return this.ingredientsById[id];
   }
+}
+
+interface PendingLoad {
+  resolve: (value: GWIngredient[]) => void;
+  reject: (reason?: any) => void;
 }

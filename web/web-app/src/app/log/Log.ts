@@ -24,4 +24,16 @@ export class Log {
   static quote(msg: string): string {
     return `"${msg}"`;
   }
+
+  static logAndRethrow<T>(
+    func: () => Promise<T>,
+    errorMsg?: string,
+  ): Promise<T> {
+    try {
+      return func();
+    } catch (error) {
+      this.error(errorMsg ?? 'Caught error during async function call', error);
+      throw error;
+    }
+  }
 }

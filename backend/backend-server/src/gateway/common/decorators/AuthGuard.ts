@@ -61,8 +61,7 @@ export class AuthGuard implements CanActivate {
     });
   }
 
-  /** */
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     this.authorize(context, (request.cookies ?? {})[ACCESS_TOKEN_COOKIE_NAME]);
     return true;

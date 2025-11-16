@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ifDefined } from '@mealz/backend-shared';
 import { InternalError, MealzError } from '@mealz/backend-common';
 import {
   FactId,
@@ -18,7 +19,6 @@ import {
   GWProduct,
   GWUnitPer100,
 } from '@mealz/backend-ingredients-gateway-api';
-import { ifDefined } from '../../../../shared';
 
 @Injectable()
 export class GWIngredientMapper {

@@ -6,14 +6,16 @@ import {
   SummarizeMealLogRequestV1,
   SummarizeMealLogResponseV1,
 } from '@mealz/backend-meals-log-service-api';
-import { LogMealGWRequestV1 } from '@mealz/backend-meals-log-gateway-api';
+import { LogMealGWRequestV1, LogMealGWResponseV1 } from '@mealz/backend-meals-log-gateway-api';
 import { roundToTwoDecimals } from '@mealz/backend-gateway-common';
 
 import { SummarizeMealLogQueryParamsV1 } from '../dtos';
+import { GWMealLogMapper } from './GWMealLogMapper';
 
 @Injectable()
 export class MealsLogGWService {
   public constructor(
+    private readonly gwMealLogMapper: GWMealLogMapper,
     private readonly mealsLogTransporter: MealsLogTransporter,
   ) {}
 
@@ -21,12 +23,20 @@ export class MealsLogGWService {
     gwRequest: LogMealGWRequestV1,
     userId: string,
     context: Context,
-  ): Promise<void> {
+  ): Promise<LogMealGWResponseV1> {
     const request: LogMealRequestV1 = {
       userId,
       meal: gwRequest.meal,
+      dailyPlanMealName: gwRequest.dailyPlanMealName,
     };
-    await this.mealsLogTransporter.logMealV1(request, context);
+    const { id, status } = await this.mealsLogTransporter.logMealV1(
+      request,
+      context,
+    );
+    return {
+      id,
+      status: this.gwMealLogMapper.fromStatus(status),
+    };
   }
 
   public async summarizeMacrosV1(

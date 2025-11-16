@@ -1,2 +1,2 @@
 export * from './dtos';
-export * from './UsersAuthAPI';
+export * from './UsersAuthV1API';

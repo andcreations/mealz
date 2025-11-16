@@ -12,10 +12,11 @@ import {
 import { InvalidEmailOrPasswordError } from '../errors';
 import { comparePassword } from '../utils';
 import { UsersAuthRepository } from '../repositories';
+import { TimePeriod } from '@andcreations/common';
 
 @Injectable()
 export class UsersAuthService {
-  private static readonly ACCESS_TOKEN_PERIOD = '365h';
+  private static readonly ACCESS_TOKEN_PERIOD = '365d';
 
   private readonly jwtSecret: string;
   private readonly jwtAccessTokenPeriod: number;
@@ -25,7 +26,7 @@ export class UsersAuthService {
   ) {
     this.jwtSecret = requireStrEnv('MEALZ_JWT_SECRET');
     this.jwtAccessTokenPeriod = this.toSeconds(
-      ms(UsersAuthService.ACCESS_TOKEN_PERIOD),
+      TimePeriod.fromStr(UsersAuthService.ACCESS_TOKEN_PERIOD)
     );
   }
 

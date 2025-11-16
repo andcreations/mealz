@@ -41,7 +41,7 @@ export class MealsDailyPlanGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Post('create')
+  @Post('')
   public async createV1(
     @Body() gwRequest: CreateMealDailyPlanGWRequestV1Impl,
     @GWUser() gwUser: AuthUser,
