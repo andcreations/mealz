@@ -37,6 +37,7 @@ interface MealPlannerState {
     ingredients: MealPlannerIngredient[];
     calories: string;
   },
+  dailyPlanMeaCalories: string;
   dailyPlanMealName?: string;
 }
 
@@ -54,6 +55,7 @@ export function MealPlanner() {
     ingredients: [],
     calories: '',
     calculateAmountsError: null,
+    dailyPlanMeaCalories: '',
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -90,6 +92,7 @@ export function MealPlanner() {
           ingredients,
           {
             loadStatus: LoadStatus.Loaded,
+            dailyPlanMeaCalories: caloriesStr,
             dailyPlanMealName: mealsDailyPlanService.getMealName(
               mealDailyPlan,
               Date.now(),
@@ -308,7 +311,7 @@ export function MealPlanner() {
       setState(prevState => ({
         ...prevState,
         ingredients: [],
-        calories: '',
+        calories: prevState.dailyPlanMeaCalories,
         clearUndo: {
           ingredients: prevState.ingredients,
           calories: prevState.calories,

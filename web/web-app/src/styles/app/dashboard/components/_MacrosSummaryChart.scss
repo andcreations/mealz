@@ -67,5 +67,8 @@ $mealz-macros-summary-inactive-bar-opacity: 0.3;
 }
 
 .mealz-macros-summary-chart-x-axis {
-  @include mealz-font-tiny();
+  .recharts-cartesian-axis-tick-value {
+    fill: $mealz-theme-color-bg;
+    @include mealz-font-tiny();
+  }
 }

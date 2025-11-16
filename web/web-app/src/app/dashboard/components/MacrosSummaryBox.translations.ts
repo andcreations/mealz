@@ -5,4 +5,5 @@ export const MacrosSummaryBoxTranslations: Translations = {
   'carbs': 'Carbs',
   'protein': 'Protein',
   'fat': 'Fat',
+  'goal': 'goal',
 }

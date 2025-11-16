@@ -4,6 +4,7 @@ import { HTTPWebClientService } from '@andcreations/web-common';
 import {
   GWMealDailyPlan,
   GWMealDailyPlanEntry,
+  GWMealDailyPlanGoals,
   MealsDailyPlanV1API,
   ReadMealDailyPlansGWResponseV1,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
@@ -22,6 +23,31 @@ export class MealsDailyPlanService {
       MealsDailyPlanV1API.url.readManyV1({ limit: 1 }),
     );
     return data.mealDailyPlans[0];
+  }
+
+  public async readCurrentDailyGoals(
+  ): Promise<GWMealDailyPlanGoals | undefined> {
+    const { data } = await this.http.get<ReadMealDailyPlansGWResponseV1>(
+      MealsDailyPlanV1API.url.readManyV1({ limit: 1 }),
+    );
+    const plan = data.mealDailyPlans[0];
+    if (!plan) {
+      return undefined;
+    }
+
+    const goals: GWMealDailyPlanGoals = {
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+    };
+    plan.entries.forEach(entry => {
+      goals.calories += entry.goals.calories;
+      goals.protein += entry.goals.protein;
+      goals.carbs += entry.goals.carbs;
+      goals.fat += entry.goals.fat;
+    });
+    return goals;
   }
 
   public getEntry(
@@ -52,7 +78,7 @@ export class MealsDailyPlanService {
       }
     }
 
-    // last entry where start hour:minute is 00:00
+    // last entry where the end hour:minute is 00:00
     const lastEntry = entries[entries.length - 1];
     const startMinute = minute(lastEntry.startHour, lastEntry.startMinute);
     if (nowMinute >= startMinute) {
