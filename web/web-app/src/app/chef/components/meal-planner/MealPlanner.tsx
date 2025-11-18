@@ -37,7 +37,7 @@ interface MealPlannerState {
     ingredients: MealPlannerIngredient[];
     calories: string;
   },
-  dailyPlanMeaCalories: string;
+  dailyPlanMealCalories: string;
   dailyPlanMealName?: string;
 }
 
@@ -55,7 +55,7 @@ export function MealPlanner() {
     ingredients: [],
     calories: '',
     calculateAmountsError: null,
-    dailyPlanMeaCalories: '',
+    dailyPlanMealCalories: '',
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -83,16 +83,20 @@ export function MealPlanner() {
         ),
       ])
       .then(([userMeal, mealDailyPlan]) => {
-        const { ingredients, caloriesStr } = userMealDraft.resolve(
+        const {
+          ingredients,
+          caloriesStr,
+          dailyPlanMealCalories,
+        } = userMealDraft.resolve(
           userMeal,
-          mealDailyPlan
+          mealDailyPlan,
         );
         recalculate(
           caloriesStr,
           ingredients,
           {
             loadStatus: LoadStatus.Loaded,
-            dailyPlanMeaCalories: caloriesStr,
+            dailyPlanMealCalories,
             dailyPlanMealName: mealsDailyPlanService.getMealName(
               mealDailyPlan,
               Date.now(),
@@ -171,12 +175,14 @@ export function MealPlanner() {
     ): {
       ingredients: MealPlannerIngredient[];
       caloriesStr: string;
+      dailyPlanMealCalories: string;
     } => {
       const entry = mealsDailyPlanService.getEntry(mealDailyPlan, Date.now());
       if (!userMeal) {
         return {
           ingredients: [],
           caloriesStr: entry?.goals.calories.toString() ?? '',
+          dailyPlanMealCalories: '',
         };
       }
 
@@ -186,6 +192,7 @@ export function MealPlanner() {
         return {
           ingredients: [],
           caloriesStr: entry.goals.calories.toString(),
+          dailyPlanMealCalories: entry.goals.calories.toString(),
         };
       }
 
@@ -196,6 +203,7 @@ export function MealPlanner() {
       return {
         ingredients,
         caloriesStr,
+        dailyPlanMealCalories: entry.goals.calories.toString(),
       };
     },
 
@@ -311,7 +319,7 @@ export function MealPlanner() {
       setState(prevState => ({
         ...prevState,
         ingredients: [],
-        calories: prevState.dailyPlanMeaCalories,
+        calories: prevState.dailyPlanMealCalories,
         clearUndo: {
           ingredients: prevState.ingredients,
           calories: prevState.calories,
