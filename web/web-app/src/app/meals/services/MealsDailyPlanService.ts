@@ -50,6 +50,16 @@ export class MealsDailyPlanService {
     return goals;
   }
 
+  public async readCurrentEntry(): Promise<GWMealDailyPlanEntry | undefined> {
+    const plan = await this.readCurrentDailyPlan();
+    return this.getEntry(plan, Date.now());
+  }
+
+  public async readCurrentGoals(): Promise<GWMealDailyPlanGoals | undefined> {
+    const entry = await this.readCurrentEntry();
+    return entry?.goals;
+  }
+
   public getEntry(
     plan: GWMealDailyPlan | undefined,
     timestamp: number,

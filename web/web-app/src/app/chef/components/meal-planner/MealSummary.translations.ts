@@ -13,4 +13,8 @@ export const MealSummaryTranslations: Translations = {
   'grams': 'g',
   'more-than-planned': 'More than planned',
   'less-than-planned': 'Less than planned',
+  'calories-goal': 'Calories goal',
+  'carbs-goal': 'Carbs goal',
+  'fat-goal': 'Fat goal',
+  'protein-goal': 'Protein goal',
 };

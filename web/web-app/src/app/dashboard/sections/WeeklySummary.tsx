@@ -14,7 +14,7 @@ import { WeeklySummaryTranslations } from './WeeklySummary.translations';
 
 interface WeeklySummaryState {
   summaries?: GWMacrosSummaryWithDayOfWeek[];
-  summariesLoadStatus: LoadStatus;
+  loadStatus: LoadStatus;
 }
 
 export function WeeklySummary() {
@@ -23,7 +23,7 @@ export function WeeklySummary() {
   const translate = useTranslations(WeeklySummaryTranslations);
 
   const [state, setState] = useState<WeeklySummaryState>({
-    summariesLoadStatus: LoadStatus.Loading,
+    loadStatus: LoadStatus.Loading,
   });
   const patchState = usePatchState(setState);
 
@@ -33,7 +33,7 @@ export function WeeklySummary() {
         .then((summaries) => {
           patchState({
             summaries,
-            summariesLoadStatus: LoadStatus.Loaded,
+            loadStatus: LoadStatus.Loaded,
           });
         })
         .catch(error => {
@@ -42,7 +42,7 @@ export function WeeklySummary() {
             translate('failed-to-fetch-weekly-summary')
           );
           patchState({
-            summariesLoadStatus: LoadStatus.FailedToLoad,
+            loadStatus: LoadStatus.FailedToLoad,
           });
         });
     },
@@ -67,10 +67,10 @@ export function WeeklySummary() {
   return (
     <div className='mealz-weekly-summary'>
       <LoaderByStatus
-        loadStatus={state.summariesLoadStatus}
+        loadStatus={state.loadStatus}
         size={LoaderSize.Small}
       />
-      { state.summariesLoadStatus === LoadStatus.Loaded &&
+      { state.loadStatus === LoadStatus.Loaded &&
         <MacrosSummaryChart data={summariesToChartData()}/>
       }
     </div>
