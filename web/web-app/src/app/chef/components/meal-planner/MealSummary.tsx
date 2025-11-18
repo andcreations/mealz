@@ -1,15 +1,23 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames';
+import {
+  GWMealDailyPlanGoals,
+} from '@mealz/backend-meals-daily-plan-gateway-api';
 
-import { MealPlannerIngredient, MealSummaryResult } from '../../types';
+import { LoadStatus } from '../../../common';
+import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { UserSettingsService } from '../../../user';
+import { MealsDailyPlanService } from '../../../meals';
+import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealCalculator } from '../../services';
 import { MealSummaryTranslations } from './MealSummary.translations';
+import { LoaderByStatus, LoaderSize } from '../../../components';
 
 const MAX_CALORIES_DIFFERENCE = 20;
+const GOAL_ERROR_PERCENTAGE = 10;
 
 export interface MealSummaryProps {
   className?: string;
@@ -21,20 +29,42 @@ export interface MealSummaryProps {
 interface MealSummaryState {
   status: string | null;
   summary?: MealSummaryResult;
+  goals?: GWMealDailyPlanGoals;
+  loadStatus: LoadStatus;
 }
 
 export function MealSummary(props: MealSummaryProps) {
   const userSettings = useService(UserSettingsService);
+  const mealsDailyPlanService = useService(MealsDailyPlanService);
   const mealCalculator = useService(MealCalculator);
 
   const [state, setState] = useState<MealSummaryState>({
     status: null,
     summary: null,
+    loadStatus: LoadStatus.Loading,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealSummaryTranslations);
 
-  // initialize state
+  // initial read
+  useEffect(
+    () => {
+      Promise.all([
+        Log.logAndRethrow(
+          () => mealsDailyPlanService.readCurrentGoals(),
+          'Failed to read current goals',
+        ),
+      ])
+      .then(([goals]) => {
+        patchState({
+          goals,
+          loadStatus: LoadStatus.Loaded,
+        });
+      });
+    },
+    [],
+  );
+
   useEffect(
     () => {
       const summary = mealCalculator.summarize(props.ingredients);
@@ -47,7 +77,7 @@ export function MealSummary(props: MealSummaryProps) {
   );
 
   const renderFacts = () => {
-    const { summary } = state;
+    const { summary, goals } = state;
 
     const percentages = mealCalculator.calculateMacrosPercentages(
       summary.total.carbs,
@@ -146,16 +176,18 @@ export function MealSummary(props: MealSummaryProps) {
     const factsIf = (condition: boolean, facts: any[]) => {
       return condition ? facts : [];
     }
+    const ifDiffersFromGoal = (amount: number, goal: number) => {
+      const percent = Math.abs(amount - goal) / goal * 100;
+      return percent > GOAL_ERROR_PERCENTAGE;
+    }
 
     const difference = props.calories > 0
       ? summary.total.calories - props.calories
       : undefined;
-
     let moreThanPlanned: number;
     if (difference > MAX_CALORIES_DIFFERENCE) {
       moreThanPlanned = difference;
     }
-
     let lessThanPlanned: number;
     if (-difference > MAX_CALORIES_DIFFERENCE) {
       lessThanPlanned = -difference;
@@ -170,6 +202,21 @@ export function MealSummary(props: MealSummaryProps) {
           nameClassName: 'mealz-color-calories',
         },
       ),
+      ...factsIf(
+        !!goals,
+        addFact(
+          goals.calories,
+          'kcal',
+          'calories-goal',
+          {
+            tiny: true,
+            highlight: ifDiffersFromGoal(
+              summary.total.calories,
+              goals.calories,
+            ),
+          },
+        )
+      ),      
       ...factsIf(
         moreThanPlanned > 0,
         addFact(
@@ -203,7 +250,23 @@ export function MealSummary(props: MealSummaryProps) {
         {
           details: percentageToDetails(percentages.carbs),
           nameClassName: 'mealz-color-carbs',
-        }),
+        },
+      ),
+      ...factsIf(
+        !!goals,
+        addFact(
+          goals.carbs,
+          'g',
+          'carbs-goal',
+          {
+            tiny: true,
+            highlight: ifDiffersFromGoal(
+              summary.total.carbs,
+              goals.carbs,
+            ),
+          },
+        ),
+      ),      
       ...addFact(
         summary.total.sugars,
         'g',
@@ -211,7 +274,9 @@ export function MealSummary(props: MealSummaryProps) {
         {
           tiny: true,
           nameClassName: 'mealz-color-sugars',
-        }),
+        },
+      ),
+
       ...addSeparator(),
       ...addFact(
         summary.total.protein,
@@ -222,6 +287,22 @@ export function MealSummary(props: MealSummaryProps) {
            nameClassName: 'mealz-color-protein',
         }
       ),
+      ...factsIf(
+        !!goals,
+        addFact(
+          goals.protein,
+          'g',
+          'protein-goal',
+          {
+            tiny: true,
+            highlight: ifDiffersFromGoal(
+              summary.total.protein,
+              goals.protein,
+            ),
+          },
+        )
+      ),      
+
       ...addSeparator(),
       ...addFact(
         summary.total.totalFat,
@@ -231,6 +312,21 @@ export function MealSummary(props: MealSummaryProps) {
           details: percentageToDetails(percentages.fat),
           nameClassName: 'mealz-color-fat',
         }
+      ),
+      ...factsIf(
+        !!goals,
+        addFact(
+          goals.fat,
+          'g',
+          'fat-goal',
+          {
+            tiny: true,
+            highlight: ifDiffersFromGoal(
+              summary.total.totalFat,
+              goals.fat,
+            ),
+          },
+        )
       ),
       ...addFact(
         summary.total.monounsaturatedFat,
@@ -260,15 +356,23 @@ export function MealSummary(props: MealSummaryProps) {
 
   return (
     <div className={mealSummaryClassNames}>
-      { !!state.status &&
-        <div className='mealz-meal-summary-status'>
-          { state.status }
-        </div>
-      }
-      { !state.status && state.summary &&
-        <div className='mealz-meal-summary-facts'>
-          { renderFacts() }
-        </div>
+      <LoaderByStatus
+        loadStatus={state.loadStatus}
+        size={LoaderSize.Small}
+      />
+      { state.loadStatus === LoadStatus.Loaded &&
+        <>
+          { !!state.status &&
+            <div className='mealz-meal-summary-status'>
+              { state.status }
+            </div>
+          }
+          { !state.status && state.summary &&
+            <div className='mealz-meal-summary-facts'>
+              { renderFacts() }
+            </div>
+          }
+        </>
       }
     </div>
   );
