@@ -11,8 +11,8 @@ export interface PageWrapperProps {
 export function PageWrapper(props: React.PropsWithChildren<PageWrapperProps>) {
   return (
     <div className='mealz-page-wrapper'>
-      <Notifications/>
       <PageNavbar/>
+      <Notifications/>
       <div className='mealz-page-wrapper-content'>
         { !!props.title &&
           <PageHeader title={props.title}/>
