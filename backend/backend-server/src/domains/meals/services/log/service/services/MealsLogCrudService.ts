@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { TimePeriod } from '@andcreations/common';
+import { DateTime } from 'luxon';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
 import { 
   InternalError,
   MealzError,
-  requireStrEnv,
   Saga,
   SagaService,
 } from '@mealz/backend-common';
@@ -22,18 +21,12 @@ import { MealsLogCrudRepository } from '../repositories';
 
 @Injectable()
 export class MealsLogCrudService {
-  private readonly upsertOnLogMealPeriod: number;
-  
   public constructor(
     private readonly logger: Logger,
     private readonly sagaService: SagaService,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsLogCrudRepository: MealsLogCrudRepository,
-  ) {
-    this.upsertOnLogMealPeriod = TimePeriod.fromStr(
-      requireStrEnv('MEALZ_UPSERT_ON_LOG_MEAL_PERIOD')
-    );
-  }
+  ) {}
 
   private async createMealLog(
     userId: string,
@@ -218,12 +211,26 @@ export class MealsLogCrudService {
     );
     const now = Date.now();
 
+    let update = false;
     // update existing meal log?
-    const update = (
-      latest &&
-      (now - latest.loggedAt < this.upsertOnLogMealPeriod ||
-      latest.dailyPlanMealName === request.dailyPlanMealName)
-    );
+    if (latest) {
+      const FORMAT = 'yyyy-MM-dd';
+      const latestDay = DateTime.fromMillis(latest.loggedAt)
+        .setZone(request.timeZone)
+        .toFormat(FORMAT);
+      const nowDay = DateTime.fromMillis(now)
+        .setZone(request.timeZone)
+        .toFormat(FORMAT);
+      console.log(`latestDay: ${latestDay}, nowDay: ${nowDay}`);
+
+      // update if it's the same day and the same meal
+      if (
+        latestDay === nowDay &&
+        latest.dailyPlanMealName === request.dailyPlanMealName
+      ) {
+        update = true;
+      }
+    }
 
     // update
     if (update) {

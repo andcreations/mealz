@@ -1,23 +1,23 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { FastifyRequest, FastifyReply } from 'fastify';
 import { getLogger } from '../../../logger';
 
 @Injectable()
 export class RequestLogMiddleware implements NestMiddleware {
   public use(
-    request: FastifyRequest['raw'],
-    response: FastifyReply['raw'],
+    request: any,
+    response: any,
     next: () => void,
-  ) {
-    const url = (request as any).originalUrl; // it's there!
+  ): void {
+    const url = request.originalUrl; // it's there!
 
     // log only api requests
     if (!url.startsWith('/api/')) {
       return next();
     }
 
-    (request as any).mealzStartTime = Date.now();
-    const took = () => Date.now() - (request as any).mealzStartTime;
+    // duration
+    request.mealzStartTime = Date.now();
+    const duration = () => Date.now() - (request as any).mealzStartTime;
 
     const logResponse = () => {
       if ((response as any).mealzLogged === true) {
@@ -26,18 +26,26 @@ export class RequestLogMiddleware implements NestMiddleware {
       (response as any).mealzLogged = true;
 
       getLogger().debug('HTTP response', {
-        correlationId,
-        took: took(),
+        correlationId: request.correlationId,
+        duration: duration(),
         statusCode: response.statusCode,
         url,
       });
     };
 
-    const correlationId = (request as any).correlationId;
+    // body
+    const bodyMethods = ['POST', 'PUT', 'PATCH'];
+    let body: any = undefined;
+    if (bodyMethods.includes(request.method)) {
+      body = request.body;
+    }
+  
+    // log request
     getLogger().debug('HTTP request', {
-      correlationId,
+      correlationId: request.correlationId,
       method: request.method,
       url,
+      ...(body ? { body } : {}),
     });
 
     response.on('finish', logResponse);

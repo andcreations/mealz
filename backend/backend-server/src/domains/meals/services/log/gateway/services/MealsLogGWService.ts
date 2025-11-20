@@ -28,6 +28,7 @@ export class MealsLogGWService {
       userId,
       meal: gwRequest.meal,
       dailyPlanMealName: gwRequest.dailyPlanMealName,
+      timeZone: gwRequest.timeZone,
     };
     const { id, status } = await this.mealsLogTransporter.logMealV1(
       request,

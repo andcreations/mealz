@@ -30,7 +30,11 @@ export class MealsLogService {
     LogMealGWRequestV1, LogMealGWResponseV1
     >(
       MealsLogV1API.url.logMealV1(),
-      { meal, dailyPlanMealName },
+      {
+        meal,
+        dailyPlanMealName,
+        timeZone: this.systemService.getTimeZone(),
+      },
     );
     return response.data;
   }
@@ -44,17 +48,7 @@ export class MealsLogService {
     );
     return data.summary;
   }
-
-  // private getTodayFromToDate(): { fromDate: number, toDate: number } {
-  //   const timeZone = this.systemService.getTimeZone();
-  //   const now = DateTime.now().setZone(timeZone);
-
-  //   const fromDate = now.startOf('day').toMillis();
-  //   const toDate = now.endOf('day').toMillis();
-
-  //   return { fromDate, toDate };
-  // }
-
+  
   public async fetchTodaySummary(): Promise<GWMacrosSummary> {
     const { fromDate, toDate } = this.dateService.getTodayFromToDate();
     Log.debug(

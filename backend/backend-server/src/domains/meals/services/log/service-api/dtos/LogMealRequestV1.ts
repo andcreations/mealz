@@ -10,4 +10,7 @@ export class LogMealRequestV1 {
 
   // Daily plan meal name
   public dailyPlanMealName?: MealLog['dailyPlanMealName'];
+
+  // IANA time zone
+  public timeZone: string;
 }
