@@ -9,16 +9,24 @@ import {
 
 import { Log } from '../../log';
 import { BusService } from '../../bus';
+import { I18nService, TranslateFunc } from '../../i18n';
+import { NotificationsService } from '../../notifications';
 import { AuthTopics } from '../bus';
+import { AuthServiceTranslations } from './AuthService.translations';
 
 @Service()
 export class AuthService {
   private userId: string | undefined;
+  private readonly translate: TranslateFunc;
 
   public constructor(
     private readonly http: HTTPWebClientService,
+    private readonly i18n: I18nService,
     private readonly bus: BusService,
-  ) {}
+    private readonly notificationsService: NotificationsService,
+  ) {
+    this.translate = this.i18n.translateFunc(AuthServiceTranslations);
+  }
 
   public async signIn(email: string, password: string): Promise<void> {
     const response = await this.http.post<
@@ -35,6 +43,15 @@ export class AuthService {
   public async signOut(): Promise<void> {
     await this.http.delete<void>(UsersAuthV1API.url.signOutV1());
     this.userId = undefined;
+  }
+
+  public async signOutOrLogError(): Promise<void> {
+    try {
+      await this.signOut();
+    } catch (error) {
+      Log.error('Failed to sign out', error);
+      this.notificationsService.error(this.translate('failed-to-sign-out'));
+    }
   }
 
   public async checkSignedIn(): Promise<boolean> {

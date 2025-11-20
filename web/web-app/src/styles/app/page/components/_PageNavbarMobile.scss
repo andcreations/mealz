@@ -1,0 +1,16 @@
+.mealz-navbar-mobile {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  margin-left: 5%;
+  margin-right: 5%;
+  height: 100%;
+}
+
+.mealz-navbar-mobile-item {
+  font-size: 1.5rem !important;
+  cursor: pointer;
+  text-align: center;
+  flex-grow: 1;
+  text-shadow: 0.125rem 0.125rem 0 rgba(black, 0.5);
+}

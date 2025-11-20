@@ -1,5 +1,5 @@
 import { Service } from '@andcreations/common';
-import { Translations } from '../types';
+import { TranslateFunc, Translations } from '../types';
 
 @Service()
 export class I18nService {
@@ -18,5 +18,11 @@ export class I18nService {
     ...values: string[]
   ): string {
     return this.format(translations[key] ?? key, values || []);
+  }
+
+  public translateFunc(translations: Translations): TranslateFunc {
+    return (key: string, ...values: string[]) => {
+      return this.translate(translations, key, ...values);
+    };
   }
 }
