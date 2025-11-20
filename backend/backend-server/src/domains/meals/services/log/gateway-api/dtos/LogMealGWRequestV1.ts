@@ -6,4 +6,7 @@ export interface LogMealGWRequestV1 {
 
   // Daily plan meal name
   dailyPlanMealName?: string;
+
+  // IANA time zone
+  timeZone: string;
 }

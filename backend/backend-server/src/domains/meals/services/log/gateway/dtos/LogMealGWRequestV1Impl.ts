@@ -2,6 +2,7 @@ import {
   IsDefined,
   IsOptional,
   IsString,
+  IsTimeZone,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -24,4 +25,11 @@ export class LogMealGWRequestV1Impl implements LogMealGWRequestV1 {
   @IsOptional()
   @IsString()
   public dailyPlanMealName?: string;
+
+  @ApiProperty({
+    description: 'The IANA time zone'
+  })
+  @IsString()
+  @IsTimeZone()
+  public timeZone: string;
 }
