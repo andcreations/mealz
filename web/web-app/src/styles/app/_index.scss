@@ -4,7 +4,6 @@
 @import './flex';
 @import './font';
 @import './colors';
-@import './border';
 @import './breakpoints';
 
 @import './page/components/const';
@@ -43,6 +42,7 @@
 @import './dashboard/components/WeeklySummary';
 @import './dashboard/components/MacrosSummaryChart';
 
+@import './chef/components/meal-planner/MealNamePicker';
 @import './chef/components/meal-planner/IngredientsEditor';
 @import './chef/components/meal-planner/IngredientPicker';
 @import './chef/components/meal-planner/IngredientPickerWrapper';

@@ -1,0 +1,12 @@
+.mealz-meal-name-picker {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.mealz-meal-name-picker-meal-name {
+  padding: 0.5rem 1rem;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba($mealz-theme-color-border, 0.5);
+  }
+}

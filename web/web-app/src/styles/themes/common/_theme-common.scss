@@ -1,3 +1,6 @@
+@import './theme-palette';
+@import './border';
+
 @import '../../../../node_modules/bootstrap/scss/functions';
 @import '../../../../node_modules/bootstrap/scss/variables';
 @import '../../../../node_modules/bootstrap/scss/variables-dark';
@@ -6,7 +9,6 @@
 @import '../../../../node_modules/bootstrap/scss/utilities';
 @import '../../../../node_modules/bootstrap/scss/transitions';
 
-@import './theme-palette';
 @import './bootstrap-overrides';
 
 @import '../../../../node_modules/bootstrap/scss/root';
@@ -15,3 +17,4 @@
 @import '../../../../node_modules/bootstrap/scss/containers';
 @import '../../../../node_modules/bootstrap/scss/buttons';
 @import '../../../../node_modules/bootstrap/scss/forms';
+@import '../../../../node_modules/bootstrap/scss/modal';

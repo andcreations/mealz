@@ -24,6 +24,7 @@ import { MealPlannerActionBar } from './MealPlannerActionBar';
 import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
+import { MealNamePicker } from './MealNamePicker';
 
 enum Focus { Calories };
 
@@ -37,8 +38,11 @@ interface MealPlannerState {
     ingredients: MealPlannerIngredient[];
     calories: string;
   },
+  dailyMealPlan?: GWMealDailyPlan;
   dailyPlanMealCalories: string;
   dailyPlanMealName?: string;
+  fixedMealName: boolean;
+  showMealNamePicker: boolean;
 }
 
 export function MealPlanner() {
@@ -56,6 +60,8 @@ export function MealPlanner() {
     calories: '',
     calculateAmountsError: null,
     dailyPlanMealCalories: '',
+    fixedMealName: false,
+    showMealNamePicker: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -82,14 +88,15 @@ export function MealPlanner() {
           'Failed to read current daily plan',
         ),
       ])
-      .then(([userMeal, mealDailyPlan]) => {
+      .then(([userMeal, dailyMealPlan]) => {
         const {
           ingredients,
           caloriesStr,
+          dailyPlanMealName,
           dailyPlanMealCalories,
         } = userMealDraft.resolve(
           userMeal,
-          mealDailyPlan,
+          dailyMealPlan,
         );
         recalculate(
           caloriesStr,
@@ -97,10 +104,9 @@ export function MealPlanner() {
           {
             loadStatus: LoadStatus.Loaded,
             dailyPlanMealCalories,
-            dailyPlanMealName: mealsDailyPlanService.getMealName(
-              mealDailyPlan,
-              Date.now(),
-            ),
+            dailyMealPlan,
+            dailyPlanMealName,
+            fixedMealName: userMeal?.metadata?.fixedMealName ?? false,
           },
         );
       })
@@ -140,7 +146,12 @@ export function MealPlanner() {
       }
       userMealDraft.tryUpsert();
     },
-    [state.ingredients, state.calories, state.calculateAmountsError],
+    [
+      state.ingredients,
+      state.calories,
+      state.dailyPlanMealName,
+      state.calculateAmountsError,
+    ],
   )
 
   const recalculate = (
@@ -175,27 +186,44 @@ export function MealPlanner() {
     ): {
       ingredients: MealPlannerIngredient[];
       caloriesStr: string;
+      dailyPlanMealName: string;
       dailyPlanMealCalories: string;
     } => {
-      const entry = mealsDailyPlanService.getEntry(mealDailyPlan, Date.now());
+      const entry = mealsDailyPlanService.getEntryByTime(
+        mealDailyPlan,
+        Date.now(),
+      );
+      const dailyPlanMealNameByTime = mealsDailyPlanService.getMealName(
+        mealDailyPlan,
+        Date.now(),
+      );
+
       if (!userMeal) {
         return {
           ingredients: [],
           caloriesStr: entry?.goals.calories.toString() ?? '',
+          dailyPlanMealName: dailyPlanMealNameByTime,
           dailyPlanMealCalories: '',
         };
       }
 
-      // If the names are different, this means that this is another meal.
+      // If the names are different, but it's not a fixed meal name,
+      // then this means that this is another meal.
       // Clear the draft meal in this case.
-      if (userMeal && userMeal.metadata?.mealName !== entry?.mealName) {
+      if (
+        userMeal &&
+        userMeal.metadata?.mealName !== entry?.mealName &&
+        !userMeal.metadata?.fixedMealName
+      ) {
         return {
           ingredients: [],
           caloriesStr: entry.goals.calories.toString(),
+          dailyPlanMealName: dailyPlanMealNameByTime,
           dailyPlanMealCalories: entry.goals.calories.toString(),
         };
       }
 
+      // go with the draft user meal
       const ingredients = mealMapper.toMealPlannerIngredients(
         userMeal.meal.ingredients
       );     
@@ -203,6 +231,8 @@ export function MealPlanner() {
       return {
         ingredients,
         caloriesStr,
+        dailyPlanMealName:
+          userMeal.metadata?.mealName ?? dailyPlanMealNameByTime,
         dailyPlanMealCalories: entry.goals.calories.toString(),
       };
     },
@@ -211,12 +241,7 @@ export function MealPlanner() {
       if (state.calculateAmountsError) {
         return;
       }
-      const caloriesValue = calories.get();
-      if (!caloriesValue) {
-        userMealDraft.delete();
-        return;
-      } 
-      userMealDraft.upsert(caloriesValue, state.ingredients);
+      userMealDraft.upsert(calories.get(), state.ingredients);
     },
     
     upsert: (
@@ -224,7 +249,11 @@ export function MealPlanner() {
       ingredients: MealPlannerIngredient[],
     ) => {
       const gwMeal = mealMapper.toGWMeal(calories, ingredients);
-      mealsUserService.upsertUserDraftMeal(gwMeal, meal.name())
+      const metadata: UserDraftMealMetadata = {
+        mealName: state.dailyPlanMealName,
+        fixedMealName: state.fixedMealName,
+      };
+      mealsUserService.upsertUserDraftMeal(gwMeal, metadata)
         .then(() => {
           clearDirty();
         })
@@ -278,6 +307,61 @@ export function MealPlanner() {
 
     onBlur: () => {
       userMealDraft.tryUpsert();
+    },
+  };
+
+  const mealName = {
+    onShow: () => {
+      const names = mealName.getMealNames();
+      if (names.length === 0) {
+        return;
+      }
+      patchState({
+        showMealNamePicker: true,
+      });
+    },
+
+    onClose: () => {
+      patchState({
+        showMealNamePicker: false,
+      });
+    },
+
+    getMealNames: (): string[] => {
+      if (!state.dailyMealPlan) {
+        return [
+          translate('default-meal-name'),
+          translate('ad-hoc-meal-name'),
+        ];
+      }
+      return [
+        ...mealsDailyPlanService.getMealNames(state.dailyMealPlan),
+        translate('ad-hoc-meal-name'),
+      ];
+    },
+
+    onPick: (mealName: string) => {
+      if (mealName === state.dailyPlanMealName) {
+        return;
+      }
+      const entryByName = mealsDailyPlanService.getEntryByMealName(
+        state.dailyMealPlan,
+        mealName,
+      );
+      const entryByTime = mealsDailyPlanService.getEntryByTime(
+        state.dailyMealPlan,
+        Date.now(),
+      );
+      markDirty();
+      patchState({
+        dailyPlanMealName: mealName,
+        showMealNamePicker: false,
+        fixedMealName: entryByTime.mealName !== mealName,
+        ...ifValueDefined<MealPlannerState>(
+          'calories',
+          entryByName?.goals.calories.toString(),
+        ),
+      });
     },
   };
 
@@ -344,7 +428,7 @@ export function MealPlanner() {
         undo,
       });
     },
-  }
+  };
 
   return (
     <>
@@ -366,8 +450,11 @@ export function MealPlanner() {
         <div className='mealz-meal-planner'>
           <div className='mealz-meal-planner-top-bar'>
             <div className='mealz-meal-planner-meal'>
-              <div  className='mealz-meal-planner-meal-name'>
-                { meal.name() ?? translate('no-meal-name') }
+              <div
+                className='mealz-meal-planner-meal-name'
+                onClick={mealName.onShow}
+              >
+                { meal.name() ?? translate('default-meal-name') }
               </div>
               <div className='mealz-meal-planner-calories-unit'>
                 { `(${translate('kcal')})` }
@@ -403,6 +490,14 @@ export function MealPlanner() {
             />
           </div>
         </div>
+      }
+      { state.showMealNamePicker &&
+        <MealNamePicker
+          show={state.showMealNamePicker}
+          mealNames={mealName.getMealNames()}
+          onPick={mealName.onPick}
+          onClose={mealName.onClose}
+        />
       }
     </>
   );
