@@ -39,11 +39,8 @@ export class MealsUserService {
 
   public async upsertUserDraftMeal(
     meal: GWMealWithoutId,
-    mealName?: string,
+    metadata: UserDraftMealMetadata,
   ): Promise<void> {
-    const metadata: UserDraftMealMetadata = {
-      mealName,
-    };
     await this.http.post<
       UpsertUserMealGWRequestV1,
       UpsertUserMealGWResponseV1
@@ -66,4 +63,9 @@ export class MealsUserService {
 
 export interface UserDraftMealMetadata {
   mealName?: string;
+
+  // True if the user picked the meal name and it's not current daily plan
+  // meal name according to the time of the day. When it's true, then whenever
+  // the user opens Chef, the picked meal will be shown.
+  fixedMealName?: boolean;
 }

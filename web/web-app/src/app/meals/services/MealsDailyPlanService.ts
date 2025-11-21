@@ -52,7 +52,7 @@ export class MealsDailyPlanService {
 
   public async readCurrentEntry(): Promise<GWMealDailyPlanEntry | undefined> {
     const plan = await this.readCurrentDailyPlan();
-    return this.getEntry(plan, Date.now());
+    return this.getEntryByTime(plan, Date.now());
   }
 
   public async readCurrentGoals(): Promise<GWMealDailyPlanGoals | undefined> {
@@ -60,7 +60,7 @@ export class MealsDailyPlanService {
     return entry?.goals;
   }
 
-  public getEntry(
+  public getEntryByTime(
     plan: GWMealDailyPlan | undefined,
     timestamp: number,
   ): GWMealDailyPlanEntry | undefined {
@@ -98,11 +98,28 @@ export class MealsDailyPlanService {
     return undefined;
   }
 
+  public getEntryByMealName(
+    plan: GWMealDailyPlan | undefined,
+    mealName: string,
+  ): GWMealDailyPlanEntry | undefined {
+    if (!plan) {
+      return undefined;
+    }
+    return plan.entries.find(entry => entry.mealName === mealName);
+  }
+
   public getMealName(
     plan: GWMealDailyPlan | undefined,
     timestamp: number,
   ): string | undefined {
-    const entry = this.getEntry(plan, timestamp);
+    const entry = this.getEntryByTime(plan, timestamp);
     return entry?.mealName;
+  }
+
+  public getMealNames(plan: GWMealDailyPlan | undefined,): string[] {
+    if (!plan) {
+      return [];
+    }
+    return plan.entries.map(entry => entry.mealName);
   }
 }

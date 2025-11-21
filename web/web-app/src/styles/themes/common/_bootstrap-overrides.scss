@@ -1,20 +1,20 @@
 @use 'sass:color';
 
-// Box shadow
+// box shadow
 $mealz-box-shadow-color: rgba($mealz-theme-color-fg, 0.25);
 $mealz-box-shadow-wide: 0 0 0 0.3rem $mealz-box-shadow-color;
 $mealz-box-shadow-thin: 0 0 0 0.2rem $mealz-box-shadow-color;
 
-// Input border & shadow
+// input border & shadow
 $input-border-color: $mealz-theme-color-border;
 $input-focus-border-color: $mealz-theme-color-fg;
 $input-focus-box-shadow: $mealz-box-shadow-thin;
 
-// Input background
+// input background
 $input-bg: rgba($mealz-theme-color-bg, 0.1);
 $input-focus-bg: $input-bg;
 
-// Input text color
+// input text color
 $input-color: $mealz-color;
 $input-focus-color: $mealz-color;
 $input-placeholder-color: color.scale($mealz-theme-color-bg, $lightness: 16%);
@@ -23,7 +23,7 @@ $input-placeholder-color: color.scale($mealz-theme-color-bg, $lightness: 16%);
   font-weight: 300 !important;
 }
 
-// Buttons
+// buttons
 .btn-primary,
 .btn-primary:hover,
 .btn-primary:active,
@@ -39,3 +39,10 @@ $input-placeholder-color: color.scale($mealz-theme-color-bg, $lightness: 16%);
 }
 
 
+// modal
+.modal-content {
+  color: $mealz-color !important;
+  background-color: $mealz-theme-color-bg-dark !important;
+  border: 1px solid $mealz-theme-color-bg !important;
+  border-radius: $mealz-border-radius !important;
+}
