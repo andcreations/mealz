@@ -101,7 +101,7 @@ async function readAllIngredientsFromDB(db: SQLiteDB): Promise<DBIngredient[]> {
     if (lastId) {
       where = `WHERE id > '${lastId}'`;
     }
-    const query = `SELECT id, details FROM Ingredients ${where} LIMIT ${limit}`;
+    const query = `SELECT id, details FROM ingredients ${where} LIMIT ${limit}`;
     const rows = await db.select<any>(query, []);
 
     // keep
@@ -154,7 +154,7 @@ async function insertIngredients(
           ` ${Colors.gray('(' + existing.id + ')')}`
         );
         await db.run(
-          'DELETE FROM Ingredients WHERE id = ?',
+          'DELETE FROM ingredients WHERE id = ?',
           [existing.id],
         );
       }
@@ -171,7 +171,7 @@ async function insertIngredients(
       ` ${Colors.gray('(' + id + ')')}`
     );
     await db.run(
-      'INSERT INTO Ingredients (id, detailsVersion, details) ' +
+      'INSERT INTO ingredients (id, details_version, details) ' +
       'VALUES (?, ?, ?)',
       [id, detailsVersion, detailsBuffer],
     );

@@ -18,13 +18,13 @@ export class IngredientDBMapper {
     if (!entity) {
       return undefined;
     }
-    if (entity.detailsVersion === IngredientDetailsVersion.V1) {
+    if (entity.details_version === IngredientDetailsVersion.V1) {
       return this.fromDetailsV1(entity);
     }
 
     throw new InternalError(
       `Unknown ingredient details version ` +
-      `${MealzError.quote(entity.detailsVersion.toString())}`
+      `${MealzError.quote(entity.details_version.toString())}`
     );
   }
 

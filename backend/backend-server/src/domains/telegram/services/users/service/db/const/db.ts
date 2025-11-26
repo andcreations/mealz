@@ -1,0 +1,1 @@
+export const TELEGRAM_USERS_DB_NAME = 'telegram-users';
