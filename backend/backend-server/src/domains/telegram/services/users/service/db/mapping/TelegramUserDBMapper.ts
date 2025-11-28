@@ -12,7 +12,7 @@ export class TelegramUserDBMapper {
       id: telegramUser.id,
       user_id: telegramUser.userId,
       chat_id: telegramUser.chatId,
-      is_enabled: telegramUser.isEnabled,
+      is_enabled: telegramUser.isEnabled ? 1 : 0,
     };
   }
 
@@ -26,7 +26,7 @@ export class TelegramUserDBMapper {
       id: entity.id,
       userId: entity.user_id,
       chatId: entity.chat_id,
-      isEnabled: entity.is_enabled,
+      isEnabled: entity.is_enabled === 1,
     };
   }
 }

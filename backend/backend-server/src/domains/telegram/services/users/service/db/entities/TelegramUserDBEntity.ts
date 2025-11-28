@@ -28,5 +28,5 @@ export class TelegramUserDBEntity {
     name: 'isEnabled',
     type: DBFieldType.INTEGER,
   })
-  public is_enabled: Date;
+  public is_enabled: number;
 }
