@@ -5,7 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",
-    "clean": "rm -rf node_modules dist"
+    "clean": "rm -rf node_modules dist",
+    "migrate-databases": "node dist/migrate-databases.js",
+    "insert-ingredients": "node dist/insert-ingredients.js"
   },
   "dependencies": {
     "@msgpack/msgpack": "^3.1.2",
