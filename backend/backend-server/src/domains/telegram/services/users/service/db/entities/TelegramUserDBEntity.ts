@@ -1,7 +1,7 @@
 import { DBEntity, DBField, DBFieldType } from '@mealz/backend-db';
 
-export const TELEGRAM_USER_DB_ENTITY_NAME = 'TelegramUser';
-export const TELEGRAM_USER_DB_TABLE_NAME = 'TelegramUsers';
+export const TELEGRAM_USER_DB_ENTITY_NAME = 'telegram_user';
+export const TELEGRAM_USER_DB_TABLE_NAME = 'telegram_users';
 
 @DBEntity(TELEGRAM_USER_DB_ENTITY_NAME)
 export class TelegramUserDBEntity {

@@ -44,8 +44,8 @@ export class MealsUserRepository {
     context: Context,
   ): Promise<UserMeal | undefined> {
     const query: Where<UserMealDBEntity> = {
-      userId: { $eq: userId },
-      typeId: { $eq: typeId },
+      user_id: { $eq: userId },
+      type_id: { $eq: typeId },
     };
     const entity = await this.repository.findOne(query, {}, context);
     if (!entity) {
@@ -62,13 +62,13 @@ export class MealsUserRepository {
     context: Context,
   ): Promise<UserMeal[]> {
     const query: Where<UserMealDBEntity> = {
-      userId: { $eq: userId },
+      user_id: { $eq: userId },
     };
     if (lastId) {
       query.id = { $gt: lastId };
     }
     if (typeIds) {
-      query.typeId = { $in: typeIds };
+      query.type_id = { $in: typeIds };
     }
     const entities = await this.repository.find(
       query,
@@ -120,8 +120,8 @@ export class MealsUserRepository {
     context: Context,
   ): Promise<void> {
     const query: Where<UserMealDBEntity> = {
-      userId: { $eq: userId },
-      typeId: { $eq: typeId },
+      user_id: { $eq: userId },
+      type_id: { $eq: typeId },
     };
     await this.repository.delete(query, context);
   }

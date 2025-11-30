@@ -10,9 +10,9 @@ export class UserMealDBMapper {
   public toEntity(userMeal: UserMeal): UserMealDBEntity {
     return {
       id: userMeal.id,
-      userId: userMeal.userId,
-      mealId: userMeal.mealId,
-      typeId: userMeal.typeId,
+      user_id: userMeal.userId,
+      meal_id: userMeal.mealId,
+      type_id: userMeal.typeId,
       ...mapIfDefined<UserMealDBEntity>(
         'metadata',
         userMeal.metadata,
@@ -29,9 +29,9 @@ export class UserMealDBMapper {
     }
     return {
       id: entity.id,
-      userId: entity.userId,
-      mealId: entity.mealId,
-      typeId: entity.typeId,
+      userId: entity.user_id,
+      mealId: entity.meal_id,
+      typeId: entity.type_id,
       ...mapIfDefined<UserMeal>(
         'metadata',
         entity.metadata,

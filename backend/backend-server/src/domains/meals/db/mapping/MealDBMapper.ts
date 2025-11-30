@@ -15,7 +15,7 @@ export class MealDBMapper {
   public toEntity(meal: Meal): MealDBEntity {
     return {
       id: meal.id,
-      detailsVersion: MealDetailsVersion.V1,
+      details_version: MealDetailsVersion.V1,
       details: this.mealDetailsV1Mapper.toBuffer(meal),
     };
   }
@@ -24,13 +24,13 @@ export class MealDBMapper {
     if (!entity) {
       return undefined;
     }
-    if (entity.detailsVersion === MealDetailsVersion.V1) {
+    if (entity.details_version === MealDetailsVersion.V1) {
       return this.fromDetailsV1(entity);
     }
 
     throw new InternalError(
       `Unknown ingredient details version ` +
-      `${MealzError.quote(entity.detailsVersion.toString())}`
+      `${MealzError.quote(entity.details_version.toString())}`
     );
   }
 

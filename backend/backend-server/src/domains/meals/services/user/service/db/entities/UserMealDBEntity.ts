@@ -1,7 +1,7 @@
 import { DBEntity, DBField, DBFieldType } from '@mealz/backend-db';
 
-export const USER_MEAL_DB_ENTITY_NAME = 'UserMeal';
-export const USER_MEAL_DB_TABLE_NAME = 'UserMeals';
+export const USER_MEAL_DB_ENTITY_NAME = 'user_meal';
+export const USER_MEAL_DB_TABLE_NAME = 'user_meals';
 
 @DBEntity(USER_MEAL_DB_ENTITY_NAME)
 export class UserMealDBEntity {
@@ -13,22 +13,22 @@ export class UserMealDBEntity {
   public id: string;
 
   @DBField({
-    name: 'userId',
+    name: 'user_id',
     type: DBFieldType.STRING,
   })
-  public userId: string;
+  public user_id: string;
 
   @DBField({
-    name: 'mealId',
+    name: 'meal_id',
     type: DBFieldType.STRING,
   })
-  public mealId: string;
+  public meal_id: string;
 
   @DBField({
-    name: 'typeId',
+    name: 'type_id',
     type: DBFieldType.STRING,
   })
-  public typeId: string;
+  public type_id: string;
 
   @DBField({
     name: 'metadata',
