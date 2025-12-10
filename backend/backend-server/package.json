@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@andcreations/common": "^0.1.13",
+    "@andcreations/telegram-bot": "andcreations/telegram-bot.git",
     "@fastify/cookie": "^11.0.2",
     "@fastify/static": "^8.2.0",
     "@msgpack/msgpack": "^3.1.2",
