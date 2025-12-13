@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { LoggerModule } from '@mealz/backend-logger';
+import { UsersCrudAPIModule } from '@mealz/backend-users-crud-service-api';
 import {
   TelegramUsersAPIModule,
 } from '@mealz/backend-telegram-users-service-api';
@@ -16,6 +17,7 @@ import { TelegramBotRequestController } from './controllers';
 @Module({
   imports: [
     LoggerModule,
+    UsersCrudAPIModule.forRoot({}),
     TelegramUsersAPIModule.forRoot({}),
   ],
   providers: [

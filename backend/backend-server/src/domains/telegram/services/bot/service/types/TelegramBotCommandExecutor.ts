@@ -15,11 +15,16 @@ export abstract class TelegramBotCommandExecutor {
     return this.name;
   }
 
-  protected async reply(
+  protected async sendMessage(
     command: TelegramBotCommand,
-    message: TelegramAnonymousMessage,
+    message: TelegramAnonymousMessage |  string,
     context: Context,
   ): Promise<void> {
+    if (typeof message === 'string') {
+      message = {
+        text: message,
+      };
+    }
     await this.telegramBotClient.sendMessage(
       {
          ...message,

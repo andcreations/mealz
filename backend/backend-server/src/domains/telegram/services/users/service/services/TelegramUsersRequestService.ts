@@ -1,49 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
-import { TimePeriod } from '@andcreations/common';
 import { Context } from '@mealz/backend-core';
+import { requireStrEnv } from '@mealz/backend-common';
 import {
+  TelegramUser,
   GenerateStartLinkRequestV1,
   GenerateStartLinkResponseV1,
+  UpsertTelegramUserRequestV1,
   VerifyStartTokenRequestV1,
   VerifyStartTokenResponseV1,
+  ReadTelegramUserRequestV1,
+  ReadTelegramUserResponseV1,
 } from '@mealz/backend-telegram-users-service-api';
-import { requireStrEnv } from '@mealz/backend-common';
 
-import { StartJwtPayload, StartJwtPayloadUser } from '../types';
-import { InvalidStartTokenError } from '../errors';
+import { InvalidTokenError } from '../errors';
+import { TelegramTokensService } from './TelegramTokensService';
+import { TelegramUsersService } from './TelegramUsersService';
 
 @Injectable()
 export class TelegramUsersRequestService {
-  private static readonly TOKEN_PERIOD = TimePeriod.fromStr('1h');
-
   private readonly botName: string;
-  private readonly jwtSecret: string;
-  private readonly tokenPeriod: number = this.toSeconds(
-    TelegramUsersRequestService.TOKEN_PERIOD
-  );
 
-  public constructor() {
+  public constructor(
+    private readonly telegramTokensService: TelegramTokensService,
+    private readonly telegramUsersService: TelegramUsersService,
+  ) {
     this.botName = requireStrEnv('MEALZ_TELEGRAM_BOT_NAME');
-    this.jwtSecret = requireStrEnv('MEALZ_TELEGRAM_JWT_SECRET');
   }
 
   public async generateStartLinkV1(
     request: GenerateStartLinkRequestV1,
-    _context: Context,
+    context: Context,
   ): Promise<GenerateStartLinkResponseV1> {
-    // payload
-    const issuedAt = this.toSeconds(Date.now());
-    const payload: StartJwtPayload = {
-      user: {
-        userId: request.userId,
-      },
-      iat: issuedAt,
-      exp: issuedAt + this.tokenPeriod,
-    };
-
-    // generate token
-    const token = jwt.sign(payload, this.jwtSecret);
+    // create token
+    const { token } = await this.telegramTokensService.createStartToken(
+      request.userId,
+      context,
+    );
 
     // generate link
     return {
@@ -51,37 +43,49 @@ export class TelegramUsersRequestService {
     };
   }
 
-  private verifyToken(token: string): StartJwtPayloadUser {
-    // verify
-    let rawPayload: jwt.JwtPayload | string;
-    try {
-      rawPayload = jwt.verify(token, this.jwtSecret);
-    } catch (error) {
-      throw new InvalidStartTokenError();
-    }
-    if (typeof rawPayload === 'string') {
-      throw new InvalidStartTokenError();
-    }
-
-    // payload
-    const payload = rawPayload as StartJwtPayload;
-    if (payload.exp < this.toSeconds(Date.now())) {
-      throw new InvalidStartTokenError();
-    }
-    return payload.user;
-  }
-
   public async verifyStartTokenV1(
     request: VerifyStartTokenRequestV1,
-    _context: Context,
+    context: Context,
   ): Promise<VerifyStartTokenResponseV1> {
-    const user = this.verifyToken(request.token);
-    return {
-      userId: user.userId,
-    };
+    try {
+      const { userId } = await this.telegramTokensService.verifyStartToken(
+        request.token,
+        context,
+      );
+      return { userId, isValid: true };
+    } catch (error) {
+      if (error instanceof InvalidTokenError) {
+        return { isValid: false };
+      }
+      throw error;
+    }
   }
 
-  private toSeconds(milliseconds: number): number {
-    return Math.round(milliseconds / 1000);
-  }  
+  public async upsertTelegramUserV1(
+    request: UpsertTelegramUserRequestV1,
+    context: Context,
+  ): Promise<void> {
+    const telegramUser: TelegramUser = {
+      userId: request.userId,
+      telegramChatId: request.telegramChatId,
+      telegramUserId: request.telegramUserId,
+      telegramUsername: request.telegramUsername,
+      isEnabled: true,
+    };
+    return this.telegramUsersService.upsertTelegramUser(
+      telegramUser,
+      context,
+    );
+  }
+
+  public async readTelegramUserV1(
+    request: ReadTelegramUserRequestV1,
+    context: Context,
+  ): Promise<ReadTelegramUserResponseV1> {
+    const telegramUser = await this.telegramUsersService.readTelegramUser(
+      request.userId,
+      context,
+    );
+    return { telegramUser };
+  }
 }

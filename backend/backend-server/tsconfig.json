@@ -26,6 +26,7 @@
       "@mealz/backend-users-db": ["src/domains/users/db"],
       "@mealz/backend-users-auth-service-api": ["src/domains/users/services/auth/service-api"],
       "@mealz/backend-users-auth-gateway-api": ["src/domains/users/services/auth/gateway-api"],
+      "@mealz/backend-users-crud-service-api": ["src/domains/users/services/crud/service-api"],
 
       "@mealz/backend-ingredients-common": ["src/domains/ingredients/common"],
       "@mealz/backend-ingredients-shared": ["src/domains/ingredients/shared"],
@@ -51,6 +52,7 @@
       "@mealz/backend-meals-daily-plan-gateway-api": ["src/domains/meals/services/daily-plan/gateway-api"],
     
       "@mealz/backend-telegram-bot-service-api": ["src/domains/telegram/services/bot/service-api"],
+      "@mealz/backend-telegram-users-common": ["src/domains/telegram/services/users/common"],
       "@mealz/backend-telegram-users-service-api": ["src/domains/telegram/services/users/service-api"],
       "@mealz/backend-telegram-users-gateway-api": ["src/domains/telegram/services/users/gateway-api"]
     }

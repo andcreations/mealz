@@ -8,7 +8,7 @@ import { Logger } from '@mealz/backend-logger';
 import { UnknownDBError } from '../../core';
 import { SQLITE_DBE_MODULE_OPTIONS } from '../const';
 import { SQLiteDBModuleOptions } from '../SQLiteDBModule';
-import { SQLiteError } from '../errors/SQLiteError';
+import { SQLiteError } from '../errors';
 import { SQLiteStatement } from '../types';
 
 @Injectable()
@@ -66,7 +66,10 @@ export class SQLiteDB {
     return this.handleError(func);
   }
 
-  public async run(statement: SQLiteStatement): Promise<void> {
+  public async run(statement: SQLiteStatement | string): Promise<void> {
+    if (typeof statement === 'string') {
+      statement = new SQLiteStatement(statement);
+    }
     const func = () =>
       new Promise<void>((resolve, reject) => {
         this.db.run(
@@ -110,6 +113,17 @@ export class SQLiteDB {
         );
       });
     return this.handleError(func);
+  }
+
+  public async transaction(func: () => Promise<void>): Promise<void> {
+    await this.run('BEGIN TRANSACTION');
+    try {
+      await func();
+    } catch (error) {
+      await this.run('ROLLBACK TRANSACTION');
+      throw error;
+    }
+    await this.run('COMMIT TRANSACTION');
   }
 
   private async handleError<T>(func: () => Promise<T>): Promise<T> {

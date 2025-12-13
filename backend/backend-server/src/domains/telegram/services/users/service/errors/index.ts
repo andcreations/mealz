@@ -1,1 +1,1 @@
-export * from './InvalidStartTokenError';
+export * from './InvalidTokenError';

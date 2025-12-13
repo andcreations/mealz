@@ -13,6 +13,18 @@ export class UserDBEntity {
   public id: string;
 
   @DBField({
+    name: 'first_name',
+    type: DBFieldType.STRING,
+  })
+  public first_name: string;
+
+  @DBField({
+    name: 'last_name',
+    type: DBFieldType.STRING,
+  })
+  public last_name: string;
+
+  @DBField({
     name: 'email',
     type: DBFieldType.STRING,
   })

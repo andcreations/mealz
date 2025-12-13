@@ -2,6 +2,8 @@ async function up(db) {
   await db.run(`
     CREATE TABLE users (
       id TEXT PRIMARY KEY,
+      first_name TEXT NOT NULL,
+      last_name TEXT NOT NULL,
       email TEXT NOT NULL,
       password TEXT NOT NULL,
       roles TEXT NOT NULL
@@ -13,10 +15,12 @@ async function up(db) {
 
   // Create the admin user with password "eatgood"
   await db.run(`
-    INSERT INTO users (id,email,password,roles)
+    INSERT INTO users (id,first_name,last_name,email,password,roles)
     VALUES (
       '01975110-fbb7-714d-bb5f-62f41fc39791',
-      'mealz@andcreations.com',
+      'Michael',
+      'Cook',
+      'mealz@mealz.andcreations.io',
       '$2b$10$evRzEyU6TIbAWrICfeyCl.ErSErJOj5C.dDtcSnSvXAFJBnk0kBgG',
       'admin'
     );

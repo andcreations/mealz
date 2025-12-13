@@ -155,4 +155,10 @@ export abstract class DBRepository<T> {
     where: Where<T>,
     context: Context,
   ): Promise<void>;
+
+  /**
+   * Runs a transactional operation.
+   * @param func Function to be executed in the transaction.
+   */
+  public abstract transaction(func: () => Promise<void>): Promise<void>;
 }

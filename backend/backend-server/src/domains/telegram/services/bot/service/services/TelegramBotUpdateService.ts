@@ -25,6 +25,11 @@ export class TelegramBotUpdateService implements OnModuleInit, OnModuleDestroy {
     update: TelegramUpdate,
     context: Context,
   ): Promise<void> {
+    this.logger.debug('Handling Telegram bot update', {
+      ...context,
+      update: JSON.stringify(update),
+    });
+
     const message = update.message.text;
     if (this.isBotCommand(message)) {
       // parse

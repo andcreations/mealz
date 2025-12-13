@@ -21,6 +21,12 @@ export class UserDBMapper {
         case 'id':
           user.id = (entity as any).id;
           break;
+        case 'firstName':
+          user.firstName = (entity as any).first_name;
+          break;
+        case 'lastLame':
+          user.lastLame = (entity as any).last_name;
+          break;
         case 'email':
           user.email = (entity as any).email;
           break;

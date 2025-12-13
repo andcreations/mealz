@@ -9,7 +9,6 @@ export class TelegramUserDBMapper {
     telegramUser: TelegramUser,
   ): TelegramUserDBEntity {
     return {
-      id: telegramUser.id,
       user_id: telegramUser.userId,
       telegram_chat_id: telegramUser.telegramChatId,
       telegram_user_id: telegramUser.telegramUserId,
@@ -25,7 +24,6 @@ export class TelegramUserDBMapper {
       return undefined;
     }
     return {
-      id: entity.id,
       userId: entity.user_id,
       telegramChatId: entity.telegram_chat_id,
       telegramUserId: entity.telegram_user_id,

@@ -49,8 +49,16 @@ export class SQLiteDBModule {
       inject: [Logger],
     };
     const repositories: Provider[] = options.entities.map(entity => {
+      const token = getDBRepositoryToken(options.name, entity.entityName);
+      getLogger().debug(`SQLite database repository`, {
+        ...BOOTSTRAP_CONTEXT,
+        dbFilename,
+        entity: entity.entityName,
+        tableName: entity.tableName,
+        token,
+      });
       return {
-        provide: getDBRepositoryToken(options.name, entity.entityName),
+        provide: token,
         useFactory: async (factory: SQLiteDBRepositoryFactory) => {
           return factory.createRepository(entity.entityName, entity.tableName);
         },

@@ -6,15 +6,9 @@ export const TELEGRAM_USER_DB_TABLE_NAME = 'telegram_users';
 @DBEntity(TELEGRAM_USER_DB_ENTITY_NAME)
 export class TelegramUserDBEntity {
   @DBField({
-    name: 'id',
-    type: DBFieldType.STRING,
-    primaryKey: true,
-  })
-  public id: string;
-
-  @DBField({
     name: 'user_id',
     type: DBFieldType.STRING,
+    primaryKey: true,
   })
   public user_id: string;
 
@@ -37,7 +31,7 @@ export class TelegramUserDBEntity {
   public telegram_username: string;
 
   @DBField({
-    name: 'isEnabled',
+    name: 'is_enabled',
     type: DBFieldType.INTEGER,
   })
   public is_enabled: number;

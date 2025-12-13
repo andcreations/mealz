@@ -1,7 +1,4 @@
 export class TelegramUser {
-  // Entity identifier
-  public id: string;
-
   // User identifier
   public userId: string;
 

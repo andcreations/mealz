@@ -1,3 +1,4 @@
 export interface VerifyStartTokenResponseV1 {
-  userId: string;
+  userId?: string;
+  isValid: boolean;
 }
