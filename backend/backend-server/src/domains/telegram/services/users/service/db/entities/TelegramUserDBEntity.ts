@@ -1,31 +1,37 @@
 import { DBEntity, DBField, DBFieldType } from '@mealz/backend-db';
 
-export const TELEGRAM_USER_DB_ENTITY_NAME = 'TelegramUser';
-export const TELEGRAM_USER_DB_TABLE_NAME = 'TelegramUsers';
+export const TELEGRAM_USER_DB_ENTITY_NAME = 'telegram_user';
+export const TELEGRAM_USER_DB_TABLE_NAME = 'telegram_users';
 
 @DBEntity(TELEGRAM_USER_DB_ENTITY_NAME)
 export class TelegramUserDBEntity {
   @DBField({
-    name: 'id',
+    name: 'user_id',
     type: DBFieldType.STRING,
     primaryKey: true,
-  })
-  public id: string;
-
-  @DBField({
-    name: 'userId',
-    type: DBFieldType.STRING,
   })
   public user_id: string;
 
   @DBField({
-    name: 'chatId',
-    type: DBFieldType.STRING,
+    name: 'telegram_chat_id',
+    type: DBFieldType.INTEGER,
   })
-  public chat_id: string;
+  public telegram_chat_id: number;
 
   @DBField({
-    name: 'isEnabled',
+    name: 'telegram_user_id',
+    type: DBFieldType.INTEGER,
+  })
+  public telegram_user_id: number;
+
+  @DBField({
+    name: 'telegram_username',
+    type: DBFieldType.STRING,
+  })
+  public telegram_username: string;
+
+  @DBField({
+    name: 'is_enabled',
     type: DBFieldType.INTEGER,
   })
   public is_enabled: number;

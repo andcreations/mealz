@@ -14,6 +14,7 @@ import {
   UsersDomainModule,
   IngredientsDomainModule,
   MealsDomainModule,
+  TelegramDomainModule,
 } from './domains';
 import { getServeStaticModule } from './web-app';
 
@@ -23,6 +24,7 @@ import { getServeStaticModule } from './web-app';
     UsersDomainModule,
     IngredientsDomainModule,
     MealsDomainModule,
+    TelegramDomainModule,
   ],
 })
 export class AppModule implements NestModule {

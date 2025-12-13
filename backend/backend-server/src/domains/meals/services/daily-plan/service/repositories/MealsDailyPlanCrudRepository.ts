@@ -39,7 +39,7 @@ export class MealsDailyPlanCrudRepository {
     context: Context,
   ): Promise<MealDailyPlan[]> {
     const query: Where<MealDailyPlanDBEntity> = {
-      userId: { $eq: userId },
+      user_id: { $eq: userId },
     };
     const entities = await this.repository.find(
       query,

@@ -221,4 +221,8 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     );
     await this.db.run(statement);
   }
+
+  public async transaction(func: () => Promise<void>): Promise<void> {
+    await this.db.transaction(func);
+  }
 }

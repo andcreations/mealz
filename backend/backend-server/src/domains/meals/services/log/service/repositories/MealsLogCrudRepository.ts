@@ -42,12 +42,12 @@ export class MealsLogCrudRepository {
     userId: string,
     context: Context,
   ): Promise<MealLog | undefined> {
-    const query: Where<MealLogDBEntity> = { userId: { $eq: userId } };
+    const query: Where<MealLogDBEntity> = { user_id: { $eq: userId } };
     const entity = await this.repository.findOne(
       query,
       { 
         sort: [
-          { loggedAt: 'desc' },
+          { logged_at: 'desc' },
         ],
       },
       context,

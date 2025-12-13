@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
-import { TelegramUserDBMapper } from './mapping';
+import { TelegramTokenDBMapper, TelegramUserDBMapper } from './mapping';
 
 @Module({
-  providers: [TelegramUserDBMapper],
-  exports: [TelegramUserDBMapper],
+  providers: [
+    TelegramUserDBMapper,
+    TelegramTokenDBMapper,
+  ],
+  exports: [
+    TelegramUserDBMapper,
+    TelegramTokenDBMapper,
+  ],
 })
 export class TelegramUsersDBModule {
 }

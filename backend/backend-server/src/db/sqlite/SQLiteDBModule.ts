@@ -1,5 +1,9 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { Logger, LoggerModule } from '@mealz/backend-logger';
+import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
+import { InternalError } from '@mealz/backend-common';
+import { getLogger, Logger, LoggerModule } from '@mealz/backend-logger';
 
 import { getDBRepositoryToken } from '../core';
 import { 
@@ -22,6 +26,19 @@ export interface SQLiteDBModuleOptions {
 @Module({})
 export class SQLiteDBModule {
   public static forRoot(options: SQLiteDBModuleOptions): DynamicModule {
+    const dbFilename = path.resolve(options.dbFilename);
+    if (!fs.existsSync(dbFilename)) {
+      throw new InternalError(
+        `SQLite database file ${dbFilename} not found`,
+      );
+    }
+    getLogger().info(`SQLite database module`, {
+      ...BOOTSTRAP_CONTEXT,
+      name: options.name,
+      dbFilename,
+      exists: fs.existsSync(dbFilename)
+    });
+
     const sqlite: Provider = {
       provide: SQLiteDB,
       useFactory: async (logger: Logger): Promise<SQLiteDB> => {
@@ -32,8 +49,16 @@ export class SQLiteDBModule {
       inject: [Logger],
     };
     const repositories: Provider[] = options.entities.map(entity => {
+      const token = getDBRepositoryToken(options.name, entity.entityName);
+      getLogger().debug(`SQLite database repository`, {
+        ...BOOTSTRAP_CONTEXT,
+        dbFilename,
+        entity: entity.entityName,
+        tableName: entity.tableName,
+        token,
+      });
       return {
-        provide: getDBRepositoryToken(options.name, entity.entityName),
+        provide: token,
         useFactory: async (factory: SQLiteDBRepositoryFactory) => {
           return factory.createRepository(entity.entityName, entity.tableName);
         },

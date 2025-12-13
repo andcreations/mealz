@@ -9,9 +9,10 @@ export class TelegramUserDBMapper {
     telegramUser: TelegramUser,
   ): TelegramUserDBEntity {
     return {
-      id: telegramUser.id,
       user_id: telegramUser.userId,
-      chat_id: telegramUser.chatId,
+      telegram_chat_id: telegramUser.telegramChatId,
+      telegram_user_id: telegramUser.telegramUserId,
+      telegram_username: telegramUser.telegramUsername,
       is_enabled: telegramUser.isEnabled ? 1 : 0,
     };
   }
@@ -23,9 +24,10 @@ export class TelegramUserDBMapper {
       return undefined;
     }
     return {
-      id: entity.id,
       userId: entity.user_id,
-      chatId: entity.chat_id,
+      telegramChatId: entity.telegram_chat_id,
+      telegramUserId: entity.telegram_user_id,
+      telegramUsername: entity.telegram_username,
       isEnabled: entity.is_enabled === 1,
     };
   }

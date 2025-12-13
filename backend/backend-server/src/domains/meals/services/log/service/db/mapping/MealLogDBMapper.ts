@@ -8,10 +8,10 @@ export class MealLogDBMapper {
   public toEntity(mealLog: MealLog): MealLogDBEntity {
     return {
       id: mealLog.id,
-      userId: mealLog.userId,
-      mealId: mealLog.mealId,
-      dailyPlanMealName: mealLog.dailyPlanMealName,
-      loggedAt: mealLog.loggedAt,
+      user_id: mealLog.userId,
+      meal_id: mealLog.mealId,
+      daily_plan_meal_name: mealLog.dailyPlanMealName,
+      logged_at: mealLog.loggedAt,
     };
   }
 
@@ -21,10 +21,10 @@ export class MealLogDBMapper {
     }
     return {
       id: entity.id,
-      userId: entity.userId,
-      mealId: entity.mealId,
-      dailyPlanMealName: entity.dailyPlanMealName,
-      loggedAt: entity.loggedAt,
+      userId: entity.user_id,
+      mealId: entity.meal_id,
+      dailyPlanMealName: entity.daily_plan_meal_name,
+      loggedAt: entity.logged_at,
     }
   }
 }

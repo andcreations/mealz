@@ -1,7 +1,7 @@
 import { DBEntity, DBField, DBFieldType } from '@mealz/backend-db';
 
-export const MEAL_DB_ENTITY_NAME = 'Meal';
-export const MEAL_DB_TABLE_NAME = 'Meals';
+export const MEAL_DB_ENTITY_NAME = 'meal';
+export const MEAL_DB_TABLE_NAME = 'meals';
 
 @DBEntity(MEAL_DB_ENTITY_NAME)
 export class MealDBEntity {
@@ -13,10 +13,10 @@ export class MealDBEntity {
   public id: string;
 
   @DBField({
-    name: 'detailsVersion',
+    name: 'details_version',
     type: DBFieldType.INTEGER,
   })
-  public detailsVersion: number;
+  public details_version: number;
 
   @DBField({
     name: 'details',

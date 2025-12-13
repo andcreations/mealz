@@ -1,7 +1,7 @@
 import { DBEntity, DBField, DBFieldType } from '@mealz/backend-db';
 
-export const USER_DB_ENTITY_NAME = 'User';
-export const USER_DB_TABLE_NAME = 'Users';
+export const USER_DB_ENTITY_NAME = 'user';
+export const USER_DB_TABLE_NAME = 'users';
 
 @DBEntity(USER_DB_ENTITY_NAME)
 export class UserDBEntity {
@@ -11,6 +11,18 @@ export class UserDBEntity {
     primaryKey: true,
   })
   public id: string;
+
+  @DBField({
+    name: 'first_name',
+    type: DBFieldType.STRING,
+  })
+  public first_name: string;
+
+  @DBField({
+    name: 'last_name',
+    type: DBFieldType.STRING,
+  })
+  public last_name: string;
 
   @DBField({
     name: 'email',

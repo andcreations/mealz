@@ -29,8 +29,8 @@ export class MealsLogHistoryRepository {
     context: Context,
   ): Promise<MealLog[]> {
     const query: Where<MealLogDBEntity> = {
-      userId: { $eq: userId },
-      loggedAt: {
+      user_id: { $eq: userId },
+      logged_at: {
         $gte: fromDate,
         $lte: toDate,
       },

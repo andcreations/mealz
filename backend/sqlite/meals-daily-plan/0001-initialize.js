@@ -1,21 +1,21 @@
 async function up(db) {
   await db.run(`
-    CREATE TABLE MealDailyPlans (
+    CREATE TABLE meal_daily_plans (
       id TEXT PRIMARY KEY UNIQUE NOT NULL,
-      userId TEXT NOT NULL,
-      detailsVersion INTEGER NOT NULL,
+      user_id TEXT NOT NULL,
+      details_version INTEGER NOT NULL,
       details BLOB NOT NULL,
       createdAt INTEGER NOT NULL
     );
   `);
   await db.run(`
-    CREATE INDEX MealDailyPlans_userId ON MealDailyPlans (userId);
+    CREATE INDEX meal_daily_plans_user_id ON meal_daily_plans (user_id);
   `);
 }
 
 async function down(db) {
-  await db.run(`DROP INDEX IF EXISTS MealDailyPlans_userId;`);
-  await db.run(`DROP TABLE IF EXISTS MealDailyPlans;`)
+  await db.run(`DROP INDEX IF EXISTS meal_daily_plans_user_id;`);
+  await db.run(`DROP TABLE IF EXISTS meal_daily_plans;`)
 }
 
 module.exports = { up, down };

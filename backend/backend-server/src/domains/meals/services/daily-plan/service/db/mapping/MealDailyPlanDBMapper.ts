@@ -17,8 +17,8 @@ export class MealDailyPlanDBMapper {
   ): Omit<MealDailyPlanDBEntity, 'createdAt'> {
     return {
       id: mealDailyPlan.id,
-      userId: mealDailyPlan.userId,
-      detailsVersion: MealDailyPlanDetailsVersion.V1,
+      user_id: mealDailyPlan.userId,
+      details_version: MealDailyPlanDetailsVersion.V1,
       details: this.mealDailyPlanDetailsV1Mapper.toBuffer(mealDailyPlan),
     };
   }
@@ -29,20 +29,20 @@ export class MealDailyPlanDBMapper {
     if (!entity) {
       return undefined;
     }
-    if (entity.detailsVersion === MealDailyPlanDetailsVersion.V1) {
+    if (entity.details_version === MealDailyPlanDetailsVersion.V1) {
       return this.fromDetailsV1(entity);
     }
 
     throw new InternalError(
       `Unknown meal daily plan details version ` +
-      `${MealzError.quote(entity.detailsVersion.toString())}`
+      `${MealzError.quote(entity.details_version.toString())}`
     );
   }
 
   private fromDetailsV1(entity: MealDailyPlanDBEntity): MealDailyPlan {
     return {
       id: entity.id,
-      userId: entity.userId,
+      userId: entity.user_id,
       createdAt: entity.createdAt,
       ...this.mealDailyPlanDetailsV1Mapper.fromBuffer(entity.details),
     };
