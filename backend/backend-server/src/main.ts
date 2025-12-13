@@ -30,8 +30,8 @@ interface CertificateAndKey {
 }
 
 function readCertificateAndKey(): CertificateAndKey | undefined {
-  const certFile = process.env.MEALZ_HTTPS_CERT_FILE;
-  const keyFile = process.env.MEALZ_HTTPS_KEY_FILE;
+  const certFile = process.env['MEALZ_HTTPS_CERT_FILE'];
+  const keyFile = process.env['MEALZ_HTTPS_KEY_FILE'];
 
   if (certFile && keyFile) {
     if (!fs.existsSync(certFile)) {

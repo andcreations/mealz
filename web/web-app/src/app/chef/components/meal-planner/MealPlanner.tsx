@@ -110,7 +110,8 @@ export function MealPlanner() {
           },
         );
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         patchState({
           loadStatus: LoadStatus.FailedToLoad,
         });
@@ -193,6 +194,7 @@ export function MealPlanner() {
         mealDailyPlan,
         Date.now(),
       );
+      console.log('entry', entry);
       const dailyPlanMealNameByTime = mealsDailyPlanService.getMealName(
         mealDailyPlan,
         Date.now(),
@@ -215,11 +217,12 @@ export function MealPlanner() {
         userMeal.metadata?.mealName !== entry?.mealName &&
         !userMeal.metadata?.fixedMealName
       ) {
+        const caloriesStr = entry?.goals.calories.toString() ?? '';
         return {
           ingredients: [],
-          caloriesStr: entry.goals.calories.toString(),
+          caloriesStr,
           dailyPlanMealName: dailyPlanMealNameByTime,
-          dailyPlanMealCalories: entry.goals.calories.toString(),
+          dailyPlanMealCalories: caloriesStr,
         };
       }
 
@@ -233,7 +236,7 @@ export function MealPlanner() {
         caloriesStr,
         dailyPlanMealName:
           userMeal.metadata?.mealName ?? dailyPlanMealNameByTime,
-        dailyPlanMealCalories: entry.goals.calories.toString(),
+        dailyPlanMealCalories: entry?.goals.calories.toString(),
       };
     },
 

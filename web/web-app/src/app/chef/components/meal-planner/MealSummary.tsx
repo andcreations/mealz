@@ -96,7 +96,7 @@ export function MealSummary(props: MealSummaryProps) {
       return (row++).toString();
     }
 
-    const addFact = (
+    const createFact = (
       amount: number | undefined,
       unit: string,
       nameKey: string,
@@ -156,7 +156,7 @@ export function MealSummary(props: MealSummaryProps) {
       ];
     }
 
-    const addSeparator = () => {
+    const createSeparator = () => {
       const gridRow = nextGridRow();
       const styles = {
         gridRow,
@@ -173,8 +173,11 @@ export function MealSummary(props: MealSummaryProps) {
       ];
     }
 
-    const factsIf = (condition: boolean, facts: any[]) => {
-      return condition ? facts : [];
+    const factsIf = (
+      condition: boolean,
+      createFacts: () => React.ReactNode[],
+    ) => {
+      return condition ? createFacts() : [];
     }
     const ifDiffersFromGoal = (amount: number, goal: number) => {
       const percent = Math.abs(amount - goal) / goal * 100;
@@ -194,7 +197,7 @@ export function MealSummary(props: MealSummaryProps) {
     }
 
     return [
-      ...addFact(
+      ...createFact(
         summary.total.calories,
         'kcal',
         'calories',
@@ -204,7 +207,7 @@ export function MealSummary(props: MealSummaryProps) {
       ),
       ...factsIf(
         !!goals,
-        addFact(
+        () => createFact(
           goals.calories,
           'kcal',
           'calories-goal',
@@ -219,7 +222,7 @@ export function MealSummary(props: MealSummaryProps) {
       ),      
       ...factsIf(
         moreThanPlanned > 0,
-        addFact(
+        () => createFact(
           moreThanPlanned,
           'kcal',
           'more-than-planned',
@@ -231,7 +234,7 @@ export function MealSummary(props: MealSummaryProps) {
       ),
       ...factsIf(
         lessThanPlanned > 0,
-        addFact(
+        () => createFact(
           lessThanPlanned,
           'kcal',
           'less-than-planned',
@@ -242,8 +245,8 @@ export function MealSummary(props: MealSummaryProps) {
         )
       ),
 
-      ...addSeparator(),
-      ...addFact(
+      ...createSeparator(),
+      ...createFact(
         summary.total.carbs,
         'g',
         'carbs',
@@ -254,7 +257,7 @@ export function MealSummary(props: MealSummaryProps) {
       ),
       ...factsIf(
         !!goals,
-        addFact(
+        () => createFact(
           goals.carbs,
           'g',
           'carbs-goal',
@@ -267,7 +270,7 @@ export function MealSummary(props: MealSummaryProps) {
           },
         ),
       ),      
-      ...addFact(
+      ...createFact(
         summary.total.sugars,
         'g',
         'sugars',
@@ -277,8 +280,8 @@ export function MealSummary(props: MealSummaryProps) {
         },
       ),
 
-      ...addSeparator(),
-      ...addFact(
+      ...createSeparator(),
+      ...createFact(
         summary.total.protein,
         'g',
         'protein',
@@ -289,7 +292,7 @@ export function MealSummary(props: MealSummaryProps) {
       ),
       ...factsIf(
         !!goals,
-        addFact(
+        () => createFact(
           goals.protein,
           'g',
           'protein-goal',
@@ -303,8 +306,8 @@ export function MealSummary(props: MealSummaryProps) {
         )
       ),      
 
-      ...addSeparator(),
-      ...addFact(
+      ...createSeparator(),
+      ...createFact(
         summary.total.totalFat,
         'g',
         'fat',
@@ -315,7 +318,7 @@ export function MealSummary(props: MealSummaryProps) {
       ),
       ...factsIf(
         !!goals,
-        addFact(
+        () => createFact(
           goals.fat,
           'g',
           'fat-goal',
@@ -328,19 +331,19 @@ export function MealSummary(props: MealSummaryProps) {
           },
         )
       ),
-      ...addFact(
+      ...createFact(
         summary.total.monounsaturatedFat,
         'g',
         'monosaturated-fat',
         { tiny: true },
       ),
-      ...addFact(
+      ...createFact(
         summary.total.polyunsaturatedFat,
         'g',
         'polysaturated-fat',
         { tiny: true },
       ),
-      ...addFact(
+      ...createFact(
         summary.total.saturatedFat,
         'g',
         'saturated-fat',

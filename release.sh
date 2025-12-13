@@ -68,7 +68,7 @@ cp -r $SCRIPT_DIR/backend/sqlite $RELEASE_DIR/sqlite
 cp -r $SCRIPT_DIR/release/* $RELEASE_DIR
 
 # Create the release file
-RELEASE_FILE=mealz-$VERSION.tgz
+RELEASE_FILE=mealz-release-$VERSION.tgz
 tar cfz $RELEASE_FILE $RELEASE_DIR
 
 # Clean up

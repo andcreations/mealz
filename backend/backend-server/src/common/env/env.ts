@@ -1,5 +1,9 @@
 import { InternalError } from '../errors';
 
+const BOOL_TRUE = ['true'];
+const BOOL_FALSE = ['false'];
+const BOOL_VALID_VALUES = [...BOOL_TRUE, ...BOOL_FALSE];
+
 export function getStrEnv(
   name: string,
   defaultValue?: string,
@@ -20,7 +24,16 @@ export function getBoolEnv(
   defaultValue?: boolean,
 ): boolean | undefined {
   const value = process.env[name];
-  return value !== undefined ? ['true', '1'].includes(value) : defaultValue;
+  if (value === undefined) {
+    return defaultValue;
+  }
+  if (!BOOL_VALID_VALUES.includes(value)) {
+    throw new InternalError(
+      `Environment variable ${name} is invalid. ` +
+      `Valid values are ${BOOL_VALID_VALUES.join(', ')}`
+    );
+  }
+  return BOOL_TRUE.includes(value);
 }
 
 export function requireBoolEnv(name: string): boolean {

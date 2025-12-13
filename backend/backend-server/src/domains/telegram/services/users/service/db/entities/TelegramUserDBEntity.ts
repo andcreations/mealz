@@ -13,16 +13,28 @@ export class TelegramUserDBEntity {
   public id: string;
 
   @DBField({
-    name: 'userId',
+    name: 'user_id',
     type: DBFieldType.STRING,
   })
   public user_id: string;
 
   @DBField({
-    name: 'chatId',
+    name: 'telegram_chat_id',
+    type: DBFieldType.INTEGER,
+  })
+  public telegram_chat_id: number;
+
+  @DBField({
+    name: 'telegram_user_id',
+    type: DBFieldType.INTEGER,
+  })
+  public telegram_user_id: number;
+
+  @DBField({
+    name: 'telegram_username',
     type: DBFieldType.STRING,
   })
-  public chat_id: string;
+  public telegram_username: string;
 
   @DBField({
     name: 'isEnabled',

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as ms from 'ms';
 import * as jwt from 'jsonwebtoken';
 import { Context } from '@mealz/backend-core';
 import { requireStrEnv } from '@mealz/backend-common';

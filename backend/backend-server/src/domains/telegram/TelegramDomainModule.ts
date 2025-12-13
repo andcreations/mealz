@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 
-import { TelegramUsersModule } from './services/users';
-import { TelegramBotModule } from './services/bot';
+import { TelegramUsersGWModule, TelegramUsersModule } from './services/users';
+import { TelegramBotModule, TelegramBotGWModule } from './services/bot';
 
 @Module({
   imports: [
     TelegramUsersModule,
+    TelegramUsersGWModule,
     TelegramBotModule,
+    TelegramBotGWModule,
   ],
 })
 export class TelegramDomainModule {}

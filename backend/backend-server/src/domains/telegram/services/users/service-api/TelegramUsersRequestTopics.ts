@@ -5,6 +5,8 @@ import {
 } from './domain-and-service';
 
 export class TelegramUsersRequestTopics {
+  public static readonly GenerateStartLinkV1 = topic('generateStartLink', 'v1');
+  public static readonly VerifyStartTokenV1 = topic('verifyStartToken', 'v1');
 };
 
 function topic(method: string, version: string): string {

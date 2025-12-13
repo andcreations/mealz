@@ -50,7 +50,9 @@
       "@mealz/backend-meals-daily-plan-service-api": ["src/domains/meals/services/daily-plan/service-api"],
       "@mealz/backend-meals-daily-plan-gateway-api": ["src/domains/meals/services/daily-plan/gateway-api"],
     
-      "@mealz/backend-telegram-users-service-api": ["src/domains/telegram/services/users/service-api"]
+      "@mealz/backend-telegram-bot-service-api": ["src/domains/telegram/services/bot/service-api"],
+      "@mealz/backend-telegram-users-service-api": ["src/domains/telegram/services/users/service-api"],
+      "@mealz/backend-telegram-users-gateway-api": ["src/domains/telegram/services/users/gateway-api"]
     }
   },
   "exclude": ["node_modules", "dist"]

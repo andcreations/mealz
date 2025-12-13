@@ -1,36 +1,39 @@
 export class Log {
-  static isDebug(): boolean {
+  public static isDebug(): boolean {
     return true;
   }
 
-  static debug(msg: string): void {
+  public static debug(msg: string): void {
     if (this.isDebug()) {
       console.log(`DBUG ${msg}`);
     }
   }
 
-  static info(msg: string): void {
+  public static info(msg: string): void {
     console.log(`INFO ${msg}`);
   }
 
-  static error(msg: string, error?: any): void {
-    let errorMsg = error ? 'Unknown error' : '';
+  public static error(msg: string, error?: any): void {
+    let errorMsg = '';
     if (error instanceof Error) {
-      errorMsg = '\n' + error.stack;
+      errorMsg = error.message + '\n' + error.stack;
+    }
+    else {
+      errorMsg = 'Unknown error';
     }
     console.log(`EROR ${msg}: ${errorMsg}`);
   }
 
-  static quote(msg: string): string {
+  public static quote(msg: string): string {
     return `"${msg}"`;
   }
 
-  static logAndRethrow<T>(
+  public static async logAndRethrow<T>(
     func: () => Promise<T>,
     errorMsg?: string,
   ): Promise<T> {
     try {
-      return func();
+      return await func();
     } catch (error) {
       this.error(errorMsg ?? 'Caught error during async function call', error);
       throw error;
