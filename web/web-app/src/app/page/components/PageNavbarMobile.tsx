@@ -10,23 +10,31 @@ export function PageNavbarMobile() {
   const authService = useService(AuthService);
   const navigate = useNavigate();
 
+  const onSignOut = () => {
+    authService.signOutOrLogError();
+    navigate(PathTo.signIn());
+  };
+
+
   return (
-    <div className='mealz-navbar-mobile'>
-        <MaterialIcon 
-          icon='home'
-          className='mealz-navbar-mobile-item'
-          onClick={() => navigate(PathTo.dashboard())}
-        />      
-        <MaterialIcon 
-          icon='lunch_dining'
-          className='mealz-navbar-mobile-item'
-          onClick={() => navigate(PathTo.chef())}
-        />      
-        <MaterialIcon 
-          icon='logout'
-          className='mealz-navbar-mobile-item'
-          onClick={() => authService.signOutOrLogError()}
-        />      
+    <div className='mealz-navbar-mobile-container'>
+      <div className='mealz-navbar-mobile'>
+          <MaterialIcon 
+            icon='home'
+            className='mealz-navbar-mobile-item'
+            onClick={() => navigate(PathTo.dashboard())}
+          />      
+          <MaterialIcon 
+            icon='lunch_dining'
+            className='mealz-navbar-mobile-item'
+            onClick={() => navigate(PathTo.chef())}
+          />      
+          <MaterialIcon 
+            icon='logout'
+            className='mealz-navbar-mobile-item'
+            onClick={() => onSignOut()}
+          />      
+      </div>
     </div>
   );
 }

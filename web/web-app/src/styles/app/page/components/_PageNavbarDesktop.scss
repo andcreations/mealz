@@ -1,3 +1,12 @@
+.mealz-navbar-desktop-container {
+  height: $mealz-navbar-height;
+  background-color: $mealz-theme-color-bg-medium;
+  position: relative;
+
+  // above the page content so that the menu overlay is above the content
+  z-index: 9;
+}
+
 .mealz-navbar-desktop {
   @include mealz-flex-container();
   @include mealz-flex-horizontal();

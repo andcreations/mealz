@@ -1,7 +1,13 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import { DynamicModule } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { requireStrEnv, isFastify, isExpress } from '@mealz/backend-common';
+import {
+  requireStrEnv,
+  isFastify,
+  isExpress,
+  InternalError,
+} from '@mealz/backend-common';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
 import { getLogger } from '@mealz/backend-logger';
 
@@ -11,6 +17,11 @@ let staticFilesDir: string;
 function getStaticFilesDir(): string {
   if (!staticFilesDir) {
     staticFilesDir = path.normalize(requireStrEnv('MEALZ_WEB_APP_DIR'));
+    if (!fs.existsSync(staticFilesDir)) {
+      throw new InternalError(
+        `Web application directory ${staticFilesDir} not found`,
+      );
+    }
     getLogger().info('Web application directory', {
       ...BOOTSTRAP_CONTEXT,
       dir: staticFilesDir,

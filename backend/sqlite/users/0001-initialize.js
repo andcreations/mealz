@@ -20,7 +20,7 @@ async function up(db) {
       '01975110-fbb7-714d-bb5f-62f41fc39791',
       'Michael',
       'Cook',
-      'mealz@mealz.andcreations.io',
+      'mealz@andcreations.io',
       '$2b$10$evRzEyU6TIbAWrICfeyCl.ErSErJOj5C.dDtcSnSvXAFJBnk0kBgG',
       'admin'
     );
