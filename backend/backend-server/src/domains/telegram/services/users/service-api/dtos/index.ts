@@ -5,3 +5,5 @@ export * from './VerifyStartTokenResponseV1';
 export * from './UpsertTelegramUserRequestV1';
 export * from './ReadTelegramUserRequestV1';
 export * from './ReadTelegramUserResponseV1';
+export * from './ReadTelegramUserInfoRequestV1';
+export * from './ReadTelegramUserInfoResponseV1';

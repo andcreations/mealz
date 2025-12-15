@@ -8,6 +8,8 @@ import {
   GenerateStartLinkResponseV1,
   ReadTelegramUserRequestV1,
   ReadTelegramUserResponseV1,
+  ReadTelegramUserInfoRequestV1,
+  ReadTelegramUserInfoResponseV1,
   UpsertTelegramUserRequestV1,
   VerifyStartTokenRequestV1,
   VerifyStartTokenResponseV1,
@@ -65,6 +67,19 @@ export class TelegramUsersTransporter {
       ReadTelegramUserRequestV1, ReadTelegramUserResponseV1
     >(
       TelegramUsersRequestTopics.ReadTelegramUserV1,
+      request,
+      context,
+    );
+  }
+
+  public async readTelegramUserInfoV1(
+    request: ReadTelegramUserInfoRequestV1,
+    context: Context,
+  ): Promise<ReadTelegramUserInfoResponseV1> {
+    return this.transporter.sendRequest<
+      ReadTelegramUserInfoRequestV1, ReadTelegramUserInfoResponseV1
+    >(
+      TelegramUsersRequestTopics.ReadTelegramUserInfoV1,
       request,
       context,
     );
