@@ -10,6 +10,8 @@ import {
   VerifyStartTokenResponseV1,
   ReadTelegramUserRequestV1,
   ReadTelegramUserResponseV1,
+  ReadTelegramUserInfoResponseV1,
+  ReadTelegramUserInfoRequestV1,
 } from '@mealz/backend-telegram-users-service-api';
 
 import { InvalidTokenError } from '../errors';
@@ -87,5 +89,19 @@ export class TelegramUsersRequestService {
       context,
     );
     return { telegramUser };
+  }
+
+  public async readTelegramUserInfoV1(
+    request: ReadTelegramUserInfoRequestV1,
+    context: Context,
+  ): Promise<ReadTelegramUserInfoResponseV1> {
+    const telegramUser = await this.telegramUsersService.readTelegramUser(
+      request.userId,
+      context,
+    );
+    return {
+      telegramUser,
+      canSendMessagesTo: telegramUser?.isEnabled ?? false,
+    };
   }
 }

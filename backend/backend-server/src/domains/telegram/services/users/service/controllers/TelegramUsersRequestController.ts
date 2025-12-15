@@ -3,6 +3,8 @@ import { RequestController, RequestHandler } from '@mealz/backend-transport';
 import {
   GenerateStartLinkRequestV1,
   GenerateStartLinkResponseV1,
+  ReadTelegramUserInfoRequestV1,
+  ReadTelegramUserInfoResponseV1,
   ReadTelegramUserRequestV1,
   ReadTelegramUserResponseV1,
   TelegramUsersRequestTopics,
@@ -58,6 +60,17 @@ export class TelegramUsersRequestController {
     context: Context,
   ): Promise<ReadTelegramUserResponseV1> {
     return this.telegramUsersRequestService.readTelegramUserV1(
+      request,
+      context,
+    );
+  }
+
+  @RequestHandler(TelegramUsersRequestTopics.ReadTelegramUserInfoV1)
+  public async readTelegramUserInfoV1(
+    request: ReadTelegramUserInfoRequestV1,
+    context: Context,
+  ): Promise<ReadTelegramUserInfoResponseV1> {
+    return this.telegramUsersRequestService.readTelegramUserInfoV1(
       request,
       context,
     );

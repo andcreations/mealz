@@ -3,6 +3,7 @@ import { RequestController,RequestHandler } from '@mealz/backend-transport';
 import {
   HandleUpdateRequestV1,
   LogWebhookTokenRequestV1,
+  SendMessageToUserRequestV1,
   TelegramBotRequestTopics,
 } from '@mealz/backend-telegram-bot-service-api';
 
@@ -29,5 +30,13 @@ export class TelegramBotRequestController {
     context: Context,
   ): Promise<void> {
     return this.telegramBotService.handleUpdateV1(request, context);
+  }
+
+  @RequestHandler(TelegramBotRequestTopics.SendMessageToUserV1)
+  public async sendMessageToUserV1(
+    request: SendMessageToUserRequestV1,
+    context: Context,
+  ): Promise<void> {
+    return this.telegramBotService.sendMessageToUserV1(request, context);
   }
 }

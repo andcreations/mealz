@@ -1,26 +1,18 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { TelegramUpdate } from '@andcreations/telegram-bot';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
 
 import { TelegramBotCommand } from '../types';
-import { TelegramBotClient } from './TelegramBotClient';
 import { TelegramBotCommandProvider } from './TelegramBotCommandProvider';
 
 @Injectable()
-export class TelegramBotUpdateService implements OnModuleInit, OnModuleDestroy {
+export class TelegramBotUpdateService {
   public constructor(
     private readonly logger: Logger,
-    private readonly telegramBotClient: TelegramBotClient,
     private readonly telegramBotCommandProvider: TelegramBotCommandProvider,
   ) {}
 
-  public onModuleInit(): void {
-  }
-
-  public onModuleDestroy(): void {
-  }
-  
   public async handleUpdateV1(
     update: TelegramUpdate,
     context: Context,

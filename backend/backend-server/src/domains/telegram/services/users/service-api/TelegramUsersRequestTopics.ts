@@ -12,6 +12,10 @@ export class TelegramUsersRequestTopics {
     'v1',
   );
   public static readonly ReadTelegramUserV1 = topic('readTelegramUser', 'v1');
+  public static readonly ReadTelegramUserInfoV1 = topic(
+    'readTelegramUserInfo',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

@@ -4,7 +4,7 @@ import { RequestTransporter } from '@mealz/backend-transport';
 
 import { TELEGRAM_BOT_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { TelegramBotRequestTopics } from './TelegramBotRequestTopics';
-import { HandleUpdateRequestV1, LogWebhookTokenRequestV1 } from './dtos';
+import { HandleUpdateRequestV1, LogWebhookTokenRequestV1, SendMessageToUserRequestV1 } from './dtos';
 
 export class TelegramBotTransporter {
   public constructor(
@@ -33,6 +33,19 @@ export class TelegramBotTransporter {
       HandleUpdateRequestV1, void
     >(
       TelegramBotRequestTopics.HandleUpdateV1,
+      request,
+      context,
+    );
+  }
+
+  public async sendMessageToUserV1(
+    request: SendMessageToUserRequestV1,
+    context: Context,
+  ): Promise<void> {
+    return this.transporter.sendRequest<
+      SendMessageToUserRequestV1, void
+    >(
+      TelegramBotRequestTopics.SendMessageToUserV1,
       request,
       context,
     );

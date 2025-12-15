@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
-import { HandleUpdateRequestV1 } from '@mealz/backend-telegram-bot-service-api';
+import {
+  TelegramUsersTransporter,
+} from '@mealz/backend-telegram-users-service-api';
+import {
+  HandleUpdateRequestV1,
+  SendMessageToUserRequestV1,
+} from '@mealz/backend-telegram-bot-service-api';
 
 import { TelegramBotClient } from './TelegramBotClient';
 import { TelegramBotUpdateService } from './TelegramBotUpdateService';
@@ -10,6 +16,7 @@ import { TelegramBotUpdateService } from './TelegramBotUpdateService';
 export class TelegramBotService {
   public constructor(
     private readonly logger: Logger,
+    private readonly telegramUsersTransporter: TelegramUsersTransporter,
     private readonly telegramBotClient: TelegramBotClient,
     private readonly telegramBotUpdateService: TelegramBotUpdateService,
   ) {}
@@ -33,6 +40,25 @@ export class TelegramBotService {
   ): Promise<void> {
     return this.telegramBotUpdateService.handleUpdateV1(
       request.update,
+      context,
+    );
+  }
+
+  public async sendMessageToUserV1(
+    request: SendMessageToUserRequestV1,
+    context: Context,
+  ): Promise<void> {
+    const {
+      telegramUser,
+    } = await this.telegramUsersTransporter.readTelegramUserV1(
+      { userId: request.userId },
+      context,
+    );
+    return this.telegramBotClient.sendMessage(
+      {
+        ...request.message,
+        chat_id: telegramUser.telegramChatId,
+      },
       context,
     );
   }
