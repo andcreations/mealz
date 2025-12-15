@@ -37,7 +37,11 @@ export function PageNavbarDesktop() {
   };
   const onMenuItemClick = () => {
     patchState({ menuHidden: true });
-  }  
+  }
+  const onSignOut = () => {
+    authService.signOutOrLogError();
+    navigate(PathTo.signIn());
+  };
 
   const menuItems: PageNavbarMenuItem[] = [
     {
@@ -54,32 +58,32 @@ export function PageNavbarDesktop() {
     },
     {
       label: translate('sign-out'),
-      onClick: () => {
-        authService.signOutOrLogError();
-      },
+      onClick: () => { onSignOut(); },
     },
   ];
 
   return (
-    <div className='mealz-navbar-desktop'>
-      <div className='mealz-navbar-desktop-left-side-content'>
-        <div className='mealz-navbar-desktop-logo'>
-          { translate('mealz') }
+    <div className='mealz-navbar-desktop-container'>
+      <div className='mealz-navbar-desktop'>
+        <div className='mealz-navbar-desktop-left-side-content'>
+          <div className='mealz-navbar-desktop-logo'>
+            { translate('mealz') }
+          </div>
         </div>
+        <div className='mealz-navbar-desktop-right-side-content'>
+          <MaterialIcon 
+            icon='more_horiz'
+            className='mealz-navbar-desktop-menu'
+            onClick={onShowMenu}
+          />
+          <PageNavbarMenu
+            hidden={state.menuHidden}
+            items={menuItems}
+            onItemClick={onMenuItemClick}
+            onCancel={onHideMenu}
+          />
+        </div>      
       </div>
-      <div className='mealz-navbar-desktop-right-side-content'>
-        <MaterialIcon 
-          icon='more_horiz'
-          className='mealz-navbar-desktop-menu'
-          onClick={onShowMenu}
-        />
-        <PageNavbarMenu
-          hidden={state.menuHidden}
-          items={menuItems}
-          onItemClick={onMenuItemClick}
-          onCancel={onHideMenu}
-        />
-      </div>      
     </div>
   );
 }

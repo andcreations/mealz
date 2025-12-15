@@ -10,8 +10,8 @@ export function PageNavbar() {
   const isMobile = systemService.isMobile();
 
   return (
-    <div className='mealz-navbar'>
+    <>
       { isMobile ? <PageNavbarMobile/> : <PageNavbarDesktop/> }
-    </div>
+    </>
   );
 }
