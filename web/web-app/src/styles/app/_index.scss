@@ -22,6 +22,7 @@
 @import './components/basic/Loader';
 @import './components/basic/MaterialIcon';
 @import './components/basic/LinkButton';
+@import './components/basic/ModalMenu';
 @import './components/layout/Center';
 @import './components/layout/FullScreen';
 @import './components/charts/LineChart';
@@ -41,7 +42,6 @@
 @import './dashboard/components/WeeklySummary';
 @import './dashboard/components/MacrosSummaryChart';
 
-@import './chef/components/meal-planner/MealNamePicker';
 @import './chef/components/meal-planner/IngredientsEditor';
 @import './chef/components/meal-planner/IngredientPicker';
 @import './chef/components/meal-planner/IngredientPickerWrapper';

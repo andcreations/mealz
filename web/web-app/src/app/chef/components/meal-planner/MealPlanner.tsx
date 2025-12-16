@@ -9,7 +9,7 @@ import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { CalculateAmountsResult, MealPlannerIngredient } from '../../types';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
-import { LoaderType } from '../../../components';
+import { LoaderType, ModalMenuItem, ModalMenu } from '../../../components';
 import { PageLoader } from '../../../page';
 import { NotificationsService, NotificationType } from '../../../notifications';
 import {
@@ -24,7 +24,6 @@ import { MealPlannerActionBar } from './MealPlannerActionBar';
 import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
-import { MealNamePicker } from './MealNamePicker';
 
 enum Focus { Calories };
 
@@ -194,7 +193,6 @@ export function MealPlanner() {
         mealDailyPlan,
         Date.now(),
       );
-      console.log('entry', entry);
       const dailyPlanMealNameByTime = mealsDailyPlanService.getMealName(
         mealDailyPlan,
         Date.now(),
@@ -341,6 +339,13 @@ export function MealPlanner() {
         ...mealsDailyPlanService.getMealNames(state.dailyMealPlan),
         translate('ad-hoc-meal-name'),
       ];
+    },
+
+    getMenuItems: (): ModalMenuItem[] => {
+      return mealName.getMealNames().map(name => ({
+        name,
+        onClick: (item: ModalMenuItem) => mealName.onPick(item.name),
+      }));
     },
 
     onPick: (mealName: string) => {
@@ -495,10 +500,10 @@ export function MealPlanner() {
         </div>
       }
       { state.showMealNamePicker &&
-        <MealNamePicker
+        <ModalMenu
           show={state.showMealNamePicker}
-          mealNames={mealName.getMealNames()}
-          onPick={mealName.onPick}
+          items={mealName.getMenuItems()}
+          onClick={mealName.onClose}
           onClose={mealName.onClose}
         />
       }

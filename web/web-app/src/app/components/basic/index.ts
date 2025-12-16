@@ -3,3 +3,4 @@ export * from './Loader'
 export * from './LoaderByStatus';
 export * from './MaterialIcon';
 export * from './LinkButton';
+export * from './ModalMenu';
