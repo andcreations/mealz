@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import * as fs from 'fs';
-import { encode, decode } from '@msgpack/msgpack';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { IngredientDetailsV1 } from './ingredients';
@@ -12,6 +11,14 @@ import { SQLiteDB } from './sqlite';
 interface DBIngredient {
   id: string;
   name: Record<string, string>;
+}
+
+function encode(value: any): Buffer {
+  return Buffer.from(JSON.stringify(value));
+}
+
+function decode<T>(buffer: Buffer): T {
+  return JSON.parse(buffer.toString()) as T;
 }
 
 async function loadIngredients(filename: string): Promise<any> {

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
+import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 import {
   TelegramUsersTransporter,
 } from '@mealz/backend-telegram-users-service-api';
@@ -48,6 +49,9 @@ export class TelegramBotService {
     request: SendMessageToUserRequestV1,
     context: Context,
   ): Promise<void> {
+    if (!isTelegramEnabled()) {
+      return;
+    }
     const {
       telegramUser,
     } = await this.telegramUsersTransporter.readTelegramUserV1(

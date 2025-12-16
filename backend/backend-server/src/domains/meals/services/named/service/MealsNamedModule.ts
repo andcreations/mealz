@@ -7,6 +7,7 @@ import { MealsCrudAPIModule } from '@mealz/backend-meals-crud-service-api';
 import { MEALS_NAMED_SQLITE_DB_MODULE_OPTIONS, MealsNamedDBModule } from './db';
 import { MealsNamedCrudService } from './services';
 import { MealsNamedCrudRepository } from './repositories';
+import { MealsDailyPlanRequestController } from './controllers';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MealsNamedCrudRepository } from './repositories';
     IdGeneratorProvider,
     MealsNamedCrudRepository,
     MealsNamedCrudService,
+    MealsDailyPlanRequestController,
   ],
 })
 export class MealsNamedModule {}

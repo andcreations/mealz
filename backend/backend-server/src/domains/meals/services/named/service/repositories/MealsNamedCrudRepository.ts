@@ -4,7 +4,8 @@ import { IdGenerator, InjectIdGenerator } from '@mealz/backend-common';
 import {
   DBRepository,
   InjectDBRepository,
-  UpsertObject,
+  Update,
+  UpdateObject,
   Where,
 } from '@mealz/backend-db';
 import {
@@ -29,7 +30,7 @@ export class MealsNamedCrudRepository {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  public async readNameMealById(
+  public async readById(
     id: string,
     context: Context,
   ): Promise<NamedMeal | undefined> {
@@ -41,16 +42,43 @@ export class MealsNamedCrudRepository {
     return this.mapper.fromEntity(entity);
   }
 
-  public async readNamedMealsByUserId(
+  public async readByUserIdAndMealName(
+    userId: string,
+    mealName: string,
+    context: Context,
+  ): Promise<NamedMeal | undefined> {
+    const query: Where<NamedMealDBEntity> = {
+      user_id: { $eq: userId },
+      meal_name: { $eq: mealName },
+    };
+    const entity = await this.repository.findOne(query, {}, context);
+    return this.mapper.fromEntity(entity);
+  }
+
+  public async readFromLastByUserId(
+    lastId: string | undefined,
+    limit: number,
     userId: string,
     context: Context,
   ): Promise<NamedMeal[]> {
     const query: Where<NamedMealDBEntity> = { user_id: { $eq: userId } };
-    const entities = await this.repository.find(query, {}, context);
+    if (lastId) {
+      query.id = { $gt: lastId };
+    }
+    const entities = await this.repository.find(
+      query,
+      { 
+        limit,
+        sort: [
+          { id: 'asc' },
+        ],
+      },
+      context,
+    );
     return this.mapper.fromEntities(entities);
   }
 
-  public async createNamedMeal(
+  public async create(
     namedMeal: NamedMealWithoutId,
     context: Context,
   ): Promise<Pick<NamedMeal, 'id'>> {
@@ -60,7 +88,7 @@ export class MealsNamedCrudRepository {
     return { id };
   }
 
-  public async deleteNamedMealById(
+  public async deleteById(
     id: string,
     context: Context,
   ): Promise<void> {
@@ -68,13 +96,16 @@ export class MealsNamedCrudRepository {
     await this.repository.delete(query, context);
   }
 
-  public async upsertNamedMeal(
-    namedMeal: UpsertObject<NamedMeal, 'id'>,
+  public async update(
+    namedMeal: UpdateObject<NamedMeal, 'id'>,
     context: Context,
-  ): Promise<Pick<NamedMeal, 'id'>> {
-    const id = namedMeal.id ?? this.idGenerator();
-    const entity = this.mapper.toEntity({ ...namedMeal, id });
-    await this.repository.upsert(entity, context);
-    return { id };
+  ): Promise<void> {
+    const query: Where<NamedMealDBEntity> = {
+      id: { $eq: namedMeal.id },
+    };
+    const update: Update<NamedMealDBEntity> = {
+      meal_name: { $set: namedMeal.mealName },
+    };
+    await this.repository.update(query, update, context);
   }
 }

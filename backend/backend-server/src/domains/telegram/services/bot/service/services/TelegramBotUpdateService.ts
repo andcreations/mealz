@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TelegramUpdate } from '@andcreations/telegram-bot';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
+import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 
 import { TelegramBotCommand } from '../types';
 import { TelegramBotCommandProvider } from './TelegramBotCommandProvider';
@@ -17,6 +18,9 @@ export class TelegramBotUpdateService {
     update: TelegramUpdate,
     context: Context,
   ): Promise<void> {
+    if (!isTelegramEnabled()) {
+      return;
+    }
     this.logger.debug('Handling Telegram bot update', {
       ...context,
       update: JSON.stringify(update),

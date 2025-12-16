@@ -1,78 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { Logger } from '@mealz/backend-logger';
 import {
   InternalError,
   MealzError,
   Saga,
   SagaService,
 } from '@mealz/backend-common';
-import { Meal, MealWithoutId } from '@mealz/backend-meals-common';
+import { Meal } from '@mealz/backend-meals-common';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
-import { NamedMeal } from '@mealz/backend-meals-named-service-api';
+import {
+  NamedMeal,
+  CreateNamedMealRequestV1,
+  CreateNamedMealResponseV1,
+  ReadNamedMealsFromLastRequestV1,
+  ReadNamedMealsFromLastResponseV1,
+  UpdateNamedMealRequestV1,
+} from '@mealz/backend-meals-named-service-api';
 
+import { NamedMealAlreadyExistsError, NamedMealNotFoundError } from '../errors';
 import { MealsNamedCrudRepository } from '../repositories';
 
 @Injectable()
 export class MealsNamedCrudService {
   public constructor(
-    private readonly logger: Logger,
     private readonly sagaService: SagaService,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsNamedCrudRepository: MealsNamedCrudRepository,
-  ) {
-    // setTimeout(async () => {
-    //   // console.log('-> test');
-    //   // await this.upsertNamedMeal(
-    //   //   '019b26a2-2214-74de-af5b-177707b53125',
-    //   //   {
-    //   //     calories: 100,
-    //   //     ingredients: [
-    //   //       {
-    //   //         ingredientId: '019ad613-7acd-72ba-986e-5cd338bcd1b8',
-    //   //         enteredAmount: '50',
-    //   //         calculatedAmount: 50,
-    //   //       },
-    //   //       {
-    //   //         ingredientId: '019ad613-7cdd-7750-81b4-0bf9ba32ed0a',
-    //   //         enteredAmount: '150',
-    //   //         calculatedAmount: 150,
-    //   //       }
-    //   //     ],
-    //   //   },
-    //   //   {
-    //   //     correlationId: 'test',
-    //   //   }        
-    //   // );
+  ) {}
 
-    //   // await this.createNamedMeal(
-    //   //   'deadbabe',
-    //   //   {
-    //   //     calories: 100,
-    //   //     ingredients: [
-    //   //       {
-    //   //         ingredientId: '019ad613-7acd-72ba-986e-5cd338bcd1b8',
-    //   //         enteredAmount: '50',
-    //   //         calculatedAmount: 50,
-    //   //       }
-    //   //     ],
-    //   //   },
-    //   //   'test-meal-01',
-    //   //   {
-    //   //     correlationId: 'test',
-    //   //   }        
-    //   // );
-
-    //   console.log('<- test');
-    // }, 1000);
-  }
-
-  public async createNamedMeal(
-    userId: string | undefined,
-    meal: MealWithoutId,
-    mealName: string,
+  public async createNamedMealV1(
+    request: CreateNamedMealRequestV1,
     context: Context,
-  ): Promise<Pick<NamedMeal, 'id'>> {
+  ): Promise<CreateNamedMealResponseV1> {
+    const { userId, meal, mealName } = request;
+
     // saga context
     type SagaContext = {
       newMealId?: string;
@@ -83,6 +44,20 @@ export class MealsNamedCrudService {
     const saga: Saga<SagaContext> = {
       id: `create-named-meal`,
       operations: [
+        {
+          getId: () => 'check-name',
+          do: async () => {
+            const namedMeal =
+              await this.mealsNamedCrudRepository.readByUserIdAndMealName(
+                userId,
+                mealName,
+                context,
+              );
+            if (namedMeal) {
+              throw new NamedMealAlreadyExistsError(mealName);
+            }
+          },
+        },
         {
           getId: () => 'create-meal',
           do: async (sagaContext: SagaContext) => {
@@ -108,7 +83,7 @@ export class MealsNamedCrudService {
         {
           getId: () => 'create-named-meal',
           do: async (sagaContext: SagaContext) => {
-            const { id } = await this.mealsNamedCrudRepository.createNamedMeal(
+            const { id } = await this.mealsNamedCrudRepository.create(
               {
                 mealId: sagaContext.newMealId,
                 userId,
@@ -120,7 +95,7 @@ export class MealsNamedCrudService {
           },
           undo: async (sagaContext: SagaContext) => {
             if (sagaContext.newNamedMealId) {
-              await this.mealsNamedCrudRepository.deleteNamedMealById(
+              await this.mealsNamedCrudRepository.deleteById(
                 sagaContext.newNamedMealId,
                 context,
               );
@@ -137,11 +112,12 @@ export class MealsNamedCrudService {
     return { id: sagaContext.newNamedMealId };    
   }
 
-  public async upsertNamedMeal(
-    namedMealId: string,
-    meal: MealWithoutId,
+  public async updateNamedMealV1(
+    request: UpdateNamedMealRequestV1,
     context: Context,
   ): Promise<void> {
+    const { namedMealId, userId, meal, mealName } = request;
+
     // saga context
     type SagaContext = {
       originalNamedMeal?: NamedMeal;
@@ -153,11 +129,40 @@ export class MealsNamedCrudService {
       id: `upsert-named-meal`,
       operations: [
         {
+          getId: () => 'check-exists',
+          do: async () => {
+            const namedMeal = await this.mealsNamedCrudRepository.readById(
+              namedMealId,
+              context,
+            );
+            if (!namedMeal) {
+              throw new NamedMealNotFoundError(namedMealId);
+            }
+          },
+        },
+        {
+          getId: () => 'check-name',
+          do: async () => {
+            const namedMeal =
+              await this.mealsNamedCrudRepository.readByUserIdAndMealName(
+                userId,
+                mealName,
+                context,
+              );
+            console.log('namedMeal', namedMeal);
+            console.log('namedMealId', namedMealId);
+            // cannot update if there is another named meal with the same name
+            if (namedMeal && namedMeal.id !== namedMealId) {
+              throw new NamedMealAlreadyExistsError(mealName);
+            }
+          },
+        },
+        {
           // Read the named meal to get the meal identifier and
           // to be able to rollback the changes.          
           getId: () => 'read-named-meal',
           do: async (sagaContext: SagaContext) => {
-            const namedMeal = await this.mealsNamedCrudRepository.readNameMealById(
+            const namedMeal = await this.mealsNamedCrudRepository.readById(
               namedMealId,
               context,
             );
@@ -202,20 +207,22 @@ export class MealsNamedCrudService {
           },
         },       
         {
-          getId: () => 'upsert-named-meal',
+          getId: () => 'update-named-meal',
+          condition: async (sagaContext: SagaContext) => {
+            // if the fields to be updated differ from the original named meal
+            return sagaContext.originalNamedMeal.mealName !== mealName;
+          },
           do: async (sagaContext: SagaContext) => {
-            await this.mealsNamedCrudRepository.upsertNamedMeal(
+            await this.mealsNamedCrudRepository.update(
               { 
                 id: namedMealId,
-                userId: sagaContext.originalNamedMeal.userId,
-                mealName: sagaContext.originalNamedMeal.mealName,
-                mealId: sagaContext.originalNamedMeal.mealId,
+                mealName,
               },
               context,
             );
           },
           undo: async (sagaContext: SagaContext) => {
-            await this.mealsNamedCrudRepository.upsertNamedMeal(
+            await this.mealsNamedCrudRepository.update(
               sagaContext.originalNamedMeal,
               context,
             );
@@ -227,5 +234,18 @@ export class MealsNamedCrudService {
     // run the saga
     const sagaContext: SagaContext = {};
     await this.sagaService.run(saga, sagaContext, context);    
+  }
+
+  public async readNamedMealsFromLastV1(
+    request: ReadNamedMealsFromLastRequestV1,
+    context: Context,
+  ): Promise<ReadNamedMealsFromLastResponseV1> {
+    const namedMeals = await this.mealsNamedCrudRepository.readFromLastByUserId(
+      request.lastId,
+      request.limit,
+      request.userId,
+      context,
+    );
+    return { namedMeals };
   }
 }

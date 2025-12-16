@@ -1,1 +1,2 @@
-export * from './MealsNamedPlanGWService';
+export * from './GWNamedMealMapper';
+export * from './MealsNamedPlanGWService';  

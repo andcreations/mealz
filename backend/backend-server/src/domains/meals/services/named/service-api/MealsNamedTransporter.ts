@@ -4,6 +4,13 @@ import { RequestTransporter } from '@mealz/backend-transport';
 
 import { MEALS_NAMED_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsNamedRequestTopics } from './MealsNamedRequestTopics';
+import {
+  CreateNamedMealRequestV1,
+  CreateNamedMealResponseV1,
+  ReadNamedMealsFromLastRequestV1,
+  ReadNamedMealsFromLastResponseV1,
+  UpdateNamedMealRequestV1,
+} from './dtos';
 
 @Injectable()
 export class MealsNamedTransporter {
@@ -11,4 +18,41 @@ export class MealsNamedTransporter {
     @Inject(MEALS_NAMED_REQUEST_TRANSPORTER_TOKEN)
     private readonly transporter: RequestTransporter,
   ) {}
+
+  public async readNamedMealsFromLastV1(
+    request: ReadNamedMealsFromLastRequestV1,
+    context: Context,
+  ): Promise<ReadNamedMealsFromLastResponseV1> {
+    return await this.transporter.sendRequest(
+      MealsNamedRequestTopics.ReadNamedMealsFromLastV1,
+      request,
+      context,
+    );
+  }
+
+  public async createNamedMealV1(
+    request: CreateNamedMealRequestV1,
+    context: Context,
+  ): Promise<CreateNamedMealResponseV1> {
+    return await this.transporter.sendRequest<
+      CreateNamedMealRequestV1, CreateNamedMealResponseV1
+    >(
+      MealsNamedRequestTopics.CreateNamedMealV1,
+      request,
+      context,
+    );
+  }
+
+  public async updateNamedMealV1(
+    request: UpdateNamedMealRequestV1,
+    context: Context,
+  ): Promise<void> {
+    return await this.transporter.sendRequest<
+      UpdateNamedMealRequestV1, void
+    >(
+      MealsNamedRequestTopics.UpdateNamedMealV1,
+      request,
+      context,
+    );
+  }
 }

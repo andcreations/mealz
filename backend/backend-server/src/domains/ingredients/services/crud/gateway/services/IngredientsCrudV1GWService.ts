@@ -26,12 +26,14 @@ export class IngredientsCrudV1GWService {
       lastId: gwParams.lastId,
       limit: gwParams.limit,
     };
-    const response = await this.ingredientsCrudTransporter.readIngredientsFromLastV1(
+    const { 
+      ingredients,
+    } = await this.ingredientsCrudTransporter.readIngredientsFromLastV1(
       request,
       context,
     );
     return {
-      ingredients: response.ingredients.map(ingredient =>
+      ingredients: ingredients.map(ingredient =>
         this.gwIngredientMapper.fromIngredient(ingredient),
       ),
     };

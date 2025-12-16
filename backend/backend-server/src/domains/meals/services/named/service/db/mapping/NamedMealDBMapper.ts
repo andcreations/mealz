@@ -14,7 +14,9 @@ export class NamedMealDBMapper {
     };
   }
 
-  public fromEntity(entity: NamedMealDBEntity | undefined): NamedMeal | undefined {
+  public fromEntity(
+    entity: NamedMealDBEntity | undefined,
+  ): NamedMeal | undefined {
     if (!entity) {
       return undefined;
     }

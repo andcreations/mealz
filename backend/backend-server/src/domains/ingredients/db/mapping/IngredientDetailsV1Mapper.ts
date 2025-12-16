@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { decode } from '@msgpack/msgpack';
+import { decode } from '@mealz/backend-db';
 import { InternalError } from '@mealz/backend-common';
 import {
   FactId,
