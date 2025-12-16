@@ -10,6 +10,7 @@ import {
 import { Logger } from '@mealz/backend-logger';
 import { InternalError, requireStrEnv } from '@mealz/backend-common';
 import { BOOTSTRAP_CONTEXT, Context } from '@mealz/backend-core';
+import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 
 @Injectable()
 export class TelegramBotClient implements OnModuleInit {
@@ -18,6 +19,10 @@ export class TelegramBotClient implements OnModuleInit {
   public constructor(private readonly logger: Logger) {}
 
   public async onModuleInit(): Promise<void> {
+    if (!isTelegramEnabled()) {
+      this.logger.info('Telegram disabled', BOOTSTRAP_CONTEXT);
+      return;
+    }
     const botToken = requireStrEnv('MEALZ_TELEGRAM_BOT_TOKEN');
     this.telegramBot = new TelegramBot(botToken);
     

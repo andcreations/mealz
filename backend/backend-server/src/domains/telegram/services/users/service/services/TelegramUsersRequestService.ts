@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { requireStrEnv } from '@mealz/backend-common';
+import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 import {
   TelegramUser,
   GenerateStartLinkRequestV1,
@@ -99,9 +100,10 @@ export class TelegramUsersRequestService {
       request.userId,
       context,
     );
+    const isTelegramUserEnabled = telegramUser?.isEnabled ?? false;
     return {
       telegramUser,
-      canSendMessagesTo: telegramUser?.isEnabled ?? false,
+      canSendMessagesTo: isTelegramUserEnabled && isTelegramEnabled(),
     };
   }
 }

@@ -50,6 +50,7 @@ async function run(): Promise<void> {
   await migrateDB('meals-user');
   await migrateDB('meals-log');
   await migrateDB('meals-daily-plan');
+  await migrateDB('meals-named');
   await migrateDB('telegram-users');
 
 }

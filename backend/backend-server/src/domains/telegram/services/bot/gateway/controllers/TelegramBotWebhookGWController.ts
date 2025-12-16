@@ -17,7 +17,6 @@ export class TelegramBotWebhookGWController {
     @Param('token') token: string,
     @GWContext() context: Context,
   ): Promise<void> {
-    console.log('token', token);
     if (!this.telegramBotWebhookGWService.isTokenValid(token)) {
       throw new UnauthorizedError();
     }

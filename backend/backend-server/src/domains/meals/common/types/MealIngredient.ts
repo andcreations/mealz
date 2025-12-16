@@ -11,5 +11,5 @@ export class MealIngredient {
   public enteredAmount?: string;
 
   // Calculated amount of the ingredient
-  calculatedAmount?: number;  
+  public calculatedAmount?: number;  
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { decode, encode } from '@msgpack/msgpack';
+import { decode, encode } from '@mealz/backend-db';
 import { ifDefined } from '@mealz/backend-shared';
 import {
   AdHocIngredient,

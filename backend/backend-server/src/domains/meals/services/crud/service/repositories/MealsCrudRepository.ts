@@ -13,7 +13,7 @@ import {
   MEAL_DB_ENTITY_NAME,
   MealDBEntity,
   MealDBMapper,
-} from '@mealz/backend-meals-db';
+} from '../db';
 
 @Injectable()
 export class MealsCrudRepository {

@@ -116,7 +116,7 @@ export class MealsLogCrudService {
 
     // saga
     const saga: Saga<SagaContext> = {
-      id: `upsert-meal-log-v1`,
+      id: `upsert-meal-log`,
       operations: [
         {
           // Read the meal log to get the meal identifier and
@@ -221,7 +221,6 @@ export class MealsLogCrudService {
       const nowDay = DateTime.fromMillis(now)
         .setZone(request.timeZone)
         .toFormat(FORMAT);
-      console.log(`latestDay: ${latestDay}, nowDay: ${nowDay}`);
 
       // update if it's the same day and the same meal
       if (

@@ -2,6 +2,9 @@ export interface SagaOperation<TContext> {
   // Gets the operation identifier. It should be human-readable.
   getId: () => string;
 
+  // Operation skipped if the condition is not met.
+  condition?: (context: TContext) => Promise<boolean>;
+
   // Performs the operation
   do: (context: TContext) => Promise<void>;
 

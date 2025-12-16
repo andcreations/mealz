@@ -19,6 +19,12 @@ export class SagaService {
     let sagaError: any;
     const runOperations: SagaOperation<TContext>[] = [];
     for (const operation of saga.operations) {
+      if (operation.condition) {
+        const conditionMet = await operation.condition(sagaContext);
+        if (!conditionMet) {
+          continue;
+        }
+      }
       try {
         this.logger.verbose(
           'Running saga operation',
