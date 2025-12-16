@@ -1,0 +1,80 @@
+import { Injectable } from '@nestjs/common';
+import { Context } from '@mealz/backend-core';
+import { IdGenerator, InjectIdGenerator } from '@mealz/backend-common';
+import {
+  DBRepository,
+  InjectDBRepository,
+  UpsertObject,
+  Where,
+} from '@mealz/backend-db';
+import {
+  NamedMeal,
+  NamedMealWithoutId,
+} from '@mealz/backend-meals-named-service-api';
+
+import { 
+  MEALS_NAMED_DB_ENTITY_NAME, 
+  MEALS_NAMED_DB_NAME, 
+  NamedMealDBEntity,
+  NamedMealDBMapper,
+} from '../db';
+
+@Injectable()
+export class MealsNamedCrudRepository {
+  public constructor(
+    @InjectDBRepository(MEALS_NAMED_DB_NAME, MEALS_NAMED_DB_ENTITY_NAME)
+    private readonly repository: DBRepository<NamedMealDBEntity>,
+    private readonly mapper: NamedMealDBMapper,
+    @InjectIdGenerator()
+    private readonly idGenerator: IdGenerator,
+  ) {}
+
+  public async readNameMealById(
+    id: string,
+    context: Context,
+  ): Promise<NamedMeal | undefined> {
+    const query: Where<NamedMealDBEntity> = { id: { $eq: id } };
+    const entity = await this.repository.findOne(query, {}, context);
+    if (!entity) {
+      return;
+    }
+    return this.mapper.fromEntity(entity);
+  }
+
+  public async readNamedMealsByUserId(
+    userId: string,
+    context: Context,
+  ): Promise<NamedMeal[]> {
+    const query: Where<NamedMealDBEntity> = { user_id: { $eq: userId } };
+    const entities = await this.repository.find(query, {}, context);
+    return this.mapper.fromEntities(entities);
+  }
+
+  public async createNamedMeal(
+    namedMeal: NamedMealWithoutId,
+    context: Context,
+  ): Promise<Pick<NamedMeal, 'id'>> {
+    const id = this.idGenerator();
+    const entity = this.mapper.toEntity({ ...namedMeal, id });
+    await this.repository.insert(entity, context);
+    return { id };
+  }
+
+  public async deleteNamedMealById(
+    id: string,
+    context: Context,
+  ): Promise<void> {
+    const query: Where<NamedMealDBEntity> = { id: { $eq: id } };
+    await this.repository.delete(query, context);
+  }
+
+  public async upsertNamedMeal(
+    namedMeal: UpsertObject<NamedMeal, 'id'>,
+    context: Context,
+  ): Promise<Pick<NamedMeal, 'id'>> {
+    const id = namedMeal.id ?? this.idGenerator();
+    const entity = this.mapper.toEntity({ ...namedMeal, id });
+    await this.repository.upsert(entity, context);
+    return { id };
+  }
+}

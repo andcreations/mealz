@@ -10,5 +10,4 @@ import { MealDBMapper, MealDetailsV1Mapper } from './mapping';
     MealDBMapper,
   ],
 })
-export class MealsDBModule {
-}
+export class MealsDBModule {}

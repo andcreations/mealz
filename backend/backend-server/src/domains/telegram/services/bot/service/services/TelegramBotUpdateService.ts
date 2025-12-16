@@ -48,7 +48,6 @@ export class TelegramBotUpdateService {
       try {
         await executor.execute(command, context);
       } catch (error) {
-        console.log(error);
         this.logger.error(
           'Error executing Telegram bot command',
           {

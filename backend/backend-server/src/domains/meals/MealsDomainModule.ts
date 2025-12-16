@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { MealsCrudModule } from './services/crud';
 import { MealsUserModule, MealsUserGWModule } from './services/user';
 import { MealsLogModule, MealsLogGWModule } from './services/log';
-import { MealsDailyPlanModule } from './services/daily-plan/service';
-import { MealsDailyPlanGWModule } from './services/daily-plan/gateway';
+import { MealsDailyPlanModule, MealsDailyPlanGWModule } from './services/daily-plan';
+import { MealsNamedModule, MealsNamedGWModule } from './services/named';
 
 @Module({
   imports: [
@@ -15,6 +15,8 @@ import { MealsDailyPlanGWModule } from './services/daily-plan/gateway';
     MealsLogGWModule,
     MealsDailyPlanModule,
     MealsDailyPlanGWModule,
+    MealsNamedModule,
+    MealsNamedGWModule,
   ],
 })
 export class MealsDomainModule {

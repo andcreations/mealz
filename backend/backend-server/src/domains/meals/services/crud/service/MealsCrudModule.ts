@@ -5,7 +5,7 @@ import { SQLiteDBModule } from '@mealz/backend-db';
 import {
   MEALS_SQLITE_DB_MODULE_OPTIONS,
   MealsDBModule,
-} from '@mealz/backend-meals-db';
+} from './db';
 
 import { MealsCrudRepository } from './repositories';
 import { MealsCrudService } from './services';
