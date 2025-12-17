@@ -131,10 +131,6 @@ export function IngredientPicker(props: IngredientPickerProps) {
     },
     [state.focus],
   );
-  // useEffect(
-  //   () => focusRef(name.ref, { select: true }),
-  //   [],
-  // );
 
   // select an ingredient
   const selectIngredientByIndex = (index: number) => {

@@ -46,7 +46,7 @@ export function DailySummary(props: DailySummaryProps) {
           'Failed to summarize daily meal log',
         ),
         Log.logAndRethrow(
-          () => mealsDailyPlanService.readCurrentDailyGoals(),
+          () => mealsDailyPlanService.readCurrentDailyGoalsByNow(),
           'Failed to read current daily plan',
         ),
       ])

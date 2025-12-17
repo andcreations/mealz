@@ -41,7 +41,7 @@ export class IngredientsSearch implements OnBootstrap {
   }
 
   private tryBuildIndex(): void {
-    if (!this.ingredientsCrudService.loaded()) {
+    if (!this.ingredientsCrudService.isLoaded()) {
       return;
     }
     this.buildIndex();

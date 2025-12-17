@@ -15,6 +15,9 @@ import {
   ReadNamedMealsFromLastRequestV1,
   ReadNamedMealsFromLastResponseV1,
   UpdateNamedMealRequestV1,
+  ReadNamedMealByIdResponseV1,
+  ReadNamedMealByIdRequestV1,
+  DeleteNamedMealRequestV1,
 } from '@mealz/backend-meals-named-service-api';
 
 import { NamedMealAlreadyExistsError, NamedMealNotFoundError } from '../errors';
@@ -27,6 +30,20 @@ export class MealsNamedCrudService {
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsNamedCrudRepository: MealsNamedCrudRepository,
   ) {}
+
+  public async readNamedMealByIdV1(
+    request: ReadNamedMealByIdRequestV1,
+    context: Context,
+  ): Promise<ReadNamedMealByIdResponseV1> {
+    const namedMeal = await this.mealsNamedCrudRepository.readById(
+      request.id,
+      context,
+    );
+    if (!namedMeal || namedMeal.userId !== request.userId) {
+      throw new NamedMealNotFoundError(request.id);
+    }
+    return { namedMeal };
+  }
 
   public async createNamedMealV1(
     request: CreateNamedMealRequestV1,
@@ -141,7 +158,7 @@ export class MealsNamedCrudService {
           },
         },
         {
-          getId: () => 'check-name',
+          getId: () => 'check-access-and-name',
           do: async () => {
             const namedMeal =
               await this.mealsNamedCrudRepository.readByUserIdAndMealName(
@@ -149,8 +166,7 @@ export class MealsNamedCrudService {
                 mealName,
                 context,
               );
-            console.log('namedMeal', namedMeal);
-            console.log('namedMealId', namedMealId);
+
             // cannot update if there is another named meal with the same name
             if (namedMeal && namedMeal.id !== namedMealId) {
               throw new NamedMealAlreadyExistsError(mealName);
@@ -247,5 +263,19 @@ export class MealsNamedCrudService {
       context,
     );
     return { namedMeals };
+  }
+
+  public async deleteNamedMealV1(
+    request: DeleteNamedMealRequestV1,
+    context: Context,
+  ): Promise<void> {
+    const namedMeal = await this.mealsNamedCrudRepository.readById(
+      request.id,
+      context,
+    );
+    if (!namedMeal || namedMeal.userId !== request.userId) {
+      throw new NamedMealNotFoundError(request.id);
+    }
+    await this.mealsNamedCrudRepository.deleteById(request.id, context);
   }
 }

@@ -44,6 +44,9 @@
       ],
       "@mealz/backend-meals-daily-plan-gateway-api": [
         "../../backend/backend-server/src/domains/meals/services/daily-plan/gateway-api"
+      ],
+      "@mealz/backend-meals-named-gateway-api": [
+        "../../backend/backend-server/src/domains/meals/services/named/gateway-api"
       ]
     }
   }

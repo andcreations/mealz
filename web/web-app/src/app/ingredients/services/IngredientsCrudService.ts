@@ -71,7 +71,7 @@ export class IngredientsCrudService implements OnBootstrap {
     let lastId: string | undefined = undefined;
     const limit = 100;
 
-  // read
+    // read
     while (true) {
       const response = await this.http.get<ReadIngredientsFromLastGWResponseV1>(
         IngredientsCrudV1API.url.readFromLastV1({ lastId, limit }),
@@ -84,15 +84,15 @@ export class IngredientsCrudService implements OnBootstrap {
       }
       lastId = ingredients[ingredients.length - 1].id;
     }
-
     Log.info(
       `Read ${readIngredients.length} ingredients ` +
       `in ${Date.now() - startTime}ms`
     );
-  // reset
+
+    // reset
     this.ingredientsById = {};
 
-  // keep
+    // keep
     this.ingredients = readIngredients;
     this.ingredients.forEach(ingredient => {
       this.ingredientsById[ingredient.id] = ingredient;
@@ -102,7 +102,7 @@ export class IngredientsCrudService implements OnBootstrap {
   private changeLoadStatus(loadStatus: LoadStatus): void {
     this.loadStatus = loadStatus;
 
-  // notify
+    // notify
     const event: IngredientsLoadStatusChangedEvent = {
       ingredientsLoadStatus: loadStatus,
     };
@@ -110,7 +110,7 @@ export class IngredientsCrudService implements OnBootstrap {
   }
 
   public async loadIngredients(): Promise<GWIngredient[]> {
-    if (this.loaded()) {
+    if (this.isLoaded()) {
       return this.getIngredients();
     }
 
@@ -119,12 +119,9 @@ export class IngredientsCrudService implements OnBootstrap {
     });
   }
 
-  public getLoadStatus(): LoadStatus {
-    return this.loadStatus;
-  }
 
-  public loaded(): boolean {
-    return this.getLoadStatus() === LoadStatus.Loaded;
+  public isLoaded(): boolean {
+    return this.loadStatus === LoadStatus.Loaded;
   }
 
   public getIngredients(): GWIngredient[] {

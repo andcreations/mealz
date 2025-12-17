@@ -8,12 +8,25 @@ export const MealPlannerTranslations: Translations = {
   'default-meal-name': 'Meal',
   'ad-hoc-meal-name': 'Ad-hoc',
   'kcal': 'kcal',
+  'meal-cleared': 'Meal cleared',
+
+  // draft meal
   'failed-to-read-user-draft-meal': 'Failed to read your draft meal',
   'failed-to-upsert-user-draft-meal': 'Failed to save your draft meal',
   'failed-to-delete-user-draft-meal': 'Failed to save your draft meal',
-  'failed-to-log-meal': 'Failed to log your meal',
+
+  // log
   'meal-logged-created': 'Meal log created',
   'meal-logged-updated': 'Meal log updated',
-  'meal-cleared': 'Meal cleared',
   'cannot-log-meal-with-errors': 'Please fix the issues with the meal before logging',
+  'failed-to-log-meal': 'Failed to log your meal',
+
+  // save
+  'cannot-save-meal-with-errors': 'Please fix the issues with the meal before saving',
+  'cannot-save-meal-with-no-ingredients': 'Please add ingredients before saving',
+  'save-placeholder': 'Enter meal name to save',
+  'save-info-empty': '',
+  'save-info-matching': 'Meal will be overwritten',
+  'save-info-non-matching': 'New meal will be created',
+  'meal-saved': 'Meal saved',
 };

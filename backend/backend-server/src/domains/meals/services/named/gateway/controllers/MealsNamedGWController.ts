@@ -1,8 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { UserRole } from '@mealz/backend-api';
 import { AuthUser } from '@mealz/backend-gateway-core';
 import { Context } from '@mealz/backend-core';
-import { Auth, GWContext, GWUser, Roles } from '@mealz/backend-gateway-common';
+import {
+  Auth,
+  GWContext,
+  GWUser,
+  Roles,
+} from '@mealz/backend-gateway-common';
 import {
   MEALS_NAMED_V1_URL,
   MealsNamedV1APIReadManyFromLastParams,
@@ -11,6 +16,7 @@ import {
 import {
   CreateNamedMealGWRequestV1Impl,
   CreateNamedMealGWResponseV1Impl,
+  ReadNamedMealByIdGWResponseV1Impl,
   ReadNamedMealsFromLastGWResponseV1Impl,
   UpdateNamedMealGWRequestV1Impl,
 } from '../dtos';
@@ -21,6 +27,22 @@ export class MealsNamedGWController {
   public constructor(
     private readonly mealsNamedPlanGWService: MealsNamedPlanGWService,
   ) {}
+
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Get(':namedMealId')
+  public async readByIdV1(
+    @Param('namedMealId') namedMealId: string,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<ReadNamedMealByIdGWResponseV1Impl> {
+    return await this.mealsNamedPlanGWService.readByIdV1(
+      namedMealId,
+      gwUser.id,
+      context,
+    );
+  }
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
@@ -64,6 +86,21 @@ export class MealsNamedGWController {
     return await this.mealsNamedPlanGWService.updateV1(
       namedMealId,
       gwRequest,
+      gwUser.id,
+      context,
+    );
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Delete('/:namedMealId')
+  public async deleteV1(
+    @Param('namedMealId') namedMealId: string,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<void> {
+    return await this.mealsNamedPlanGWService.deleteV1(
+      namedMealId,
       gwUser.id,
       context,
     );

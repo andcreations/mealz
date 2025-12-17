@@ -1,0 +1,1 @@
+export const DEFAULT_READ_LIMIT = 100;
