@@ -16,7 +16,7 @@ export interface NamedMealPickerProps {
   show: boolean;
   icon: string;
   placeholder: string;
-  info: {
+  info?: {
     empty?: string;
     matching?: string;
     nonMatching?: string;
@@ -135,12 +135,12 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
     },
 
     text: () => {
-      if (props.info.empty) {
-        return props.info.empty;
+      if (state.name.length === 0) {
+        return props.info?.empty ?? '';
       }
       return mealsNamedService.hasByName(state.name)
-        ? props.info.matching
-        : props.info.nonMatching;
+        ? props.info?.matching ?? ''
+        : props.info?.nonMatching ?? '';
     },
   }
 

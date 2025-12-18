@@ -31,7 +31,7 @@ export class MealsNamedGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Get(':namedMealId')
+  @Get('one/:namedMealId')
   public async readByIdV1(
     @Param('namedMealId') namedMealId: string,
     @GWUser() gwUser: AuthUser,

@@ -39,10 +39,11 @@ export class MealsNamedV1API {
      * @response ReadNamedMealByIdGWResponseV1
      */
     readByIdV1: (params: MealsNamedV1APIReadByIdParams) => {
-      return `${MEALS_NAMED_V1_URL}/${params.id}`;
+      return `${MEALS_NAMED_V1_URL}/one/${params.id}`;
     },
 
     /**
+     * @method GET
      * @param params Query parameters.
      * @response ReadNamedMealsFromLastGWResponseV1
      */

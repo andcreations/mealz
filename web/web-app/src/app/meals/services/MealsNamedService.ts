@@ -13,6 +13,7 @@ import {
   CreateNamedMealGWResponseV1,
   MealsNamedV1API,
   UpdateNamedMealGWRequestV1,
+  ReadNamedMealByIdGWResponseV1,
 } from '@mealz/backend-meals-named-gateway-api';
 
 import { LoadStatus } from '../../common';
@@ -98,7 +99,10 @@ export class MealsNamedService implements OnBootstrap {
     this.loadStatus = loadStatus;
   }
 
-  public async loadNamedMeals(): Promise<NamedMeal[]> {
+  public async loadAll(): Promise<NamedMeal[]> {
+    if (this.loadStatus === LoadStatus.FailedToLoad) {
+      throw new Error('Failed to load named meals');
+    }
     if (this.isLoaded()) {
       return this.getAll();
     }
@@ -140,12 +144,24 @@ export class MealsNamedService implements OnBootstrap {
     });
   }
 
+  public async loadByName(name: string): Promise<GWMealWithoutId> {
+    const namedMeal = this.getByName(name);
+    if (!namedMeal) {
+      throw new Error('Named meal not found');
+    }
+    const response = await this.http.get<ReadNamedMealByIdGWResponseV1>(
+      MealsNamedV1API.url.readByIdV1({ id: namedMeal.id }),
+    );
+    return response.data.meal;
+  }
+
   public async save(
     mealName: string,
     meal: GWMealWithoutId,
   ): Promise<void> {
     const namedMeal = this.getByName(mealName);
     if (namedMeal) {
+      // update
       await this.http.put<
         UpdateNamedMealGWRequestV1, void
       >(
@@ -162,6 +178,7 @@ export class MealsNamedService implements OnBootstrap {
       };
     }
     else {
+      // create
       const response = await this.http.post<
         CreateNamedMealGWRequestV1, CreateNamedMealGWResponseV1
       >(
@@ -176,6 +193,18 @@ export class MealsNamedService implements OnBootstrap {
         name: mealName,
       });
     }
+  }
+
+  public async deleteByName(name: string): Promise<void> {
+    const namedMeal = this.getByName(name);
+    if (!namedMeal) {
+      throw new Error('Named meal not found');
+    }
+    await this.http.delete<void>(
+      MealsNamedV1API.url.deleteV1({ id: namedMeal.id }),
+    );
+    const index = this.namedMeals.indexOf(namedMeal);
+    this.namedMeals.splice(index, 1);
   }
 }
 

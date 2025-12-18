@@ -166,7 +166,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
   const ingredient = {
     full: () : GWIngredient | undefined => {
       return state.ingredientId
-        ? ingredientsCrudService.getById(state.ingredientId)
+        ? ingredientsCrudService.getByIdOrThrow(state.ingredientId)
         : undefined;
     },
     adHoc: (): AdHocIngredient | undefined => {

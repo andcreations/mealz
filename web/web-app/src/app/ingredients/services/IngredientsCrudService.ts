@@ -109,7 +109,7 @@ export class IngredientsCrudService implements OnBootstrap {
     this.bus.emit(IngredientsTopics.IngredientsLoadStatusChanged, event);
   }
 
-  public async loadIngredients(): Promise<GWIngredient[]> {
+  public async loadAll(): Promise<GWIngredient[]> {
     if (this.isLoaded()) {
       return this.getIngredients();
     }
@@ -130,6 +130,14 @@ export class IngredientsCrudService implements OnBootstrap {
 
   public getById(id: string): GWIngredient | undefined {
     return this.ingredientsById[id];
+  }
+
+  public getByIdOrThrow(id: string): GWIngredient {
+    const ingredient = this.getById(id);
+    if (!ingredient) {
+      throw new Error('Ingredient not found');
+    }
+    return ingredient;
   }
 }
 

@@ -25,7 +25,7 @@ export class MealMapper {
 
     // full ingredient
     const fullIngredient = ingredientId
-      ? this.ingredientsCrudService.getById(ingredientId)
+      ? this.ingredientsCrudService.getByIdOrThrow(ingredientId)
       : undefined;
 
     // ad-hoc ingredient
