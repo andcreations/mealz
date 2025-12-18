@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { GWNamedMeal } from '@mealz/backend-meals-named-gateway-api';
 
 import { usePatchState, useService } from '../../../hooks';
 import { focusRef, Key, mapKey, stopBubble } from '../../../utils';
@@ -11,6 +10,8 @@ import { NamedMealPickerDropdown } from './NamedMealPickerDropdown';
 import { MaterialIcon } from '../../../components';
 
 enum Focus { Name };
+
+const SEARCH_LIMIT = 8;
 
 export interface NamedMealPickerProps {
   show: boolean;
@@ -113,7 +114,9 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
 
   const dropdown = {
     matchItems: (name: string) => {
-      return mealsNamedService.search(name).map(meal => meal.name);
+      return mealsNamedService
+        .search(name, SEARCH_LIMIT)
+        .map(meal => meal.name);
     },
 
     items: () => {

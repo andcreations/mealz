@@ -128,20 +128,22 @@ export class MealsNamedService implements OnBootstrap {
     return this.getByName(name) !== undefined;
   }
 
-  public search(query: string): NamedMeal[] {
+  public search(query: string, limit?: number): NamedMeal[] {
     if (!this.isLoaded()) {
       Log.error('Named meals not loaded');
       return [];
     }
 
     const queryNormalized = stripDiacritics(query.toLowerCase());
-    return this.namedMeals.filter(namedMeal => {
-      const mealNameNormalized = stripDiacritics(namedMeal.name.toLowerCase());
-      return (
-        mealNameNormalized.includes(queryNormalized) ||
-        isStringSimilar(mealNameNormalized, queryNormalized)
-      );
-    });
+    return this.namedMeals
+      .filter(namedMeal => {
+        const mealNameNormalized = stripDiacritics(namedMeal.name.toLowerCase());
+        return (
+          mealNameNormalized.includes(queryNormalized) ||
+          isStringSimilar(mealNameNormalized, queryNormalized)
+        );
+      })
+      .slice(0, limit ?? this.namedMeals.length);
   }
 
   public async loadByName(name: string): Promise<GWMealWithoutId> {
