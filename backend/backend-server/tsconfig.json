@@ -19,7 +19,8 @@
       "@mealz/backend-gateway-core": ["src/gateway/core"],
       "@mealz/backend-gateway-common": ["src/gateway/common"],
       "@mealz/backend-logger": ["src/logger"],
-      "@mealz/backend-db": ["src/db"],
+      "@mealz/backend-db": ["src/db/common"],
+      "@mealz/backend-db-api": ["src/db/api"],
       "@mealz/backend-transport": ["src/transport"],
 
       "@mealz/backend-users-common": ["src/domains/users/common"],

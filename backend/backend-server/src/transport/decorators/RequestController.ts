@@ -1,5 +1,7 @@
+import { EventHandlersInRequestControllerError } from '../errors';
 import { RequestControllerClass } from '../types';
 import {
+  getEventHandlerSpecs,
   getRequestHandlerSpecs,
   setRequestHandlerClassInstance,
 } from '../spec';
@@ -13,6 +15,14 @@ export const RequestController = (): ClassDecorator => {
     holder[name] = class extends controllerClass {
       public constructor(...args: any[]) {
         super(...args);
+
+
+        const eventHandlerSpecs = getEventHandlerSpecs(controllerClass);
+        if (eventHandlerSpecs.length > 0) {
+          throw new EventHandlersInRequestControllerError(
+            eventHandlerSpecs.map((spec) => spec.topic)
+          )
+        }
 
         const requestHandlerSpecs = getRequestHandlerSpecs(controllerClass);
         for (const spec of requestHandlerSpecs) {

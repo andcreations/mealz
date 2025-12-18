@@ -1,2 +1,1 @@
-export interface EmptyTransporterResponse {
-}
+export interface EmptyTransporterResponse {}

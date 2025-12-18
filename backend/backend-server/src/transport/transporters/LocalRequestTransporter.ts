@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 
 import { callRequestHandler } from '../spec';
 import { RequestTransporter } from './RequestTransporter';
 
+@Injectable()
 export class LocalRequestTransporter extends RequestTransporter {
   public constructor() {
     super();

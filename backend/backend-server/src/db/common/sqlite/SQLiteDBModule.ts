@@ -5,6 +5,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
 import { InternalError } from '@mealz/backend-common';
 import { getLogger, Logger, LoggerModule } from '@mealz/backend-logger';
+import { LocalEventTransporter } from '@mealz/backend-transport';
 
 import { getDBRepositoryToken } from '../core';
 import { 
@@ -24,7 +25,6 @@ export interface SQLiteDBModuleFeatureOptions {
   entities: Array<Entity>;
 }
 
-
 @Module({})
 export class SQLiteDBModule {
   public static forRoot(): DynamicModule {
@@ -36,6 +36,7 @@ export class SQLiteDBModule {
         LoggerModule,
       ],
       providers: [
+        LocalEventTransporter.provide(),
         SQLiteDBRepositoryFactory,
         SQLiteSQLBuilder,
         SQLiteDBBackupService,

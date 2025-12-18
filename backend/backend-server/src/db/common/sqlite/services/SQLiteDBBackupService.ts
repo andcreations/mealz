@@ -10,6 +10,12 @@ import {
 } from '@mealz/backend-core';
 import { getStrEnv, requireStrEnv } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
+import { LocalEventTransporter } from '@mealz/backend-transport';
+import { 
+  SQLiteDBBackup,
+  SQLiteDatabasesBackedUpEventV1, 
+  SQLiteDBLocalEventTopics,
+} from '@mealz/backend-db-api';
 
 import { SQLiteDB } from '../db';
 
@@ -24,6 +30,7 @@ export class SQLiteDBBackupService implements OnModuleInit {
   public constructor(
     private readonly logger: Logger,
     private readonly schedulerRegistry: SchedulerRegistry,
+    private readonly localEventTransporter: LocalEventTransporter,
   ) {
     this.backupDir = this.resolveBackupDir();
     setTimeout(async () => {
@@ -75,9 +82,20 @@ export class SQLiteDBBackupService implements OnModuleInit {
     const context: Context = {
       correlationId: generateCorrelationId(SQLiteDBBackupService.JOB_NAME),
     }
+    const event: SQLiteDatabasesBackedUpEventV1 = {
+      backupDir: this.backupDir,
+      successfulBackups: [],
+      failedBackups: [],
+    };
+    
+    // backup each database
     for (const db of this.dbs) {
+      const backup: SQLiteDBBackup = {
+        filename: db.getDbFilename(),
+      };
       try {
         await this.backupDB(db, context);
+        event.successfulBackups.push(backup);
       } catch (error) {
         this.logger.error(
           'Failed to backup SQLite database', {
@@ -86,8 +104,16 @@ export class SQLiteDBBackupService implements OnModuleInit {
           },
           error,
         );
+        event.failedBackups.push(backup);
       }
     }
+
+    // emit event
+    this.localEventTransporter.emitEvent(
+      SQLiteDBLocalEventTopics.DatabasesBackedUpV1,
+      event,
+      context,
+    );
   }
 
   private async backupDB(db: SQLiteDB, context: Context): Promise<void> {
