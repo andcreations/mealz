@@ -18,10 +18,10 @@
       "@mealz/backend-gateway-api": ["src/gateway/api"],
       "@mealz/backend-gateway-core": ["src/gateway/core"],
       "@mealz/backend-gateway-common": ["src/gateway/common"],
-      "@mealz/backend-logger": ["src/logger"],
+      "@mealz/backend-logger": ["src/commons/logger"],
       "@mealz/backend-db": ["src/commons/db/common"],
       "@mealz/backend-db-api": ["src/commons/db/api"],
-      "@mealz/backend-transport": ["src/transport"],
+      "@mealz/backend-transport": ["src/commons/transport"],
 
       "@mealz/backend-users-common": ["src/domains/users/common"],
       "@mealz/backend-users-db": ["src/domains/users/db"],

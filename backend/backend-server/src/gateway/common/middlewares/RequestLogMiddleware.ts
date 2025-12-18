@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { getLogger } from '../../../logger';
+import { getLogger } from '@mealz/backend-logger';
 
 @Injectable()
 export class RequestLogMiddleware implements NestMiddleware {
