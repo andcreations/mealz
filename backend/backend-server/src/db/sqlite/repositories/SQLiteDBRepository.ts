@@ -14,7 +14,8 @@ import {
 } from '../../core';
 import { COLUMN_TO_FIELD_MAPPING, SQLiteResultCodes } from '../const';
 import { SQLiteError, UnmappedSQLiteColumnTypeError } from '../errors';
-import { SQLiteSQLBuilder, SQLiteDB } from '../services';
+import { SQLiteDB } from '../db';
+import { SQLiteSQLBuilder } from '../services';
 
 interface SQLiteColumn {
   name: string;

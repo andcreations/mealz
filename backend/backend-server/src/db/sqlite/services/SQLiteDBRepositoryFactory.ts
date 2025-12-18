@@ -6,6 +6,9 @@ import { Logger } from '@mealz/backend-logger';
 import { getDBEntitySpec, getDBFieldSpec } from '../../core/spec';
 import { DBRepository } from '../../core/repositories';
 import { SQLiteDBRepository } from '../repositories';
+import { SQLiteDB } from '../db/SQLiteDB';
+import { SQLiteDBBackupService } from './SQLiteDBBackupService';
+import { SQLiteSQLBuilder } from './SQLiteSQLBuilder';
 
 interface RepositoryEntry {
   entityName: string;
@@ -42,13 +45,19 @@ export class SQLiteDBRepositoryFactory implements OnModuleInit {
   }
 
   public async createRepository(
+    dbFilename: string,
     entityName: string,
     tableName: string,
+    logger: Logger,
+    sqliteSQLBuilder: SQLiteSQLBuilder,
+    backupService: SQLiteDBBackupService,
   ): Promise<DBRepository<unknown>> {
-  // create
-    console.log('a');
-    const repository = await this.moduleRef.create(SQLiteDBRepository);
-    console.log('b');
+    // create database
+    const db = new SQLiteDB( dbFilename , backupService);
+    await db.init();
+
+    // create repository
+    const repository = new SQLiteDBRepository(db, sqliteSQLBuilder, logger);
 
   // keep for initialization
     this.entries.push({

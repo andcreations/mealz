@@ -11,10 +11,10 @@ import {
 import { getStrEnv, requireStrEnv } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 
-import { SQLiteDB } from './SQLiteDB';
+import { SQLiteDB } from '../db';
 
 @Injectable()
-export class SQLiteDBBackup implements OnModuleInit {
+export class SQLiteDBBackupService implements OnModuleInit {
   private static readonly DEFAULT_CRON_EXPRESSION = '0 2 * * *';
   private static readonly JOB_NAME = 'sqlite-db-backup';
 
@@ -26,6 +26,9 @@ export class SQLiteDBBackup implements OnModuleInit {
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {
     this.backupDir = this.resolveBackupDir();
+    setTimeout(async () => {
+      await this.backup();
+    }, 1001)
   }
 
   private resolveBackupDir(): string {
@@ -37,11 +40,15 @@ export class SQLiteDBBackup implements OnModuleInit {
     if (!fs.existsSync(this.backupDir)) {
       fs.mkdirSync(this.backupDir, { recursive: true });
     }
+    this.logger.debug('SQLiteDB backup directory', {
+      ...BOOTSTRAP_CONTEXT,
+      backupDir: this.backupDir,
+    });
 
     // job
     const cronExpression = getStrEnv(
       'MEALZ_SQLITE_DB_BACKUP_CRON_EXPRESSION',
-      SQLiteDBBackup.DEFAULT_CRON_EXPRESSION,
+      SQLiteDBBackupService.DEFAULT_CRON_EXPRESSION,
     );
     const job = new CronJob(cronExpression, () => {
       this.backup();
@@ -52,32 +59,30 @@ export class SQLiteDBBackup implements OnModuleInit {
       cronExpression,
     });
     // schedule the job
-    this.schedulerRegistry.addCronJob(SQLiteDBBackup.JOB_NAME, job);
+    this.schedulerRegistry.addCronJob(SQLiteDBBackupService.JOB_NAME, job);
     job.start();
   }
 
   public register(db: SQLiteDB): void {
-    const options = db.getOptions();
     this.logger.debug('Registering SQLite backup', {
       ...BOOTSTRAP_CONTEXT,
-      name: options.name,
-      dbFilename: options.dbFilename,
+      dbFilename: db.getDbFilename(),
     });
     this.dbs.push(db);
   }
 
   private async backup(): Promise<void> {
     const context: Context = {
-      correlationId: generateCorrelationId(SQLiteDBBackup.JOB_NAME),
+      correlationId: generateCorrelationId(SQLiteDBBackupService.JOB_NAME),
     }
     for (const db of this.dbs) {
       try {
-        await this.backupDB(db);
+        await this.backupDB(db, context);
       } catch (error) {
         this.logger.error(
           'Failed to backup SQLite database', {
             ...context,
-            dbFilename: db.getOptions().dbFilename,
+            dbFilename: db.getDbFilename(),
           },
           error,
         );
@@ -85,11 +90,24 @@ export class SQLiteDBBackup implements OnModuleInit {
     }
   }
 
-  private async backupDB(db: SQLiteDB): Promise<void> {
+  private async backupDB(db: SQLiteDB, context: Context): Promise<void> {
+    const dbFilename = path.basename(db.getDbFilename());
     const dbBackupFilename = path.resolve(
-      this.backupDir,
-      `${db.getOptions().name}.sqlite`,
+      path.join(this.backupDir, `${dbFilename}`),
     );
+    this.logger.debug('Backing up SQLite database', {
+      ...context,
+      dbFilename: db.getDbFilename(),
+      dbBackupFilename,
+    });
+
+    // backup
     await db.backup(dbBackupFilename);
+
+    this.logger.debug('SQLite database backed up', {
+      ...context,
+      dbFilename: db.getDbFilename(),
+      dbBackupFilename,
+    });
   }
 }

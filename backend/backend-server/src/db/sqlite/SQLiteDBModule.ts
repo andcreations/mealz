@@ -10,8 +10,7 @@ import { getDBRepositoryToken } from '../core';
 import { 
   SQLiteSQLBuilder,
   SQLiteDBRepositoryFactory, 
-  SQLiteDB,
-  SQLiteDBBackup, 
+  SQLiteDBBackupService, 
 } from './services';
 
 interface Entity {
@@ -39,12 +38,12 @@ export class SQLiteDBModule {
       providers: [
         SQLiteDBRepositoryFactory,
         SQLiteSQLBuilder,
-        SQLiteDBBackup,
+        SQLiteDBBackupService,
       ],
       exports: [
         SQLiteDBRepositoryFactory,
         SQLiteSQLBuilder,
-        SQLiteDBBackup,
+        SQLiteDBBackupService,
       ],
     };
   }
@@ -63,24 +62,6 @@ export class SQLiteDBModule {
       exists: fs.existsSync(dbFilename)
     });
 
-    const sqlite: Provider = {
-      provide: SQLiteDB,
-      useFactory: async (
-        logger: Logger,
-        backup: SQLiteDBBackup,
-      ): Promise<SQLiteDB> => {
-        const db = new SQLiteDB({
-          ...options,
-          dbFilename: path.resolve(options.dbFilename),
-         },
-         logger,
-         backup,
-        );
-        await db.init();
-        return db;
-      },
-      inject: [Logger, SQLiteDBBackup],
-    };
     const repositories: Provider[] = options.entities.map(entity => {
       const token = getDBRepositoryToken(options.name, entity.entityName);
       getLogger().debug(`SQLite database repository`, {
@@ -92,18 +73,34 @@ export class SQLiteDBModule {
       });
       return {
         provide: token,
-        useFactory: async (sqliteDB: SQLiteDB, factory: SQLiteDBRepositoryFactory) => {
-          console.log('sqliteDB', sqliteDB);
-          return factory.createRepository(entity.entityName, entity.tableName);
+        useFactory: async (
+          logger: Logger,
+          sqliteSQLBuilder: SQLiteSQLBuilder,
+          backupService: SQLiteDBBackupService,
+          factory: SQLiteDBRepositoryFactory,
+        ) => {
+          return factory.createRepository(
+            dbFilename,
+            entity.entityName,
+            entity.tableName,
+            logger,
+            sqliteSQLBuilder,
+            backupService,
+          );
         },
-        inject: [SQLiteDB, SQLiteDBRepositoryFactory],
+        inject: [
+          Logger,
+          SQLiteSQLBuilder,
+          SQLiteDBBackupService,
+          SQLiteDBRepositoryFactory,
+        ],
       };
     });
     return {
       module: SQLiteDBModule,
       imports: [LoggerModule],
-      providers: [sqlite, ...repositories],
-      exports: [sqlite, ...repositories],
+      providers: [...repositories],
+      exports: [...repositories],
     };
   }
 }

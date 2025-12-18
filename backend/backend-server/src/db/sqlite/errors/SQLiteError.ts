@@ -2,8 +2,13 @@ export class SQLiteError extends Error {
   public errno: number;
   public code: string;
 
-  public constructor(errno: number, code: string, message: string) {
-    super(message);
+  public constructor(
+    errno: number,
+    code: string,
+    message: string,
+    stack?: string,
+  ) {
+    super(`${message}\n${stack ?? ''}`);
     this.errno = errno;
     this.code = code;
   }

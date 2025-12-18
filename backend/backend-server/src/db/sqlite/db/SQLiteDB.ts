@@ -1,49 +1,35 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as sqlite3 from 'better-sqlite3';
-import { Inject, Injectable } from '@nestjs/common';
-import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
-import { Logger } from '@mealz/backend-logger';
 
 import { UnknownDBError } from '../../core';
-import { SQLITE_DBE_MODULE_OPTIONS } from '../const';
-import { SQLiteDBModuleFeatureOptions } from '../SQLiteDBModule';
 import { SQLiteError } from '../errors';
 import { SQLiteStatement } from '../types';
-import { SQLiteDBBackup } from './SQLiteDBBackup';
+import { SQLiteDBBackupService } from '../services';
 
-@Injectable()
 export class SQLiteDB {
   private db: sqlite3.Database;
 
   constructor(
-    @Inject(SQLITE_DBE_MODULE_OPTIONS)
-    private readonly options: SQLiteDBModuleFeatureOptions,
-    private readonly logger: Logger,
-    backup: SQLiteDBBackup,
+    private readonly dbFilename: string,
+    private readonly backupService: SQLiteDBBackupService,
   ) {
-    backup.register(this);
+    this.backupService.register(this);
   }
 
-  public getOptions(): SQLiteDBModuleFeatureOptions {
-    return this.options;
+  public getDbFilename(): string {
+    return this.dbFilename;
   }
   
   public async init(): Promise<void> {
-    this.logger.debug('Initializing SQLite', {
-      ...BOOTSTRAP_CONTEXT,
-      name: this.options.name,
-      dbFilename: this.options.dbFilename,
-    });
-
-    const dir = path.dirname(this.options.dbFilename);
+    const dir = path.dirname(this.dbFilename);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
 
     return new Promise((resolve, reject) => {
       try {
-        this.db = sqlite3(this.options.dbFilename);
+        this.db = sqlite3(this.dbFilename);
         this.db.pragma('journal_mode = WAL');
         resolve();
       } catch (error) {
@@ -120,9 +106,14 @@ export class SQLiteDB {
       return await func();
     } catch (error) {
       if (SQLiteError.isSQLiteError(error)) {
-        throw new SQLiteError(error.errno, error.code, error.message);
+        throw new SQLiteError(
+          error.errno,
+          error.code,
+          error.message,
+          error.stack
+        );
       }
-      throw new UnknownDBError(error);
+      throw error;
     }
   }
 }
