@@ -2,6 +2,10 @@ import { buildRequestTopic } from '@mealz/backend-transport';
 import { MEALS_NAMED_DOMAIN, MEALS_NAMED_SERVICE } from './domain-and-service';
 
 export class MealsNamedRequestTopics {
+  public static readonly ReadNamedMealByIdV1 = topic(
+    'readNamedMealById',
+    'v1',
+  );
   public static readonly ReadNamedMealsFromLastV1 = topic(
     'readNamedMealsFromLast',
     'v1',
@@ -12,6 +16,10 @@ export class MealsNamedRequestTopics {
   );
   public static readonly UpdateNamedMealV1 = topic(
     'updateNamedMeal',
+    'v1',
+  );
+  public static readonly DeleteNamedMealV1 = topic(
+    'deleteNamedMeal',
     'v1',
   );
 };

@@ -41,7 +41,7 @@ export class IngredientsSearch implements OnBootstrap {
   }
 
   private tryBuildIndex(): void {
-    if (!this.ingredientsCrudService.loaded()) {
+    if (!this.ingredientsCrudService.isLoaded()) {
       return;
     }
     this.buildIndex();
@@ -75,6 +75,8 @@ export class IngredientsSearch implements OnBootstrap {
 
   public search(pattern: string, limit: number): GWIngredient[] {
     const results = this.index.search(stripDiacritics(pattern), { limit });
-    return results.ids.map(id => this.ingredientsCrudService.getById(id));
+    return results.ids
+      .map(id => this.ingredientsCrudService.getById(id))
+      .filter(ingredient => ingredient !== undefined);
   }
 }

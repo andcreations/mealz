@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
+import { DEFAULT_READ_LIMIT } from '@mealz/backend-common';
 import { GWIngredientMapper } from '@mealz/backend-ingredients-gateway-common';
 import {
   IngredientsCrudTransporter,
@@ -24,7 +25,7 @@ export class IngredientsCrudV1GWService {
   ): Promise<ReadIngredientsFromLastGWResponseV1> {
     const request: ReadIngredientsFromLastRequestV1 = {
       lastId: gwParams.lastId,
-      limit: gwParams.limit,
+      limit: gwParams.limit ?? DEFAULT_READ_LIMIT,
     };
     const { 
       ingredients,

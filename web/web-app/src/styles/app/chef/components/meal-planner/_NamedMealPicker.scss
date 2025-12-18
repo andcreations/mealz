@@ -1,0 +1,46 @@
+.mealz-named-meal-picker .modal-content {
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  margin-top: 2rem;
+}
+
+.mealz-named-meal-picker .modal-dialog {
+  max-width: calc(100vw - 2 * 1rem);
+}
+
+.mealz-named-meal-picker-content {
+  display: grid;
+  grid-template-columns: auto 2rem;
+  grid-template-rows: auto auto;
+}
+
+.mealz-named-meal-picker-name {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.mealz-named-meal-picker-name-input,
+.mealz-named-meal-picker-name-input:focus {
+  border: none;
+  box-shadow: none;
+  background-color: $mealz-theme-color-bg-dark;
+  padding-bottom: 0; // to move the info closer to the name
+}
+
+.mealz-named-meal-picker-info {
+  grid-column: 1;
+  grid-row: 2;
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+  padding-left: 0.75rem;
+}
+
+.mealz-named-meal-picker-button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0.5rem;
+  color: $mealz-theme-color-fg-dark;
+}

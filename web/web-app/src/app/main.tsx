@@ -7,6 +7,7 @@ import { AuthService } from './auth';
 import { SystemService } from './system';
 import { AppRouter, PathTo, RoutingService } from './routing';
 import { IngredientsCrudService, IngredientsSearch } from './ingredients';
+import { MealsNamedService } from './meals';
 import { NotificationsService } from './notifications';
 
 function failedToRunApp(error: any): void {
@@ -18,6 +19,7 @@ async function bootstrapServices(): Promise<void> {
   IoC.resolve(RoutingService);
   IoC.resolve(IngredientsCrudService);
   IoC.resolve(IngredientsSearch);
+  IoC.resolve(MealsNamedService);
   IoC.resolve(NotificationsService);
   IoC.bootstrap();
 }

@@ -40,17 +40,15 @@ export function ModalMenu(props: ModalMenuProps) {
   }
 
   return (
-    <div>
-      <Modal
-        className='mealz-modal-menu'
-        show={props.show}
-        backdrop={true}
-        centered={true}
-        onHide={props.onClose}
-        onEscapeKeyDown={props.onClose}
-      >
-        { renderItems() }
-      </Modal>
-    </div>
+    <Modal
+      className='mealz-modal-menu'
+      show={props.show}
+      backdrop={true}
+      centered={true}
+      onHide={props.onClose}
+      onEscapeKeyDown={props.onClose}
+    >
+      { renderItems() }
+    </Modal>
   );
 }

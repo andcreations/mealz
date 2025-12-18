@@ -34,7 +34,7 @@ import { MaterialIcon } from '../../../components';
 
 enum Focus { Amount, Name };
 
-const SEARCH_LIMIT = 10;
+const SEARCH_LIMIT = 8;
 const DEFAULT_AMOUNT = '100';
 
 export interface IngredientPickerProps {
@@ -131,10 +131,6 @@ export function IngredientPicker(props: IngredientPickerProps) {
     },
     [state.focus],
   );
-  // useEffect(
-  //   () => focusRef(name.ref, { select: true }),
-  //   [],
-  // );
 
   // select an ingredient
   const selectIngredientByIndex = (index: number) => {
@@ -170,7 +166,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
   const ingredient = {
     full: () : GWIngredient | undefined => {
       return state.ingredientId
-        ? ingredientsCrudService.getById(state.ingredientId)
+        ? ingredientsCrudService.getByIdOrThrow(state.ingredientId)
         : undefined;
     },
     adHoc: (): AdHocIngredient | undefined => {

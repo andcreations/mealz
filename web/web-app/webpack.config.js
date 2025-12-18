@@ -60,6 +60,10 @@ module.exports = {
         '@mealz/backend-meals-daily-plan-gateway-api',
         'domains/meals/services/daily-plan/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-meals-named-gateway-api',
+        'domains/meals/services/named/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser

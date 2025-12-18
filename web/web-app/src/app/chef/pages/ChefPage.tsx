@@ -33,7 +33,7 @@ export function ChefPage() {
     () => {
       Promise.all([
         Log.logAndRethrow(
-          () => ingredientsCrudService.loadIngredients(),
+          () => ingredientsCrudService.loadAll(),
           'Failed to load ingredients',
         ),
       ])

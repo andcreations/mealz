@@ -1,4 +1,5 @@
 export * from './string';
+export * from './string-similarity';
 export * from './array';
 export * from './object';
 export * from './html-events';

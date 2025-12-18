@@ -5,5 +5,4 @@ import { GWMealMapper } from './services';
   providers: [GWMealMapper],
   exports: [GWMealMapper],
 })
-export class MealsGWCommonModule {
-}
+export class MealsGWCommonModule {}

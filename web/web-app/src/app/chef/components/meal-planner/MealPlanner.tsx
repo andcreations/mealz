@@ -17,6 +17,8 @@ import {
   MealsLogService,
   MealsDailyPlanService,
   UserDraftMealMetadata,
+  MealsNamedService,
+  NamedMeal,
 } from '../../../meals';
 import { useTranslations } from '../../../i18n';
 import { MealCalculator, MealMapper } from '../../services';
@@ -24,6 +26,7 @@ import { MealPlannerActionBar } from './MealPlannerActionBar';
 import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
+import { NamedMealPicker } from './NamedMealPicker';
 
 enum Focus { Calories };
 
@@ -42,6 +45,9 @@ interface MealPlannerState {
   dailyPlanMealName?: string;
   fixedMealName: boolean;
   showMealNamePicker: boolean;
+  showSaveMealPicker: boolean;
+  showLoadMealPicker: boolean;
+  showDeleteMealPicker: boolean;
 }
 
 export function MealPlanner() {
@@ -49,6 +55,7 @@ export function MealPlanner() {
   const mealsUserService = useService(MealsUserService);
   const mealsLogService = useService(MealsLogService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
+  const mealsNamedService = useService(MealsNamedService);
   const mealMapper = useService(MealMapper);
   const mealCalculator = useService(MealCalculator);
 
@@ -61,9 +68,14 @@ export function MealPlanner() {
     dailyPlanMealCalories: '',
     fixedMealName: false,
     showMealNamePicker: false,
+    showSaveMealPicker: false,
+    showLoadMealPicker: false,
+    showDeleteMealPicker: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
+
+  const namedMeals = useRef<NamedMeal[]>([]);
 
   // dirty flag
   const isDirty = useRef(false);
@@ -86,8 +98,12 @@ export function MealPlanner() {
           () => mealsDailyPlanService.readCurrentDailyPlan(),
           'Failed to read current daily plan',
         ),
+        Log.logAndRethrow(
+          () => mealsNamedService.loadAll(),
+          'Failed to load named meals',
+        ),
       ])
-      .then(([userMeal, dailyMealPlan]) => {
+      .then(([userMeal, dailyMealPlan, loadedNamedMeals]) => {
         const {
           ingredients,
           caloriesStr,
@@ -108,12 +124,10 @@ export function MealPlanner() {
             fixedMealName: userMeal?.metadata?.fixedMealName ?? false,
           },
         );
+        namedMeals.current = loadedNamedMeals;
       })
-      .catch((error) => {
-        console.log(error);
-        patchState({
-          loadStatus: LoadStatus.FailedToLoad,
-        });
+      .catch(() => {
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],
@@ -438,6 +452,102 @@ export function MealPlanner() {
     },
   };
 
+  const namedMeal = {
+    onShowLoad: () => {
+      patchState({ showLoadMealPicker: true });
+    },
+
+    onCloseLoad: () => {
+      patchState({ showLoadMealPicker: false });
+    },
+
+    onShowSave: () => {
+      if (state.ingredients.length === 0) {
+        notificationsService.error(
+          translate('cannot-save-meal-with-no-ingredients')
+        );
+        return;
+      }
+      if (state.calculateAmountsError) {
+        notificationsService.error(
+          translate('cannot-save-meal-with-errors')
+        );
+        return;
+      }
+      patchState({ showSaveMealPicker: true });
+    },
+
+    onCloseSave: () => {
+      patchState({ showSaveMealPicker: false });
+    },
+
+    onShowDelete: () => {
+      patchState({ showDeleteMealPicker: true });
+    },
+
+    onCloseDelete: () => {
+      patchState({ showDeleteMealPicker: false });
+    },
+
+    onLoad: (name: string) => {
+      mealsNamedService.loadByName(name)
+        .then((meal) => {
+          markDirty();
+          recalculate(
+            meal.calories?.toString() ?? '',
+            mealMapper.toMealPlannerIngredients(meal.ingredients),
+            {
+              showLoadMealPicker: false
+            }
+          );
+        })
+        .catch((error) => {
+          notificationsService.error(
+            translate('failed-to-load-meal')
+          );
+          patchState({ showLoadMealPicker: false });
+          Log.error('Failed to load meal', error);
+        });
+    },
+
+    onSave: (name: string) => {
+      const gwMeal = mealMapper.toGWMeal(
+        calories.get(),
+        state.ingredients,
+      );
+      mealsNamedService.save(name, gwMeal)
+        .then(() => {
+          notificationsService.info(
+            translate('meal-saved')
+          );
+          namedMeals.current = mealsNamedService.getAll();
+        })
+        .catch(error => {
+          notificationsService.error(
+            translate('failed-to-save-meal')
+          );
+          Log.error('Failed to save meal', error);
+        });
+      patchState({ showSaveMealPicker: false });
+    },
+
+    onDelete: (name: string) => {
+      mealsNamedService.deleteByName(name)
+        .then(() => {
+          notificationsService.info(
+            translate('meal-deleted')
+          );
+        })
+        .catch(error => {
+          notificationsService.error(
+            translate('failed-to-delete-meal')
+          );
+          Log.error('Failed to delete meal', error);
+        });
+      patchState({ showDeleteMealPicker: false });
+    },
+  };
+
   return (
     <>
       { state.loadStatus === LoadStatus.Loading &&
@@ -482,6 +592,9 @@ export function MealPlanner() {
             <MealPlannerActionBar
               onLogMeal={meal.onLog}
               onClearMeal={meal.onClear}
+              onSaveMeal={namedMeal.onShowSave}
+              onLoadMeal={namedMeal.onShowLoad}
+              onDeleteMeal={namedMeal.onShowDelete}
             />
           </div>
           <div className='mealz-meal-planner-ingredients'>
@@ -505,6 +618,39 @@ export function MealPlanner() {
           items={mealName.getMenuItems()}
           onClick={mealName.onClose}
           onClose={mealName.onClose}
+        />
+      }
+      { state.showSaveMealPicker &&
+        <NamedMealPicker
+          show={state.showSaveMealPicker}
+          icon='cloud_upload'
+          placeholder={translate('save-placeholder')}
+          info={{
+            matching: translate('save-info-matching'),
+            nonMatching: translate('save-info-non-matching'),
+          }}
+          onPick={namedMeal.onSave}
+          onClose={namedMeal.onCloseSave}
+        />
+      }
+      { state.showLoadMealPicker &&
+        <NamedMealPicker
+          show={state.showLoadMealPicker}
+          icon='cloud_download'
+          placeholder={translate('load-placeholder')}
+          mustMatchToPick={true}
+          onPick={namedMeal.onLoad}
+          onClose={namedMeal.onCloseLoad}
+        />
+      }
+      { state.showDeleteMealPicker &&
+        <NamedMealPicker
+          show={state.showDeleteMealPicker}
+          icon='delete'
+          placeholder={translate('delete-placeholder')}
+          mustMatchToPick={true}
+          onPick={namedMeal.onDelete}
+          onClose={namedMeal.onCloseDelete}
         />
       }
     </>

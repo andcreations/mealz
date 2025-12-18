@@ -3,10 +3,17 @@ import { useState } from 'react';
 
 import { usePatchState } from '../../../hooks';
 import { MaterialIcon, ModalMenu, ModalMenuItem } from '../../../components';
+import { useTranslations } from '../../../i18n';
+import {
+  MealPlannerActionBarTranslations,
+} from './MealPlannerActionBar.translations';
 
 export interface MealPlannerActionBarProps {
   onLogMeal: () => void;
   onClearMeal: () => void;
+  onLoadMeal: () => void;
+  onSaveMeal: () => void;
+  onDeleteMeal: () => void;
 }
 
 interface MealPlannerActionBarState {
@@ -14,6 +21,8 @@ interface MealPlannerActionBarState {
 }
 
 export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
+  const translate = useTranslations(MealPlannerActionBarTranslations);
+  
   const [state, setState] = useState<MealPlannerActionBarState>({
     showModalMenu: false,
   });
@@ -36,9 +45,21 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
 
   const menuItems: ModalMenuItem[] = [
     {
-      name: 'Log Meal',
-      onClick: props.onLogMeal,
+      name: translate('clear-meal'),
+      onClick: props.onClearMeal,
     },
+    {
+      name: translate('load-meal'),
+      onClick: props.onLoadMeal,
+    },
+    {
+      name: translate('save-meal'),
+      onClick: props.onSaveMeal,
+    },
+    {
+      name: translate('delete-meal'),
+      onClick: props.onDeleteMeal,
+    }
   ];
 
   return (
@@ -46,21 +67,15 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
       <div className='mealz-meal-planner-action-bar'>
         <MaterialIcon
           className='mealz-meal-planner-action-bar-icon'
-          icon='delete'
-          onClick={props.onClearMeal}
+          icon='note_add'
+          onClick={props.onLogMeal}
         />
         <Separator/>
         <MaterialIcon
           className='mealz-meal-planner-action-bar-icon'
-          icon='note_add'
-          onClick={props.onLogMeal}
-        />
-        {/* <Separator/>
-        <MaterialIcon
-          className='mealz-meal-planner-action-bar-icon'
           icon='more_vert'
           onClick={onShowModalMenu}
-        /> */}
+        />
       </div>
       { state.showModalMenu &&
         <ModalMenu
