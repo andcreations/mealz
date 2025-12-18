@@ -14,7 +14,7 @@ import { MealsCrudRequestController } from './controllers';
 @Module({
   imports: [
     LoggerModule,
-    SQLiteDBModule.forRoot(MEALS_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(MEALS_SQLITE_DB_MODULE_OPTIONS),
     MealsDBModule,    
   ],
   providers: [

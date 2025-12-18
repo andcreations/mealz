@@ -19,7 +19,7 @@ import { MealsLogRequestController } from './controllers';
     SagaModule,
     MealsCommonModule,
     MealsLogDBModule,
-    SQLiteDBModule.forRoot(MEALS_LOG_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(MEALS_LOG_SQLITE_DB_MODULE_OPTIONS),
     MealsCrudAPIModule.forRoot({}),
   ],
   providers: [

@@ -13,7 +13,7 @@ import { IngredientsCrudRequestController } from './controllers';
 @Module({
   imports: [
     LoggerModule,
-    SQLiteDBModule.forRoot(INGREDIENTS_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(INGREDIENTS_SQLITE_DB_MODULE_OPTIONS),
     IngredientsDBModule,
   ],
   providers: [

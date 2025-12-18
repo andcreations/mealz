@@ -7,7 +7,7 @@ import { Logger } from '@mealz/backend-logger';
 
 import { UnknownDBError } from '../../core';
 import { SQLITE_DBE_MODULE_OPTIONS } from '../const';
-import { SQLiteDBModuleOptions } from '../SQLiteDBModule';
+import { SQLiteDBModuleFeatureOptions } from '../SQLiteDBModule';
 import { SQLiteError } from '../errors';
 import { SQLiteStatement } from '../types';
 import { SQLiteDBBackup } from './SQLiteDBBackup';
@@ -18,14 +18,14 @@ export class SQLiteDB {
 
   constructor(
     @Inject(SQLITE_DBE_MODULE_OPTIONS)
-    private readonly options: SQLiteDBModuleOptions,
+    private readonly options: SQLiteDBModuleFeatureOptions,
     private readonly logger: Logger,
     backup: SQLiteDBBackup,
   ) {
     backup.register(this);
   }
 
-  public getOptions(): SQLiteDBModuleOptions {
+  public getOptions(): SQLiteDBModuleFeatureOptions {
     return this.options;
   }
   

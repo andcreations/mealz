@@ -1,4 +1,4 @@
-import { SQLiteDBModuleOptions } from '@mealz/backend-db';
+import { SQLiteDBModuleFeatureOptions } from '@mealz/backend-db';
 import { requireStrEnv } from '@mealz/backend-common';
 
 import { INGREDIENTS_DB_NAME } from '../const';
@@ -7,7 +7,7 @@ import {
   INGREDIENT_DB_TABLE_NAME,
 } from '../entities';
 
-export const INGREDIENTS_SQLITE_DB_MODULE_OPTIONS: SQLiteDBModuleOptions = {
+export const INGREDIENTS_SQLITE_DB_MODULE_OPTIONS: SQLiteDBModuleFeatureOptions = {
   name: INGREDIENTS_DB_NAME,
   dbFilename: requireStrEnv('MEALZ_INGREDIENTS_SQLITE_DB_FILE'),
   entities: [

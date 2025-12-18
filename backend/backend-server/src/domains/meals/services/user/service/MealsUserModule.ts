@@ -17,7 +17,7 @@ import { MealsUserRequestController } from './controllers';
     MealsCrudAPIModule.forRoot({}),
     LoggerModule,
     SagaModule,
-    SQLiteDBModule.forRoot(MEALS_USER_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(MEALS_USER_SQLITE_DB_MODULE_OPTIONS),
     MealsUserDBModule,    
   ],
   providers: [

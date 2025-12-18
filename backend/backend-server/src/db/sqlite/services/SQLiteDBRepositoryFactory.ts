@@ -46,7 +46,9 @@ export class SQLiteDBRepositoryFactory implements OnModuleInit {
     tableName: string,
   ): Promise<DBRepository<unknown>> {
   // create
+    console.log('a');
     const repository = await this.moduleRef.create(SQLiteDBRepository);
+    console.log('b');
 
   // keep for initialization
     this.entries.push({

@@ -19,15 +19,37 @@ interface Entity {
   tableName: string;
 }
 
-export interface SQLiteDBModuleOptions {
+export interface SQLiteDBModuleFeatureOptions {
   name: string;
   dbFilename: string;
   entities: Array<Entity>;
 }
 
+
 @Module({})
 export class SQLiteDBModule {
-  public static forRoot(options: SQLiteDBModuleOptions): DynamicModule {
+  public static forRoot(): DynamicModule {
+    return {
+      global: true,
+      module: SQLiteDBModule,
+      imports: [
+        ScheduleModule.forRoot(),
+        LoggerModule,
+      ],
+      providers: [
+        SQLiteDBRepositoryFactory,
+        SQLiteSQLBuilder,
+        SQLiteDBBackup,
+      ],
+      exports: [
+        SQLiteDBRepositoryFactory,
+        SQLiteSQLBuilder,
+        SQLiteDBBackup,
+      ],
+    };
+  }
+
+  public static forFeature(options: SQLiteDBModuleFeatureOptions): DynamicModule {
     const dbFilename = path.resolve(options.dbFilename);
     if (!fs.existsSync(dbFilename)) {
       throw new InternalError(
@@ -70,30 +92,18 @@ export class SQLiteDBModule {
       });
       return {
         provide: token,
-        useFactory: async (factory: SQLiteDBRepositoryFactory) => {
+        useFactory: async (sqliteDB: SQLiteDB, factory: SQLiteDBRepositoryFactory) => {
+          console.log('sqliteDB', sqliteDB);
           return factory.createRepository(entity.entityName, entity.tableName);
         },
-        inject: [SQLiteDBRepositoryFactory],
+        inject: [SQLiteDB, SQLiteDBRepositoryFactory],
       };
     });
-
     return {
-      global: true,
       module: SQLiteDBModule,
-      imports: [
-        ScheduleModule.forRoot(),
-        LoggerModule,
-      ],
-      providers: [
-        SQLiteDBRepositoryFactory,
-        SQLiteSQLBuilder,
-        SQLiteDBBackup,
-        sqlite,
-        ...repositories,
-      ],
-      exports: [
-        ...repositories,
-      ],
+      imports: [LoggerModule],
+      providers: [sqlite, ...repositories],
+      exports: [sqlite, ...repositories],
     };
   }
 }
