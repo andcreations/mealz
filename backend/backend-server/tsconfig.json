@@ -12,15 +12,15 @@
     "incremental": true,
     "paths": {
       "@mealz/backend-core": ["src/core"],
-      "@mealz/backend-common": ["src/common"],
+      "@mealz/backend-common": ["src/commons/common"],
       "@mealz/backend-shared": ["src/shared"],
       "@mealz/backend-api": ["src/api"],
       "@mealz/backend-gateway-api": ["src/gateway/api"],
       "@mealz/backend-gateway-core": ["src/gateway/core"],
       "@mealz/backend-gateway-common": ["src/gateway/common"],
       "@mealz/backend-logger": ["src/logger"],
-      "@mealz/backend-db": ["src/db/common"],
-      "@mealz/backend-db-api": ["src/db/api"],
+      "@mealz/backend-db": ["src/commons/db/common"],
+      "@mealz/backend-db-api": ["src/commons/db/api"],
       "@mealz/backend-transport": ["src/transport"],
 
       "@mealz/backend-users-common": ["src/domains/users/common"],
