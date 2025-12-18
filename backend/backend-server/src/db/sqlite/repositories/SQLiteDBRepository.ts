@@ -144,39 +144,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
         ...statement.toContext(),
       },
     );
-    
-    const rows: Pick<T, K>[] = [];
-    await this.db.each(statement, (row) => {
-      rows.push(row);
-    });
-    return rows;
-  }
-
-  public async iterate<K extends keyof T>(
-    where: Where<T>,
-    options: Omit<FindOptions<T, K>, 'limit'>,
-    callback: IterateCallback<Pick<T, K>>,
-    context: Context,
-  ): Promise<void> {
-    const statement = this.sqlBuilder.buildSelect(
-      this.tableName,
-      this.getEntityName(),
-      this.getFieldsSpec(),
-      where,
-      options,
-    );
-    this.logger.verbose(
-      'Running SQL query',
-      {
-        ...context,
-        ...statement.toContext(),
-      },
-    );
-
-    await this.db.each(statement, (row) => {
-      callback.onNext(row);
-    });
-    callback.onComplete();
+    return this.db.getAll(statement);
   }
 
   public async update(

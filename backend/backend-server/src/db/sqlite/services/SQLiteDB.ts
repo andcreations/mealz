@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import * as sqlite3 from 'sqlite3';
+import * as sqlite3 from 'better-sqlite3';
 import { Inject, Injectable } from '@nestjs/common';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
@@ -10,6 +10,7 @@ import { SQLITE_DBE_MODULE_OPTIONS } from '../const';
 import { SQLiteDBModuleOptions } from '../SQLiteDBModule';
 import { SQLiteError } from '../errors';
 import { SQLiteStatement } from '../types';
+import { SQLiteDBBackup } from './SQLiteDBBackup';
 
 @Injectable()
 export class SQLiteDB {
@@ -19,8 +20,15 @@ export class SQLiteDB {
     @Inject(SQLITE_DBE_MODULE_OPTIONS)
     private readonly options: SQLiteDBModuleOptions,
     private readonly logger: Logger,
-  ) {}
+    backup: SQLiteDBBackup,
+  ) {
+    backup.register(this);
+  }
 
+  public getOptions(): SQLiteDBModuleOptions {
+    return this.options;
+  }
+  
   public async init(): Promise<void> {
     this.logger.debug('Initializing SQLite', {
       ...BOOTSTRAP_CONTEXT,
@@ -34,34 +42,29 @@ export class SQLiteDB {
     }
 
     return new Promise((resolve, reject) => {
-      this.db = new sqlite3.Database(
-        this.options.dbFilename,
-        (err) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          this.logger.debug('Initialized SQLite', {
-            ...BOOTSTRAP_CONTEXT,
-            name: this.options.name,
-          });
-          resolve();
-        },
-      );
+      try {
+        this.db = sqlite3(this.options.dbFilename);
+        this.db.pragma('journal_mode = WAL');
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     });
+  }
+
+  public async backup(file: string): Promise<void> {
+    await this.db.backup(file);
   }
 
   public async pragma<TResponse>(statement: string): Promise<TResponse> {
     const func = () =>
       new Promise<TResponse>((resolve, reject) => {
-        this.db.all(`PRAGMA ${statement}`, (error, rows) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-          resolve(rows as TResponse);
-        });
+        try {
+          const result = this.db.pragma(`${statement}`);
+          resolve(result as TResponse);
+        } catch (error) { 
+          reject(error);
+        }
       });
     return this.handleError(func);
   }
@@ -72,47 +75,33 @@ export class SQLiteDB {
     }
     const func = () =>
       new Promise<void>((resolve, reject) => {
-        this.db.run(
-          statement.getSQL(),
-          statement.getParams(),
-          (error) => {
-            if (error) {
-              reject(error);
-              return;
-            }
-            resolve();
-          },
-        );
+        try {
+          const sqliteStatement = this.db.prepare(statement.getSQL());
+          sqliteStatement.run(statement.getParams());
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
       });
     return this.handleError(func);
   }
 
-  public async each(
+  public async getAll<T = any>(
     statement: SQLiteStatement,
-    callback: (row: any) => void,
-  ): Promise<void> {
+  ): Promise<T[]> {
     const func = () =>
-      new Promise<void>((resolve, reject) => {
-        this.db.each(
-          statement.getSQL(),
-          statement.getParams(),
-          (error, row) => {
-            if (error) {
-              reject(error);
-              return; 
-            }
-            callback(row);
-          },
-          (err, _rowCount) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            resolve();
-          },
-        );
+      new Promise<T[]>((resolve, reject) => {
+        try {
+          const sqliteStatement = this.db.prepare<unknown[], T>(
+            statement.getSQL(),
+          );
+          const result = sqliteStatement.all(statement.getParams());
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
       });
-    return this.handleError(func);
+    return this.handleError<T[]>(func);
   }
 
   public async transaction(func: () => Promise<void>): Promise<void> {

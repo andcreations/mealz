@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
 import { InternalError } from '@mealz/backend-common';
 import { getLogger, Logger, LoggerModule } from '@mealz/backend-logger';
@@ -9,7 +10,8 @@ import { getDBRepositoryToken } from '../core';
 import { 
   SQLiteSQLBuilder,
   SQLiteDBRepositoryFactory, 
-  SQLiteDB, 
+  SQLiteDB,
+  SQLiteDBBackup, 
 } from './services';
 
 interface Entity {
@@ -41,12 +43,21 @@ export class SQLiteDBModule {
 
     const sqlite: Provider = {
       provide: SQLiteDB,
-      useFactory: async (logger: Logger): Promise<SQLiteDB> => {
-        const db = new SQLiteDB(options, logger);
+      useFactory: async (
+        logger: Logger,
+        backup: SQLiteDBBackup,
+      ): Promise<SQLiteDB> => {
+        const db = new SQLiteDB({
+          ...options,
+          dbFilename: path.resolve(options.dbFilename),
+         },
+         logger,
+         backup,
+        );
         await db.init();
         return db;
       },
-      inject: [Logger],
+      inject: [Logger, SQLiteDBBackup],
     };
     const repositories: Provider[] = options.entities.map(entity => {
       const token = getDBRepositoryToken(options.name, entity.entityName);
@@ -67,13 +78,16 @@ export class SQLiteDBModule {
     });
 
     return {
+      global: true,
       module: SQLiteDBModule,
       imports: [
+        ScheduleModule.forRoot(),
         LoggerModule,
       ],
       providers: [
         SQLiteDBRepositoryFactory,
         SQLiteSQLBuilder,
+        SQLiteDBBackup,
         sqlite,
         ...repositories,
       ],

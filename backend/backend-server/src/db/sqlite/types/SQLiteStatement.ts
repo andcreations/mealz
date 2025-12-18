@@ -3,9 +3,9 @@ export type SQLiteParams = Record<string, SQLiteParamValue>;
 
 export class SQLiteStatement {
   private sql: string = '';
-  private params: SQLiteParams = {};
+  private params: SQLiteParamValue[] = [];
 
-  public constructor(sql = '', params: SQLiteParams = {}) {
+  public constructor(sql = '', params: SQLiteParamValue[] = []) {
     this.sql = sql;
     this.params = params;
   }
@@ -18,7 +18,7 @@ export class SQLiteStatement {
     return this.sql;
   }
 
-  public getParams(): SQLiteParams {
+  public getParams(): SQLiteParamValue[] {
     return this.params;
   }
 
@@ -26,35 +26,35 @@ export class SQLiteStatement {
     this.sql += sql;
   }
 
-  public setParam(name: string, value: SQLiteParamValue): void {
-    this.params[name] = value;
+  public addParam(value: SQLiteParamValue): void {
+    this.params.push(value);
   }
 
   public append(other: SQLiteStatement): void {
+    const tr = new Error().stack
     this.sql += other.sql;
-    this.params = {
+    this.params = [
       ...this.params,
       ...other.params,
-    };  
+    ];
   }
 
   public toContext(): Record<string, string> {
-    const params: Record<string, string | number> = {};
-    Object.keys(this.params).forEach((key) => {
-      const value = this.params[key];
+    const paramsForContext: (string | number) [] = [];
+    this.params.forEach(value => {
       if (value instanceof Buffer) {
-        params[key] = `Binary buffer of size ${value.length}`;
+        paramsForContext.push(`Binary buffer of size ${value.length}`);
         return;
       }
       if (typeof value === 'number') {
-        params[key] = value;
+        paramsForContext.push(value);
         return;
       }
-      params[key] = value.toString();
+      paramsForContext.push(value.toString());
     });
     return {
       sql: this.sql,
-      params: JSON.stringify(params),
+      params: JSON.stringify(paramsForContext),
     };
   }
 }

@@ -121,20 +121,6 @@ export abstract class DBRepository<T> {
   }
 
   /**
-   * Iterate over the entities in the database.
-   * @param where Where clause.
-   * @param options Options of the iterate operation.
-   * @param callback Callback to be called for each entity.
-   * @param context Context of the iterate operation.
-   */
-  public abstract iterate<K extends keyof T>(
-    where: Where<T>,
-    options: Omit<FindOptions<T, K>, 'limit'>,
-    callback: IterateCallback<T>,
-    context: Context,
-  ): Promise<void>;
-
-  /**
    * Update entities in the database.
    * @param where Where clause.
    * @param update Update operator.

@@ -15,6 +15,6 @@ export const SHUTDOWN_CONTEXT: Context = {
   correlationId: 'shutdown',
 };
 
-export function generateCorrelationId(): string {
-  return v7();
+export function generateCorrelationId(prefix?: string): string {
+  return prefix ? `${prefix}:${v7()}` : v7();
 }

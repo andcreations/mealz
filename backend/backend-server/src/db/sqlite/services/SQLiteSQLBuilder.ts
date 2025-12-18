@@ -24,7 +24,7 @@ class SQLiteStatementContext {
   private paramIndex = 0;
 
   public nextParam(prefix: string): string {
-    return `$${prefix}${this.paramIndex++}`;
+    return '?';
   }
 }
 
@@ -183,22 +183,21 @@ export class SQLiteSQLBuilder {
     fieldsSpec: DBFieldSpec[],
     context: SQLiteStatementContext,
   ): SQLiteStatement {
+    const PLACEHOLDER = '{}';
     let statement: SQLiteStatement = new SQLiteStatement();
 
     const appendOne = (sql: string, value: string) => {
       const param = context.nextParam('where');
       statement.append(new SQLiteStatement(
-        sql.replace('{}', param),
-        {
-          [param]: value,
-        },
+        sql.replace(PLACEHOLDER, param),
+        [value],
       ));
     };
     const appendArray = (sql: string, items: Array<string | number>) => {
       let itemsSql = '';
       items.forEach((item, index) => {
         const param = context.nextParam('where');
-        statement.setParam(param, item);
+        statement.addParam(item);
 
         if (index > 0) {
           itemsSql += ',';
@@ -206,7 +205,7 @@ export class SQLiteSQLBuilder {
         itemsSql += param;
       });
       statement.append(new SQLiteStatement(
-        sql.replace('{}', itemsSql),
+        sql.replace(PLACEHOLDER, itemsSql),
       ));
     };
 
@@ -219,50 +218,50 @@ export class SQLiteSQLBuilder {
       switch (operator) {
         case '$eq':
           appendOne(
-            `${field} = {}`,
+            `${field} = ${PLACEHOLDER}`,
             this.getSingleSQLValueForWhere(entityName, value),
           );
           break;
         case '$ne':
           appendOne(
-            `${field} != {}`,
+            `${field} != ${PLACEHOLDER}`,
             this.getSingleSQLValueForWhere(entityName, value),
           );
           break;
         case '$gt':
           appendOne(
-            `${field} > {}`,
+            `${field} > ${PLACEHOLDER}`,
             this.getSingleSQLValueForWhere(entityName, value),
           );
           break;
         case '$gte':
           appendOne(
-            `${field} >= {}`,
+            `${field} >= ${PLACEHOLDER}`,
             this.getSingleSQLValueForWhere(entityName, value),
           );
           break;
         case '$lt':
           appendOne(
-            `${field} < {}`,
+            `${field} < ${PLACEHOLDER}`,
             this.getSingleSQLValueForWhere(entityName, value),
           );
           break;
         case '$lte':
           appendOne(
-            `${field} <= {}`,
+            `${field} <= ${PLACEHOLDER}`,
             this.getSingleSQLValueForWhere(entityName, value),
           );
           break;
         case '$in':
-          appendArray(`${field} IN ({})`, value);
+          appendArray(`${field} IN (${PLACEHOLDER})`, value);
           break;
         case '$nin':
-          appendArray(`${field} NOT IN ({})`, value);
+          appendArray(`${field} NOT IN (${PLACEHOLDER})`, value);
           break;
         case '$like':
           this.assertString(entityName, fieldsSpec, field);
           appendOne(
-            `${field} LIKE {}`,
+            `${field} LIKE ${PLACEHOLDER}`,
             this.getSingleSQLValueForWhere(entityName, value),
           );
           break;
@@ -441,17 +440,13 @@ export class SQLiteSQLBuilder {
       case '$set':
         return new SQLiteStatement(
           `${field} = ${param}`,
-          {
-            [param]: this.getSQLValue(entityName, value),
-          },
+          [this.getSQLValue(entityName, value)],
         );
       case '$inc':
         this.assertNumber(entityName, fieldsSpec, field);
         return new SQLiteStatement(
           `${field} = ${field} + ${param}`,
-          {
-            [param]: value,
-          },
+          [value],
         );
       default:
         throw new SQLiteWhereBuildError(
@@ -563,7 +558,7 @@ export class SQLiteSQLBuilder {
 
     // parameters
     values.forEach(item => {
-      statement.setParam(item.paramName, item.value);
+      statement.addParam(item.value);
     });
 
     return statement;
