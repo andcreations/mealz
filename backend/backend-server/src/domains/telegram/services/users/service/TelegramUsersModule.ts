@@ -22,7 +22,7 @@ import { TelegramUsersRequestController } from './controllers';
 @Module({
   imports: [
     TelegramUsersAPIModule.forRoot({}),
-    SQLiteDBModule.forRoot(TELEGRAM_USERS_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(TELEGRAM_USERS_SQLITE_DB_MODULE_OPTIONS),
     TelegramUsersDBModule,
   ],
   providers: [

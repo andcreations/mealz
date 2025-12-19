@@ -11,7 +11,7 @@ import { UsersAuthRequestController } from './controllers';
 
 @Module({
   imports: [
-    SQLiteDBModule.forRoot(USERS_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(USERS_SQLITE_DB_MODULE_OPTIONS),
   ],
   providers: [
     UserDBMapper,

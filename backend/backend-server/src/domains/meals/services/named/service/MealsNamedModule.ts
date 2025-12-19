@@ -14,7 +14,7 @@ import { MealsDailyPlanRequestController } from './controllers';
     LoggerModule,
     SagaModule,
     MealsCrudAPIModule.forRoot({}),
-    SQLiteDBModule.forRoot(MEALS_NAMED_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(MEALS_NAMED_SQLITE_DB_MODULE_OPTIONS),
     MealsNamedDBModule,
   ],
   providers: [

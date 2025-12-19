@@ -12,7 +12,7 @@ import { MealsDailyPlanRequestController } from './controllers';
 
 @Module({
   imports: [
-    SQLiteDBModule.forRoot(MEALS_DAILY_PLAN_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(MEALS_DAILY_PLAN_SQLITE_DB_MODULE_OPTIONS),
     MealsDailyPlanDBModule,
   ],
   providers: [

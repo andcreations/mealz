@@ -5,6 +5,7 @@ import {
   NestModule,
   Type,
 } from '@nestjs/common';
+import { SQLiteDBModule } from '@mealz/backend-db';
 import { 
   CorrelationIdMiddleware,
   RequestLogMiddleware,
@@ -21,6 +22,7 @@ import { getServeStaticModule } from './web-app';
 @Module({
   imports: [
     getServeStaticModule(),
+    SQLiteDBModule.forRoot(),
     UsersDomainModule,
     IngredientsDomainModule,
     MealsDomainModule,

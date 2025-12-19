@@ -7,9 +7,9 @@ import {
 import * as jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN_COOKIE_NAME } from '@mealz/backend-api';
 import { requireStrEnv } from '@mealz/backend-common';
+import { getLogger } from '@mealz/backend-logger';
 import { JwtPayload, JWT_SECRET_ENV_NAME } from '@mealz/backend-gateway-core';
 
-import { getLogger } from '../../../logger';
 import { AccessForbiddenError } from '../errors';
 import { Roles } from './Roles';
 

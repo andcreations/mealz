@@ -12,7 +12,7 @@ import { IngredientsSearchService, SearchIndexFactory } from './services';
 @Module({
   imports: [
     LoggerModule,
-    SQLiteDBModule.forRoot(INGREDIENTS_SQLITE_DB_MODULE_OPTIONS),
+    SQLiteDBModule.forFeature(INGREDIENTS_SQLITE_DB_MODULE_OPTIONS),
     IngredientsDBModule,
   ],
   providers: [
