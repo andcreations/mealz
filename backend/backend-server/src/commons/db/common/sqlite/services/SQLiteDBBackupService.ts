@@ -8,15 +8,22 @@ import {
   Context,
   generateCorrelationId,
 } from '@mealz/backend-core';
-import { getStrEnv, requireStrEnv } from '@mealz/backend-common';
+import {
+  deleteFilesInDirectory,
+  getStrEnv,
+  requireStrEnv,
+  resolveTimeZone,
+} from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 import { LocalEventTransporter } from '@mealz/backend-transport';
+import { BackupJobRunner } from '@mealz/backend-backup';
 import { 
   SQLiteDBBackup,
   SQLiteDatabasesBackedUpEventV1, 
   SQLiteDBLocalEventTopics,
 } from '@mealz/backend-db-api';
 
+import { SQLITE_DUMP_DIR_ENV_NAME } from '../const';
 import { SQLiteDB } from '../db';
 
 @Injectable()
@@ -24,32 +31,33 @@ export class SQLiteDBBackupService implements OnModuleInit {
   private static readonly DEFAULT_CRON_EXPRESSION = '0 2 * * *';
   private static readonly JOB_NAME = 'sqlite-db-backup';
 
-  private readonly backupDir: string;
+  private readonly dumpDir: string;
   private readonly dbs: SQLiteDB[] = [];
 
   public constructor(
     private readonly logger: Logger,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly localEventTransporter: LocalEventTransporter,
+    private readonly backupJobRunner: BackupJobRunner,
   ) {
-    this.backupDir = this.resolveBackupDir();
+    this.dumpDir = this.resolveBackupDir();
     setTimeout(async () => {
       await this.backup();
     }, 1001)
   }
 
   private resolveBackupDir(): string {
-    return path.resolve(requireStrEnv('MEALZ_SQLITE_DB_BACKUP_DIR'));
+    return path.resolve(requireStrEnv(SQLITE_DUMP_DIR_ENV_NAME));
   }
 
   public onModuleInit(): void {
     // directory
-    if (!fs.existsSync(this.backupDir)) {
-      fs.mkdirSync(this.backupDir, { recursive: true });
+    if (!fs.existsSync(this.dumpDir)) {
+      fs.mkdirSync(this.dumpDir, { recursive: true });
     }
-    this.logger.debug('SQLiteDB backup directory', {
+    this.logger.debug('SQLiteDB dump directory', {
       ...BOOTSTRAP_CONTEXT,
-      backupDir: this.backupDir,
+      dumpDir: this.dumpDir,
     });
 
     // job
@@ -57,9 +65,13 @@ export class SQLiteDBBackupService implements OnModuleInit {
       'MEALZ_SQLITE_DB_BACKUP_CRON_EXPRESSION',
       SQLiteDBBackupService.DEFAULT_CRON_EXPRESSION,
     );
-    const job = new CronJob(cronExpression, () => {
-      this.backup();
-    });
+    const job = new CronJob(
+      cronExpression,
+      () => { this.backup(); },
+      undefined,
+      undefined,
+      resolveTimeZone(),
+    );
 
     this.logger.info('Scheduling SQLite database backup', {
       ...BOOTSTRAP_CONTEXT,
@@ -71,6 +83,12 @@ export class SQLiteDBBackupService implements OnModuleInit {
   }
 
   public register(db: SQLiteDB): void {
+    // happens when there are two or more SQLiteDB instances of the same database
+    const has = this.dbs.some(d => d.getDbFilename() === db.getDbFilename());
+    if (has) {
+      return;
+    }
+
     this.logger.debug('Registering SQLite backup', {
       ...BOOTSTRAP_CONTEXT,
       dbFilename: db.getDbFilename(),
@@ -83,22 +101,28 @@ export class SQLiteDBBackupService implements OnModuleInit {
       correlationId: generateCorrelationId(SQLiteDBBackupService.JOB_NAME),
     }
     const event: SQLiteDatabasesBackedUpEventV1 = {
-      backupDir: this.backupDir,
+      backupDir: this.dumpDir,
       successfulBackups: [],
       failedBackups: [],
     };
+    const allBackups: SQLiteDBBackup[] = [];
+
+    // wipe the backup directory
+    deleteFilesInDirectory(this.dumpDir);
     
-    // backup each database
+    // dump each database
     for (const db of this.dbs) {
       const backup: SQLiteDBBackup = {
-        filename: db.getDbFilename(),
+        filename: path.basename(db.getDbFilename()),
       };
+      allBackups.push(backup);
+
       try {
-        await this.backupDB(db, context);
+        await this.dumpDB(db);
         event.successfulBackups.push(backup);
       } catch (error) {
         this.logger.error(
-          'Failed to backup SQLite database', {
+          'Failed to dump SQLite database', {
             ...context,
             dbFilename: db.getDbFilename(),
           },
@@ -106,6 +130,38 @@ export class SQLiteDBBackupService implements OnModuleInit {
         );
         event.failedBackups.push(backup);
       }
+    }
+
+    // backup the databases
+    try {
+      await this.backupJobRunner.runAll(context);
+    } catch (error) {
+      this.logger.error('Failed to backup databases', context, error);
+
+      // consider all failed if the backup fails
+      event.successfulBackups = [];
+      event.failedBackups = allBackups;
+    }
+
+    // log
+    if (event.failedBackups.length === 0) {
+      this.logger.info('Successfully backed up SQLite databases', {
+        ...context,
+        backups: event.successfulBackups.map(backup => {
+          return backup.filename;
+      }),
+      });
+    }
+    else {
+      this.logger.error('Failed to backup SQLite databases', {
+        ...context,
+        successfulBackups: event.successfulBackups.map(backup => {
+          return backup.filename;
+        }),
+        failedBackups: event.failedBackups.map(backup => {
+          return backup.filename;
+        }),
+      });
     }
 
     // emit event
@@ -116,24 +172,11 @@ export class SQLiteDBBackupService implements OnModuleInit {
     );
   }
 
-  private async backupDB(db: SQLiteDB, context: Context): Promise<void> {
+  private async dumpDB(db: SQLiteDB): Promise<void> {
     const dbFilename = path.basename(db.getDbFilename());
     const dbBackupFilename = path.resolve(
-      path.join(this.backupDir, `${dbFilename}`),
+      path.join(this.dumpDir, `${dbFilename}`),
     );
-    this.logger.debug('Backing up SQLite database', {
-      ...context,
-      dbFilename: db.getDbFilename(),
-      dbBackupFilename,
-    });
-
-    // backup
     await db.backup(dbBackupFilename);
-
-    this.logger.debug('SQLite database backed up', {
-      ...context,
-      dbFilename: db.getDbFilename(),
-      dbBackupFilename,
-    });
   }
 }
