@@ -37,6 +37,7 @@
     "luxon": "^3.7.2",
     "minisearch": "^7.1.2",
     "ms": "^2.1.3",
+    "node-scp": "^0.0.25",
     "protobufjs": "^7.5.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.1.0",

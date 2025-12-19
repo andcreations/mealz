@@ -2,32 +2,19 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { DateTime } from 'luxon';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
-import {
-  getStrEnv,
-  InternalError,
-  requireStrEnv,
-} from '@mealz/backend-common';
+import { InternalError } from '@mealz/backend-common';
 import { getLogger, Logger, LoggerModule } from '@mealz/backend-logger';
 import { LocalEventTransporter } from '@mealz/backend-transport';
-import {
-  BackupJobDef,
-  backupJobDef,
-  BackupModule,
-  CopyBackupJob,
-} from '@mealz/backend-backup';
+import { BackupModule } from '@mealz/backend-backup';
 
 import { getDBRepositoryToken } from '../core';
-import {
-  SQLITE_DUMP_DIR_ENV_NAME,
-  SQLITE_LOCAL_BACKUP_DIR_ENV_NAME,
-} from './const';
 import { 
   SQLiteSQLBuilder,
   SQLiteDBRepositoryFactory, 
   SQLiteDBBackupService, 
 } from './services';
+import { BackupJobDefsResolver } from './utils';
 
 interface Entity {
   entityName: string;
@@ -50,7 +37,7 @@ export class SQLiteDBModule {
         ScheduleModule.forRoot(),
         LoggerModule,
         BackupModule.forRoot({
-          jobs: resolveBackupJobs(),
+          jobs: BackupJobDefsResolver.resolveBackupJobs(),
         }),
       ],
       providers: [
@@ -122,31 +109,4 @@ export class SQLiteDBModule {
       exports: [...repositories],
     };
   }
-}
-
-function resolveBackupJobs(): BackupJobDef<any>[] {
-  const srcDir = requireStrEnv(SQLITE_DUMP_DIR_ENV_NAME);
-  const jobDefs: BackupJobDef<any>[] = [];
-
-  const envNames = Object.keys(process.env);
-  for (const envName of envNames) {
-    // local copy
-    if (envName.startsWith(SQLITE_LOCAL_BACKUP_DIR_ENV_NAME)) {
-      const dstDir = process.env[envName];
-      getLogger().info('Adding SQLiteDB local backup', {
-        ...BOOTSTRAP_CONTEXT,
-        envName,
-        dstDir,
-      })
-      jobDefs.push(backupJobDef(
-        envName,
-        CopyBackupJob,
-        {
-          srcDir,
-          dstDir,
-        }
-      ));
-    }
-  }
-  return jobDefs;
 }
