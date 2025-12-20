@@ -15,7 +15,7 @@ import {
   ReadTelegramUserInfoRequestV1,
 } from '@mealz/backend-telegram-users-service-api';
 
-import { InvalidTokenError } from '../errors';
+import { InvalidTokenError, TelegramUserNotFoundError } from '../errors';
 import { TelegramTokensService } from './TelegramTokensService';
 import { TelegramUsersService } from './TelegramUsersService';
 
@@ -96,10 +96,21 @@ export class TelegramUsersRequestService {
     request: ReadTelegramUserInfoRequestV1,
     context: Context,
   ): Promise<ReadTelegramUserInfoResponseV1> {
-    const telegramUser = await this.telegramUsersService.readTelegramUser(
-      request.userId,
-      context,
-    );
+    let telegramUser;
+    try {
+      telegramUser = await this.telegramUsersService.readTelegramUser(
+        request.userId,
+        context,
+      );
+    } catch (error) {
+      if (error instanceof TelegramUserNotFoundError) {
+        return {
+          telegramUser: undefined,
+          canSendMessagesTo: false,
+        };
+      }
+      throw error;
+    }
     const isTelegramUserEnabled = telegramUser?.isEnabled ?? false;
     return {
       telegramUser,

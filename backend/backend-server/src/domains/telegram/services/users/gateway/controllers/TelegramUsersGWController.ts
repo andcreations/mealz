@@ -24,6 +24,9 @@ export class TelegramUsersGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<GenerateStartLinkGWResponseV1Impl> {
-    return await this.telegramUsersGWService.generateStartLinkV1(gwUser.id, context);
+    return await this.telegramUsersGWService.generateStartLinkV1(
+      gwUser.id,
+      context,
+    );
   }
 }
