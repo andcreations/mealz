@@ -1,10 +1,17 @@
 import { Inject } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import { 
+  RequestTransporter, 
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import { TELEGRAM_BOT_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { TelegramBotRequestTopics } from './TelegramBotRequestTopics';
-import { HandleUpdateRequestV1, LogWebhookTokenRequestV1, SendMessageToUserRequestV1 } from './dtos';
+import { 
+  HandleUpdateRequestV1, 
+  LogWebhookTokenRequestV1, 
+  SendMessageToUserRequestV1,
+} from './dtos';
 
 export class TelegramBotTransporter {
   public constructor(
@@ -15,9 +22,9 @@ export class TelegramBotTransporter {
   public async logWebhookTokenV1(
     request: LogWebhookTokenRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.transporter.sendRequest<
-      LogWebhookTokenRequestV1, void
+      LogWebhookTokenRequestV1, VoidTransporterResponse
     >(
       TelegramBotRequestTopics.LogWebhookTokenV1,
       request,
@@ -28,9 +35,9 @@ export class TelegramBotTransporter {
   public async handleUpdateV1(
     request: HandleUpdateRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.transporter.sendRequest<
-      HandleUpdateRequestV1, void
+      HandleUpdateRequestV1, VoidTransporterResponse
     >(
       TelegramBotRequestTopics.HandleUpdateV1,
       request,
@@ -41,9 +48,9 @@ export class TelegramBotTransporter {
   public async sendMessageToUserV1(
     request: SendMessageToUserRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.transporter.sendRequest<
-      SendMessageToUserRequestV1, void
+      SendMessageToUserRequestV1, VoidTransporterResponse
     >(
       TelegramBotRequestTopics.SendMessageToUserV1,
       request,

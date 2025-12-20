@@ -1,5 +1,9 @@
 import { Context } from '@mealz/backend-core';
-import { RequestController, RequestHandler } from '@mealz/backend-transport';
+import {
+  RequestController, 
+  RequestHandler, 
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 import {
   GenerateStartLinkRequestV1,
   GenerateStartLinkResponseV1,
@@ -47,7 +51,7 @@ export class TelegramUsersRequestController {
   public async upsertTelegramUserV1(
     request: UpsertTelegramUserRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.telegramUsersRequestService.upsertTelegramUserV1(
       request,
       context,

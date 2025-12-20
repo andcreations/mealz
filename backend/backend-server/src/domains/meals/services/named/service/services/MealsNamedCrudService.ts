@@ -6,6 +6,7 @@ import {
   Saga,
   SagaService,
 } from '@mealz/backend-common';
+import { VoidTransporterResponse } from '@mealz/backend-transport';
 import { Meal } from '@mealz/backend-meals-common';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import {
@@ -132,7 +133,7 @@ export class MealsNamedCrudService {
   public async updateNamedMealV1(
     request: UpdateNamedMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     const { namedMealId, userId, meal, mealName } = request;
 
     // saga context
@@ -249,7 +250,9 @@ export class MealsNamedCrudService {
 
     // run the saga
     const sagaContext: SagaContext = {};
-    await this.sagaService.run(saga, sagaContext, context);    
+    await this.sagaService.run(saga, sagaContext, context);   
+    
+    return {};
   }
 
   public async readNamedMealsFromLastV1(
@@ -268,7 +271,7 @@ export class MealsNamedCrudService {
   public async deleteNamedMealV1(
     request: DeleteNamedMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     const namedMeal = await this.mealsNamedCrudRepository.readById(
       request.id,
       context,
@@ -277,5 +280,6 @@ export class MealsNamedCrudService {
       throw new NamedMealNotFoundError(request.id);
     }
     await this.mealsNamedCrudRepository.deleteById(request.id, context);
+    return {};
   }
 }

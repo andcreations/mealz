@@ -106,7 +106,10 @@ export class TelegramAdminNotificationsService {
       return;
     }
     await this.telegramBotTransporter.sendMessageToUserV1(
-      { userId, message: telegramMessage },
+      { 
+        userId, 
+        message: telegramMessage,
+      },
       context,
     );
   }

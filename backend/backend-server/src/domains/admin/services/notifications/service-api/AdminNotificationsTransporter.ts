@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import {
+  RequestTransporter,
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import {
   ADMIN_NOTIFICATIONS_REQUEST_TRANSPORTER_TOKEN,
@@ -20,8 +23,10 @@ export class AdminNotificationsTransporter {
   public async sendAdminNotificationV1(
     request: SendAdminNotificationRequestV1,
     context: Context,
-  ): Promise<void> {
-    await this.transporter.sendRequest(
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      SendAdminNotificationRequestV1, VoidTransporterResponse
+    >(
       AdminNotificationsRequestTopics.SendAdminNotificationV1,
       request,
       context,

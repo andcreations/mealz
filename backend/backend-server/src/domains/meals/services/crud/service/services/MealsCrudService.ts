@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
+import { VoidTransporterResponse } from '@mealz/backend-transport';
 import {
   ReadMealByIdRequestV1,
   ReadMealByIdResponseV1,  
@@ -71,7 +72,8 @@ export class MealsCrudService {
   public async deleteMealByIdV1(
     request: DeleteMealByIdRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     await this.mealsCrudRepository.deleteMealById(request.id, context);
+    return {};
   }
 }

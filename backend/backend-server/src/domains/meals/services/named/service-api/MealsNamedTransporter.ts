@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import {
+  RequestTransporter,
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import { MEALS_NAMED_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsNamedRequestTopics } from './MealsNamedRequestTopics';
@@ -38,7 +41,9 @@ export class MealsNamedTransporter {
     request: ReadNamedMealsFromLastRequestV1,
     context: Context,
   ): Promise<ReadNamedMealsFromLastResponseV1> {
-    return await this.transporter.sendRequest(
+    return await this.transporter.sendRequest<
+      ReadNamedMealsFromLastRequestV1, ReadNamedMealsFromLastResponseV1
+    >(
       MealsNamedRequestTopics.ReadNamedMealsFromLastV1,
       request,
       context,
@@ -61,9 +66,9 @@ export class MealsNamedTransporter {
   public async updateNamedMealV1(
     request: UpdateNamedMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return await this.transporter.sendRequest<
-      UpdateNamedMealRequestV1, void
+      UpdateNamedMealRequestV1, VoidTransporterResponse
     >(
       MealsNamedRequestTopics.UpdateNamedMealV1,
       request,
@@ -74,9 +79,9 @@ export class MealsNamedTransporter {
   public async deleteNamedMealV1(
     request: DeleteNamedMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return await this.transporter.sendRequest<
-      DeleteNamedMealRequestV1, void
+      DeleteNamedMealRequestV1, VoidTransporterResponse
     >(
       MealsNamedRequestTopics.DeleteNamedMealV1,
       request,

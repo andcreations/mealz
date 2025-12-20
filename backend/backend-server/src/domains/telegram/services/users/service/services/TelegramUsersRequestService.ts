@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { requireStrEnv } from '@mealz/backend-common';
+import { VoidTransporterResponse } from '@mealz/backend-transport';
 import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 import {
   TelegramUser,
@@ -67,7 +68,7 @@ export class TelegramUsersRequestService {
   public async upsertTelegramUserV1(
     request: UpsertTelegramUserRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     const telegramUser: TelegramUser = {
       userId: request.userId,
       telegramChatId: request.telegramChatId,
@@ -75,10 +76,11 @@ export class TelegramUsersRequestService {
       telegramUsername: request.telegramUsername,
       isEnabled: true,
     };
-    return this.telegramUsersService.upsertTelegramUser(
+    await this.telegramUsersService.upsertTelegramUser(
       telegramUser,
       context,
     );
+    return {};
   }
 
   public async readTelegramUserV1(

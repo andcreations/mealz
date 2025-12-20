@@ -1,10 +1,13 @@
-import { RequestController, RequestHandler } from '@mealz/backend-transport';
+import {
+  RequestController,
+  RequestHandler,
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 import { Context } from '@mealz/backend-core';
 import {
   MealsDailyPlanRequestTopics,
   CreateMealDailyPlanRequestV1,
   CreateMealDailyPlanResponseV1,
-  UpdateMealDailyPlanResponseV1,
   UpdateMealDailyPlanRequestV1,
   ReadManyMealDailyPlansResponseV1,
   ReadManyMealDailyPlansRequestV1,
@@ -43,7 +46,7 @@ export class MealsDailyPlanRequestController {
   public async updateMealDailyPlanV1(
     request: UpdateMealDailyPlanRequestV1,
     context: Context,
-  ): Promise<UpdateMealDailyPlanResponseV1> {
+  ): Promise<VoidTransporterResponse> {
     return this.mealsDailyPlanCrudService.updateMealDailyPlanV1(
       request,
       context,

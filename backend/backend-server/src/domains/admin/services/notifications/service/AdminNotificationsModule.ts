@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { LoggerModule } from '@mealz/backend-logger';
-import { TelegramBotAPIModule } from '@mealz/backend-telegram-bot-service-api';
+import { 
+  TelegramBotAPIModule,
+} from '@mealz/backend-telegram-bot-service-api';
 import {
   TelegramUsersAPIModule,
 } from '@mealz/backend-telegram-users-service-api';
