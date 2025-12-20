@@ -60,7 +60,9 @@
       
       "@mealz/backend-telegram-users-common": ["src/domains/telegram/services/users/common"],
       "@mealz/backend-telegram-users-service-api": ["src/domains/telegram/services/users/service-api"],
-      "@mealz/backend-telegram-users-gateway-api": ["src/domains/telegram/services/users/gateway-api"]
+      "@mealz/backend-telegram-users-gateway-api": ["src/domains/telegram/services/users/gateway-api"],
+
+      "@mealz/backend-admin-notifications-service-api": ["src/domains/admin/services/notifications/service-api"],
     }
   },
   "exclude": ["node_modules", "dist"]

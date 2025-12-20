@@ -9,10 +9,12 @@ import {
   generateCorrelationId,
 } from '@mealz/backend-core';
 import {
+  createTranslation,
   deleteFilesInDirectory,
   getStrEnv,
   requireStrEnv,
   resolveTimeZone,
+  TranslateFunc,
 } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 import { LocalEventTransporter } from '@mealz/backend-transport';
@@ -22,9 +24,14 @@ import {
   SQLiteDatabasesBackedUpEventV1, 
   SQLiteDBLocalEventTopics,
 } from '@mealz/backend-db-api';
+import { 
+  AdminNotificationsTransporter,
+  AdminNotificationType,
+} from '@mealz/backend-admin-notifications-service-api';
 
 import { SQLITE_DUMP_DIR_ENV_NAME } from '../const';
 import { SQLiteDB } from '../db';
+import { SQLiteDBBackupServiceTranslations } from './SQLiteDBBackupService.translations';
 
 @Injectable()
 export class SQLiteDBBackupService implements OnModuleInit {
@@ -33,24 +40,24 @@ export class SQLiteDBBackupService implements OnModuleInit {
 
   private readonly dumpDir: string;
   private readonly dbs: SQLiteDB[] = [];
+  private readonly translate: TranslateFunc;
 
   public constructor(
     private readonly logger: Logger,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly localEventTransporter: LocalEventTransporter,
     private readonly backupJobRunner: BackupJobRunner,
+    private readonly adminNotificationsTransporter: AdminNotificationsTransporter,
   ) {
     this.dumpDir = this.resolveBackupDir();
-    setTimeout(async () => {
-      await this.backup();
-    }, 1001)
+    this.translate = createTranslation(SQLiteDBBackupServiceTranslations);
   }
 
   private resolveBackupDir(): string {
     return path.resolve(requireStrEnv(SQLITE_DUMP_DIR_ENV_NAME));
   }
 
-  public onModuleInit(): void {
+  public async onModuleInit(): Promise<void> {
     // directory
     if (!fs.existsSync(this.dumpDir)) {
       fs.mkdirSync(this.dumpDir, { recursive: true });
@@ -149,7 +156,7 @@ export class SQLiteDBBackupService implements OnModuleInit {
         ...context,
         backups: event.successfulBackups.map(backup => {
           return backup.filename;
-      }),
+        }),
       });
     }
     else {
@@ -162,6 +169,15 @@ export class SQLiteDBBackupService implements OnModuleInit {
           return backup.filename;
         }),
       });
+      await this.adminNotificationsTransporter.sendAdminNotificationV1(
+        {
+          notification: {
+            type: AdminNotificationType.Error,
+            message: this.translate('failed-to-backup-sqlite-databases'),
+          },
+        },
+        context,
+      );
     }
 
     // emit event

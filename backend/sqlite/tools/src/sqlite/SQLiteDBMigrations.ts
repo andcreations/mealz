@@ -165,8 +165,6 @@ export class SQLiteDBMigrations {
     if (migration.status !== 'up') {
       throw new Error(`Migration ${filename} is not up`);
     }
-
-    console.log('run');
     await this.runMigrationFromFile(fullFilename, 'down');
   }
 }

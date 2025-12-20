@@ -7,6 +7,9 @@ import { InternalError } from '@mealz/backend-common';
 import { getLogger, Logger, LoggerModule } from '@mealz/backend-logger';
 import { LocalEventTransporter } from '@mealz/backend-transport';
 import { BackupModule } from '@mealz/backend-backup';
+import { 
+  AdminNotificationsAPIModule,
+} from '@mealz/backend-admin-notifications-service-api';
 
 import { getDBRepositoryToken } from '../core';
 import { 
@@ -39,6 +42,7 @@ export class SQLiteDBModule {
         BackupModule.forRoot({
           jobs: BackupJobDefsResolver.resolveBackupJobs(),
         }),
+        AdminNotificationsAPIModule.forRoot({}),
       ],
       providers: [
         LocalEventTransporter.provide(),
