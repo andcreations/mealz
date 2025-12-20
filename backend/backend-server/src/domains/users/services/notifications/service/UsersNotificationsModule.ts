@@ -8,10 +8,12 @@ import {
 } from '@mealz/backend-telegram-users-service-api';
 
 import {
-  TelegramAdminNotificationsService,
-  AdminNotificationsService,
+  TelegramUsersNotificationsService,
+  UsersNotificationsService,
 } from './services';
-import { AdminNotificationsRequestController } from './controllers';
+import { 
+  UsersNotificationsRequestController,
+ } from './controllers';
 
 @Module({
   imports: [
@@ -20,9 +22,9 @@ import { AdminNotificationsRequestController } from './controllers';
     TelegramBotAPIModule.forRoot({}),
   ],
   providers: [
-    TelegramAdminNotificationsService,
-    AdminNotificationsService,
-    AdminNotificationsRequestController,
+    UsersNotificationsService,
+    TelegramUsersNotificationsService,
+    UsersNotificationsRequestController,
   ],
 })
-export class AdminNotificationsModule {}
+export class UsersNotificationsModule {}

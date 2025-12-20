@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
+import { VoidTransporterResponse } from '@mealz/backend-transport';
 import {
   ReadManyMealDailyPlansRequestV1,
   ReadManyMealDailyPlansResponseV1,
   CreateMealDailyPlanRequestV1,
   CreateMealDailyPlanResponseV1,
   UpdateMealDailyPlanRequestV1,
-  UpdateMealDailyPlanResponseV1,
 } from '@mealz/backend-meals-daily-plan-service-api';
 
 import { MealDailyPlanByIdNotFoundError } from '../errors';
@@ -45,7 +45,7 @@ export class MealsDailyPlanCrudService {
   public async updateMealDailyPlanV1(
     request: UpdateMealDailyPlanRequestV1,
     context: Context,
-  ): Promise<UpdateMealDailyPlanResponseV1> {
+  ): Promise<VoidTransporterResponse> {
     const existing = await this.mealsDailyPlanCrudRepository.findById(
       request.mealDailyPlan.id,
       context,

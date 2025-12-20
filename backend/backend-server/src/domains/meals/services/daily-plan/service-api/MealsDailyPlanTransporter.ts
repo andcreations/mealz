@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import {
+  RequestTransporter,
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import { MEALS_DAILY_PLAN_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsDailyPlanRequestTopics } from './MealsDailyPlanRequestTopics';
@@ -10,7 +13,6 @@ import {
   CreateMealDailyPlanRequestV1,
   CreateMealDailyPlanResponseV1,
   UpdateMealDailyPlanRequestV1,
-  UpdateMealDailyPlanResponseV1,
 } from './dtos';
 
 @Injectable()
@@ -48,9 +50,9 @@ export class MealsDailyPlanTransporter {
   public async updateMealDailyPlanV1(
     request: UpdateMealDailyPlanRequestV1,
     context: Context,
-  ): Promise<UpdateMealDailyPlanResponseV1> {
+  ): Promise<VoidTransporterResponse> {
     return this.transporter.sendRequest<
-      UpdateMealDailyPlanRequestV1, UpdateMealDailyPlanResponseV1
+      UpdateMealDailyPlanRequestV1, VoidTransporterResponse
     >(
       MealsDailyPlanRequestTopics.UpdateMealDailyPlanV1,
       request,

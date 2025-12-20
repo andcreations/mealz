@@ -1,5 +1,9 @@
 import { Context } from '@mealz/backend-core';
-import { RequestController, RequestHandler } from '@mealz/backend-transport';
+import { 
+  RequestController, 
+  RequestHandler, 
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 import {
   CreateNamedMealRequestV1,
   CreateNamedMealResponseV1,
@@ -52,7 +56,7 @@ export class MealsDailyPlanRequestController {
   public async updateNamedMealV1(
     request: UpdateNamedMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.mealsNamedCrudService.updateNamedMealV1(request, context);
   }
 
@@ -60,7 +64,7 @@ export class MealsDailyPlanRequestController {
   public async deleteNamedMealV1(
     request: DeleteNamedMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.mealsNamedCrudService.deleteNamedMealV1(request, context);
   }
 }

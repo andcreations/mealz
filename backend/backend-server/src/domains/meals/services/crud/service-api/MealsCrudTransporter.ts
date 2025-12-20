@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import {
+  RequestTransporter,
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import { MEALS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { MealsCrudRequestTopics } from './MealsCrudRequestTopics';
@@ -78,9 +81,9 @@ export class MealsCrudTransporter {
   public async deleteMealByIdV1(
     request: DeleteMealByIdRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.transporter.sendRequest<
-    DeleteMealByIdRequestV1, void
+      DeleteMealByIdRequestV1, VoidTransporterResponse
     >(
       MealsCrudRequestTopics.DeleteMealByIdV1,
       request,

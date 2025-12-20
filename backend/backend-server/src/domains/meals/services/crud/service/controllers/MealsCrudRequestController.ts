@@ -1,5 +1,9 @@
 import { Context } from '@mealz/backend-core';
-import { RequestHandler, RequestController } from '@mealz/backend-transport';
+import {
+  RequestHandler,
+  RequestController,
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 import {
   ReadMealByIdRequestV1,
   ReadMealByIdResponseV1,
@@ -56,7 +60,7 @@ export class MealsCrudRequestController {
   public async deleteMealByIdV1(
     request: DeleteMealByIdRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     return this.mealsCrudService.deleteMealByIdV1(request, context);
   }
 }

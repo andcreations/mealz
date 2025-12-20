@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
+import { VoidTransporterResponse } from '@mealz/backend-transport';
 import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 import {
   TelegramUsersTransporter,
@@ -22,7 +23,9 @@ export class TelegramBotService {
     private readonly telegramBotUpdateService: TelegramBotUpdateService,
   ) {}
 
-  public async logWebhookTokenV1(context: Context): Promise<void> {
+  public async logWebhookTokenV1(
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
     const info = await this.telegramBotClient.getWebhook();
     this.logger.info('Telegram webhook info', {
       ...context,
@@ -33,24 +36,26 @@ export class TelegramBotService {
           : 'unknown',
       },
     });
+    return {};
   }
 
   public async handleUpdateV1(
     request: HandleUpdateRequestV1,
     context: Context,
-  ): Promise<void> {
-    return this.telegramBotUpdateService.handleUpdateV1(
+  ): Promise<VoidTransporterResponse> {
+    await this.telegramBotUpdateService.handleUpdateV1(
       request.update,
       context,
     );
+    return {};
   }
 
   public async sendMessageToUserV1(
     request: SendMessageToUserRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<VoidTransporterResponse> {
     if (!isTelegramEnabled()) {
-      return;
+      return {};
     }
     const {
       telegramUser,
@@ -58,12 +63,13 @@ export class TelegramBotService {
       { userId: request.userId },
       context,
     );
-    return this.telegramBotClient.sendMessage(
+    await this.telegramBotClient.sendMessage(
       {
         ...request.message,
         chat_id: telegramUser.telegramChatId,
       },
       context,
     );
+    return {};
   }
 }

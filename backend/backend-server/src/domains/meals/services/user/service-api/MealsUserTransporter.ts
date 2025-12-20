@@ -10,6 +10,7 @@ import {
   CreateUserMealRequestV1,
   CreateUserMealResponseV1,
   UpsertUserMealRequestV1,
+  UpsertUserMealResponseV1,
   DeleteUserMealRequestV1,
   DeleteUserMealResponseV1,
 } from './dtos';
@@ -26,7 +27,7 @@ export class MealsUserTransporter {
     context: Context,
   ): Promise<ReadManyUserMealsResponseV1> {
     return this.transporter.sendRequest<
-    ReadManyUserMealsRequestV1, ReadManyUserMealsResponseV1
+      ReadManyUserMealsRequestV1, ReadManyUserMealsResponseV1
     >(
       MealsUserRequestTopics.ReadManyUserMealsV1,
       request,
@@ -39,7 +40,7 @@ export class MealsUserTransporter {
     context: Context,
   ): Promise<CreateUserMealResponseV1> {
     return this.transporter.sendRequest<
-    CreateUserMealRequestV1, CreateUserMealResponseV1
+      CreateUserMealRequestV1, CreateUserMealResponseV1
     >(
       MealsUserRequestTopics.CreateUserMealV1,
       request,
@@ -50,9 +51,9 @@ export class MealsUserTransporter {
   public async upsertUserMealV1(
     request: UpsertUserMealRequestV1,
     context: Context,
-  ): Promise<void> {
+  ): Promise<UpsertUserMealResponseV1> {
     return this.transporter.sendRequest<
-      UpsertUserMealRequestV1, void
+      UpsertUserMealRequestV1, UpsertUserMealResponseV1
     >(
       MealsUserRequestTopics.UpsertUserMealV1,
       request,

@@ -1,6 +1,9 @@
 import { Inject } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import { 
+  RequestTransporter, 
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import { TELEGRAM_USERS_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import {
@@ -51,8 +54,10 @@ export class TelegramUsersTransporter {
   public async upsertTelegramUserV1(
     request: UpsertTelegramUserRequestV1,
     context: Context,
-  ): Promise<void> {
-    return this.transporter.sendRequest<UpsertTelegramUserRequestV1, void>(
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      UpsertTelegramUserRequestV1, VoidTransporterResponse
+    >(
       TelegramUsersRequestTopics.UpsertTelegramUserV1,
       request,
       context,
