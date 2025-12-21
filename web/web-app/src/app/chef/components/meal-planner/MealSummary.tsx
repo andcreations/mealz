@@ -18,6 +18,7 @@ import { LoaderByStatus, LoaderSize } from '../../../components';
 
 const MAX_CALORIES_DIFFERENCE = 20;
 const GOAL_ERROR_PERCENTAGE = 10;
+const SHOW_FAT_DETAILS = false;
 
 export interface MealSummaryProps {
   className?: string;
@@ -331,23 +332,29 @@ export function MealSummary(props: MealSummaryProps) {
           },
         )
       ),
-      ...createFact(
-        summary.total.monounsaturatedFat,
-        'g',
-        'monosaturated-fat',
-        { tiny: true },
-      ),
-      ...createFact(
-        summary.total.polyunsaturatedFat,
-        'g',
-        'polysaturated-fat',
-        { tiny: true },
-      ),
-      ...createFact(
-        summary.total.saturatedFat,
-        'g',
-        'saturated-fat',
-        { tiny: true },
+
+      ...factsIf(
+        SHOW_FAT_DETAILS,
+        () => [
+          ...createFact(
+            summary.total.monounsaturatedFat,
+            'g',
+            'monosaturated-fat',
+            { tiny: true },
+          ),
+          ...createFact(
+            summary.total.polyunsaturatedFat,
+            'g',
+            'polysaturated-fat',
+            { tiny: true },
+          ),
+          ...createFact(
+            summary.total.saturatedFat,
+            'g',
+            'saturated-fat',
+            { tiny: true },
+          ),
+        ]
       ),
     ];
   };

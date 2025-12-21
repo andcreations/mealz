@@ -148,6 +148,13 @@ export class MealCalculator {
     fat: number,
   ): Macros {
     const total = carbs + protein + fat;
+    if (total === 0) {
+      return {
+        carbs: 0,
+        protein: 0,
+        fat: 0,
+      };
+    }
     const carbsPercent = carbs * 100 / total;
     const proteinPercent = protein * 100 / total;
     return {
