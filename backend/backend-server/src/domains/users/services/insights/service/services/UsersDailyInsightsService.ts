@@ -8,8 +8,11 @@ import {
   generateCorrelationId,
 } from '@mealz/backend-core';
 import {
+  createTranslation,
+  getBoolEnv,
   getStrEnv,
   resolveTimeZone,
+  TranslateFunc,
 } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 import { AIProvider } from '@mealz/backend-ai';
@@ -30,15 +33,21 @@ import {
   MealsDailyPlanTransporter,
 } from '@mealz/backend-meals-daily-plan-service-api';
 import { 
+  ChunkedUserNotification,
+  ChunkedUserNotificationChunk,
+  ChunkedUserNotificationType,
   UsersNotificationsTransporter,
 } from '@mealz/backend-users-notifications-service-api';
 
 import { 
-  UserDailyInsightPrompt,
-  UserDailyInsightPromptInput,
-  UserDailyInsightPromptMeal,
-  UserDailyInsightPromptAmounts,
-} from '../prompts';
+  UserDailyInsightsAmounts, 
+  UserDailyInsightsMeal, 
+  UserDailyInsightsInput,
+} from '../types';
+import { UserDailyInsightPrompt } from '../prompts';
+import {
+  UsersDailyInsightsServiceTranslations,
+} from './UsersDailyInsightsService.translations';
 
 @Injectable()
 export class UsersDailyInsightsService implements OnModuleInit {
@@ -46,6 +55,10 @@ export class UsersDailyInsightsService implements OnModuleInit {
   private static readonly JOB_NAME = 'users-daily-insights';
   private static readonly AI_MAX_TOKENS = 4000;
   private static readonly AI_TEMPERATURE = 0.8;
+
+  private readonly sendNutritionSummary: boolean;
+  private readonly sendInsights: boolean;
+  private readonly translate: TranslateFunc;
 
   public constructor(
     private readonly logger: Logger,
@@ -57,9 +70,26 @@ export class UsersDailyInsightsService implements OnModuleInit {
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsDailyPlanTransporter: MealsDailyPlanTransporter,
     private readonly usersNotificationsTransporter: UsersNotificationsTransporter,
-  ) {}
+  ) {
+    this.translate = createTranslation(UsersDailyInsightsServiceTranslations);
+    this.sendNutritionSummary = getBoolEnv(
+      'MEALZ_USERS_DAILY_INSIGHTS_SEND_NUTRITION_SUMMARY',
+      false,
+    );
+    this.sendInsights = getBoolEnv(
+      'MEALZ_USERS_DAILY_INSIGHTS_SEND_INSIGHTS',
+      false,
+    );
+  }
 
   public async onModuleInit(): Promise<void> {
+    const context = BOOTSTRAP_CONTEXT;
+
+    if (!this.sendNutritionSummary && !this.sendInsights) {
+      this.logger.info('Daily insights are disabled', context);
+      return;
+    }
+
     // create job
     const cronExpression = getStrEnv(
       'MEALZ_USERS_DAILY_INSIGHTS_CRON',
@@ -74,8 +104,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
     );
 
     // schedule the job
-    this.logger.info('Scheduling SQLite database backup', {
-      ...BOOTSTRAP_CONTEXT,
+    this.logger.info('Scheduling daily insights generation', {
+      ...context,
       cronExpression,
     });
     this.schedulerRegistry.addCronJob(UsersDailyInsightsService.JOB_NAME, job);
@@ -134,7 +164,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
     previousDayEnd: DateTime,
     context: Context,
   ): Promise<void> {
-    const startTime = DateTime.now();
+    const startTime = Date.now();
 
     const { 
       canSendMessagesTo,
@@ -162,35 +192,52 @@ export class UsersDailyInsightsService implements OnModuleInit {
     );
 
     // build prompt
-    const promptInput = await this.buildPromptInput(data, context);
+    const promptInput = await this.buildInput(data, context);
     const prompt = UserDailyInsightPrompt.generate(promptInput);
 
-    // generate insights
-    const insights = await this.aiProvider.createCompletion({
-      prompt,
-      maxTokens: UsersDailyInsightsService.AI_MAX_TOKENS,
-      temperature: UsersDailyInsightsService.AI_TEMPERATURE,
-    });
-
-    // log
-    this.logger.info('Generated insights for user', {
-      ...context,
-      userId: user.id,
-      promptInput,
-      insights: insights.text,
-      duration: Date.now() - startTime.toMillis(),
-    });
-
-    // send
-    await this.usersNotificationsTransporter.sendBasicUserNotification(
-      {
-        userId: user.id,
-        notification: {
-          message: insights.text,
+    // send nutrition summary
+    if (this.sendNutritionSummary) {
+      await this.usersNotificationsTransporter.sendChunkedUserNotification(
+        {
+          userId: user.id,
+          notification: this.buildNutritionSummaryNotification(
+            promptInput.meals,
+            promptInput.overallAmounts,
+          ),
         },
-      },
-      context,
-    );
+        context,
+      );
+    }
+  
+    // insights
+    if (this.sendInsights) {
+      // generate
+      const insights = await this.aiProvider.createCompletion({
+        prompt,
+        maxTokens: UsersDailyInsightsService.AI_MAX_TOKENS,
+        temperature: UsersDailyInsightsService.AI_TEMPERATURE,
+      });
+
+      // log
+      this.logger.info('Generated insights for user', {
+        ...context,
+        userId: user.id,
+        promptInput,
+        insights: insights.text,
+        duration: Date.now() - startTime,
+      });
+
+      // send insights
+      await this.usersNotificationsTransporter.sendBasicUserNotification(
+        {
+          userId: user.id,
+          notification: {
+            message: insights.text,
+          },
+        },
+        context,
+      );
+    }
   }
 
   private async readDataForUserInsights(
@@ -230,10 +277,10 @@ export class UsersDailyInsightsService implements OnModuleInit {
     }
   }
 
-  private async buildPromptInput(
+  private async buildInput(
     data: DataForUserInsights,
     context: Context,
-  ): Promise<UserDailyInsightPromptInput> {
+  ): Promise<UserDailyInsightsInput> {
     const dailyTotals: MealTotals = {
       calories: 0,
       carbs: 0,
@@ -248,7 +295,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
     };
 
     // meals
-    const meals: UserDailyInsightPromptMeal[] = [];
+    const meals: UserDailyInsightsMeal[] = [];
     for (const entry of data.mealDailyPlan.entries) {
       const { goals } = entry;
 
@@ -305,7 +352,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
     }
 
     // overall goals
-    const overallAmounts: UserDailyInsightPromptAmounts = {
+    const overallAmounts: UserDailyInsightsAmounts = {
       calories: dailyTotals.calories,
       caloriesGoal: dailyGoals.calories,
       carbs: dailyTotals.carbs,
@@ -317,6 +364,116 @@ export class UsersDailyInsightsService implements OnModuleInit {
     };
 
     return { meals, overallAmounts };
+  }
+
+  private buildNutritionSummaryNotification(
+    meals: UserDailyInsightsMeal[],
+    overallAmounts: UserDailyInsightsAmounts,
+  ): ChunkedUserNotification {
+    const chunks: ChunkedUserNotificationChunk[] = [];
+    const bold = (text: string) => {
+      chunks.push({
+        type: ChunkedUserNotificationType.Bold,
+        text,
+      });
+    }
+    const normal = (text: string) => {  
+      chunks.push({
+        type: ChunkedUserNotificationType.Normal,
+        text,
+      });
+    }
+    const code = (text: string) => {
+      chunks.push({
+        type: ChunkedUserNotificationType.Code,
+        text,
+      });
+    }
+    const newLine = () => normal('\n');
+
+    // title
+    bold(this.translate('nutrition-summary-title'));
+    newLine();
+    newLine();
+    
+    // amount
+    const amount = (
+      amount: number,
+      goal: number,
+      unit: string,
+    ) => {
+      const percent = (amount / goal) * 100;
+      normal(
+        `${amount.toFixed()} ${unit} ` +
+        this.translate('amounts', percent.toFixed(), goal.toFixed(), unit)
+      );
+      const PERCENT_MARGIN_LOW = 5;
+      const PERCENT_MARGIN_HIGH = 15;
+
+      const percentDiff = Math.abs(percent - 100);
+      if (percentDiff > PERCENT_MARGIN_HIGH) {
+        normal(' ‼️');
+      }
+      else if (percentDiff > PERCENT_MARGIN_LOW) {
+        normal(' ❗');
+      }
+    }
+
+    // daily amounts
+    code(this.translate('calories'));
+    amount(
+      overallAmounts.calories,
+      overallAmounts.caloriesGoal,
+      'kcal',
+    );
+    newLine();
+    code(this.translate('carbs'));
+    amount(
+      overallAmounts.carbs,
+      overallAmounts.carbsGoal,
+      'g',
+    );
+    newLine();
+    code(this.translate('protein'));
+    amount(
+      overallAmounts.protein,
+      overallAmounts.proteinGoal,
+      'g',
+    );
+    newLine();
+    code(this.translate('fat'));
+    amount(
+      overallAmounts.fat,
+      overallAmounts.fatGoal,
+      'g',
+    );
+    newLine();
+
+    // meal names
+    let maxMealNameLength = 0;
+    for (const meal of meals) {
+      if (meal.name.length > maxMealNameLength) {
+        maxMealNameLength = meal.name.length;
+      }
+    }
+
+    // meals
+    for (const meal of meals) {
+      newLine();
+      code(meal.name.padStart(maxMealNameLength) + ': ');
+      if (!meal.skipped) {
+        amount(
+          meal.amounts.calories,
+          meal.amounts.caloriesGoal,
+          'kcal',
+        );
+      }
+      else {
+        normal(this.translate('skipped'));
+      }
+    }
+
+    return { chunks };
   }
 }
 

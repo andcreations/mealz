@@ -9,6 +9,10 @@ export class UsersNotificationsRequestTopics {
     'sendBasicUserNotification',
     'v1',
   );
+  public static readonly SendChunkedUserNotificationV1 = topic(
+    'sendChunkedUserNotification',
+    'v1',
+  );
   public static readonly ReadUserNotificationsInfoV1 = topic(
     'readUserNotificationsInfo',
     'v1',

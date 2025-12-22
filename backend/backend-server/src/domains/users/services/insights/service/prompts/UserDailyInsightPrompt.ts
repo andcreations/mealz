@@ -1,28 +1,7 @@
 import { PromptBuilder } from '@mealz/backend-ai';
+import { UserDailyInsightsInput } from '../types';
 
 const GOAL_ERROR_PERCENTAGE = 5;
-
-export interface UserDailyInsightPromptAmounts {
-  calories?: number;
-  caloriesGoal?: number
-  carbs?: number
-  carbsGoal?: number
-  fat?: number
-  fatGoal?: number
-  protein?: number
-  proteinGoal?: number
-}
-
-export interface UserDailyInsightPromptMeal {
-  name: string;
-  skipped: boolean;
-  amounts?: UserDailyInsightPromptAmounts;
-}
-
-export interface UserDailyInsightPromptInput {
-  meals: UserDailyInsightPromptMeal[]
-  overallAmounts: UserDailyInsightPromptAmounts;
-}
 
 export class UserDailyInsightPrompt {
   private static moreLessSkipped(
@@ -42,7 +21,7 @@ export class UserDailyInsightPrompt {
     );
   }
 
-  public static generate(input: UserDailyInsightPromptInput): string {
+  public static generate(input: UserDailyInsightsInput): string {
     let mealsStr = '';
     input.meals.forEach((meal, index) => {
       if (index > 0) {

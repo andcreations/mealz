@@ -31,7 +31,9 @@ import {
 
 import { SQLITE_DUMP_DIR_ENV_NAME } from '../const';
 import { SQLiteDB } from '../db';
-import { SQLiteDBBackupServiceTranslations } from './SQLiteDBBackupService.translations';
+import {
+  SQLiteDBBackupServiceTranslations,
+} from './SQLiteDBBackupService.translations';
 
 @Injectable()
 export class SQLiteDBBackupService implements OnModuleInit {
