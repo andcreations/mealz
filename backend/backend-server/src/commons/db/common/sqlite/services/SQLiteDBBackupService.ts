@@ -35,7 +35,7 @@ import { SQLiteDBBackupServiceTranslations } from './SQLiteDBBackupService.trans
 
 @Injectable()
 export class SQLiteDBBackupService implements OnModuleInit {
-  private static readonly DEFAULT_CRON_EXPRESSION = '0 2 * * *';
+  private static readonly DEFAULT_CRON = '0 2 * * *';
   private static readonly JOB_NAME = 'sqlite-db-backup';
 
   private readonly dumpDir: string;
@@ -67,10 +67,10 @@ export class SQLiteDBBackupService implements OnModuleInit {
       dumpDir: this.dumpDir,
     });
 
-    // job
+    // create job
     const cronExpression = getStrEnv(
-      'MEALZ_SQLITE_DB_BACKUP_CRON_EXPRESSION',
-      SQLiteDBBackupService.DEFAULT_CRON_EXPRESSION,
+      'MEALZ_SQLITE_DB_BACKUP_CRON',
+      SQLiteDBBackupService.DEFAULT_CRON,
     );
     const job = new CronJob(
       cronExpression,
@@ -80,11 +80,11 @@ export class SQLiteDBBackupService implements OnModuleInit {
       resolveTimeZone(),
     );
 
+    // schedule the job
     this.logger.info('Scheduling SQLite database backup', {
       ...BOOTSTRAP_CONTEXT,
       cronExpression,
     });
-    // schedule the job
     this.schedulerRegistry.addCronJob(SQLiteDBBackupService.JOB_NAME, job);
     job.start();
   }

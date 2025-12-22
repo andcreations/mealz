@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { VoidTransporterResponse } from '@mealz/backend-transport';
+import { 
+  TelegramUsersTransporter,
+} from '@mealz/backend-telegram-users-service-api';
 import {
+  ReadUserNotificationsInfoRequestV1,
+  ReadUserNotificationsInfoResponseV1,
   SendBasicUserNotificationRequestV1,
 } from '@mealz/backend-users-notifications-service-api';
 
@@ -12,6 +17,7 @@ import {
 @Injectable()
 export class UsersNotificationsService {
   public constructor(
+    private readonly telegramUsersTransporter: TelegramUsersTransporter,
     private readonly telegramUsersNotificationsService: TelegramUsersNotificationsService,
   ) {}
 
@@ -25,5 +31,21 @@ export class UsersNotificationsService {
       context,
     );
     return {};
+  }
+
+  public async readUserNotificationsInfoV1(
+    request: ReadUserNotificationsInfoRequestV1,
+    context: Context,
+  ): Promise<ReadUserNotificationsInfoResponseV1> {
+    const { 
+      canSendMessagesTo,
+    } = await this.telegramUsersTransporter.readTelegramUserInfoV1(
+      { userId: request.userId },
+      context,
+    );
+
+    return {
+      canSendMessagesTo,
+    }
   }
 }

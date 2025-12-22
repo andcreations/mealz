@@ -3,6 +3,8 @@ import { Context } from '@mealz/backend-core';
 import {
   ReadUserByIdRequestV1,
   ReadUserByIdResponseV1,
+  ReadUsersFromLastRequestV1,
+  ReadUsersFromLastResponseV1,
 } from '@mealz/backend-users-crud-service-api';
 
 import { UserByIdNotFoundError } from '../errors';
@@ -26,5 +28,17 @@ export class UsersCrudService {
       throw new UserByIdNotFoundError(request.id);
     }
     return { user };
+  }
+
+  public async readUsersFromLastV1(
+    request: ReadUsersFromLastRequestV1,
+    context: Context,
+  ): Promise<ReadUsersFromLastResponseV1> {
+    const users = await this.usersCrudRepository.readUsersFromLast(
+      request.lastId,
+      request.limit,
+      context,
+    );
+    return { users };
   }
 }

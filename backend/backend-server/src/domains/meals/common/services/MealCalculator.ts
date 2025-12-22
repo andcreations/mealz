@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { InternalError } from '@mealz/backend-common';
-import { getCaloriesPer100 } from '@mealz/backend-ingredients-common';
+import { 
+  FactId,
+  getCaloriesPer100,
+  getFactAmount,
+} from '@mealz/backend-ingredients-common';
 import {
   calculateAmount,
   calculateFact,
@@ -15,6 +19,7 @@ import {
   MealWithoutId,
   MealIngredient,
   CalculateAmountsResult,
+  MealTotals,
 } from '../types';
 
 @Injectable()
@@ -96,7 +101,7 @@ export class MealCalculator {
       .filter(ingredient => ingredient.ingredientId != null)
       .map(ingredient => ingredient.ingredientId);
 
-  // read ingredients
+    // read ingredients
     const { ingredients } = ingredientIds.length > 0
       ? await this.ingredientsCrudTransporter.readIngredientsByIdV1(
           {
@@ -109,7 +114,7 @@ export class MealCalculator {
     const getMealIngredientCaloriesPer100 = (
       mealIngredient: MealIngredient
     ): number | undefined => {
-    // full ingredient
+      // full ingredient
       if (mealIngredient.ingredientId) {
         const ingredient = ingredients.find(ingredient => {
           return ingredient.id === mealIngredient.ingredientId;
@@ -117,7 +122,7 @@ export class MealCalculator {
         return getCaloriesPer100(ingredient);
       }
 
-    // ad-hoc ingredient
+      // ad-hoc ingredient
       if (mealIngredient.adHocIngredient) {
         return mealIngredient.adHocIngredient.caloriesPer100;
       }
@@ -127,7 +132,7 @@ export class MealCalculator {
 
     let totalKnownCalories = 0;
     let missingAmountCount = 0;
-  // calculate total known calories
+    // calculate total known calories
     meal.ingredients.forEach(ingredient => {
       const amount = this.fromEnteredAmount(ingredient);
       if (amount === INVALID_AMOUNT) {
@@ -141,7 +146,7 @@ export class MealCalculator {
 
     const missingCalories = Math.max(0, meal.calories - totalKnownCalories);
     const missingCaloriesPerIngredient = missingCalories / missingAmountCount;
-  // calculate amounts
+    // calculate amounts
     const newIngredients = meal.ingredients.map(ingredient => {
       const amount = this.fromEnteredAmount(ingredient);
       if (amount !== INVALID_AMOUNT) {
@@ -163,12 +168,69 @@ export class MealCalculator {
       }
     });
 
+    // calculate totals
+    const totals: MealTotals = {
+      calories: 0,
+      carbs: 0,
+      fat: 0,
+      protein: 0,
+    };
+    let hasTotalCalories = false;
+    let hasTotalCarbs = false;
+    let hasTotalFat = false;
+    let hasTotalProtein = false;
+    for (const newIngredient of newIngredients) {
+      const ingredient = ingredients.find(ingredient => {
+        return ingredient.id === newIngredient.ingredientId;
+      });
+      if (!ingredient) {
+        continue;
+      }
+
+      const calories = getFactAmount(ingredient, FactId.Calories);
+      if (calories != null) {
+        totals.calories += getFactAmount(ingredient, FactId.Calories);
+        hasTotalCalories = true;
+      }
+
+      const carbs = getFactAmount(ingredient, FactId.Carbs);
+      if (carbs != null) {
+        totals.carbs += carbs;
+        hasTotalCarbs = true;
+      }
+
+      const fat = getFactAmount(ingredient, FactId.TotalFat);
+      if (fat != null) {
+        totals.fat += fat;
+        hasTotalFat = true;
+      }
+
+      const protein = getFactAmount(ingredient, FactId.Protein);
+      if (protein != null) {
+        totals.protein += protein;
+        hasTotalProtein = true;
+      }
+    }
+    if (!hasTotalCalories) {
+      delete totals.calories;
+    }
+    if (!hasTotalCarbs) {
+      delete totals.carbs;
+    }
+    if (!hasTotalFat) {
+      delete totals.fat;
+    }
+    if (!hasTotalProtein) {
+      delete totals.protein;
+    }
+
     return {
       meal: {
         ...meal,
         ingredients: newIngredients,
       },
       ingredients,
+      totals,
     };
   }
 }

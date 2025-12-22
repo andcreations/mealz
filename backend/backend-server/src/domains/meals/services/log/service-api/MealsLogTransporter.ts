@@ -7,6 +7,8 @@ import { MealsLogRequestTopics } from './MealsLogRequestTopics';
 import {
   LogMealRequestV1,
   LogMealResponseV1,
+  ReadUserMealLogsRequestV1,
+  ReadUserMealLogsResponseV1,
   SummarizeMealLogRequestV1,
   SummarizeMealLogResponseV1,
 } from './dtos';
@@ -41,6 +43,18 @@ export class MealsLogTransporter {
       MealsLogRequestTopics.SummarizeMacrosV1,
       request,
       context,
+    );
+  }
+
+  public async readUserMealLogsV1(
+    request: ReadUserMealLogsRequestV1,
+    context: Context,
+  ): Promise<ReadUserMealLogsResponseV1> {
+    return this.transporter.sendRequest<
+      ReadUserMealLogsRequestV1, ReadUserMealLogsResponseV1
+    >(
+      MealsLogRequestTopics.ReadUserMealLogsV1,
+      request, context,
     );
   }
 }

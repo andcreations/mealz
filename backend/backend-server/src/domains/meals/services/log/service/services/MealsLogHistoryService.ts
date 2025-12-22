@@ -6,6 +6,8 @@ import { MealCalculator } from '@mealz/backend-meals-common';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import {
   MacrosSummary,
+  ReadUserMealLogsRequestV1,
+  ReadUserMealLogsResponseV1,
   SummarizeMealLogRequestV1,
   SummarizeMealLogResponseV1,
 } from '@mealz/backend-meals-log-service-api';
@@ -106,5 +108,18 @@ export class MealsLogHistoryService {
       context,
     );
     return { summary };
-  }  
+  }
+
+  public async readUserMealLogsV1(
+    request: ReadUserMealLogsRequestV1,
+    context: Context,
+  ): Promise<ReadUserMealLogsResponseV1> {
+    const mealLogs = await this.mealsLogHistoryRepository.readByDateRange(
+      request.userId,
+      request.fromDate,
+      request.toDate,
+      context,
+    );
+    return { mealLogs };
+  }
 }

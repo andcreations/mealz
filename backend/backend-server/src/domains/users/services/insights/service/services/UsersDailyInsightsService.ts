@@ -1,0 +1,327 @@
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { CronJob } from 'cron';
+import { DateTime } from 'luxon';
+import {
+  BOOTSTRAP_CONTEXT,
+  Context,
+  generateCorrelationId,
+} from '@mealz/backend-core';
+import {
+  getStrEnv,
+  resolveTimeZone,
+} from '@mealz/backend-common';
+import { Logger } from '@mealz/backend-logger';
+import { AIProvider } from '@mealz/backend-ai';
+import { UserWithoutPassword } from '@mealz/backend-users-common';
+import { Meal, MealCalculator, MealTotals } from '@mealz/backend-meals-common';
+import { 
+  UsersCrudTransporter,
+} from '@mealz/backend-users-crud-service-api';
+import { 
+  MealLog, 
+  MealsLogTransporter,
+} from '@mealz/backend-meals-log-service-api';
+import { 
+  MealsCrudTransporter,
+} from '@mealz/backend-meals-crud-service-api';
+import { 
+  MealDailyPlan,
+  MealsDailyPlanTransporter,
+} from '@mealz/backend-meals-daily-plan-service-api';
+import { 
+  UsersNotificationsTransporter,
+} from '@mealz/backend-users-notifications-service-api';
+
+import { 
+  UserDailyInsightPrompt,
+  UserDailyInsightPromptInput,
+  UserDailyInsightPromptMeal,
+  UserDailyInsightPromptAmounts,
+} from '../prompts';
+
+@Injectable()
+export class UsersDailyInsightsService implements OnModuleInit {
+  private static readonly DEFAULT_CRON = '0 8 * * *';
+  private static readonly JOB_NAME = 'users-daily-insights';
+  private static readonly AI_MAX_TOKENS = 4000;
+  private static readonly AI_TEMPERATURE = 0.8;
+
+  public constructor(
+    private readonly logger: Logger,
+    private readonly schedulerRegistry: SchedulerRegistry,
+    private readonly mealCalculator: MealCalculator,
+    private readonly aiProvider: AIProvider,
+    private readonly usersCrudTransporter: UsersCrudTransporter,
+    private readonly mealsLogTransporter: MealsLogTransporter,
+    private readonly mealsCrudTransporter: MealsCrudTransporter,
+    private readonly mealsDailyPlanTransporter: MealsDailyPlanTransporter,
+    private readonly usersNotificationsTransporter: UsersNotificationsTransporter,
+  ) {}
+
+  public async onModuleInit(): Promise<void> {
+    // create job
+    const cronExpression = getStrEnv(
+      'MEALZ_USERS_DAILY_INSIGHTS_CRON',
+      UsersDailyInsightsService.DEFAULT_CRON,
+    );
+    const job = new CronJob(
+      cronExpression,
+      () => { this.generateInsights(); },
+      undefined,
+      undefined,
+      resolveTimeZone(),
+    );
+
+    // schedule the job
+    this.logger.info('Scheduling SQLite database backup', {
+      ...BOOTSTRAP_CONTEXT,
+      cronExpression,
+    });
+    this.schedulerRegistry.addCronJob(UsersDailyInsightsService.JOB_NAME, job);
+    job.start();
+  }
+
+  private async generateInsights(): Promise<void> {
+    const context: Context = {
+      correlationId: generateCorrelationId(UsersDailyInsightsService.JOB_NAME),
+    }
+
+    // previous day
+    const previousDayStart = DateTime
+      .now()
+      .setZone(resolveTimeZone())
+      .minus({ days: 1 })
+      .startOf('day');
+    const previousDayEnd = DateTime
+      .now()
+      .setZone(resolveTimeZone())
+      .minus({ days: 1 })
+      .endOf('day');
+
+    let lastId: string | undefined = undefined;
+    const limit = 100;
+
+    // loop until all users are processed
+    while (true) {
+      // read users
+      const { users } = await this.usersCrudTransporter.readUsersFromLastV1(
+        { lastId, limit },
+        context,
+      );
+
+      // generate insights
+      for (const user of users) {
+        await this.generateInsightsForUser(
+          user,
+          previousDayStart,
+          previousDayEnd,
+          context,
+        );
+      }
+
+      // more
+      if (users.length < limit) {
+        break;
+      }
+      lastId = users[users.length - 1].id;
+    }
+  }
+
+  private async generateInsightsForUser(
+    user: UserWithoutPassword,
+    previousDayStart: DateTime,
+    previousDayEnd: DateTime,
+    context: Context,
+  ): Promise<void> {
+    const startTime = DateTime.now();
+
+    const { 
+      canSendMessagesTo,
+    } = await this.usersNotificationsTransporter.readUserNotificationsInfoV1(
+      { userId: user.id },
+      context,
+    );
+    if (!canSendMessagesTo) {
+      this.logger.debug(
+        'User cannot send messages, skipping daily insights generation', 
+        {
+          ...context,
+          userId: user.id,
+        },
+      );
+      return;
+    }
+
+    // read data
+    const data = await this.readDataForUserInsights(
+      user.id,
+      previousDayStart,
+      previousDayEnd,
+      context,
+    );
+
+    // build prompt
+    const promptInput = await this.buildPromptInput(data, context);
+    const prompt = UserDailyInsightPrompt.generate(promptInput);
+
+    // generate insights
+    const insights = await this.aiProvider.createCompletion({
+      prompt,
+      maxTokens: UsersDailyInsightsService.AI_MAX_TOKENS,
+      temperature: UsersDailyInsightsService.AI_TEMPERATURE,
+    });
+
+    // log
+    this.logger.info('Generated insights for user', {
+      ...context,
+      userId: user.id,
+      promptInput,
+      insights: insights.text,
+      duration: Date.now() - startTime.toMillis(),
+    });
+
+    // send
+    await this.usersNotificationsTransporter.sendBasicUserNotification(
+      {
+        userId: user.id,
+        notification: {
+          message: insights.text,
+        },
+      },
+      context,
+    );
+  }
+
+  private async readDataForUserInsights(
+    userId: string,
+    previousDayStart: DateTime,
+    previousDayEnd: DateTime,
+    context: Context,
+  ): Promise<DataForUserInsights> {
+    // read meal logs
+    const [ { mealLogs }, { mealDailyPlan } ] = await Promise.all([
+      this.mealsLogTransporter.readUserMealLogsV1(
+        { 
+          userId: userId,
+          fromDate: previousDayStart.toMillis(),
+          toDate: previousDayEnd.toMillis(),
+        },
+        context,
+      ),
+      this.mealsDailyPlanTransporter.readUserCurrentMealDailyPlanV1(
+        { userId: userId },
+        context,
+      ),
+    ]);
+
+    // read meals
+    const [ { meals } ] = await Promise.all([
+      this.mealsCrudTransporter.readMealsByIdV1(
+        { ids: mealLogs.map(mealLog => mealLog.mealId) },
+        context,
+      ),
+    ]);
+
+    return {
+      mealLogs,
+      meals,
+      mealDailyPlan,
+    }
+  }
+
+  private async buildPromptInput(
+    data: DataForUserInsights,
+    context: Context,
+  ): Promise<UserDailyInsightPromptInput> {
+    const dailyTotals: MealTotals = {
+      calories: 0,
+      carbs: 0,
+      fat: 0,
+      protein: 0,
+    };
+    const dailyGoals: MealTotals = {
+      calories: 0,
+      carbs: 0,
+      fat: 0,
+      protein: 0,
+    };
+
+    // meals
+    const meals: UserDailyInsightPromptMeal[] = [];
+    for (const entry of data.mealDailyPlan.entries) {
+      const { goals } = entry;
+
+      // update goals
+      dailyGoals.calories += goals.calories;
+      dailyGoals.carbs += goals.carbs;
+      dailyGoals.fat += goals.fat;
+      dailyGoals.protein += goals.protein;
+
+      // find meal
+      const mealLog = data.mealLogs.find(mealLog => {
+        return mealLog.dailyPlanMealName === entry.mealName;
+      });
+      const meal = data.meals.find(meal => {
+        return meal.id === mealLog?.mealId;
+      });
+      if (!meal) {
+        meals.push({  
+          name: entry.mealName, 
+          skipped: true,
+        });
+        continue;
+      }
+
+      // meal totals
+      const {
+        totals: mealTotals,
+      } = await this.mealCalculator.calculateAmounts(
+        meal,
+        context,
+      );
+
+      // push meal
+      meals.push({
+        name: entry.mealName,
+        skipped: false,
+        amounts: {
+          calories: mealTotals.calories,
+          caloriesGoal: goals.calories,
+          carbs: mealTotals.carbs,
+          carbsGoal: goals.carbs,
+          fat: mealTotals.fat,
+          fatGoal: goals.fat,
+          protein: mealTotals.protein,
+          proteinGoal: goals.protein,
+        },
+      });
+
+      // update totals
+      dailyTotals.calories += mealTotals.calories ?? 0;
+      dailyTotals.carbs += mealTotals.carbs ?? 0;
+      dailyTotals.fat += mealTotals.fat ?? 0;
+      dailyTotals.protein += mealTotals.protein ?? 0;
+    }
+
+    // overall goals
+    const overallAmounts: UserDailyInsightPromptAmounts = {
+      calories: dailyTotals.calories,
+      caloriesGoal: dailyGoals.calories,
+      carbs: dailyTotals.carbs,
+      carbsGoal: dailyGoals.carbs,
+      fat: dailyTotals.fat,
+      fatGoal: dailyGoals.fat,
+      protein: dailyTotals.protein,
+      proteinGoal: dailyGoals.protein,
+    };
+
+    return { meals, overallAmounts };
+  }
+}
+
+interface DataForUserInsights {
+  mealLogs: MealLog[];
+  meals: Meal[];
+  mealDailyPlan?: MealDailyPlan;
+}

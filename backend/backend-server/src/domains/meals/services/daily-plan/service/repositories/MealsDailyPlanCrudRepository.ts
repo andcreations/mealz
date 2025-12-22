@@ -99,4 +99,23 @@ export class MealsDailyPlanCrudRepository {
     };
     await this.repository.update(query, update, context);
   }
+
+  public async readCurrent(
+    userId: string,
+    context: Context,
+  ): Promise<MealDailyPlan | undefined> {
+    const query: Where<MealDailyPlanDBEntity> = {
+      user_id: { $eq: userId },
+    };
+    const entity = await this.repository.findOne(
+      query,
+      {
+        sort: [
+          { createdAt: 'desc' },
+        ],
+      },
+      context,
+    );
+    return this.mapper.fromEntity(entity);
+  }
 }

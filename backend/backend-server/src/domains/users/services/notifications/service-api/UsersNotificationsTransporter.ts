@@ -11,7 +11,11 @@ import {
 import {
   UsersNotificationsRequestTopics,
  } from './UsersNotificationsRequestTopics';
-import { SendBasicUserNotificationRequestV1 } from './dtos';
+import { 
+  ReadUserNotificationsInfoRequestV1,
+  ReadUserNotificationsInfoResponseV1,
+  SendBasicUserNotificationRequestV1,
+} from './dtos';
 
 export class UsersNotificationsTransporter {
   public constructor(
@@ -29,6 +33,18 @@ export class UsersNotificationsTransporter {
       UsersNotificationsRequestTopics.SendBasicUserNotificationV1,
       request,
       context,
+    );
+  }
+
+  public async readUserNotificationsInfoV1(
+    request: ReadUserNotificationsInfoRequestV1,
+    context: Context,
+  ): Promise<ReadUserNotificationsInfoResponseV1> {
+    return this.transporter.sendRequest<
+      ReadUserNotificationsInfoRequestV1, ReadUserNotificationsInfoResponseV1
+    >(
+      UsersNotificationsRequestTopics.ReadUserNotificationsInfoV1,
+      request, context,
     );
   }
 }

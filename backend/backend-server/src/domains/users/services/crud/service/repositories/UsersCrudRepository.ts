@@ -1,9 +1,10 @@
 import { Context } from '@mealz/backend-core';
-import { InjectDBRepository, DBRepository } from '@mealz/backend-db';
+import { InjectDBRepository, DBRepository, Where } from '@mealz/backend-db';
 import { UserWithoutPassword } from '@mealz/backend-users-common';
 import {
   USERS_DB_NAME,
   USER_DB_ENTITY_NAME,
+  USER_FIELDS_WITHOUT_PASSWORD,
   UserDBEntity,
   UserDBMapper,
 } from '@mealz/backend-users-db';
@@ -26,7 +27,32 @@ export class UsersCrudRepository {
     );
     return this.mapper.fromEntity(
       entity,
-      ['id', 'firstName', 'lastLame', 'email', 'roles'],
+      USER_FIELDS_WITHOUT_PASSWORD,
     );  
+  }
+
+  public async readUsersFromLast(
+    lastId: string | undefined,
+    limit: number,
+    context: Context,
+  ): Promise<UserWithoutPassword[]> {
+    const query: Where<UserDBEntity> = {};
+    if (lastId) {
+      query.id = { $gt: lastId };
+    }
+    const entities = await this.repository.find(
+      query,
+      { 
+        limit,
+        sort: [
+          { id: 'asc' },
+        ],
+      },
+      context,
+    );
+    return this.mapper.fromEntities(
+      entities,
+      USER_FIELDS_WITHOUT_PASSWORD,
+    );
   }
 }

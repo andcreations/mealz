@@ -32,7 +32,8 @@ export class OpenAIProvider implements AIProvider, OnModuleInit {
     const response = await this.client.completions.create({
       model: input.modelName ?? this.defaultModelName,
       prompt: input.prompt,
-      max_tokens: input.maxTokens
+      max_tokens: input.maxTokens,
+      temperature: input.temperature,
     })
     return {
       text: response.choices[0].text
