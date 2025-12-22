@@ -1,8 +1,9 @@
 import { Translations } from '../../../i18n';
 
 export const MealPlannerActionBarTranslations: Translations = {
-  'clear-meal': 'Clear meal',
-  'save-meal': 'Save meal',
-  'load-meal': 'Load meal',
-  'delete-meal': 'Delete meal',
+  'clear-meal': 'Clear the meal',
+  'save-meal': 'Save the meal',
+  'load-meal': 'Load a meal',
+  'delete-meal': 'Delete a meal',
+  'portion-meal': 'Portion the meal',
 };

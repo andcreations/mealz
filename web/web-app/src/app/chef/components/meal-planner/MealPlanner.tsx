@@ -27,6 +27,7 @@ import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
+import { MealPortion } from './MealPortion';
 
 enum Focus { Calories };
 
@@ -48,6 +49,7 @@ interface MealPlannerState {
   showSaveMealPicker: boolean;
   showLoadMealPicker: boolean;
   showDeleteMealPicker: boolean;
+  showMealPortion: boolean;
 }
 
 export function MealPlanner() {
@@ -71,6 +73,7 @@ export function MealPlanner() {
     showSaveMealPicker: false,
     showLoadMealPicker: false,
     showDeleteMealPicker: false,
+    showMealPortion: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -392,6 +395,12 @@ export function MealPlanner() {
       return state.dailyPlanMealName;
     },
 
+    weightInGrams: (): number => {
+      return state.ingredients.reduce((acc, ingredient) => {
+        return acc + (ingredient.calculatedAmount ?? 0);
+      }, 0);
+    },
+
     onLog: () => {
       if (state.calculateAmountsError) {
         notificationsService.error(
@@ -449,6 +458,14 @@ export function MealPlanner() {
         type: NotificationType.Info,
         undo,
       });
+    },
+
+    onShowPortion: () => {
+      patchState({ showMealPortion: true });
+    },
+
+    onClosePortion: () => {
+      patchState({ showMealPortion: false });
     },
   };
 
@@ -595,6 +612,7 @@ export function MealPlanner() {
               onSaveMeal={namedMeal.onShowSave}
               onLoadMeal={namedMeal.onShowLoad}
               onDeleteMeal={namedMeal.onShowDelete}
+              onPortionMeal={meal.onShowPortion}
             />
           </div>
           <div className='mealz-meal-planner-ingredients'>
@@ -651,6 +669,13 @@ export function MealPlanner() {
           mustMatchToPick={true}
           onPick={namedMeal.onDelete}
           onClose={namedMeal.onCloseDelete}
+        />
+      }
+      { state.showMealPortion &&
+        <MealPortion
+          mealWeightInGrams={meal.weightInGrams()}
+          show={state.showMealPortion}
+          onClose={meal.onClosePortion}
         />
       }
     </>
