@@ -13,6 +13,8 @@ import {
   CreateMealDailyPlanRequestV1,
   CreateMealDailyPlanResponseV1,
   UpdateMealDailyPlanRequestV1,
+  ReadUserCurrentMealDailyPlanRequestV1,
+  ReadUserCurrentMealDailyPlanResponseV1,
 } from './dtos';
 
 @Injectable()
@@ -59,4 +61,17 @@ export class MealsDailyPlanTransporter {
       context,
     );
   } 
+
+  public async readUserCurrentMealDailyPlanV1(
+    request: ReadUserCurrentMealDailyPlanRequestV1,
+    context: Context,
+  ): Promise<ReadUserCurrentMealDailyPlanResponseV1> {
+    return this.transporter.sendRequest<
+      ReadUserCurrentMealDailyPlanRequestV1,
+      ReadUserCurrentMealDailyPlanResponseV1
+    >(
+      MealsDailyPlanRequestTopics.ReadUserCurrentMealDailyPlanV1,
+      request, context,
+    );
+  }
 }

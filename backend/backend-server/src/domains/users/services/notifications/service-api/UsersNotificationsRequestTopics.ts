@@ -9,6 +9,10 @@ export class UsersNotificationsRequestTopics {
     'sendBasicUserNotification',
     'v1',
   );
+  public static readonly ReadUserNotificationsInfoV1 = topic(
+    'readUserNotificationsInfo',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

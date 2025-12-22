@@ -17,7 +17,7 @@ import { MealSummaryTranslations } from './MealSummary.translations';
 import { LoaderByStatus, LoaderSize } from '../../../components';
 
 const MAX_CALORIES_DIFFERENCE = 20;
-const GOAL_ERROR_PERCENTAGE = 10;
+const GOAL_ERROR_PERCENTAGE = 5;
 const SHOW_FAT_DETAILS = false;
 
 export interface MealSummaryProps {

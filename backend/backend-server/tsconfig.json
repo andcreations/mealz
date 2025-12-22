@@ -23,6 +23,7 @@
       "@mealz/backend-db-api": ["src/commons/db/api"],
       "@mealz/backend-transport": ["src/commons/transport"],
       "@mealz/backend-backup": ["src/commons/backup"],
+      "@mealz/backend-ai": ["src/commons/ai"],
 
       "@mealz/backend-users-common": ["src/domains/users/common"],
       "@mealz/backend-users-db": ["src/domains/users/db"],

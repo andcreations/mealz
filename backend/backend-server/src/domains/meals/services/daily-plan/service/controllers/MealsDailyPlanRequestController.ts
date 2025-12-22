@@ -11,6 +11,8 @@ import {
   UpdateMealDailyPlanRequestV1,
   ReadManyMealDailyPlansResponseV1,
   ReadManyMealDailyPlansRequestV1,
+  ReadUserCurrentMealDailyPlanRequestV1,
+  ReadUserCurrentMealDailyPlanResponseV1,
 } from '@mealz/backend-meals-daily-plan-service-api';
 import { MealsDailyPlanCrudService } from '../services';
 
@@ -48,6 +50,17 @@ export class MealsDailyPlanRequestController {
     context: Context,
   ): Promise<VoidTransporterResponse> {
     return this.mealsDailyPlanCrudService.updateMealDailyPlanV1(
+      request,
+      context,
+    );
+  }
+
+  @RequestHandler(MealsDailyPlanRequestTopics.ReadUserCurrentMealDailyPlanV1)
+  public async readUserCurrentMealDailyPlanV1(
+    request: ReadUserCurrentMealDailyPlanRequestV1,
+    context: Context,
+  ): Promise<ReadUserCurrentMealDailyPlanResponseV1> {
+    return this.mealsDailyPlanCrudService.readUserCurrentMealDailyPlanV1(
       request,
       context,
     );

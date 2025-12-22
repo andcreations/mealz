@@ -4,6 +4,8 @@ import {
   LogMealRequestV1,
   LogMealResponseV1,
   MealsLogRequestTopics,
+  ReadUserMealLogsRequestV1,
+  ReadUserMealLogsResponseV1,
   SummarizeMealLogRequestV1,
   SummarizeMealLogResponseV1,
 } from '@mealz/backend-meals-log-service-api';
@@ -31,5 +33,13 @@ export class MealsLogRequestController {
     context: Context,
   ): Promise<SummarizeMealLogResponseV1> {
     return this.mealsLogHistoryService.summarizeMacrosV1(request, context);
+  }
+
+  @RequestHandler(MealsLogRequestTopics.ReadUserMealLogsV1)
+  public async readUserMealLogsV1(
+    request: ReadUserMealLogsRequestV1,
+    context: Context,
+  ): Promise<ReadUserMealLogsResponseV1> {
+    return this.mealsLogHistoryService.readUserMealLogsV1(request, context);
   }
 }

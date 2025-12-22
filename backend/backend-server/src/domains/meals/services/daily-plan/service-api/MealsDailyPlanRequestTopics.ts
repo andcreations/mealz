@@ -17,6 +17,10 @@ export class MealsDailyPlanRequestTopics {
     'updateMealDailyPlan',
     'v1',
   );
+  public static readonly ReadUserCurrentMealDailyPlanV1 = topic(
+    'readUserCurrentMealDailyPlan',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

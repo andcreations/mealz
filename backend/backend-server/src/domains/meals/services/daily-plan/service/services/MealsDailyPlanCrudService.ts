@@ -7,6 +7,8 @@ import {
   CreateMealDailyPlanRequestV1,
   CreateMealDailyPlanResponseV1,
   UpdateMealDailyPlanRequestV1,
+  ReadUserCurrentMealDailyPlanRequestV1,
+  ReadUserCurrentMealDailyPlanResponseV1,
 } from '@mealz/backend-meals-daily-plan-service-api';
 
 import { MealDailyPlanByIdNotFoundError } from '../errors';
@@ -58,5 +60,16 @@ export class MealsDailyPlanCrudService {
       context,
     );
     return {};
+  }
+
+  public async readUserCurrentMealDailyPlanV1(
+    request: ReadUserCurrentMealDailyPlanRequestV1,
+    context: Context,
+  ): Promise<ReadUserCurrentMealDailyPlanResponseV1> {
+    const mealDailyPlan = await this.mealsDailyPlanCrudRepository.readCurrent(
+      request.userId,
+      context,
+    );
+    return { mealDailyPlan };
   }
 }

@@ -11,7 +11,7 @@ export class UserDBMapper {
   >(
     entity: Pick<UserDBEntity, K> | undefined,
     projection: U[],
-  ): Pick<User, U> | undefined{
+  ): Pick<User, U> | undefined {
     if (!entity) {
       return undefined;
     }
@@ -40,4 +40,16 @@ export class UserDBMapper {
     });
     return user as Pick<User, U>;
   } 
+
+  public fromEntities<
+  K extends keyof UserDBEntity,
+  U extends keyof User
+  >(
+    entities: Array<Pick<UserDBEntity, K> | undefined>,
+    projection: U[],
+  ): Array<Pick<User, U>> {
+    return entities
+      .map(entity => this.fromEntity(entity, projection))
+      .filter(user => user !== undefined);
+  }
 }

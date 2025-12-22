@@ -8,5 +8,4 @@ import { MealCalculator } from './services';
   providers: [MealCalculator],
   exports: [MealCalculator],
 })
-export class MealsCommonModule {
-}
+export class MealsCommonModule {}

@@ -8,6 +8,7 @@ export interface CreateCompletionInput {
   prompt: string;
   modelName?: string;
   maxTokens?: number;
+  temperature?: number;
 }
 
 export interface CreateCompletionOutput {

@@ -1,4 +1,4 @@
-export class ReadIngredientsFromLastRequestV1 {
-  public lastId: string | undefined;
-  public limit: number;
+export interface ReadIngredientsFromLastRequestV1 {
+  lastId?: string;
+  limit: number;
 }

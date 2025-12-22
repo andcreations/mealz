@@ -4,7 +4,12 @@ import { RequestTransporter } from '@mealz/backend-transport';
 
 import { USERS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { UsersCrudRequestTopics } from './UsersCrudRequestTopics';
-import { ReadUserByIdRequestV1, ReadUserByIdResponseV1 } from './dtos';
+import {
+  ReadUserByIdRequestV1,
+  ReadUserByIdResponseV1,
+  ReadUsersFromLastRequestV1,
+  ReadUsersFromLastResponseV1,
+} from './dtos';
 
 export class UsersCrudTransporter {
   public constructor(
@@ -20,6 +25,18 @@ export class UsersCrudTransporter {
       ReadUserByIdRequestV1, ReadUserByIdResponseV1
     >(
       UsersCrudRequestTopics.ReadUserByIdV1,
+      request, context,
+    );
+  }
+
+  public async readUsersFromLastV1(
+    request: ReadUsersFromLastRequestV1,
+    context: Context,
+  ): Promise<ReadUsersFromLastResponseV1> {
+    return this.transporter.sendRequest<
+      ReadUsersFromLastRequestV1, ReadUsersFromLastResponseV1
+    >(
+      UsersCrudRequestTopics.ReadUsersFromLastV1,
       request, context,
     );
   }

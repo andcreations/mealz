@@ -1,5 +1,7 @@
 import { Ingredient } from '@mealz/backend-ingredients-common';
+
 import { MealWithoutId } from './MealWithoutId';
+import { MealTotals } from './MealTotals';
 
 export interface CalculateAmountsResult {
   // Meal with calculated amounts
@@ -7,4 +9,7 @@ export interface CalculateAmountsResult {
 
   // Meal ingredients
   ingredients: Ingredient[];
+
+  // Meal totals
+  totals: MealTotals;
 }
