@@ -13,7 +13,7 @@ import classNames = require('classnames');
 enum Focus { Portion };
 
 export interface MealPortionProps {
-  mealWeightInGrams: number;
+  mealWeightInGrams?: number;
   show: boolean;
   onClose: () => void;
 }
