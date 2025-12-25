@@ -5,9 +5,9 @@ import Form from 'react-bootstrap/Form';
 
 import { usePatchState, useService } from '../../../hooks';
 import { focusRef, Key, mapKey, stopBubble } from '../../../utils';
+import { LinkButton } from '../../../components';
 import { MealsNamedService } from '../../../meals/';
 import { NamedMealPickerDropdown } from './NamedMealPickerDropdown';
-import { MaterialIcon } from '../../../components';
 
 enum Focus { Name };
 
@@ -15,7 +15,7 @@ const SEARCH_LIMIT = 8;
 
 export interface NamedMealPickerProps {
   show: boolean;
-  icon: string;
+  buttonLabel: string;
   placeholder: string;
   info?: {
     empty?: string;
@@ -195,9 +195,9 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
           />
         }
         <div className='mealz-named-meal-picker-button'>
-          <MaterialIcon
-            icon={props.icon}
-            disabled={button.disabled()}
+          <LinkButton
+            label={props.buttonLabel}
+            size='small'
             onClick={name.onPick}
           />
         </div>

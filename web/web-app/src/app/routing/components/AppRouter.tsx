@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 
-import { NotFoundPage } from '../../404';
-import { SignInPage } from '../../auth';
-import { DashboardPage } from '../../dashboard';
-import { ChefPage } from '../../chef';
+import { NotFoundPage } from '../../404/pages';
+import { SignInPage } from '../../auth/pages';
+import { DashboardPage } from '../../dashboard/pages';
+import { ChefPage } from '../../chef/pages';
 import { Private } from './Private';
 
 export function AppRouter() {

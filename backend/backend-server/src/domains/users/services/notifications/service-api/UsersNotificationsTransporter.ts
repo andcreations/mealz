@@ -15,6 +15,7 @@ import {
   ReadUserNotificationsInfoRequestV1,
   ReadUserNotificationsInfoResponseV1,
   SendBasicUserNotificationRequestV1,
+  SendChunkedUserNotificationRequestV1,
 } from './dtos';
 
 export class UsersNotificationsTransporter {
@@ -33,6 +34,18 @@ export class UsersNotificationsTransporter {
       UsersNotificationsRequestTopics.SendBasicUserNotificationV1,
       request,
       context,
+    );
+  }
+
+  public async sendChunkedUserNotification(
+    request: SendChunkedUserNotificationRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      SendChunkedUserNotificationRequestV1, VoidTransporterResponse
+    >(
+      UsersNotificationsRequestTopics.SendChunkedUserNotificationV1,
+      request, context,
     );
   }
 

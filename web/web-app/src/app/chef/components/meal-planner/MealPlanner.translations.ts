@@ -24,16 +24,22 @@ export const MealPlannerTranslations: Translations = {
   // save
   'cannot-save-meal-with-errors': 'Please fix the issues with the meal before saving',
   'cannot-save-meal-with-no-ingredients': 'Please add ingredients before saving',
+  'save-button-label': 'Save meal',
   'save-placeholder': 'Enter meal name to save',
   'save-info-matching': 'Meal will be overwritten',
   'save-info-non-matching': 'New meal will be created',
   'meal-saved': 'Meal saved',
 
   // load
+  'load-button-label': 'Load meal',
   'load-placeholder': 'Pick meal to load',
 
   // delete
+  'delete-button-label': 'Delete meal',
   'delete-placeholder': 'Pick meal to delete',
   'meal-deleted': 'Meal deleted',
   'failed-to-delete-meal': 'Failed to delete meal',
+
+  // portion
+  'cannot-portion-meal-with-errors': 'Please fix the issues with the meal before portioning',
 };

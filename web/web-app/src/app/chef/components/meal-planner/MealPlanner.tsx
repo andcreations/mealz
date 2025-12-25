@@ -27,6 +27,7 @@ import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
+import { MealPortion } from './MealPortion';
 
 enum Focus { Calories };
 
@@ -48,6 +49,7 @@ interface MealPlannerState {
   showSaveMealPicker: boolean;
   showLoadMealPicker: boolean;
   showDeleteMealPicker: boolean;
+  showMealPortion: boolean;
 }
 
 export function MealPlanner() {
@@ -71,6 +73,7 @@ export function MealPlanner() {
     showSaveMealPicker: false,
     showLoadMealPicker: false,
     showDeleteMealPicker: false,
+    showMealPortion: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -392,6 +395,12 @@ export function MealPlanner() {
       return state.dailyPlanMealName;
     },
 
+    weightInGrams: (): number => {
+      return state.ingredients.reduce((acc, ingredient) => {
+        return acc + (ingredient.calculatedAmount ?? 0);
+      }, 0);
+    },
+
     onLog: () => {
       if (state.calculateAmountsError) {
         notificationsService.error(
@@ -448,6 +457,28 @@ export function MealPlanner() {
         message: translate('meal-cleared'),
         type: NotificationType.Info,
         undo,
+      });
+    },
+
+    onShowPortion: () => {
+      if (state.calculateAmountsError) {
+        notificationsService.error(
+          translate('cannot-portion-meal-with-errors')
+        );
+        return;
+      }
+      patchState({ showMealPortion: true });
+    },
+
+    onClosePortion: () => {
+      patchState({ showMealPortion: false });
+    },
+
+    onPortion: (ingredients: MealPlannerIngredient[]) => {
+      markDirty();
+      patchState({
+        ingredients,
+        showMealPortion: false,
       });
     },
   };
@@ -595,6 +626,7 @@ export function MealPlanner() {
               onSaveMeal={namedMeal.onShowSave}
               onLoadMeal={namedMeal.onShowLoad}
               onDeleteMeal={namedMeal.onShowDelete}
+              onPortionMeal={meal.onShowPortion}
             />
           </div>
           <div className='mealz-meal-planner-ingredients'>
@@ -623,7 +655,7 @@ export function MealPlanner() {
       { state.showSaveMealPicker &&
         <NamedMealPicker
           show={state.showSaveMealPicker}
-          icon='cloud_upload'
+          buttonLabel={translate('save-button-label')}
           placeholder={translate('save-placeholder')}
           info={{
             matching: translate('save-info-matching'),
@@ -636,7 +668,7 @@ export function MealPlanner() {
       { state.showLoadMealPicker &&
         <NamedMealPicker
           show={state.showLoadMealPicker}
-          icon='cloud_download'
+          buttonLabel={translate('load-button-label')}
           placeholder={translate('load-placeholder')}
           mustMatchToPick={true}
           onPick={namedMeal.onLoad}
@@ -646,11 +678,19 @@ export function MealPlanner() {
       { state.showDeleteMealPicker &&
         <NamedMealPicker
           show={state.showDeleteMealPicker}
-          icon='delete'
+          buttonLabel={translate('delete-button-label')}
           placeholder={translate('delete-placeholder')}
           mustMatchToPick={true}
           onPick={namedMeal.onDelete}
           onClose={namedMeal.onCloseDelete}
+        />
+      }
+      { state.showMealPortion &&
+        <MealPortion
+          ingredients={state.ingredients}
+          show={state.showMealPortion}
+          onClose={meal.onClosePortion}
+          onPortion={meal.onPortion}
         />
       }
     </>

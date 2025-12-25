@@ -8,6 +8,7 @@ import {
   ReadUserNotificationsInfoRequestV1,
   ReadUserNotificationsInfoResponseV1,
   SendBasicUserNotificationRequestV1,
+  SendChunkedUserNotificationRequestV1,
   UsersNotificationsRequestTopics,
  } from '@mealz/backend-users-notifications-service-api';
 
@@ -25,6 +26,17 @@ export class UsersNotificationsRequestController {
     context: Context,
   ): Promise<VoidTransporterResponse> {
     return this.usersNotificationsService.sendBasicUserNotificationV1(
+      request,
+      context,
+    );
+  }
+
+  @RequestHandler(UsersNotificationsRequestTopics.SendChunkedUserNotificationV1)
+  public async sendChunkedUserNotification(
+    request: SendChunkedUserNotificationRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.usersNotificationsService.sendChunkedUserNotificationV1(
       request,
       context,
     );

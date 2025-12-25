@@ -14,6 +14,7 @@ export interface MealPlannerActionBarProps {
   onLoadMeal: () => void;
   onSaveMeal: () => void;
   onDeleteMeal: () => void;
+  onPortionMeal: () => void;
 }
 
 interface MealPlannerActionBarState {
@@ -59,7 +60,12 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
     {
       name: translate('delete-meal'),
       onClick: props.onDeleteMeal,
+    },
+    {
+      name: translate('portion-meal'),
+      onClick: props.onPortionMeal,
     }
+
   ];
 
   return (

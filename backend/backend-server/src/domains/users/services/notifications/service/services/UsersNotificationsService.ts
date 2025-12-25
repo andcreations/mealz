@@ -8,6 +8,7 @@ import {
   ReadUserNotificationsInfoRequestV1,
   ReadUserNotificationsInfoResponseV1,
   SendBasicUserNotificationRequestV1,
+  SendChunkedUserNotificationRequestV1,
 } from '@mealz/backend-users-notifications-service-api';
 
 import {
@@ -26,6 +27,18 @@ export class UsersNotificationsService {
     context: Context,
   ): Promise<VoidTransporterResponse> {
     await this.telegramUsersNotificationsService.sendBasicUserNotification(
+      request.notification,
+      request.userId,
+      context,
+    );
+    return {};
+  }
+
+  public async sendChunkedUserNotificationV1(
+    request: SendChunkedUserNotificationRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    await this.telegramUsersNotificationsService.sendChunkedUserNotification(
       request.notification,
       request.userId,
       context,

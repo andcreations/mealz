@@ -2,3 +2,7 @@
   cursor: pointer;
   color: $mealz-theme-color-link;
 }
+
+.mealz-link-button-small {
+  @include mealz-font-small();
+}
