@@ -5,7 +5,7 @@ module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '@mealz/backend-core': '<rootDir>/core',
-    '@mealz/backend-common': '<rootDir>/common',
-    '@mealz/backend-logger': '<rootDir>/logger'
+    '@mealz/backend-common': '<rootDir>/commons/common',
+    '@mealz/backend-logger': '<rootDir>/commons/logger'
   }
 }

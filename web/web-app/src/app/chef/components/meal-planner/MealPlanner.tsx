@@ -461,11 +461,25 @@ export function MealPlanner() {
     },
 
     onShowPortion: () => {
+      if (state.calculateAmountsError) {
+        notificationsService.error(
+          translate('cannot-portion-meal-with-errors')
+        );
+        return;
+      }
       patchState({ showMealPortion: true });
     },
 
     onClosePortion: () => {
       patchState({ showMealPortion: false });
+    },
+
+    onPortion: (ingredients: MealPlannerIngredient[]) => {
+      markDirty();
+      patchState({
+        ingredients,
+        showMealPortion: false,
+      });
     },
   };
 
@@ -641,7 +655,7 @@ export function MealPlanner() {
       { state.showSaveMealPicker &&
         <NamedMealPicker
           show={state.showSaveMealPicker}
-          icon='cloud_upload'
+          buttonLabel={translate('save-button-label')}
           placeholder={translate('save-placeholder')}
           info={{
             matching: translate('save-info-matching'),
@@ -654,7 +668,7 @@ export function MealPlanner() {
       { state.showLoadMealPicker &&
         <NamedMealPicker
           show={state.showLoadMealPicker}
-          icon='cloud_download'
+          buttonLabel={translate('load-button-label')}
           placeholder={translate('load-placeholder')}
           mustMatchToPick={true}
           onPick={namedMeal.onLoad}
@@ -664,7 +678,7 @@ export function MealPlanner() {
       { state.showDeleteMealPicker &&
         <NamedMealPicker
           show={state.showDeleteMealPicker}
-          icon='delete'
+          buttonLabel={translate('delete-button-label')}
           placeholder={translate('delete-placeholder')}
           mustMatchToPick={true}
           onPick={namedMeal.onDelete}
@@ -673,9 +687,10 @@ export function MealPlanner() {
       }
       { state.showMealPortion &&
         <MealPortion
-          mealWeightInGrams={meal.weightInGrams()}
+          ingredients={state.ingredients}
           show={state.showMealPortion}
           onClose={meal.onClosePortion}
+          onPortion={meal.onPortion}
         />
       }
     </>

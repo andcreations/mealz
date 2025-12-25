@@ -24,32 +24,7 @@ export class TelegramUsersNotificationsService {
     private readonly logger: Logger,
     private readonly telegramUsersTransporter: TelegramUsersTransporter,
     private readonly telegramBotTransporter: TelegramBotTransporter,
-  ) {
-    // setTimeout(async () => {
-    //   await this.sendChunkedUserNotification(
-    //     {
-    //       chunks: [
-    //         {
-    //           text: 'Hello ',
-    //           type: ChunkedUserNotificationType.Normal,
-    //         },
-    //         {
-    //           text: 'World!\n',
-    //           type: ChunkedUserNotificationType.Bold,
-    //         },
-    //         {
-    //           text: '10 PRINT "DUPA"\n20 GOTO 10',
-    //           type: ChunkedUserNotificationType.Code,
-    //         },
-    //       ],
-    //     },
-    //     '01975110-fbb7-714d-bb5f-62f41fc39791',
-    //     {
-    //       correlationId: '1234567890',
-    //     },
-    //   )
-    // }, 1001);
-  }
+  ) {}
 
   private async sendTelegramMessageToUser(
     userId: string,

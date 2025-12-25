@@ -1,7 +1,11 @@
 import { IngredientFacts } from '../../ingredients';
 
+export interface MealSummaryTotals extends IngredientFacts {
+  grams: number;
+}
+
 export interface MealSummaryResult {
-  total: IngredientFacts;
+  total: MealSummaryTotals;
   hasFullIngredients: boolean;
   hasAdHocIngredients: boolean;
 }

@@ -1,12 +1,5 @@
-// .mealz-meal-portion {
-//   @include mealz-flex-container();
-//   @include mealz-flex-vertical();
-//   align-items: center;
-//   justify-content: center;
-// }
-
 .mealz-meal-portion .modal-content {
-  padding: 0 0.5rem 0.5rem 0.5rem;
+  // padding: 0 0.5rem 0.5rem 0.5rem;
   margin-top: 2rem;
 }
 
@@ -18,10 +11,34 @@
   padding-bottom: 0; // to move the info closer to the name
 }
 
+.mealz-meal-portion-content {
+  display: grid;
+  grid-template-columns: auto min-content;
+  grid-template-rows: auto auto;
+}
+
+.mealz-meal-portion-input {
+  grid-column: 1;
+  grid-row: 1;
+}
+
 .mealz-meal-portion-info {
   grid-column: 1;
   grid-row: 2;
   @include mealz-font-tiny();
   color: $mealz-theme-color-fg-dark;
   padding-left: 0.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.mealz-meal-portion-button {
+  @include mealz-font-small();
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 1rem;
+  text-wrap: nowrap;
 }

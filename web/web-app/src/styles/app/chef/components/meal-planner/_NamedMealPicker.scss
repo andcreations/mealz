@@ -9,7 +9,7 @@
 
 .mealz-named-meal-picker-content {
   display: grid;
-  grid-template-columns: auto 2rem;
+  grid-template-columns: auto auto;
   grid-template-rows: auto auto;
 }
 
@@ -40,7 +40,8 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   padding-top: 0.5rem;
+  margin-right: 1rem;
   color: $mealz-theme-color-fg-dark;
 }

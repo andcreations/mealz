@@ -181,6 +181,7 @@ export class MealCalculator {
         saturatedFat: 0,
         monounsaturatedFat: 0,
         polyunsaturatedFat: 0,
+        grams: 0,
       },
       hasFullIngredients: false,
       hasAdHocIngredients: false,
@@ -195,6 +196,7 @@ export class MealCalculator {
     // summarize
     validIngredients.forEach(ingredient => {
       const amount = ingredient.calculatedAmount;
+      summary.total.grams += amount;
 
       // ad-hoc ingredient
       if (!!ingredient.adHocIngredient) {
