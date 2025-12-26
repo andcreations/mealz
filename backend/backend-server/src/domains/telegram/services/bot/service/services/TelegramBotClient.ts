@@ -40,10 +40,6 @@ export class TelegramBotClient implements OnModuleInit {
       max_connections: 1,
       certificate,
     };
-    this.logger.info('Setting Telegram webhook', {
-      ...BOOTSTRAP_CONTEXT,
-      webhook,
-    });
     await this.telegramBot.setWebhook(webhook);
   }
 

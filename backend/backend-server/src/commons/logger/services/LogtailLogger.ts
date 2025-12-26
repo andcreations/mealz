@@ -18,19 +18,35 @@ export class LogtailLogger extends Logger {
   }
 
   public verbose(msg: string, context: Context): void {
-    this.logtail.debug(msg, context);
+    const { correlationId, ...ctx } = context;
+    this.logtail.debug(msg, {
+      ctx,
+      correlationId,
+    });
   }
 
   public debug(msg: string, context: Context): void {
-    this.logtail.debug(msg, context);
+    const { correlationId, ...ctx } = context;
+    this.logtail.debug(msg, {
+      ctx,
+      correlationId,
+    });
   }
 
   public info(msg: string, context: Context): void {
-    this.logtail.info(msg, context);
+    const { correlationId, ...ctx } = context;
+    this.logtail.info(msg, {
+      ctx,
+      correlationId,
+    });
   }
 
   public warning(msg: string, context: Context): void {
-    this.logtail.warn(msg, context);
+    const { correlationId, ...ctx } = context;
+    this.logtail.warn(msg, {
+      ctx,
+      correlationId,
+    });
   }
 
   public error(msg: string, context: Context, error?: any): void {
