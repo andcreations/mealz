@@ -3,4 +3,5 @@ export interface NamedMeal {
   userId?: string;
   mealName: string;
   mealId: string;
+  createdAt: number;
 }

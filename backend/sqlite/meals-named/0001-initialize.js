@@ -4,7 +4,8 @@ async function up(db) {
       id TEXT PRIMARY KEY UNIQUE NOT NULL,
       user_id TEXT,
       meal_name TEXT NOT NULL,
-      meal_id TEXT NOT NULL
+      meal_id TEXT NOT NULL,
+      created_at INTEGER NOT NULL
     );
   `);
   await db.run(`

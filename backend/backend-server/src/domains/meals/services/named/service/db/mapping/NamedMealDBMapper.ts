@@ -11,6 +11,7 @@ export class NamedMealDBMapper {
       user_id: namedMeal.userId,
       meal_name: namedMeal.mealName,
       meal_id: namedMeal.mealId,
+      created_at: namedMeal.createdAt,
     };
   }
 
@@ -25,6 +26,7 @@ export class NamedMealDBMapper {
       userId: entity.user_id,
       mealName: entity.meal_name,
       mealId: entity.meal_id,
+      createdAt: entity.created_at,
     }
   }
 
