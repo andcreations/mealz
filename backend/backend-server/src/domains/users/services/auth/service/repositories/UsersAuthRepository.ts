@@ -28,4 +28,30 @@ export class UsersAuthRepository {
     );
     return this.mapper.fromEntity(entity, ['id', 'password', 'roles']);
   }
+
+  public async readPasswordByUserId(
+    userId: string,
+    context: Context,
+  ): Promise<string | undefined> {
+    const entity = await this.repository.findOne<
+      'password'
+    >(
+      { id: { $eq: userId } },
+      { projection: ['password'] },
+      context,
+    );
+    return entity?.password;
+  }
+
+  public async updatePasswordByUserId(
+    userId: string,
+    hashedPassword: string,
+    context: Context,
+  ): Promise<void> {
+    await this.repository.update(
+      { id: { $eq: userId } }, 
+      { password: { $set: hashedPassword } },
+      context,
+    );
+  }
 }

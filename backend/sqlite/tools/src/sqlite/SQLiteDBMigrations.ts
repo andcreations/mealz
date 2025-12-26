@@ -128,7 +128,7 @@ export class SQLiteDBMigrations {
     const migrations = await this.readMigrations();
     
     const files = fs.readdirSync(directory)
-      .filter(file => file.endsWith('js'));
+      .filter(file => file.endsWith('js') && !file.startsWith('._'));
     files.sort((a, b) => a.localeCompare(b));
 
     const filesToRun = files.filter(file => {

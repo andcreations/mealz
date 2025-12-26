@@ -27,6 +27,7 @@ import {
   UserAuthGWRequestV1Impl,
   UserAuthGWResponseV1Impl,
   CheckUserAuthGWResponseV1Impl,
+  ChangePasswordGWRequestV1Impl,
 } from '../dtos';
 import { ACCESS_TOKEN_COOKIE_MAX_AGE } from '../consts';
 import { UserAuthGWService } from '../services';
@@ -94,5 +95,20 @@ export class UserAuthGWController {
     @GWUser() gwUser: AuthUser,
   ): Promise<CheckUserAuthGWResponseV1Impl> {
     return { userId: gwUser.id };
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Post('password')
+  public async changePasswordV1(
+    @Body() gwRequest: ChangePasswordGWRequestV1Impl,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<void> {
+    await this.userAuthGWService.changePasswordV1(
+      gwRequest,
+      gwUser.id,
+      context,
+    );
   }
 }
