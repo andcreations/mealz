@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { IdGeneratorProvider } from '@mealz/backend-common';
 import { SQLiteDBModule } from '@mealz/backend-db';
 import {
   USERS_SQLITE_DB_MODULE_OPTIONS,
@@ -14,6 +15,7 @@ import { UsersCrudRequestController } from './controllers';
     SQLiteDBModule.forFeature(USERS_SQLITE_DB_MODULE_OPTIONS),
   ],
   providers: [
+    IdGeneratorProvider,
     UserDBMapper,
     UsersCrudRepository,
     UsersCrudService,

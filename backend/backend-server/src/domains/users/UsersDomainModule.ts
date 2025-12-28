@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { UsersAuthModule, UsersAuthGWModule } from './services/auth';
-import { UsersCrudModule } from './services/crud';
+import { UsersCrudGWModule, UsersCrudModule } from './services/crud';
 import { UsersNotificationsModule } from './services/notifications';
 import { UsersInsightsModule } from './services/insights';
 
@@ -10,6 +10,7 @@ import { UsersInsightsModule } from './services/insights';
     UsersAuthModule,
     UsersAuthGWModule,
     UsersCrudModule,
+    UsersCrudGWModule,
     UsersNotificationsModule,
     UsersInsightsModule,
   ],

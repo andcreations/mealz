@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
+import { VoidTransporterResponse } from '@mealz/backend-transport';
+import { hashPassword } from '@mealz/backend-users-common';
 import {
+  CreateUserRequestV1,
   ReadUserByIdRequestV1,
   ReadUserByIdResponseV1,
   ReadUsersFromLastRequestV1,
@@ -40,5 +43,19 @@ export class UsersCrudService {
       context,
     );
     return { users };
+  }
+
+  public async createUserV1(
+    request: CreateUserRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    const { user } = request;
+    await this.usersCrudRepository.createUser({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: hashPassword(user.password),
+    }, context);
+    return {};
   }
 }

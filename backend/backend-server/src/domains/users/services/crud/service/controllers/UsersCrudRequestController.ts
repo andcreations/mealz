@@ -1,6 +1,11 @@
-import { RequestController, RequestHandler } from '@mealz/backend-transport';
 import { Context } from '@mealz/backend-core';
 import {
+  RequestController, 
+  RequestHandler, 
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
+import {
+  CreateUserRequestV1,
   ReadUserByIdRequestV1,
   ReadUserByIdResponseV1,
   ReadUsersFromLastRequestV1,
@@ -30,5 +35,13 @@ export class UsersCrudRequestController {
     context: Context,
   ): Promise<ReadUsersFromLastResponseV1> {
     return this.usersCrudService.readUsersFromLastV1(request, context);
+  }
+
+  @RequestHandler(UsersCrudRequestTopics.CreateUserV1)
+  public async createUserV1(
+    request: CreateUserRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.usersCrudService.createUserV1(request, context);
   }
 }

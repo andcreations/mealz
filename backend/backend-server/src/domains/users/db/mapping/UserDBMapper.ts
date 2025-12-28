@@ -24,8 +24,8 @@ export class UserDBMapper {
         case 'firstName':
           user.firstName = (entity as any).first_name;
           break;
-        case 'lastLame':
-          user.lastLame = (entity as any).last_name;
+        case 'lastName':
+          user.lastName = (entity as any).last_name;
           break;
         case 'email':
           user.email = (entity as any).email;
@@ -51,5 +51,16 @@ export class UserDBMapper {
     return entities
       .map(entity => this.fromEntity(entity, projection))
       .filter(user => user !== undefined);
+  }
+
+  public toEntity(user: User): UserDBEntity {
+    return {
+      id: user.id,
+      first_name: user.firstName,
+      last_name: user.lastName,
+      email: user.email,
+      password: user.password,
+      roles: user.roles?.join(','),
+    };
   }
 }

@@ -1,4 +1,4 @@
-import { hashPassword } from '../utils';
+import { hashPassword } from '@mealz/backend-users-common';
 
 if (process.argv.length < 3) {
   console.error('Re-run with arguments: [password]');

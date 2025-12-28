@@ -1,4 +1,4 @@
-// Type for an object to be updated
+// Type for an object to be updated.
 // Makes all fields, but the primary key, optional.
 export type UpdateObject<T, K extends keyof T> = 
   Pick<T, K> &

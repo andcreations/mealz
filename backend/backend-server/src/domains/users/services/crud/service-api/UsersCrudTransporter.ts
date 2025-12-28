@@ -1,10 +1,14 @@
 import { Inject } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import { 
+  RequestTransporter,
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import { USERS_CRUD_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { UsersCrudRequestTopics } from './UsersCrudRequestTopics';
 import {
+  CreateUserRequestV1,
   ReadUserByIdRequestV1,
   ReadUserByIdResponseV1,
   ReadUsersFromLastRequestV1,
@@ -37,6 +41,18 @@ export class UsersCrudTransporter {
       ReadUsersFromLastRequestV1, ReadUsersFromLastResponseV1
     >(
       UsersCrudRequestTopics.ReadUsersFromLastV1,
+      request, context,
+    );
+  }
+
+  public async createUserV1(
+    request: CreateUserRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      CreateUserRequestV1, VoidTransporterResponse
+    >(
+      UsersCrudRequestTopics.CreateUserV1,
       request, context,
     );
   }
