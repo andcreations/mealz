@@ -4,6 +4,7 @@ export interface UsersAuthV1APIURL {
   authV1: () => string;
   signOutV1: () => string;
   checkV1: () => string;
+  changePasswordV1: () => string;
 }
 
 export class UsersAuthV1API {
@@ -25,5 +26,11 @@ export class UsersAuthV1API {
      * @response CheckUserAuthGWResponseV1
      */
     checkV1: () => `${USERS_AUTH_V1_URL}/check`,
+
+    /**
+     * @method POST
+     * @request ChangePasswordGWRequestV1
+     */
+    changePasswordV1: () => `${USERS_AUTH_V1_URL}/password`,
   };
 }

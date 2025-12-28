@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import { TimePeriod } from '@andcreations/common';
 import { Context } from '@mealz/backend-core';
 import { requireStrEnv } from '@mealz/backend-common';
+import { VoidTransporterResponse } from '@mealz/backend-transport';
 import { JwtPayload } from '@mealz/backend-gateway-core';
 import {
   AuthUserRequestV1,
   AuthUserResponseV1,
+  ChangePasswordRequestV1,
 } from '@mealz/backend-users-auth-service-api';
 
-import { InvalidEmailOrPasswordError } from '../errors';
-import { comparePassword } from '../utils';
+import { InvalidEmailOrPasswordError, InvalidPasswordError } from '../errors';
+import { comparePassword, hashPassword } from '../utils';
 import { UsersAuthRepository } from '../repositories';
-import { TimePeriod } from '@andcreations/common';
 
 @Injectable()
 export class UsersAuthService {
@@ -71,6 +73,28 @@ export class UsersAuthService {
       userId: user.id,
       accessToken,
     };
+  }
+
+  public async changePasswordV1(
+    request: ChangePasswordRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    const password = await this.usersAuthRepository.readPasswordByUserId(
+      request.userId,
+      context,
+    );
+    if (!password || !comparePassword(request.oldPassword, password)) {
+      throw new InvalidPasswordError();
+    }
+
+    // hash new password
+    const hashedPassword = hashPassword(request.newPassword);
+
+    // update password
+    await this.usersAuthRepository.updatePasswordByUserId(
+      request.userId, hashedPassword, context);
+    
+    return {};
   }
 
   private toSeconds(milliseconds: number): number {

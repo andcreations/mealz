@@ -30,4 +30,10 @@ export class NamedMealDBEntity {
     type: DBFieldType.STRING,
   })
   public meal_id: string;
+
+  @DBField({
+    name: 'created_at',
+    type: DBFieldType.INTEGER,
+  })
+  public created_at: number;
 }

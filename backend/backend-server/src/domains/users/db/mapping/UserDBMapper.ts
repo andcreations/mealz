@@ -42,8 +42,8 @@ export class UserDBMapper {
   } 
 
   public fromEntities<
-  K extends keyof UserDBEntity,
-  U extends keyof User
+    K extends keyof UserDBEntity,
+    U extends keyof User
   >(
     entities: Array<Pick<UserDBEntity, K> | undefined>,
     projection: U[],

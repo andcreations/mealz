@@ -1,10 +1,17 @@
 import { Inject } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { RequestTransporter } from '@mealz/backend-transport';
+import { 
+  RequestTransporter, 
+  VoidTransporterResponse,
+} from '@mealz/backend-transport';
 
 import { USERS_AUTH_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
 import { UsersAuthRequestTopics } from './UsersAuthRequestTopics';
-import { AuthUserRequestV1, AuthUserResponseV1 } from './dtos';
+import { 
+  AuthUserRequestV1, 
+  AuthUserResponseV1, 
+  ChangePasswordRequestV1, 
+} from './dtos';
 
 export class UsersAuthTransporter {
   public constructor(
@@ -22,6 +29,18 @@ export class UsersAuthTransporter {
       UsersAuthRequestTopics.AuthUserV1,
       request,
       context,
+    );
+  }
+
+  public async changePasswordV1(
+    request: ChangePasswordRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      ChangePasswordRequestV1, VoidTransporterResponse
+    >(
+      UsersAuthRequestTopics.ChangePasswordV1,
+      request, context,
     );
   }
 }

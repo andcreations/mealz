@@ -2,9 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import {
   AuthUserRequestV1,
+  ChangePasswordRequestV1,
   UsersAuthTransporter,
 } from '@mealz/backend-users-auth-service-api';
-import { UserAuthGWRequestV1 } from '@mealz/backend-users-auth-gateway-api';
+import { 
+  ChangePasswordGWRequestV1, 
+  UserAuthGWRequestV1,
+} from '@mealz/backend-users-auth-gateway-api';
 
 import { UserAuthGWResponseV1Impl } from '../dtos';
 
@@ -30,5 +34,18 @@ export class UserAuthGWService {
       userId: response.userId,
       accessToken: response.accessToken,
     };
+  }
+
+  public async changePasswordV1(
+    gwRequest: ChangePasswordGWRequestV1,
+    userId: string,
+    context: Context,
+  ): Promise<void> {
+    const request: ChangePasswordRequestV1 = {
+      userId: userId,
+      oldPassword: gwRequest.oldPassword,
+      newPassword: gwRequest.newPassword,
+    };
+    await this.usersAuthTransporter.changePasswordV1(request, context);
   }
 }

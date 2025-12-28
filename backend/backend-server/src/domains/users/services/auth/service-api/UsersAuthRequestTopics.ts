@@ -3,6 +3,7 @@ import { USERS_AUTH_DOMAIN, USERS_AUTH_SERVICE } from './domain-and-service';
 
 export class UsersAuthRequestTopics {
   public static readonly AuthUserV1 = topic('authUser', 'v1');
+  public static readonly ChangePasswordV1 = topic('changePassword', 'v1');
 };
 
 function topic(method: string, version: string): string {

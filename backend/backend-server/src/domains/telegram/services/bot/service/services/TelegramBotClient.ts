@@ -8,7 +8,7 @@ import {
   TelegramWebhookInfo,
 } from '@andcreations/telegram-bot';
 import { Logger } from '@mealz/backend-logger';
-import { InternalError, requireStrEnv } from '@mealz/backend-common';
+import { InternalError, getStrEnv, requireStrEnv } from '@mealz/backend-common';
 import { BOOTSTRAP_CONTEXT, Context } from '@mealz/backend-core';
 import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 
@@ -23,27 +23,38 @@ export class TelegramBotClient implements OnModuleInit {
       this.logger.info('Telegram disabled', BOOTSTRAP_CONTEXT);
       return;
     }
+
     const botToken = requireStrEnv('MEALZ_TELEGRAM_BOT_TOKEN');
     this.telegramBot = new TelegramBot(botToken);
     
-    const certificate = path.resolve(
-      requireStrEnv('MEALZ_TELEGRAM_WEBHOOK_CERTIFICATE')
-    );
-    if (!fs.existsSync(certificate)) {
-      throw new InternalError(
-        `Telegram webhook certificate file ${certificate} not found`,
+    // path to the self-signed CA certificate
+    let certificatePath = getStrEnv('MEALZ_TELEGRAM_WEBHOOK_CERTIFICATE');
+    if (certificatePath) {
+      certificatePath = path.resolve(certificatePath);
+      if (!fs.existsSync(certificatePath)) {
+        throw new InternalError(
+          `Telegram webhook certificate file ${certificatePath} not found`,
+        );
+      }
+      this.logger.info(
+        'Using Telegram webhook certificate',
+        BOOTSTRAP_CONTEXT,
       );
     }
+    else {
+      this.logger.info(
+        'Skipping Telegram webhook certificate',
+        BOOTSTRAP_CONTEXT,
+      ); 
+    }
+
     // set webhook
+    this.logger.info('Setting Telegram webhook', BOOTSTRAP_CONTEXT);
     const webhook: TelegramWebhook = {
       url: requireStrEnv('MEALZ_TELEGRAM_WEBHOOK_URL'),
       max_connections: 1,
-      certificate,
+      certificate: certificatePath,
     };
-    this.logger.info('Setting Telegram webhook', {
-      ...BOOTSTRAP_CONTEXT,
-      webhook,
-    });
     await this.telegramBot.setWebhook(webhook);
   }
 

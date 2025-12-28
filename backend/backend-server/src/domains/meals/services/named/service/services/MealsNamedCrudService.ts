@@ -106,6 +106,7 @@ export class MealsNamedCrudService {
                 mealId: sagaContext.newMealId,
                 userId,
                 mealName,
+                createdAt: Date.now(),
               },
               context,
             );
