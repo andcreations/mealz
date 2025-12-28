@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { 
   RequestTransporter, 
@@ -19,6 +19,7 @@ import {
 } from './dtos';
 import { TelegramUsersRequestTopics } from './TelegramUsersRequestTopics';
 
+@Injectable()
 export class TelegramUsersTransporter {
   public constructor(
     @Inject(TELEGRAM_USERS_REQUEST_TRANSPORTER_TOKEN)

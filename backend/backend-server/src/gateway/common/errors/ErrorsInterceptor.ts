@@ -86,6 +86,7 @@ export class ErrorsInterceptor implements NestInterceptor {
           getLogger().error('Caught unexpected error', {
             correlationId,
             id: correlationId,
+            error: error?.toString() ?? 'Unknown error',
           });          
 
           return throwError(() => {
