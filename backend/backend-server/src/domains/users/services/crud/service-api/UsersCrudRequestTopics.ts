@@ -4,6 +4,7 @@ import { USERS_CRUD_DOMAIN, USERS_CRUD_SERVICE } from './domain-and-service';
 export class UsersCrudRequestTopics {
   public static readonly ReadUserByIdV1 = topic('readUserById', 'v1');
   public static readonly ReadUsersFromLastV1 = topic('readUsersFromLast', 'v1');
+  public static readonly CreateUserV1 = topic('createUser', 'v1');
 };
 
 function topic(method: string, version: string): string {

@@ -7,3 +7,4 @@ export * from './IterateCallback';
 export * from './Update';
 export * from './UpsertObject';
 export * from './UpdateObject';
+export * from './CreateObject';

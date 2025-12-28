@@ -5,6 +5,7 @@ import { Context } from '@mealz/backend-core';
 import { requireStrEnv } from '@mealz/backend-common';
 import { VoidTransporterResponse } from '@mealz/backend-transport';
 import { JwtPayload } from '@mealz/backend-gateway-core';
+import { hashPassword, comparePassword } from '@mealz/backend-users-common';
 import {
   AuthUserRequestV1,
   AuthUserResponseV1,
@@ -12,7 +13,6 @@ import {
 } from '@mealz/backend-users-auth-service-api';
 
 import { InvalidEmailOrPasswordError, InvalidPasswordError } from '../errors';
-import { comparePassword, hashPassword } from '../utils';
 import { UsersAuthRepository } from '../repositories';
 
 @Injectable()

@@ -1,6 +1,13 @@
 import { Context } from '@mealz/backend-core';
-import { InjectDBRepository, DBRepository, Where } from '@mealz/backend-db';
-import { UserWithoutPassword } from '@mealz/backend-users-common';
+import { IdGenerator, InjectIdGenerator } from '@mealz/backend-common';
+import { UserRole } from '@mealz/backend-api';
+import { 
+  InjectDBRepository, 
+  DBRepository, 
+  Where, 
+  CreateObject,
+} from '@mealz/backend-db';
+import { User, UserWithoutPassword } from '@mealz/backend-users-common';
 import {
   USERS_DB_NAME,
   USER_DB_ENTITY_NAME,
@@ -13,6 +20,8 @@ export class UsersCrudRepository {
   public constructor(
     @InjectDBRepository(USERS_DB_NAME, USER_DB_ENTITY_NAME)
     private readonly repository: DBRepository<UserDBEntity>,
+    @InjectIdGenerator()
+    private readonly idGenerator: IdGenerator,
     private readonly mapper: UserDBMapper,
   ) {}
 
@@ -54,5 +63,17 @@ export class UsersCrudRepository {
       entities,
       USER_FIELDS_WITHOUT_PASSWORD,
     );
+  }
+
+  public async createUser(
+    user: CreateObject<User, 'id'>,
+    context: Context,
+  ): Promise<void> {
+    const entity = this.mapper.toEntity({
+      ...user,
+      id: this.idGenerator(),
+      roles: user.roles ?? [UserRole.USER],
+    });
+    await this.repository.insert(entity, context);
   }
 }
