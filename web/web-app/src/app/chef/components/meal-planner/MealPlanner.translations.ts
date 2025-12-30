@@ -33,12 +33,14 @@ export const MealPlannerTranslations: Translations = {
   // load
   'load-button-label': 'Load meal',
   'load-placeholder': 'Pick meal to load',
+  'load-info': 'Select a meal to load',
 
   // delete
   'delete-button-label': 'Delete meal',
   'delete-placeholder': 'Pick meal to delete',
   'meal-deleted': 'Meal deleted',
   'failed-to-delete-meal': 'Failed to delete meal',
+  'delete-info': 'Select a meal to delete',
 
   // portion
   'cannot-portion-meal-with-errors': 'Please fix the issues with the meal before portioning',

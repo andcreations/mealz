@@ -670,6 +670,11 @@ export function MealPlanner() {
           show={state.showLoadMealPicker}
           buttonLabel={translate('load-button-label')}
           placeholder={translate('load-placeholder')}
+          info={{
+            empty: translate('load-info'),
+            matching: translate('load-info'),
+            nonMatching: translate('load-info'),
+          }}
           mustMatchToPick={true}
           onPick={namedMeal.onLoad}
           onClose={namedMeal.onCloseLoad}
@@ -680,6 +685,11 @@ export function MealPlanner() {
           show={state.showDeleteMealPicker}
           buttonLabel={translate('delete-button-label')}
           placeholder={translate('delete-placeholder')}
+          info={{
+            empty: translate('delete-info'),
+            matching: translate('delete-info'),
+            nonMatching: translate('delete-info'),
+          }}
           mustMatchToPick={true}
           onPick={namedMeal.onDelete}
           onClose={namedMeal.onCloseDelete}
