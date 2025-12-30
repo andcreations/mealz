@@ -6,3 +6,8 @@
 .mealz-link-button-small {
   @include mealz-font-small();
 }
+
+.mealz-link-button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

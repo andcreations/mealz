@@ -6,7 +6,8 @@ import Form from 'react-bootstrap/Form';
 import { usePatchState, useService } from '../../../hooks';
 import { focusRef, Key, mapKey, stopBubble } from '../../../utils';
 import { LinkButton } from '../../../components';
-import { MealsNamedService } from '../../../meals/';
+import { SystemService } from '../../../system';
+import { MealsNamedService, NamedMeal } from '../../../meals';
 import { NamedMealPickerDropdown } from './NamedMealPickerDropdown';
 
 enum Focus { Name };
@@ -32,18 +33,21 @@ interface NamedMealPickerState {
   name: string;
   dropdownItems: string[];
   dropdownIndex: number;
-  dropdownVisible: boolean;
 }
 
 export function NamedMealPicker(props: NamedMealPickerProps) {
+  const systemService = useService(SystemService);
   const mealsNamedService = useService(MealsNamedService);
+
+  const namedMealsToDropdown = (namedMeals: NamedMeal[]) => {
+    return namedMeals.map(meal => meal.name);
+  }
   
   const [state, setState] = useState<NamedMealPickerState>({
     focus: Focus.Name,
     name: '',
-    dropdownItems: [],
+    dropdownItems: namedMealsToDropdown(mealsNamedService.getAll()),
     dropdownIndex: 0,
-    dropdownVisible: true,
   });
   const patchState = usePatchState(setState);
 
@@ -68,18 +72,19 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
         name,
         dropdownItems: dropdown.matchItems(name),
         dropdownIndex: 0,
-        dropdownVisible: true,
       });
     },
 
     onSelectFromDropdown: (index: number) => {
       patchState({
         name: dropdown.items()[index],
-        dropdownVisible: false,
       });
     },
 
     onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (systemService.isMobile()) {
+        return;
+      }
       switch (mapKey(event)) {
         case Key.Enter:
           stopBubble(event);
@@ -114,9 +119,10 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
 
   const dropdown = {
     matchItems: (name: string) => {
-      return mealsNamedService
-        .search(name, SEARCH_LIMIT)
-        .map(meal => meal.name);
+      const namedMeals = name.length > 0
+        ? mealsNamedService.search(name)
+        : mealsNamedService.getAll();
+      return namedMealsToDropdown(namedMeals);
     },
 
     items: () => {
@@ -124,20 +130,17 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
     },
 
     visible: () => {
-      return (
-        state.dropdownVisible &&
-        state.name.length > 0 &&
-        state.dropdownItems.length > 0
-      );
+      return state.dropdownItems.length > 0;
+    },
+
+    selectedIndex: () => {
+      return systemService.isMobile() ? undefined : state.dropdownIndex;
     },
   }
 
   const info = {
-    visible: () => {
-      return state.name.length > 0;
-    },
-
     text: () => {
+      console.log('name', state.name);
       if (state.name.length === 0) {
         return props.info?.empty ?? '';
       }
@@ -181,16 +184,14 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
             onChange={name.onChange}
             onKeyDown={name.onKeyDown}
           />
-          { info.visible() &&
-            <div className='mealz-named-meal-picker-info'>
-              { info.text() }
-            </div>
-          }
+          <div className='mealz-named-meal-picker-info'>
+            { info.text() }
+          </div>
         </div>
         { dropdown.visible() &&
           <NamedMealPickerDropdown
             items={dropdown.items()}
-            selectedIndex={state.dropdownIndex}
+            selectedIndex={dropdown.selectedIndex()}
             onSelect={name.onSelectFromDropdown}
           />
         }
@@ -198,6 +199,7 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
           <LinkButton
             label={props.buttonLabel}
             size='small'
+            disabled={button.disabled()}
             onClick={name.onPick}
           />
         </div>
