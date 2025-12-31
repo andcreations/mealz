@@ -3,16 +3,18 @@ import { Service } from '@andcreations/common';
 import { HTTPWebClientService } from '@andcreations/web-common';
 import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 import { 
-  GWMacrosSummary,
+  GWMealLog,
+  GWMacros,
   LogMealGWRequestV1,
   LogMealGWResponseV1,
   SummarizeMealLogGWResponseV1,
+  ReadMealLogsByDateRangeGWResponseV1,
   MealsLogV1API,
 } from '@mealz/backend-meals-log-gateway-api';
 
 import { DateService, SystemService } from '../../system';
 import { Log } from '../../log';
-import { GWMacrosSummaryWithDayOfWeek } from '../types';
+import { GWMacrosWithDayOfWeek } from '../types';
 
 @Service()
 export class MealsLogService {
@@ -39,17 +41,27 @@ export class MealsLogService {
     return response.data;
   }
 
+  public async readByDateRange(
+    fromDate: number,
+    toDate: number,
+  ): Promise<GWMealLog[]> {
+    const { data } = await this.http.get<ReadMealLogsByDateRangeGWResponseV1>(
+      MealsLogV1API.url.readByDateRangeV1({ fromDate, toDate }),
+    );
+    return data.mealLogs;
+  }
+
   public async summarize(
     fromDate: number,
     toDate: number,
-  ): Promise<GWMacrosSummary> {
+  ): Promise<GWMacros> {
     const { data } = await this.http.get<SummarizeMealLogGWResponseV1>(
       MealsLogV1API.url.summarizeV1({ fromDate, toDate }),
     );
     return data.summary;
   }
   
-  public async fetchTodaySummary(): Promise<GWMacrosSummary> {
+  public async fetchTodaySummary(): Promise<GWMacros> {
     const { fromDate, toDate } = this.dateService.getTodayFromToDate();
     Log.debug(
       `Summarizing today's meal log from ` +
@@ -60,11 +72,11 @@ export class MealsLogService {
     return this.summarize(fromDate, toDate);
   }
 
-  public async fetchWeeklySummary(): Promise<GWMacrosSummaryWithDayOfWeek[]> {
+  public async fetchWeeklySummary(): Promise<GWMacrosWithDayOfWeek[]> {
     const DAYS_COUNT = 7;
     
     const timeZone = this.systemService.getTimeZone();
-    const summaries: GWMacrosSummaryWithDayOfWeek[] = [];
+    const summaries: GWMacrosWithDayOfWeek[] = [];
 
     // summarize the days
     for (let index = 0; index < DAYS_COUNT; index++) {

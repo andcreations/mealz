@@ -10,9 +10,18 @@ export interface MealsLogV1APISummarizeParams {
   toDate: number;
 }
 
+export interface MealsLogV1APIReadByDateRangeParams {
+  // Date from which to read the meal logs
+  fromDate: number;
+
+  // Date to which to read the meal logs
+  toDate: number;
+}
+
 export interface MealsLogV1APIURL {
   logMealV1: () => string;
   summarizeV1: (params: MealsLogV1APISummarizeParams) => string;
+  readByDateRangeV1: (params: MealsLogV1APIReadByDateRangeParams) => string;
 }
 
 export class MealsLogV1API {
@@ -31,6 +40,18 @@ export class MealsLogV1API {
      */
     summarizeV1: (params: MealsLogV1APISummarizeParams) => {
       return URLBuilder.build(`${MEALS_LOG_V1_URL}/summary`, { ...params });
+    },
+
+    /**
+     * @method GET
+     * @params MealsLogV1APIReadByDateRangeParams
+     * @response ReadMealLogsByDateRangeResponseV1
+     */
+    readByDateRangeV1: (params: MealsLogV1APIReadByDateRangeParams) => {
+      return URLBuilder.build(
+        `${MEALS_LOG_V1_URL}/by-date-range`,
+        { ...params },
+      );
     },
   };
 }

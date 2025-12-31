@@ -1,0 +1,131 @@
+import * as React from 'react';
+import { useRef } from 'react';
+import classNames from 'classnames';
+import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
+import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
+import { 
+  GWMealDailyPlanEntry,
+} from '@mealz/backend-meals-daily-plan-gateway-api';
+
+import { useTranslations } from '../../i18n';
+import { useService } from '../../hooks';
+import { GWMealCalculator } from '../../meals';
+import { isGoalError } from '../utils';
+import { MealLogTranslations } from './MealLog.translations';
+
+export interface MealLogProps {
+  mealName: string;
+  meal?: GWMealWithoutId;
+  mealDailyPlanEntry?: GWMealDailyPlanEntry;
+}
+
+export function MealLog(props: MealLogProps) {
+  const { meal, mealDailyPlanEntry } = props;
+  const goals = mealDailyPlanEntry?.goals;
+
+  const gwMealCalculator = useService(GWMealCalculator);
+  const translate = useTranslations(MealLogTranslations);
+
+  const gwMacros = useRef<GWMacros | undefined>(
+    meal ? gwMealCalculator.calculateMacros(props.meal) : undefined,
+  );
+
+  const renderFact = (
+    factKey: string,
+    value: number,
+    unit: string,
+    goal?: number,
+  ) => {
+    const nameClassNames = classNames(
+      'mealz-meal-log-fact-name',
+      `mealz-color-${factKey}`,
+    );
+    const separatorClassName = classNames(
+      'mealz-meal-log-fact-separator',
+      `mealz-meal-log-fact-separator-${factKey}`,
+    );
+    const goalLabelClassName = classNames(
+      'mealz-meal-log-fact-goal-label',
+      { 'mealz-meal-log-fact-goal-error': isGoalError(value, goal) },
+    );
+
+    return (
+      <div className='mealz-meal-log-fact'>
+        <div className={nameClassNames}>
+          { translate(factKey) }
+        </div>
+        <div className={separatorClassName}></div>
+        <div className='mealz-meal-log-fact-value'>
+          <span>{ value.toFixed() }</span>
+          <span className='mealz-meal-log-fact-unit'>{ unit }</span>
+        </div>
+        { goal &&
+          <>
+            <div className={goalLabelClassName}>
+              { translate('goal') }
+            </div>
+            <div className='mealz-meal-log-fact-goal-value'>
+              <span>{ goal }</span>
+              <span className='mealz-meal-log-fact-unit'>{ unit }</span>
+            </div>
+          </>
+        }
+      </div>
+    );
+  };
+
+  const renderFacts = () => {
+    return (
+      <>
+        { renderFact(
+            'calories',
+            gwMacros.current.calories,
+            'kcal',
+            goals?.calories,
+          )
+        }
+        { renderFact(
+            'carbs',
+            gwMacros.current.carbs,
+            'g',
+            goals?.carbs,
+          )
+        }
+        { renderFact(
+            'protein',
+            gwMacros.current.protein,
+            'g',
+            goals?.protein,
+          )
+        }
+        { renderFact(
+            'fat',
+            gwMacros.current.fat,
+            'g',
+            goals?.fat,
+          )
+        }
+      </>
+    );
+  };
+
+  const hasFacts = gwMacros.current !== undefined;
+  
+  return (
+    <div className='mealz-meal-log'>
+      <div className='mealz-meal-log-name'>
+        { props.mealName }
+      </div>
+      { hasFacts &&
+        <div className='mealz-meal-log-facts'>
+          { renderFacts() }
+        </div>
+      }
+      { !hasFacts &&
+        <div className='mealz-meal-log-fact-no-meal'>
+          { translate('not-yet-logged') }
+        </div>
+      }
+    </div>
+  );
+}

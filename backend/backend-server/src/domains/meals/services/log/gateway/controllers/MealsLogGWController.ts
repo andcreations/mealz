@@ -9,6 +9,8 @@ import { MealsLogGWService } from '../services';
 import {
   LogMealGWRequestV1Impl,
   LogMealGWResponseV1Impl,
+  ReadMealLogsByDateRangeQueryParamsV1,
+  ReadMealLogsByDateRangeGWResponseV1Impl,
   SummarizeMealLogQueryParamsV1,
   SummarizeMealLogResponseV1Impl,
 } from '../dtos';
@@ -32,12 +34,29 @@ export class MealsLogGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
+  @Get('by-date-range')
+  public async readByDateRangeV1(
+    @Query() gwParams: ReadMealLogsByDateRangeQueryParamsV1,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<ReadMealLogsByDateRangeGWResponseV1Impl> {
+    ReadMealLogsByDateRangeQueryParamsV1.validate(gwParams);
+    return this.mealsLogGWService.readByDateRangeV1(
+      gwParams,
+      gwUser.id,
+      context,
+    );
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('summary')
   public async summarizeMacrosV1(
     @Query() gwParams: SummarizeMealLogQueryParamsV1,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<SummarizeMealLogResponseV1Impl> {
+    SummarizeMealLogQueryParamsV1.validate(gwParams);
     return this.mealsLogGWService.summarizeMacrosV1(
       gwParams,
       gwUser.id,

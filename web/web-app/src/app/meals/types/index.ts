@@ -1,2 +1,2 @@
 export * from './NamedMeal';
-export * from './GWMacrosSummaryWithDayOfWeek';
+export * from './GWMacrosWithDayOfWeek';

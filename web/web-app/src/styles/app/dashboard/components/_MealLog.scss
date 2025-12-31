@@ -1,0 +1,99 @@
+$mealz-meal-log-separator-bg-opacity: 1.0;
+
+.mealz-meal-log {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.mealz-meal-log-fact-no-meal {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-bg;
+}
+
+.mealz-meal-log-name {
+  // margin-bottom: 0.5rem;
+}
+
+.mealz-meal-log-fact-separator {
+  $height: 0.125rem;
+  height: $height;
+  width: 100%;
+  border-radius: calc($height / 2);
+  margin: 0.25rem 0;
+}
+
+.mealz-meal-log-fact-separator-calories {
+  background-color: rgba(
+    $mealz-theme-color-calories-bg,
+    $mealz-meal-log-separator-bg-opacity,
+  );
+}
+
+.mealz-meal-log-fact-separator-carbs {
+  background-color: rgba(
+    $mealz-theme-color-carbs-bg,
+    $mealz-meal-log-separator-bg-opacity,
+  );
+}
+
+.mealz-meal-log-fact-separator-protein {
+  background-color: rgba(
+    $mealz-theme-color-protein-bg,
+    $mealz-meal-log-separator-bg-opacity,
+  );
+}
+
+.mealz-meal-log-fact-separator-fat {
+  background-color: rgba(
+    $mealz-theme-color-fat-bg,
+    $mealz-meal-log-separator-bg-opacity,
+  );
+}
+
+.mealz-meal-log-facts {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.mealz-meal-log-fact {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+}
+
+.mealz-meal-log-fact-name {
+  @include mealz-font-small();
+}
+
+.mealz-meal-log-fact-value {
+  @include mealz-font-small();
+}
+
+.mealz-meal-log-fact-unit {
+  color: $mealz-theme-color-fg-dark;
+  padding-left: 0.25rem;
+  @include mealz-font-small();
+}
+
+.mealz-meal-log-fact-goal-label {
+  color: $mealz-theme-color-bg;
+  margin-top: 0.25rem;
+  @include mealz-font-tiny();
+}
+
+.mealz-meal-log-fact-goal-error {
+  color: $mealz-theme-color-error;
+}
+
+.mealz-meal-log-fact-goal-value {
+  @include mealz-font-tiny();
+}
+

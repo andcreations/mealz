@@ -7,13 +7,13 @@ import { LoaderByStatus, LoaderSize } from '../../components';
 import { usePatchState, useService } from '../../hooks';
 import { NotificationsService } from '../../notifications';
 import { useTranslations } from '../../i18n';
-import { GWMacrosSummaryWithDayOfWeek, MealsLogService } from '../../meals';
+import { GWMacrosWithDayOfWeek, MealsLogService } from '../../meals';
 import { MacrosSummaryChart, MacrosSummaryChartData } from '../components';
 import { WeeklySummaryTranslations } from './WeeklySummary.translations';
 
 
 interface WeeklySummaryState {
-  summaries?: GWMacrosSummaryWithDayOfWeek[];
+  summaries?: GWMacrosWithDayOfWeek[];
   loadStatus: LoadStatus;
 }
 

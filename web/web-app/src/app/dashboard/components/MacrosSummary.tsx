@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GWMacrosSummary } from '@mealz/backend-meals-log-gateway-api';
+import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import {
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
@@ -7,7 +7,7 @@ import {
 import { MacrosSummaryBox, MacrosSummaryBoxType } from './MacrosSummaryBox';
 
 export interface MacrosSummaryProps {
-  macrosSummary: GWMacrosSummary;
+  macrosSummary: GWMacros;
   goals?: GWMealDailyPlanGoals;
 }
 

@@ -1,5 +1,5 @@
-import { GWMacrosSummary } from '../types';
+import { GWMacros } from '../types';
 
 export interface SummarizeMealLogGWResponseV1 {
-  summary: GWMacrosSummary;
+  summary: GWMacros;
 }

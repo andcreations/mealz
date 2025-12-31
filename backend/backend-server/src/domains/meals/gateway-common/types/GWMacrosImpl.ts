@@ -1,7 +1,7 @@
-import { GWMacrosSummary } from '@mealz/backend-meals-log-gateway-api';
+import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GWMacrosSummaryImpl implements GWMacrosSummary {
+export class GWMacrosImpl implements GWMacros {
   @ApiProperty({
     description: 'Number of calories in the meal log',
   })

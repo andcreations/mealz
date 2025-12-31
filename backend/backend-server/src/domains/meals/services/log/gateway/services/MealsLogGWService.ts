@@ -3,13 +3,21 @@ import { Context } from '@mealz/backend-core';
 import { 
   LogMealRequestV1,
   MealsLogTransporter,
+  ReadUserMealLogsRequestV1,
   SummarizeMealLogRequestV1,
   SummarizeMealLogResponseV1,
 } from '@mealz/backend-meals-log-service-api';
-import { LogMealGWRequestV1, LogMealGWResponseV1 } from '@mealz/backend-meals-log-gateway-api';
+import { 
+  LogMealGWRequestV1,
+  LogMealGWResponseV1,
+  ReadMealLogsByDateRangeGWResponseV1,
+} from '@mealz/backend-meals-log-gateway-api';
 import { roundToTwoDecimals } from '@mealz/backend-gateway-common';
 
-import { SummarizeMealLogQueryParamsV1 } from '../dtos';
+import { 
+  ReadMealLogsByDateRangeQueryParamsV1, 
+  SummarizeMealLogQueryParamsV1,
+} from '../dtos';
 import { GWMealLogMapper } from './GWMealLogMapper';
 
 @Injectable()
@@ -37,6 +45,32 @@ export class MealsLogGWService {
     return {
       id,
       status: this.gwMealLogMapper.fromStatus(status),
+    };
+  }
+
+  public async readByDateRangeV1(
+    gwParams: ReadMealLogsByDateRangeQueryParamsV1,
+    userId: string,
+    context: Context,
+  ): Promise<ReadMealLogsByDateRangeGWResponseV1> {
+    // read meal logs
+    const request: ReadUserMealLogsRequestV1 = {
+      userId,
+      fromDate: gwParams.fromDate,
+      toDate: gwParams.toDate,
+    };
+    const { mealLogs } = await this.mealsLogTransporter.readUserMealLogsV1(
+      request,
+      context,
+    );
+
+    // map
+    const gwMealLogs = await this.gwMealLogMapper.fromMealLogs(
+      mealLogs,
+      context,
+    );
+    return {
+      mealLogs: gwMealLogs,
     };
   }
 
