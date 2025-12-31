@@ -7,9 +7,9 @@ import { TimePeriod } from '@andcreations/common';
 const MAX_DATE_RANGE_DAYS = 7;
 const MAX_DATE_RANGE = TimePeriod.fromStr(`${MAX_DATE_RANGE_DAYS}d`);
 
-export class SummarizeMealLogQueryParamsV1 {
+export class ReadMealLogsByDateRangeQueryParamsV1 {
   @ApiProperty({
-    description: 'Date from which to summarize the meal logs',
+    description: 'Date from which to read the meal logs',
   })
   @IsInt()
   @Min(1)
@@ -17,7 +17,7 @@ export class SummarizeMealLogQueryParamsV1 {
   public fromDate: number;
 
   @ApiProperty({
-    description: 'Date to which to summarize the meal logs',
+    description: 'Date to which to read the meal logs',
   })
   @IsInt()
   @Min(1)
@@ -25,7 +25,7 @@ export class SummarizeMealLogQueryParamsV1 {
   public toDate: number;
 
   public static validate(
-    gwParams: SummarizeMealLogQueryParamsV1,
+    gwParams: ReadMealLogsByDateRangeQueryParamsV1,
   ): void {
     const { fromDate, toDate } = gwParams;
     if (toDate - fromDate > MAX_DATE_RANGE) {

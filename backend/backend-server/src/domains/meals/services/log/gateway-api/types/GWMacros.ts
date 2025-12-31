@@ -1,4 +1,4 @@
-export interface GWMacrosSummary {
+export interface GWMacros {
   calories: number;
   carbs: number;
   protein: number;

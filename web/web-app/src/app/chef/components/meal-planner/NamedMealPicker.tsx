@@ -140,7 +140,6 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
 
   const info = {
     text: () => {
-      console.log('name', state.name);
       if (state.name.length === 0) {
         return props.info?.empty ?? '';
       }

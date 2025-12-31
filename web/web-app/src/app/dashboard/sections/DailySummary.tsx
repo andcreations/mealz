@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { GWMacrosSummary } from '@mealz/backend-meals-log-gateway-api';
+import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import {
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
@@ -21,7 +21,7 @@ export interface DailySummaryProps {
 }
 
 interface DailySummaryState {
-  summary?: GWMacrosSummary;
+  summary?: GWMacros;
   goals?: GWMealDailyPlanGoals;
   loadStatus: LoadStatus;
 }

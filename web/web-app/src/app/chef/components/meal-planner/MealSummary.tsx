@@ -11,8 +11,8 @@ import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { UserSettingsService } from '../../../user';
 import { MealsDailyPlanService } from '../../../meals';
-import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealCalculator } from '../../services';
+import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealSummaryTranslations } from './MealSummary.translations';
 import { LoaderByStatus, LoaderSize } from '../../../components';
 
