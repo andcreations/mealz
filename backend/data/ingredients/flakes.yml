@@ -1,29 +1,59 @@
+# The below is pulled from ChatGPT using .prompt.md.
+
+# Oat flakes
+# Corn flakes
+# Rice flakes 
+
 - name:
     en: Oat flakes
     pl: Płatki owsiane
   unit: g
   type: generic
-  weight: 41
+  weight: 100
   facts:
-    calories: 153
-    carbs: 26.6
-    sugars: 0.4
-    protein: 5.3
+    calories: 389
+    carbs: 66.3
+    sugars: 1.0
+    fibre: 11.6
+    protein: 16.9
     fat:
-      total: 2.6
-      saturated: 0.5
-      monounsaturated: 0.9
-      polyunsaturated: 0.8
-  link: https://www.nutritionix.com/food/rolled-oats
+      total: 6.9
+      saturated: 1.21
+      monounsaturated: 2.18
+      polyunsaturated: 2.54
 
-# Corn flakes  
-# Oat flakes [done]
-# Rice flakes  
-# Barley flakes  
-# Wheat flakes  
-# Rye flakes  
-# Millet flakes  
-# Buckwheat flakes  
-# Quinoa flakes  
-# Spelt flakes  
-# Multigrain flakes
+- name:
+    en: Corn flakes
+    pl: Płatki kukurydziane 
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 357
+    carbs: 84.4
+    sugars: 8.2
+    fibre: 3.8
+    protein: 7.5
+    fat:
+      total: 4.2
+      saturated: 0.6
+      monounsaturated: 1.2
+      polyunsaturated: 2.0
+
+- name:
+    en: Rice flakes
+    pl: Płatki ryżowe
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 380
+    carbs: 85
+    sugars: 6
+    fibre: 2
+    protein: 6
+    fat:
+      total: 2
+      saturated: 0.5
+      monounsaturated: 0.5
+      polyunsaturated: 1.0

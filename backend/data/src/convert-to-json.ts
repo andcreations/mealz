@@ -6,7 +6,12 @@ import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 
 import { Log } from './log';
-import { YamlFacts, YamlFat, YamlIngredient, YamlName, YamlProduct } from './ingredients';
+import { 
+  YamlFacts,
+  YamlIngredient,
+  YamlName,
+  YamlProduct,
+} from './ingredients';
 import {
   FactIdV1,
   FactUnitV1,

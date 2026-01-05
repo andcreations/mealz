@@ -3,6 +3,8 @@
     pl: -
   unit: g
   type: generic
+  product:
+    - brand: -
   weight: -
   facts:
     calories: -

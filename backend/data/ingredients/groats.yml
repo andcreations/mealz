@@ -1,15 +1,225 @@
-[]
-# Oats  
-# Buckwheat  
-# Barley  
-# Millet  
-# Rye  
-# Wheat  
-# Spelt  
-# Sorghum  
-# Farro  
-# Teff  
-# Quinoa  
-# Amaranth  
-# Freekeh  
-# Triticale 
+# The below is pulled from ChatGPT using .prompt.md.
+
+# Buckwheat groats
+# Barley groats
+# Millet groats
+# Rye groats
+# Quinoa   
+# Brown rice
+# White rice
+
+- name:
+    en: Buckwheat groats (raw)
+    pl: Kasza gryczana (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 343
+    carbs: 71.1
+    sugars: 0
+    fibre: 10.0
+    protein: 11.1
+    fat:
+      total: 3.04
+      saturated: 0.59
+      monounsaturated: 0.83
+      polyunsaturated: 0.83
+
+- name:
+    en: Buckwheat groats (cooked)
+    pl: Kasza gryczana (gotowana)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 92
+    carbs: 19.9
+    sugars: 0
+    fibre: 2.7
+    protein: 3.38
+    fat:
+      total: 0.62
+      saturated: 0.08
+      monounsaturated: 0.15
+      polyunsaturated: 0.39
+
+- name:
+    en: Barley groats (raw)
+    pl: Kasza jęczmienna (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 352
+    carbs: 78.6
+    sugars: 0.8
+    fibre: 16
+    protein: 9.9
+    fat:
+      total: 1.2
+      saturated: 0.24
+      monounsaturated: 0.15
+      polyunsaturated: 0.56
+
+- name:
+    en: Barley groats (cooked)
+    pl: Kasza jęczmienna (gotowana)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 123
+    carbs: 28
+    sugars: 0.4
+    fibre: 3
+    protein: 2
+    fat:
+      total: 0.4
+      saturated: 0.1
+      monounsaturated: 0.09
+      polyunsaturated: 0.33
+
+- name:
+    en: Millet (raw)
+    pl: Proso (surowe)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 756
+    carbs: 75.3
+    sugars: 0
+    fibre: 0
+    protein: 22
+    fat:
+      total: 44
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0
+
+- name:
+    en: Millet (cooked)
+    pl: Proso (gotowane)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 207
+    carbs: 41.2
+    sugars: 0
+    fibre: 0
+    protein: 6.1
+    fat:
+      total: 1
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0
+
+- name:
+    en: Quinoa (raw)
+    pl: Komosa ryżowa (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 626
+    carbs: 65.7
+    sugars: 0
+    fibre: 11.9
+    protein: 24
+    fat:
+      total: 6.2
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0
+
+- name:
+    en: Quinoa (cooked)
+    pl: Komosa ryżowa (gotowana)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 120
+    carbs: 21.3
+    sugars: 0
+    fibre: 0
+    protein: 4.4
+    fat:
+      total: 1.9
+      saturated: 0
+      monounsaturated: 0
+      polyunsaturated: 0
+
+- name:
+    en: Brown rice (raw)
+    pl: Ryż brązowy (surowy)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 367
+    carbs: 76.2
+    sugars: 0
+    fibre: 3.5
+    protein: 7.54
+    fat:
+      total: 3.2
+      saturated: 0.7
+      monounsaturated: 1
+      polyunsaturated: 1
+
+- name:
+    en: Brown rice (cooked)
+    pl: Ryż brązowy (gotowany)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 112
+    carbs: 23.5
+    sugars: 0
+    fibre: 1.8
+    protein: 2.3
+    fat:
+      total: 0.83
+      saturated: 0.17
+      monounsaturated: 0.2
+      polyunsaturated: 0.33
+
+- name:
+    en: White rice (raw)
+    pl: Ryż biały (surowy)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 365
+    carbs: 80
+    sugars: 0
+    fibre: 1.3
+    protein: 7
+    fat:
+      total: 0.66
+      saturated: 0.18
+      monounsaturated: 0.14
+      polyunsaturated: 0.22
+
+- name:
+    en: White rice (cooked)
+    pl: Ryż biały (gotowany)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 130
+    carbs: 28.3
+    sugars: 0.05
+    fibre: 0.4
+    protein: 2.7
+    fat:
+      total: 0.28
+      saturated: 0.08
+      monounsaturated: 0.1
+      polyunsaturated: 0.08

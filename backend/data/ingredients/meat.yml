@@ -1,1 +1,268 @@
-[]
+# The below is pulled from ChatGPT using .prompt.md.
+
+# Beef
+# Pork
+# Lamb
+# Mutton
+# Chicken
+# Chicken breast
+# Turkey
+# Turkey breast
+# Duck
+# Bacon
+# Sausage
+# Salami
+# Prosciutto
+# Pepperoni
+
+- name:
+    en: Beef (raw)
+    pl: Wołowina (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 250
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 26
+    fat:
+      total: 15
+      saturated: 6
+      monounsaturated: 6
+      polyunsaturated: 0.5
+
+- name:
+    en: Pork (raw)
+    pl: Wieprzowina (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 242
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 27
+    fat:
+      total: 14
+      saturated: 5
+      monounsaturated: 6
+      polyunsaturated: 1
+
+- name:
+    en: Lamb (raw)
+    pl: Jagnięcina (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 294
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 25
+    fat:
+      total: 21
+      saturated: 9
+      monounsaturated: 8
+      polyunsaturated: 1
+
+- name:
+    en: Mutton (raw)
+    pl: Baranina (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 294
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 25
+    fat:
+      total: 21
+      saturated: 9
+      monounsaturated: 8
+      polyunsaturated: 1
+
+- name:
+    en: Chicken (raw)
+    pl: Kurczak (surowy)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 215
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 18
+    fat:
+      total: 15
+      saturated: 4
+      monounsaturated: 6
+      polyunsaturated: 3
+
+- name:
+    en: Chicken breast (raw)
+    pl: Pierś z kurczaka (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 102
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 22
+    fat:
+      total: 2.2
+      saturated: 0.6
+      monounsaturated: 0.6
+      polyunsaturated: 0.4
+
+- name:
+    en: Turkey (raw)
+    pl: Indyk (surowy)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 189
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 29
+    fat:
+      total: 7
+      saturated: 2
+      monounsaturated: 2.5
+      polyunsaturated: 1.5
+
+- name:
+    en: Turkey breast (raw)
+    pl: Pierś z indyka (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 135
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 24
+    fat:
+      total: 3
+      saturated: 1
+      monounsaturated: 1
+      polyunsaturated: 0.5
+
+- name:
+    en: Duck (raw)
+    pl: Kaczka (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 337
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 19
+    fat:
+      total: 28
+      saturated: 8
+      monounsaturated: 12
+      polyunsaturated: 4
+
+- name:
+    en: Bacon (raw)
+    pl: Boczek (surowy)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 541
+    carbs: 1.4
+    sugars: 0
+    fibre: 0
+    protein: 37
+    fat:
+      total: 42
+      saturated: 14
+      monounsaturated: 18
+      polyunsaturated: 6
+
+- name:
+    en: Pork sausage
+    pl: Kiełbasa wieprzowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 333
+    carbs: 1.1
+    sugars: 0
+    fibre: 0
+    protein: 18.1
+    fat:
+      total: 28.4
+      saturated: 11.5
+      monounsaturated: 12
+      polyunsaturated: 3
+
+- name:
+    en: Salami (dry)
+    pl: Salami (suszone)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 378
+    carbs: 0.72
+    sugars: 0
+    fibre: 0
+    protein: 21.07
+    fat:
+      total: 31.65
+      saturated: 11
+      monounsaturated: 14
+      polyunsaturated: 2
+
+- name:
+    en: Prosciutto
+    pl: Prosciutto
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 250
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 27
+    fat:
+      total: 14
+      saturated: 5
+      monounsaturated: 6
+      polyunsaturated: 1
+
+- name:
+    en: Pepperoni
+    pl: Pepperoni
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 504
+    carbs: 1.8
+    sugars: 0
+    fibre: 0
+    protein: 22
+    fat:
+      total: 47
+      saturated: 18
+      monounsaturated: 19
+      polyunsaturated: 4

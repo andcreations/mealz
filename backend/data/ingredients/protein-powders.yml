@@ -1,0 +1,37 @@
+- name:
+    en: Protein powder (whey)
+    pl: Odżywka białkowa (serwatkowa)
+  unit: g
+  type: generic
+  product:
+    brand: KFD
+  weight: 100
+  facts:
+    calories: 391
+    carbs: 4
+    sugars: 4
+    protein: 79
+    fat:
+      total: 6.5
+      saturated: 3
+      monounsaturated: 0
+      polyunsaturated: 0
+
+- name:
+    en: Protein powder (rice)
+    pl: Odżywka białkowa (ryżowa)
+  unit: g
+  type: generic
+  product:
+    brand: GymBean Vanavita
+  weight: 10
+  facts:
+    calories: 380
+    carbs: 23
+    sugars: 17
+    protein: 57
+    fat:
+      total: 5
+      saturated: 2.2
+      monounsaturated: 0
+      polyunsaturated: 0
