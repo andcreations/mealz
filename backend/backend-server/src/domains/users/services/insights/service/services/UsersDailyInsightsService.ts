@@ -54,7 +54,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
   private static readonly DEFAULT_CRON = '0 8 * * *';
   private static readonly JOB_NAME = 'users-daily-insights';
   private static readonly AI_MAX_TOKENS = 4000;
-  private static readonly AI_TEMPERATURE = 0.8;
+  private static readonly AI_TEMPERATURE = 0.95;
 
   private readonly sendNutritionSummary: boolean;
   private readonly sendInsights: boolean;
@@ -117,16 +117,16 @@ export class UsersDailyInsightsService implements OnModuleInit {
       correlationId: generateCorrelationId(UsersDailyInsightsService.JOB_NAME),
     }
 
-    // previous day
-    const previousDayStart = DateTime
+    // today
+    const dayStart = DateTime
       .now()
       .setZone(resolveTimeZone())
-      .minus({ days: 1 })
+      .minus({ days: 0 })
       .startOf('day');
-    const previousDayEnd = DateTime
+    const dayEnd = DateTime
       .now()
       .setZone(resolveTimeZone())
-      .minus({ days: 1 })
+      .minus({ days: 0 })
       .endOf('day');
 
     let lastId: string | undefined = undefined;
@@ -144,8 +144,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
       for (const user of users) {
         await this.generateInsightsForUser(
           user,
-          previousDayStart,
-          previousDayEnd,
+          dayStart,
+          dayEnd,
           context,
         );
       }
@@ -160,8 +160,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
 
   private async generateInsightsForUser(
     user: UserWithoutPassword,
-    previousDayStart: DateTime,
-    previousDayEnd: DateTime,
+    dayStart: DateTime,
+    dayEnd: DateTime,
     context: Context,
   ): Promise<void> {
     const startTime = Date.now();
@@ -186,8 +186,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
     // read data
     const data = await this.readDataForUserInsights(
       user.id,
-      previousDayStart,
-      previousDayEnd,
+      dayStart,
+      dayEnd,
       context,
     );
 
@@ -242,8 +242,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
 
   private async readDataForUserInsights(
     userId: string,
-    previousDayStart: DateTime,
-    previousDayEnd: DateTime,
+    dayStart: DateTime,
+    dayEnd: DateTime,
     context: Context,
   ): Promise<DataForUserInsights> {
     // read meal logs
@@ -251,8 +251,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
       this.mealsLogTransporter.readUserMealLogsV1(
         { 
           userId: userId,
-          fromDate: previousDayStart.toMillis(),
-          toDate: previousDayEnd.toMillis(),
+          fromDate: dayStart.toMillis(),
+          toDate: dayEnd.toMillis(),
         },
         context,
       ),
@@ -401,10 +401,13 @@ export class UsersDailyInsightsService implements OnModuleInit {
       amount: number,
       goal: number,
       unit: string,
+      padding: number,
     ) => {
       const percent = (amount / goal) * 100;
+      normal(`${amount.toFixed()} ${unit}`);
+      newLine();
+      code(' '.repeat(padding))
       normal(
-        `${amount.toFixed()} ${unit} ` +
         this.translate('amounts', percent.toFixed(), goal.toFixed(), unit)
       );
       const PERCENT_MARGIN_LOW = 5;
@@ -419,33 +422,47 @@ export class UsersDailyInsightsService implements OnModuleInit {
       }
     }
 
-    // daily amounts
-    code(this.translate('calories'));
+    // calories
+    const caloriesStr = this.translate('calories');
+    code(caloriesStr);
     amount(
       overallAmounts.calories,
       overallAmounts.caloriesGoal,
       'kcal',
+      caloriesStr.length,
     );
+
+    // carbs
     newLine();
-    code(this.translate('carbs'));
+    const carbsStr = this.translate('carbs');
+    code(carbsStr);
     amount(
       overallAmounts.carbs,
       overallAmounts.carbsGoal,
       'g',
+      carbsStr.length,
     );
+
+    // protein
     newLine();
-    code(this.translate('protein'));
+    const proteinStr = this.translate('protein');
+    code(proteinStr);
     amount(
       overallAmounts.protein,
       overallAmounts.proteinGoal,
       'g',
+      proteinStr.length,
     );
+
+    // fat
     newLine();
-    code(this.translate('fat'));
+    const fatStr = this.translate('fat');
+    code(fatStr);
     amount(
       overallAmounts.fat,
       overallAmounts.fatGoal,
       'g',
+      fatStr.length,
     );
     newLine();
 
@@ -460,12 +477,14 @@ export class UsersDailyInsightsService implements OnModuleInit {
     // meals
     for (const meal of meals) {
       newLine();
-      code(meal.name.padStart(maxMealNameLength) + ': ');
+      const mealNameStr = meal.name.padStart(maxMealNameLength) + ': ';
+      code(mealNameStr);
       if (!meal.skipped) {
         amount(
           meal.amounts.calories,
           meal.amounts.caloriesGoal,
           'kcal',
+          mealNameStr.length,
         );
       }
       else {
