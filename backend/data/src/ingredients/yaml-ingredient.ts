@@ -48,6 +48,10 @@ export class YamlFacts {
   @IsNumber()
   protein: number;
 
+  @IsOptional()
+  @IsNumber()
+  fibre?: number;
+
   @IsDefined()
   @ValidateNested()
   @Type(() => YamlFat)
@@ -87,6 +91,7 @@ export class YamlIngredient {
   @Type(() => YamlProduct)
   product?: YamlProduct;
 
+  @IsOptional()
   @IsUrl()
   link?: string;
 }

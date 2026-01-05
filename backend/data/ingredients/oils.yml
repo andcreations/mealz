@@ -1,1 +1,173 @@
-[]
+# The below is pulled from ChatGPT using .prompt.md.
+
+# Olive oil
+# Sunflower oil
+# Peanut oil
+# Sesame oil
+# Coconut oil
+# Linseed oil
+# Walnut oil
+# Hazelnut oil
+# Almond oil
+
+- name:
+    en: Olive oil
+    pl: Oliwa z oliwek
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 13.8
+      monounsaturated: 73.0
+      polyunsaturated: 10.5
+
+- name:
+    en: Sunflower oil
+    pl: Olej słonecznikowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 10.8
+      monounsaturated: 20.4
+      polyunsaturated: 68.8
+
+- name:
+    en: Peanut oil
+    pl: Olej arachidowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 17
+      monounsaturated: 46
+      polyunsaturated: 32
+
+- name:
+    en: Sesame oil
+    pl: Olej sezamowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 14.85
+      monounsaturated: 41.53
+      polyunsaturated: 43.62
+
+- name:
+    en: Coconut oil
+    pl: Olej kokosowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 892
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 91.92
+      monounsaturated: 6.16
+      polyunsaturated: 1.91
+
+- name:
+    en: Linseed oil
+    pl: Olej lniany
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 9
+      monounsaturated: 18
+      polyunsaturated: 73
+
+- name:
+    en: Walnut oil
+    pl: Olej z orzechów włoskich
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 9
+      monounsaturated: 13
+      polyunsaturated: 72
+
+- name:
+    en: Hazelnut oil
+    pl: Olej z orzechów laskowych
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 7.4
+      monounsaturated: 78.0
+      polyunsaturated: 10.2
+
+- name:
+    en: Almond oil
+    pl: Olej migdałowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 884
+    carbs: 0
+    sugars: 0
+    fibre: 0
+    protein: 0
+    fat:
+      total: 100
+      saturated: 8.59
+      monounsaturated: 73.19
+      polyunsaturated: 18.22

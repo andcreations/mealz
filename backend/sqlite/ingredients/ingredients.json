@@ -1,6 +1,106 @@
 [
   {
     "name": {
+      "en": "Almond oil",
+      "pl": "Olej migdałowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 8.59
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 73.19
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 18.22
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Almonds",
+      "pl": "Migdały"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 579
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 21.6
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 21.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 49.9
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 3.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 31.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 12.3
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Apple",
       "pl": "Jabłko"
     },
@@ -201,6 +301,56 @@
   },
   {
     "name": {
+      "en": "Bacon (raw)",
+      "pl": "Boczek (surowy)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 541
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 1.4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 37
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 42
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 18
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 6
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Banana",
       "pl": "Banan"
     },
@@ -246,6 +396,156 @@
         "id": 7,
         "unit": 1,
         "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Barley groats (cooked)",
+      "pl": "Kasza jęczmienna (gotowana)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 123
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 28
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.09
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.33
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Barley groats (raw)",
+      "pl": "Kasza jęczmienna (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 352
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 78.6
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 9.9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.24
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.15
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.56
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Beef (raw)",
+      "pl": "Wołowina (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 250
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 26
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 15
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
       }
     ]
   },
@@ -351,6 +651,56 @@
   },
   {
     "name": {
+      "en": "Brazil nuts",
+      "pl": "Orzechy brazylijskie"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 659
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 11.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 14.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 67.1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 16.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 24.5
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 21
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Broccoli",
       "pl": "Brokuł"
     },
@@ -401,6 +751,106 @@
   },
   {
     "name": {
+      "en": "Brown rice (cooked)",
+      "pl": "Ryż brązowy (gotowany)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 112
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 23.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.83
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.17
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.33
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Brown rice (raw)",
+      "pl": "Ryż brązowy (surowy)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 367
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 76.2
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 7.54
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Brussels sprout",
       "pl": "Bukselka"
     },
@@ -446,6 +896,106 @@
         "id": 7,
         "unit": 1,
         "amount": 0.24
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Buckwheat groats (cooked)",
+      "pl": "Kasza gryczana (gotowana)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 92
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 19.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.38
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.62
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.08
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.15
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.39
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Buckwheat groats (raw)",
+      "pl": "Kasza gryczana (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 343
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 71.1
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 11.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3.04
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.59
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.83
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.83
       }
     ]
   },
@@ -651,6 +1201,56 @@
   },
   {
     "name": {
+      "en": "Cashews",
+      "pl": "Orzechy nerkowca"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 553
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 30.2
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 5.9
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 18.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 43.9
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 7.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 23.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 7.8
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Cauliflower",
       "pl": "Kalafior"
     },
@@ -751,6 +1351,156 @@
   },
   {
     "name": {
+      "en": "Chestnuts",
+      "pl": "Kasztany jadalne"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 213
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 45.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 10.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.4
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2.3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Chicken (raw)",
+      "pl": "Kurczak (surowy)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 215
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 18
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 15
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Chicken breast (raw)",
+      "pl": "Pierś z kurczaka (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 102
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 22
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.4
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Coconut milk",
       "pl": "Mleko kokosowe"
     },
@@ -801,6 +1551,56 @@
   },
   {
     "name": {
+      "en": "Coconut oil",
+      "pl": "Olej kokosowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 892
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 91.92
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 6.16
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.91
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Corn",
       "pl": "Kukurydza"
     },
@@ -846,6 +1646,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.58
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Corn flakes",
+      "pl": "Płatki kukurydziane"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 357
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 84.4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 8.2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 7.5
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2
       }
     ]
   },
@@ -946,6 +1796,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.05
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Duck (raw)",
+      "pl": "Kaczka (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 337
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 19
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 28
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 12
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 4
       }
     ]
   },
@@ -1301,6 +2201,106 @@
   },
   {
     "name": {
+      "en": "Hazelnut oil",
+      "pl": "Olej z orzechów laskowych"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 7.4
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 78
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 10.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Hazelnuts",
+      "pl": "Orzechy laskowe"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 628
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 16.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 15
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 60.8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 4.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 45.7
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 7.9
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Kefir",
       "pl": "Kefir"
     },
@@ -1446,6 +2446,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Lamb (raw)",
+      "pl": "Jagnięcina (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 294
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 25
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 21
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
       }
     ]
   },
@@ -1651,6 +2701,106 @@
   },
   {
     "name": {
+      "en": "Linseed oil",
+      "pl": "Olej lniany"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 18
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 73
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Macadamia nuts",
+      "pl": "Orzechy makadamia"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 718
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 13.8
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 7.9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 75.8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 12.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 58.9
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Mango",
       "pl": "Mango"
     },
@@ -1851,6 +3001,156 @@
   },
   {
     "name": {
+      "en": "Millet (cooked)",
+      "pl": "Proso (gotowane)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 207
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 41.2
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 6.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Millet (raw)",
+      "pl": "Proso (surowe)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 756
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 75.3
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 22
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 44
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Mutton (raw)",
+      "pl": "Baranina (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 294
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 25
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 21
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Nectarine",
       "pl": "Nektarynka"
     },
@@ -1910,42 +3210,42 @@
       {
         "id": 0,
         "unit": 0,
-        "amount": 373.17
+        "amount": 389
       },
       {
         "id": 1,
         "unit": 1,
-        "amount": 64.88
+        "amount": 66.3
       },
       {
         "id": 2,
         "unit": 1,
-        "amount": 0.98
+        "amount": 1
       },
       {
         "id": 3,
         "unit": 1,
-        "amount": 12.93
+        "amount": 16.9
       },
       {
         "id": 4,
         "unit": 1,
-        "amount": 6.34
+        "amount": 6.9
       },
       {
         "id": 5,
         "unit": 1,
-        "amount": 1.22
+        "amount": 1.21
       },
       {
         "id": 6,
         "unit": 1,
-        "amount": 2.2
+        "amount": 2.18
       },
       {
         "id": 7,
         "unit": 1,
-        "amount": 1.95
+        "amount": 2.54
       }
     ]
   },
@@ -1996,6 +3296,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Olive oil",
+      "pl": "Oliwa z oliwek"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 13.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 73
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 10.5
       }
     ]
   },
@@ -2251,6 +3601,106 @@
   },
   {
     "name": {
+      "en": "Peanut oil",
+      "pl": "Olej arachidowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 17
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 46
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 32
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Peanuts",
+      "pl": "Orzeszki ziemne"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 567
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 16.1
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.7
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 25.8
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 49.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 6.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 24.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 15.6
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Pear",
       "pl": "Gruszka"
     },
@@ -2301,6 +3751,156 @@
   },
   {
     "name": {
+      "en": "Pecans",
+      "pl": "Orzechy pekan"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 691
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 13.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 9.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 72
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 6.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 40.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 21.6
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pepperoni",
+      "pl": "Pepperoni"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 504
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 22
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 47
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 18
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 19
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pine nuts",
+      "pl": "Orzeszki piniowe"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 673
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 13.1
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 13.7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 68.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 4.9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 18.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 34.1
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Pineapple",
       "pl": "Ananas"
     },
@@ -2346,6 +3946,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pistachios",
+      "pl": "Pistacje"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 562
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 27.2
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 7.7
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 20.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 45.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 5.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 23.3
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 13.6
       }
     ]
   },
@@ -2451,6 +4101,106 @@
   },
   {
     "name": {
+      "en": "Pork (raw)",
+      "pl": "Wieprzowina (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 242
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 27
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pork sausage",
+      "pl": "Kiełbasa wieprzowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 333
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 1.1
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 18.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 28.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 11.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 12
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Potato",
       "pl": "Ziemniak"
     },
@@ -2501,6 +4251,162 @@
   },
   {
     "name": {
+      "en": "Prosciutto",
+      "pl": "Prosciutto"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 250
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 27
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Protein powder (rice)",
+      "pl": "Odżywka białkowa (ryżowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 3800
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 230
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 170
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 570
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 50
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 22
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "GymBean Vanavita"
+    }
+  },
+  {
+    "name": {
+      "en": "Protein powder (whey)",
+      "pl": "Odżywka białkowa (serwatkowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 391
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 79
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 6.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "KFD"
+    }
+  },
+  {
+    "name": {
       "en": "Pumpkin",
       "pl": "Dynia"
     },
@@ -2536,6 +4442,106 @@
         "id": 5,
         "unit": 1,
         "amount": 0.04
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Quinoa (cooked)",
+      "pl": "Komosa ryżowa (gotowana)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 120
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 21.3
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 4.4
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.9
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Quinoa (raw)",
+      "pl": "Komosa ryżowa (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 626
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 65.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 24
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 6.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
       },
       {
         "id": 6,
@@ -2701,6 +4707,56 @@
   },
   {
     "name": {
+      "en": "Rice flakes",
+      "pl": "Płatki ryżowe"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 380
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 85
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Ricotta",
       "pl": "Ser ricotta"
     },
@@ -2746,6 +4802,106 @@
         "id": 7,
         "unit": 1,
         "amount": 0.24
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Salami (dry)",
+      "pl": "Salami (suszone)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 378
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0.72
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 21.07
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 31.65
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 11
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Sesame oil",
+      "pl": "Olej sezamowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 14.85
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 41.53
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 43.62
       }
     ]
   },
@@ -2901,6 +5057,56 @@
   },
   {
     "name": {
+      "en": "Sunflower oil",
+      "pl": "Olej słonecznikowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 10.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 20.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 68.8
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Sweet cherry",
       "pl": "Czereśnia"
     },
@@ -3051,6 +5257,106 @@
   },
   {
     "name": {
+      "en": "Turkey (raw)",
+      "pl": "Indyk (surowy)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 189
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 29
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 7
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 2.5
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.5
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Turkey breast (raw)",
+      "pl": "Pierś z indyka (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 135
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 24
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Turnip",
       "pl": "Rzepa"
     },
@@ -3101,6 +5407,106 @@
   },
   {
     "name": {
+      "en": "Walnut oil",
+      "pl": "Olej z orzechów włoskich"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 884
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 100
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 13
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 72
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Walnuts",
+      "pl": "Orzechy włoskie"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 654
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 13.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 15.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 65.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 6.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 8.9
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 47.2
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Watermelon",
       "pl": "Arbuz"
     },
@@ -3146,6 +5552,106 @@
         "id": 7,
         "unit": 1,
         "amount": 0.03
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "White rice (cooked)",
+      "pl": "Ryż biały (gotowany)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 130
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 28.3
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.05
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 2.7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.28
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.08
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "White rice (raw)",
+      "pl": "Ryż biały (surowy)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 365
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 80
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.66
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.18
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.14
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.22
       }
     ]
   },
