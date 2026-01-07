@@ -51,7 +51,7 @@ import {
 
 @Injectable()
 export class UsersDailyInsightsService implements OnModuleInit {
-  private static readonly DEFAULT_CRON = '0 8 * * *';
+  private static readonly DEFAULT_CRON = '0 22 * * *';
   private static readonly JOB_NAME = 'users-daily-insights';
   private static readonly AI_MAX_TOKENS = 4000;
   private static readonly AI_TEMPERATURE = 0.95;
@@ -222,6 +222,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
       this.logger.info('Generated insights for user', {
         ...context,
         userId: user.id,
+        prompt,
         promptInput,
         insights: insights.text,
         duration: Date.now() - startTime,

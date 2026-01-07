@@ -351,6 +351,56 @@
   },
   {
     "name": {
+      "en": "Baguette",
+      "pl": "Bagietka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 274
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 57
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.6
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Banana",
       "pl": "Banan"
     },
@@ -746,6 +796,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Brown bread",
+      "pl": "Chleb razowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 246
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 41
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 12
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.6
       }
     ]
   },
@@ -1501,6 +1601,56 @@
   },
   {
     "name": {
+      "en": "Ciabatta",
+      "pl": "Ciabatta"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 271
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 52
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.8
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Coconut milk",
       "pl": "Mleko kokosowe"
     },
@@ -1751,6 +1901,159 @@
   },
   {
     "name": {
+      "en": "Cottage cheese 5%",
+      "pl": "Serek wiejski 5%"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 97
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 11
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 3.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {}
+  },
+  {
+    "name": {
+      "en": "Cottage cheese light 3%",
+      "pl": "Serek wiejski lekki 3%"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 81
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 2.4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 11
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {}
+  },
+  {
+    "name": {
+      "en": "Cottage cheese protein 3%",
+      "pl": "Serek wiejski wysokobiałkowy 3%"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 93
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 2.4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 13
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {}
+  },
+  {
+    "name": {
       "en": "Cucumber",
       "pl": "Ogórek"
     },
@@ -1896,6 +2199,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.09
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Focaccia",
+      "pl": "Focaccia"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 249
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 38
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 4.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.2
       }
     ]
   },
@@ -3101,6 +3454,56 @@
   },
   {
     "name": {
+      "en": "Multigrain bread",
+      "pl": "Chleb wieloziarnisty"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 265
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 44
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 11
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Mutton (raw)",
       "pl": "Baranina (surowa)"
     },
@@ -3146,6 +3549,56 @@
         "id": 7,
         "unit": 1,
         "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Naan",
+      "pl": "Chleb naan"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 291
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 50
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 7
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2
       }
     ]
   },
@@ -4001,6 +4454,56 @@
   },
   {
     "name": {
+      "en": "Pita bread",
+      "pl": "Pita"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 275
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 55
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.7
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Plum",
       "pl": "Śliwka"
     },
@@ -4407,6 +4910,56 @@
   },
   {
     "name": {
+      "en": "Pumpernickel",
+      "pl": "Chleb pumpernikiel"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 250
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 47
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.4
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Pumpkin",
       "pl": "Dynia"
     },
@@ -4807,6 +5360,56 @@
   },
   {
     "name": {
+      "en": "Rye bread",
+      "pl": "Chleb żytni"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 259
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 48
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8.5
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3.3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Salami (dry)",
       "pl": "Salami (suszone)"
     },
@@ -4952,6 +5555,106 @@
         "id": 7,
         "unit": 1,
         "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Sourdough bread",
+      "pl": "Chleb na zakwasie"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 289
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 56
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.8
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Spelt bread",
+      "pl": "Chleb orkiszowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 246
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 44
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 10.5
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.1
       }
     ]
   },
@@ -5557,6 +6260,56 @@
   },
   {
     "name": {
+      "en": "White bread",
+      "pl": "Chleb pszenny"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 266
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 49
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8.9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.4
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "White rice (cooked)",
       "pl": "Ryż biały (gotowany)"
     },
@@ -5652,6 +6405,106 @@
         "id": 7,
         "unit": 1,
         "amount": 0.22
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Whole grain bread",
+      "pl": "Chleb pełnoziarnisty"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 252
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 43
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 5.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 12
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.9
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.8
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Whole wheat bread",
+      "pl": "Chleb pełnoziarnisty pszenny"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 247
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 41
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 13
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.9
       }
     ]
   },

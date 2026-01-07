@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InternalError, MealzError } from '@mealz/backend-common';
 import { MealDailyPlan } from '@mealz/backend-meals-daily-plan-service-api';
 
+import { MealDailyPlanDetailsVersion } from '../../types';
 import { MealDailyPlanDBEntity } from '../entities';
 import { MealDailyPlanDetailsV1Mapper } from './MealDailyPlanDetailsV1Mapper';
-import { MealDailyPlanDetailsVersion } from '../../types';
 
 @Injectable()
 export class MealDailyPlanDBMapper {

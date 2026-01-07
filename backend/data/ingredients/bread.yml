@@ -1,0 +1,254 @@
+# The below is pulled from ChatGPT using .prompt.md.
+
+- name:
+    en: White bread
+    pl: Chleb pszenny
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 266
+    carbs: 49.0
+    sugars: 5.0
+    fibre: 2.7
+    protein: 8.9
+    fat:
+      total: 3.2
+      saturated: 0.7
+      monounsaturated: 0.8
+      polyunsaturated: 1.4
+
+- name:
+    en: Whole wheat bread
+    pl: Chleb pełnoziarnisty pszenny
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 247
+    carbs: 41.0
+    sugars: 6.0
+    fibre: 6.0
+    protein: 13.0
+    fat:
+      total: 4.2
+      saturated: 0.7
+      monounsaturated: 0.8
+      polyunsaturated: 1.9
+
+- name:
+    en: Whole grain bread
+    pl: Chleb pełnoziarnisty
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 252
+    carbs: 43.0
+    sugars: 5.6
+    fibre: 6.5
+    protein: 12.0
+    fat:
+      total: 4.0
+      saturated: 0.8
+      monounsaturated: 0.9
+      polyunsaturated: 1.8
+
+- name:
+    en: Sourdough bread
+    pl: Chleb na zakwasie
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 289
+    carbs: 56.0
+    sugars: 2.0
+    fibre: 2.2
+    protein: 9.0
+    fat:
+      total: 2.0
+      saturated: 0.4
+      monounsaturated: 0.5
+      polyunsaturated: 0.8
+
+- name:
+    en: Rye bread
+    pl: Chleb żytni
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 259
+    carbs: 48.0
+    sugars: 5.0
+    fibre: 5.8
+    protein: 8.5
+    fat:
+      total: 3.3
+      saturated: 0.6
+      monounsaturated: 0.7
+      polyunsaturated: 1.5
+
+- name:
+    en: Multigrain bread
+    pl: Chleb wieloziarnisty
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 265
+    carbs: 44.0
+    sugars: 6.0
+    fibre: 5.0
+    protein: 11.0
+    fat:
+      total: 4.5
+      saturated: 0.8
+      monounsaturated: 1.0
+      polyunsaturated: 2.0
+
+- name:
+    en: Brown bread
+    pl: Chleb razowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 246
+    carbs: 41.0
+    sugars: 5.0
+    fibre: 7.0
+    protein: 12.0
+    fat:
+      total: 3.5
+      saturated: 0.6
+      monounsaturated: 0.8
+      polyunsaturated: 1.6
+
+- name:
+    en: Baguette
+    pl: Bagietka
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 274
+    carbs: 57.0
+    sugars: 2.0
+    fibre: 2.4
+    protein: 9.0
+    fat:
+      total: 1.5
+      saturated: 0.3
+      monounsaturated: 0.3
+      polyunsaturated: 0.6
+
+- name:
+    en: Ciabatta
+    pl: Ciabatta
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 271
+    carbs: 52.0
+    sugars: 1.6
+    fibre: 2.3
+    protein: 9.0
+    fat:
+      total: 4.0
+      saturated: 0.7
+      monounsaturated: 1.0
+      polyunsaturated: 1.8
+
+- name:
+    en: Focaccia
+    pl: Focaccia
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 249
+    carbs: 38.0
+    sugars: 1.5
+    fibre: 2.2
+    protein: 8.0
+    fat:
+      total: 8.0
+      saturated: 1.3
+      monounsaturated: 4.8
+      polyunsaturated: 1.2
+
+- name:
+    en: Pita bread
+    pl: Pita
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 275
+    carbs: 55.0
+    sugars: 1.7
+    fibre: 2.2
+    protein: 9.0
+    fat:
+      total: 1.2
+      saturated: 0.2
+      monounsaturated: 0.2
+      polyunsaturated: 0.5
+
+- name:
+    en: Naan
+    pl: Chleb naan
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 291
+    carbs: 50.0
+    sugars: 3.0
+    fibre: 2.2
+    protein: 9.0
+    fat:
+      total: 7.0
+      saturated: 2.0
+      monounsaturated: 2.0
+      polyunsaturated: 2.0
+
+- name:
+    en: Pumpernickel
+    pl: Chleb pumpernikiel
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 250
+    carbs: 47.0
+    sugars: 6.0
+    fibre: 6.0
+    protein: 8.0
+    fat:
+      total: 3.0
+      saturated: 0.6
+      monounsaturated: 0.7
+      polyunsaturated: 1.4
+
+- name:
+    en: Spelt bread
+    pl: Chleb orkiszowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 246
+    carbs: 44.0
+    sugars: 4.0
+    fibre: 5.0
+    protein: 10.5
+    fat:
+      total: 2.4
+      saturated: 0.4
+      monounsaturated: 0.6
+      polyunsaturated: 1.1
+

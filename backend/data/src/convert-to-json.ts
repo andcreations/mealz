@@ -44,6 +44,24 @@ function validateIngredients(
   return rawIngredients as YamlIngredient[];
 }
 
+function populateMissingFields(
+  ingredients: YamlIngredient[]
+): YamlIngredient[] {
+  return ingredients.map(ingredient => {
+    return {
+      ...ingredient,
+      facts: {
+        ...ingredient.facts,
+        fat: {
+          ...ingredient.facts.fat,
+          monounsaturated: ingredient.facts.fat.monounsaturated ?? 0,
+          polyunsaturated: ingredient.facts.fat.polyunsaturated ?? 0,
+        },
+      },
+    };
+  });
+}
+
 function mergeIngredients(list: YamlIngredient[][]): YamlIngredient[] {
   const equals = (a: YamlIngredient, b: YamlIngredient) => {
     return a.name.en === b.name.en || a.name.pl === b.name.pl;
@@ -73,7 +91,8 @@ function readIngredients(dir: string): YamlIngredient[] {
     Log.info(`Reading ${filePath}`);
     const content = fs.readFileSync(filePath, 'utf8');
     const raw = YAML.parse(content);
-    const ingredients = validateIngredients(raw, filePath);
+    const validatedIngredients = validateIngredients(raw, filePath);
+    const ingredients = populateMissingFields(validatedIngredients);
     allIngredients = mergeIngredients([allIngredients, ingredients]);
   });
 

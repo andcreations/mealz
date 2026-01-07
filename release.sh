@@ -35,7 +35,7 @@ npm install
 echo -e "--------------- 8< --------------- ${GREEN}web: build tools${RESET}"
 npm run build-tools
 echo -e "--------------- 8< --------------- ${GREEN}web: build${RESET}"
-npm run build-all
+NODE_ENV=production npm run build-all
 
 # Build the SQLite tools
 cd $SCRIPT_DIR/backend/sqlite/tools

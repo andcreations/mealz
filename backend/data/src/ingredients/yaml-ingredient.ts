@@ -29,10 +29,12 @@ export class YamlFat {
   saturated: number;
 
   @IsNumber()
-  monounsaturated: number;
+  @IsOptional()
+  monounsaturated?: number;
 
   @IsNumber()
-  polyunsaturated: number;
+  @IsOptional()
+  polyunsaturated?: number;
 }
 
 export class YamlFacts {

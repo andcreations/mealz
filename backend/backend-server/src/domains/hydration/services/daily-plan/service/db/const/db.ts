@@ -1,0 +1,1 @@
+export const HYDRATION_DAILY_PLAN_DB_NAME = 'hydration-daily-plan';
