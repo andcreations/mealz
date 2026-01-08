@@ -1,8 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { IsId, IsIntTimestamp } from '@mealz/backend-gateway-common';
 import {
   GWHydrationDailyPlan,
 } from '@mealz/backend-hydration-daily-plan-gateway-api';
+
+import {
+  GWHydrationDailyPlanGoalsImpl,
+} from './GWHydrationDailyPlanGoalsImpl';
+import {
+  GWHydrationDailyPlanRemindersImpl,
+} from './GWHydrationDailyPlanRemindersImpl';
 
 export class GWHydrationDailyPlanImpl implements GWHydrationDailyPlan {
   @ApiProperty({
@@ -11,6 +20,20 @@ export class GWHydrationDailyPlanImpl implements GWHydrationDailyPlan {
   @IsId()
   public id: string;
 
+  @ApiProperty({
+    description: 'Goals for the daily plan',
+  })
+  @ValidateNested()
+  @Type(() => GWHydrationDailyPlanGoalsImpl)
+  public goals: GWHydrationDailyPlanGoalsImpl;
+
+
+  @ApiProperty({
+    description: 'Reminders for the daily plan',
+  })
+  @ValidateNested()
+  @Type(() => GWHydrationDailyPlanRemindersImpl)
+  public reminders: GWHydrationDailyPlanRemindersImpl;
 
   @ApiProperty({
     description: 'Timestamp (UTC) when the hydration plan was created',
