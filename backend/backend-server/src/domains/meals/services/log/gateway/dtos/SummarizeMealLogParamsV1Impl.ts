@@ -4,14 +4,14 @@ import { IsInt, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { TimePeriod } from '@andcreations/common';
 import {
-  SummarizeMealLogParamsV1,
+  SummarizeMealLogQueryParamsV1,
 } from '@mealz/backend-meals-log-gateway-api';
 
 const MAX_DATE_RANGE_DAYS = 7;
 const MAX_DATE_RANGE = TimePeriod.fromStr(`${MAX_DATE_RANGE_DAYS}d`);
 
 export class SummarizeMealLogParamsV1Impl
-  implements SummarizeMealLogParamsV1
+  implements SummarizeMealLogQueryParamsV1
 {
   @ApiProperty({
     description: 'Date from which to summarize the meal logs',
@@ -30,7 +30,7 @@ export class SummarizeMealLogParamsV1Impl
   public toDate: number;
 
   public static validate(
-    gwParams: SummarizeMealLogParamsV1,
+    gwParams: SummarizeMealLogQueryParamsV1,
   ): void {
     const { fromDate, toDate } = gwParams;
     if (toDate - fromDate > MAX_DATE_RANGE) {

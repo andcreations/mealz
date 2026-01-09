@@ -1,4 +1,4 @@
-export * from './HydrationDailyPlanV1APIReadManyParamsImpl';
+export * from './ReadHydrationDailyPlansQueryParamsV1Impl';
 export * from './ReadHydrationDailyPlansGWResponseV1Impl';
 export * from './CreateHydrationDailyPlanGWRequestV1Impl';
 export * from './CreateHydrationDailyPlanGWResponseV1Impl';

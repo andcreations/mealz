@@ -1,14 +1,7 @@
 import { URLBuilder } from '@andcreations/common';
+import { ReadHydrationLogsByDateRangeQueryParamsV1 } from './dtos';
 
 export const HYDRATION_LOG_V1_URL = '/api/v1/hydration/log';
-
-export interface ReadHydrationLogsByDateRangeQueryParamsV1 {
-  // Date from which to read the hydration logs
-  fromDate: number;
-
-  // Date to which to read the hydration logs
-  toDate: number;
-}
 
 export interface HydrationLogV1APIURL {
   logHydrationV1: () => string;

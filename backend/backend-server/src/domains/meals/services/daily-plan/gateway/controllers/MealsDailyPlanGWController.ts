@@ -10,7 +10,7 @@ import {
 import {
   CreateMealDailyPlanGWRequestV1Impl,
   CreateMealDailyPlanGWResponseV1Impl,
-  MealsDailyPlanV1APIReadManyParamsImpl,
+  ReadMealDailyPlansQueryParamsV1Impl,
   ReadMealDailyPlansGWResponseV1Impl,
   UpdateMealDailyPlanGWRequestV1Impl,
   UpdateMealDailyPlanGWResponseV1Impl,
@@ -28,7 +28,7 @@ export class MealsDailyPlanGWController {
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('many')
   public async readManyV1(
-    @Query() gwParams: MealsDailyPlanV1APIReadManyParamsImpl,
+    @Query() gwParams: ReadMealDailyPlansQueryParamsV1Impl,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadMealDailyPlansGWResponseV1Impl> {

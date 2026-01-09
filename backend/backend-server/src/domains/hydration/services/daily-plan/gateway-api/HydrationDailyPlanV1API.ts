@@ -1,13 +1,10 @@
 import { URLBuilder } from '@andcreations/common';
+import { ReadHydrationDailyPlansQueryParamsV1 } from './dtos';
 
 export const HYDRATION_DAILY_PLAN_V1_URL = '/api/v1/hydration/daily-plan';
 
-export interface HydrationDailyPlanV1APIReadManyParams {
-  limit?: number;
-}
-
 export interface HydrationDailyPlanV1APIURL {
-  readManyV1: (params: HydrationDailyPlanV1APIReadManyParams) => string;
+  readManyV1: (params: ReadHydrationDailyPlansQueryParamsV1) => string;
   createV1: () => string;
   updateV1: (hydrationDailyPlanId: string) => string;
 }
@@ -19,7 +16,7 @@ export class HydrationDailyPlanV1API {
      * @param params Query parameters.
      * @response ReadHydrationDailyPlansGWResponseV1
      */
-    readManyV1: (params: HydrationDailyPlanV1APIReadManyParams) => {
+    readManyV1: (params: ReadHydrationDailyPlansQueryParamsV1) => {
       return URLBuilder.build(
         `${HYDRATION_DAILY_PLAN_V1_URL}/many`,
         { ...params },

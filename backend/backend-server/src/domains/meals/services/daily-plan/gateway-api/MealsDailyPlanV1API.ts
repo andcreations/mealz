@@ -1,13 +1,10 @@
 import { URLBuilder } from '@andcreations/common';
+import { ReadMealDailyPlansQueryParamsV1 } from './dtos';
 
 export const MEALS_DAILY_PLAN_V1_URL = '/api/v1/meals/daily-plan';
 
-export interface MealsDailyPlanV1APIReadManyParams {
-  limit?: number;
-}
-
 export interface MealsDailyPlanV1APIURL {
-  readManyV1: (params: MealsDailyPlanV1APIReadManyParams) => string;
+  readManyV1: (params: ReadMealDailyPlansQueryParamsV1) => string;
   createV1: () => string;
   updateV1: (mealDailyPlanId: string) => string;
 }
@@ -19,7 +16,7 @@ export class MealsDailyPlanV1API {
      * @param params Query parameters.
      * @response ReadMealDailyPlansGWResponseV1
      */
-    readManyV1: (params: MealsDailyPlanV1APIReadManyParams) => {
+    readManyV1: (params: ReadMealDailyPlansQueryParamsV1) => {
       return URLBuilder.build(
         `${MEALS_DAILY_PLAN_V1_URL}/many`,
         { ...params },

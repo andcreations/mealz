@@ -1,4 +1,4 @@
-export * from './MealsDailyPlanV1APIReadManyParamsImpl';
+export * from './ReadMealDailyPlansQueryParamsV1Impl';
 export * from './ReadMealDailyPlansGWResponseV1Impl';
 export * from './CreateMealDailyPlanGWRequestV1Impl';
 export * from './CreateMealDailyPlanGWResponseV1Impl';

@@ -1,33 +1,20 @@
 import { URLBuilder } from '@andcreations/common';
 
+import {
+  ReadNamedMealByIdQueryParamsV1,
+  ReadNamedMealsFromLastQueryParamsV1,
+  UpdateNamedMealV1QueryParams,
+  DeleteNamedMealV1QueryParams,
+} from './dtos';
+
 export const MEALS_NAMED_V1_URL = '/api/v1/meals/named';
 
-export interface MealsNamedV1APIReadByIdParams {
-  id: string;
-}
-
-export interface MealsNamedV1APIReadManyFromLastParams {
-  // Identifier of the last read named meal.
-  lastId?: string;
-
-  // Number of named meals to read.
-  limit?: number;
-}
-
-export interface MealsNamedV1APIUpdateParams {
-  id: string;
-}
-
-export interface MealsNamedV1APIDeleteParams {
-  id: string;
-}
-
 export interface MealsNamedV1APIURL {
-  readByIdV1: (params: MealsNamedV1APIReadByIdParams) => string;
-  readFromLastV1: (params: MealsNamedV1APIReadManyFromLastParams) => string;
+  readByIdV1: (params: ReadNamedMealByIdQueryParamsV1) => string;
+  readFromLastV1: (params: ReadNamedMealsFromLastQueryParamsV1) => string;
   createV1: () => string;
-  updateV1: (params: MealsNamedV1APIUpdateParams) => string;
-  deleteV1: (params: MealsNamedV1APIDeleteParams) => string;
+  updateV1: (params: UpdateNamedMealV1QueryParams) => string;
+  deleteV1: (params: DeleteNamedMealV1QueryParams) => string;
 }
 
 export class MealsNamedV1API {
@@ -38,7 +25,7 @@ export class MealsNamedV1API {
      * @param params Path parameters.
      * @response ReadNamedMealByIdGWResponseV1
      */
-    readByIdV1: (params: MealsNamedV1APIReadByIdParams) => {
+    readByIdV1: (params: ReadNamedMealByIdQueryParamsV1) => {
       return `${MEALS_NAMED_V1_URL}/one/${params.id}`;
     },
 
@@ -47,7 +34,7 @@ export class MealsNamedV1API {
      * @param params Query parameters.
      * @response ReadNamedMealsFromLastGWResponseV1
      */
-    readFromLastV1: (params: MealsNamedV1APIReadManyFromLastParams) => {
+    readFromLastV1: (params: ReadNamedMealsFromLastQueryParamsV1) => {
       return URLBuilder.build(
         `${MEALS_NAMED_V1_URL}/from-last`,
         { ...params },
@@ -66,7 +53,7 @@ export class MealsNamedV1API {
      * @param params Path parameters.
      * @request UpdateNamedMealGWRequestV1
      */
-    updateV1: (params: MealsNamedV1APIUpdateParams) => {
+    updateV1: (params: UpdateNamedMealV1QueryParams) => {
       return `${MEALS_NAMED_V1_URL}/${params.id}`;
     },
 
@@ -74,7 +61,7 @@ export class MealsNamedV1API {
      * @method DELETE
      * @param params Path parameters.
      */
-    deleteV1: (params: MealsNamedV1APIDeleteParams) => {
+    deleteV1: (params: DeleteNamedMealV1QueryParams) => {
       return `${MEALS_NAMED_V1_URL}/${params.id}`;
     },
   };

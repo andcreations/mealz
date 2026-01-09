@@ -11,7 +11,7 @@ import {
   ReadHydrationDailyPlansGWResponseV1Impl,
   CreateHydrationDailyPlanGWRequestV1Impl,
   CreateHydrationDailyPlanGWResponseV1Impl,
-  HydrationDailyPlanV1APIReadManyParamsImpl,
+  ReadHydrationDailyPlansQueryParamsV1Impl,
   UpdateHydrationDailyPlanGWRequestV1Impl,
   UpdateHydrationDailyPlanGWResponseV1Impl,
 } from '../dtos';
@@ -29,7 +29,7 @@ export class HydrationDailyPlanGWService {
 
 
   public async readManyV1(
-    gwParams: HydrationDailyPlanV1APIReadManyParamsImpl,
+    gwParams: ReadHydrationDailyPlansQueryParamsV1Impl,
     userId: string,
     context: Context,
   ): Promise<ReadHydrationDailyPlansGWResponseV1Impl> {

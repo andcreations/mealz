@@ -18,7 +18,7 @@ import {
 import { MEALS_USER_V1_URL } from '@mealz/backend-meals-user-gateway-api';
 
 import {
-  MealsUserV1APIReadManyParamsImpl,
+  ReadManyUserMealsQueryParamsV1Impl,
   ReadManyUserMealsGWResponseV1Impl,
   UpsertUserMealGWRequestV1Impl,
   UpsertUserMealGWResponseV1Impl,
@@ -35,7 +35,7 @@ export class MealsUserV1GWController {
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('many')
   public async readManyV1(
-    @Query() gwParams: MealsUserV1APIReadManyParamsImpl,
+    @Query() gwParams: ReadManyUserMealsQueryParamsV1Impl,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadManyUserMealsGWResponseV1Impl> {

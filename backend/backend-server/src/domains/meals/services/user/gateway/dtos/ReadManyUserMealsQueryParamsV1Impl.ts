@@ -7,11 +7,11 @@ import {
   arrayFromQueryParam,
 } from '@mealz/backend-gateway-common';
 import {
-  MealsUserV1APIReadManyParams,
+  ReadManyUserMealsQueryParamsV1,
 } from '@mealz/backend-meals-user-gateway-api';
 
-export class MealsUserV1APIReadManyParamsImpl
-  implements MealsUserV1APIReadManyParams
+export class ReadManyUserMealsQueryParamsV1Impl
+  implements ReadManyUserMealsQueryParamsV1
 {
   @ApiProperty({
     description: 'Identifier of the last user meal read',

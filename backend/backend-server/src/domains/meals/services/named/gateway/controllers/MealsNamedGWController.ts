@@ -8,15 +8,13 @@ import {
   GWUser,
   Roles,
 } from '@mealz/backend-gateway-common';
-import {
-  MEALS_NAMED_V1_URL,
-  MealsNamedV1APIReadManyFromLastParams,
-} from '@mealz/backend-meals-named-gateway-api';
+import { MEALS_NAMED_V1_URL } from '@mealz/backend-meals-named-gateway-api';
 
 import {
   CreateNamedMealGWRequestV1Impl,
   CreateNamedMealGWResponseV1Impl,
   ReadNamedMealByIdGWResponseV1Impl,
+  ReadNamedMealsFromLastQueryParamsV1Impl,
   ReadNamedMealsFromLastGWResponseV1Impl,
   UpdateNamedMealGWRequestV1Impl,
 } from '../dtos';
@@ -48,7 +46,7 @@ export class MealsNamedGWController {
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('from-last')
   public async readFromLastV1(
-    @Query() gwParams: MealsNamedV1APIReadManyFromLastParams,
+    @Query() gwParams: ReadNamedMealsFromLastQueryParamsV1Impl,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadNamedMealsFromLastGWResponseV1Impl> {

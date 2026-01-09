@@ -8,7 +8,7 @@ import {
 } from '@mealz/backend-hydration-daily-plan-gateway-api';
 
 import { 
-  HydrationDailyPlanV1APIReadManyParamsImpl,
+  ReadHydrationDailyPlansQueryParamsV1Impl,
   ReadHydrationDailyPlansGWResponseV1Impl,
   CreateHydrationDailyPlanGWRequestV1Impl,
   CreateHydrationDailyPlanGWResponseV1Impl,
@@ -28,7 +28,7 @@ export class HydrationDailyPlanGWController {
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('many')
   public async readManyV1(
-    @Query() gwParams: HydrationDailyPlanV1APIReadManyParamsImpl,
+    @Query() gwParams: ReadHydrationDailyPlansQueryParamsV1Impl,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadHydrationDailyPlansGWResponseV1Impl> {
