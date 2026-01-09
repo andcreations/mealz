@@ -6,6 +6,6 @@ import {
 import { GWHydrationLogImpl } from './GWHydrationLogImpl';
 
 export class GWHydrationLogForCreationImpl extends
-  OmitType(GWHydrationLogImpl, ['id', 'createdAt'] as const)
+  OmitType(GWHydrationLogImpl, ['id', 'loggedAt'] as const)
   implements GWHydrationLogForCreation
 {}

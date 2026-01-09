@@ -7,12 +7,12 @@ import { HydrationLogDBEntity } from '../entities';
 
 @Injectable()
 export class HydrationLogDBMapper {
-  public toEntity(
-    hydrationLog: Omit<HydrationLog, 'createdAt'>,
-  ): Omit<HydrationLogDBEntity, 'createdAt'> {
+  public toEntity(hydrationLog: HydrationLog): HydrationLogDBEntity {
     return {
       id: hydrationLog.id,
       user_id: hydrationLog.userId,
+      glass_fraction: hydrationLog.glassFraction,
+      logged_at: hydrationLog.loggedAt,
     };
   }
 
@@ -25,7 +25,8 @@ export class HydrationLogDBMapper {
     return {
       id: entity.id,
       userId: entity.user_id,
-      createdAt: entity.createdAt,
+      glassFraction: entity.glass_fraction,
+      loggedAt: entity.logged_at,
     };
   }
 }

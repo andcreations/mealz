@@ -16,7 +16,7 @@ import { roundToTwoDecimals } from '@mealz/backend-gateway-common';
 
 import { 
   ReadMealLogsByDateRangeQueryParamsV1, 
-  SummarizeMealLogQueryParamsV1,
+  SummarizeMealLogParamsV1Impl,
 } from '../dtos';
 import { GWMealLogMapper } from './GWMealLogMapper';
 
@@ -75,7 +75,7 @@ export class MealsLogGWService {
   }
 
   public async summarizeMacrosV1(
-    gwParams: SummarizeMealLogQueryParamsV1,
+    gwParams: SummarizeMealLogParamsV1Impl,
     userId: string,
     context: Context,
   ): Promise<SummarizeMealLogResponseV1> {

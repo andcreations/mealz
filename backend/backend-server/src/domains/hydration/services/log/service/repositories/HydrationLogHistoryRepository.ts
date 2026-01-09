@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { IdGenerator, InjectIdGenerator } from '@mealz/backend-common';
 import {
   InjectDBRepository, 
-  DBRepository, 
+  DBRepository,
   Where, 
-  Update,
 } from '@mealz/backend-db';
-import { GlassFraction } from '@mealz/backend-hydration-log-service-api';
+import { HydrationLog } from '@mealz/backend-hydration-log-service-api';
 
 import {
   HYDRATION_LOG_DB_NAME,
@@ -17,7 +15,7 @@ import {
 } from '../db';
 
 @Injectable()
-export class HydrationLogCrudRepository {
+export class HydrationLogHistoryRepository {
   public constructor(
     @InjectDBRepository(
       HYDRATION_LOG_DB_NAME,
@@ -25,22 +23,22 @@ export class HydrationLogCrudRepository {
     )
     private readonly repository: DBRepository<HydrationLogDBEntity>,
     private readonly mapper: HydrationLogDBMapper,
-    @InjectIdGenerator()
-    private readonly idGenerator: IdGenerator,
   ) {}
 
-  public async logHydrationV1(
+  public async readByDateRange(
     userId: string,
-    glassFraction: GlassFraction,
+    fromDate: number,
+    toDate: number,
     context: Context,
-  ): Promise<void> {
-    const id = this.idGenerator();
-    const entity = this.mapper.toEntity({
-      id,
-      userId,
-      glassFraction,
-      loggedAt: Date.now(),
-    });
-    await this.repository.insert(entity, context);
+  ): Promise<HydrationLog[]> {
+    const query: Where<HydrationLogDBEntity> = {
+      user_id: { $eq: userId },
+      logged_at: {
+        $gte: fromDate,
+        $lte: toDate,
+      },
+    };
+    const entities = await this.repository.find(query, {}, context);
+    return entities.map(entity => this.mapper.fromEntity(entity));
   }
 }

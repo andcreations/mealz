@@ -1,3 +1,5 @@
+import { GlassFraction } from './GlassFraction';
+
 export class HydrationLog {
   // Hydration log identifier
   public id: string;
@@ -5,6 +7,9 @@ export class HydrationLog {
   // User identifier
   public userId: string;
 
-  // Timestamp (UTC) when the hydration log was created
-  public createdAt: number;
+  // Glass fraction
+  public glassFraction: GlassFraction;
+
+  // Timestamp (UTC) when the hydration log was logged
+  public loggedAt: number;
 }

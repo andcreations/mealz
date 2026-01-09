@@ -1,4 +1,5 @@
 import { DBEntity, DBField, DBFieldType } from '@mealz/backend-db';
+import { GlassFraction } from '@mealz/backend-hydration-log-service-api';
 
 export const HYDRATION_LOG_DB_ENTITY_NAME = 'hydration_log';
 export const HYDRATION_LOG_DB_TABLE_NAME = 'hydration_logs';
@@ -19,8 +20,14 @@ export class HydrationLogDBEntity {
   public user_id: string;
 
   @DBField({
-    name: 'createdAt',
+    name: 'glass_fraction',
+    type: DBFieldType.STRING,
+  })
+  public glass_fraction: GlassFraction;
+
+  @DBField({
+    name: 'logged_at',
     type: DBFieldType.INTEGER,
   })
-  public createdAt: number;
+  public logged_at: number;
 }

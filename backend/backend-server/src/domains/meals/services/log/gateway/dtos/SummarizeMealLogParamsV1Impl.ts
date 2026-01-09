@@ -3,11 +3,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { TimePeriod } from '@andcreations/common';
+import {
+  SummarizeMealLogParamsV1,
+} from '@mealz/backend-meals-log-gateway-api';
 
 const MAX_DATE_RANGE_DAYS = 7;
 const MAX_DATE_RANGE = TimePeriod.fromStr(`${MAX_DATE_RANGE_DAYS}d`);
 
-export class SummarizeMealLogQueryParamsV1 {
+export class SummarizeMealLogParamsV1Impl
+  implements SummarizeMealLogParamsV1
+{
   @ApiProperty({
     description: 'Date from which to summarize the meal logs',
   })
@@ -25,7 +30,7 @@ export class SummarizeMealLogQueryParamsV1 {
   public toDate: number;
 
   public static validate(
-    gwParams: SummarizeMealLogQueryParamsV1,
+    gwParams: SummarizeMealLogParamsV1,
   ): void {
     const { fromDate, toDate } = gwParams;
     if (toDate - fromDate > MAX_DATE_RANGE) {

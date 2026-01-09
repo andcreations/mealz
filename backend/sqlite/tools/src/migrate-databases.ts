@@ -20,8 +20,7 @@ async function migrateDB(name: string): Promise<void> {
   const dbFilename = path.join(databasesDir, name + '.sqlite');
   const migrationsDir = backendPath(`sqlite/${name}`);
   Log.info(
-    `\nMigrating ${Colors.cyan(name)} database ` +
-    `from ${Colors.cyan(migrationsDir)}`
+    `\nMigrating ${Colors.cyan(name)} database from ${migrationsDir}`
   );
 
   // open database
@@ -52,6 +51,7 @@ async function run(): Promise<void> {
   await migrateDB('meals-daily-plan');
   await migrateDB('meals-named');
   await migrateDB('hydration-daily-plan');
+  await migrateDB('hydration-log');
   await migrateDB('telegram-users');
 
 }

@@ -5,6 +5,11 @@ import {
 } from './domain-and-service';
 
 export class HydrationLogRequestTopics {
+  public static readonly ReadHydrationLogsByDateRangeV1 = topic(
+    'readHydrationLogsByDateRange',
+    'v1',
+  );
+  public static readonly LogHydrationV1 = topic('logHydration', 'v1');
 };
 
 function topic(method: string, version: string): string {

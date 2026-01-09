@@ -101,7 +101,9 @@ export class SQLiteDBMigrations {
       // run the migration function
       const func = script[migrationType];
       if (!func || typeof func !== 'function') {
-        throw new Error(`Migration function ${migrationType} not found in ${filename}`);
+        throw new Error(
+          `Migration function ${migrationType} not found in ${filename}`
+        );
       }
       await func(this.getDBForMigration());
 
@@ -139,7 +141,7 @@ export class SQLiteDBMigrations {
 
     if (filesToRun.length === 0) {
       const fullDirectory = path.resolve(directory);
-      Log.info(`No migrations to run from ${Colors.green(fullDirectory)}`);
+      Log.info(Colors.gray(`No migrations to run from ${fullDirectory}`));
       return;
     }
 

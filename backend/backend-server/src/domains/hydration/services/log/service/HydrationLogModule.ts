@@ -6,8 +6,14 @@ import {
   HYDRATION_LOG_SQLITE_DB_MODULE_OPTIONS, 
   HydrationLogDBModule,
 } from './db';
-import { HydrationLogCrudRepository } from './repositories';
-import { HydrationLogCrudService } from './services';
+import { 
+  HydrationLogCrudRepository,
+  HydrationLogHistoryRepository,
+} from './repositories';
+import { 
+  HydrationLogCrudService, 
+  HydrationLogHistoryService,
+} from './services';
 import { HydrationLogRequestController } from './controllers';
 
 @Module({
@@ -19,6 +25,8 @@ import { HydrationLogRequestController } from './controllers';
     IdGeneratorProvider,
     HydrationLogCrudService,
     HydrationLogCrudRepository,
+    HydrationLogHistoryRepository,
+    HydrationLogHistoryService,
     HydrationLogRequestController,
   ],
 })
