@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ValidateNested } from 'class-validator';
+import { IsDefined, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { IsId, IsIntTimestamp } from '@mealz/backend-gateway-common';
 import {
@@ -27,10 +27,10 @@ export class GWHydrationDailyPlanImpl implements GWHydrationDailyPlan {
   @Type(() => GWHydrationDailyPlanGoalsImpl)
   public goals: GWHydrationDailyPlanGoalsImpl;
 
-
   @ApiProperty({
     description: 'Reminders for the daily plan',
   })
+  @IsDefined()
   @ValidateNested()
   @Type(() => GWHydrationDailyPlanRemindersImpl)
   public reminders: GWHydrationDailyPlanRemindersImpl;

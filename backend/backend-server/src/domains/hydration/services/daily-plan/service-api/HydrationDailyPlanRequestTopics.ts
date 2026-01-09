@@ -5,6 +5,14 @@ import {
 } from './domain-and-service';
 
 export class HydrationDailyPlanRequestTopics {
+  public static readonly CreateHydrationDailyPlanV1 = topic(
+    'createHydrationDailyPlan',
+    'v1',
+  );
+  public static readonly UpdateHydrationDailyPlanV1 = topic(
+    'updateHydrationDailyPlan',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

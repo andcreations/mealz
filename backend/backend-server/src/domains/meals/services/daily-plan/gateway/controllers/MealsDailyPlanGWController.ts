@@ -15,7 +15,7 @@ import {
   UpdateMealDailyPlanGWRequestV1Impl,
   UpdateMealDailyPlanGWResponseV1Impl,
 } from '../dtos';
-import { CreateMealDailyPlanGWRequestV1Validator } from '../validators';
+import { MealDailyPlanGWRequestV1Validator } from '../validators';
 import { MealsDailyPlanGWService } from '../services';
 
 @Controller(MEALS_DAILY_PLAN_V1_URL)
@@ -41,13 +41,13 @@ export class MealsDailyPlanGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
-  @Post('')
+  @Post()
   public async createV1(
     @Body() gwRequest: CreateMealDailyPlanGWRequestV1Impl,
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<CreateMealDailyPlanGWResponseV1Impl> {
-    CreateMealDailyPlanGWRequestV1Validator.validate(gwRequest);
+    MealDailyPlanGWRequestV1Validator.validate(gwRequest);
     return await this.mealsDailyPlanGWService.createV1(
       gwRequest,
       gwUser.id,
@@ -64,7 +64,7 @@ export class MealsDailyPlanGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<UpdateMealDailyPlanGWResponseV1Impl> {
-    CreateMealDailyPlanGWRequestV1Validator.validate(gwRequest);
+    MealDailyPlanGWRequestV1Validator.validate(gwRequest);
     return await this.mealsDailyPlanGWService.updateV1(
       mealDailyPlanId,
       gwRequest,

@@ -62,9 +62,6 @@ export class MealsDailyPlanCrudRepository {
       id: { $eq: mealDailyPlanId },
     };
     const entity = await this.repository.findOne(query, {}, context);
-    if (!entity) {
-      return;
-    }
     return this.mapper.fromEntity(entity);
   }
 

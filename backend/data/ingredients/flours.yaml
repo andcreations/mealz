@@ -1,0 +1,198 @@
+- name:
+    en: Wheat flour
+    pl: Mąka pszenna
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 364
+    carbs: 76.3
+    sugars: 0.3
+    fibre: 2.7
+    protein: 10.3
+    fat:
+      total: 1.0
+      saturated: 0.2
+      monounsaturated: 0.1
+      polyunsaturated: 0.4
+
+- name:
+    en: Whole wheat flour
+    pl: Mąka pełnoziarnista pszenna
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 340
+    carbs: 72.6
+    sugars: 0.4
+    fibre: 10.7
+    protein: 13.2
+    fat:
+      total: 2.5
+      saturated: 0.4
+      monounsaturated: 0.4
+      polyunsaturated: 1.0
+
+- name:
+    en: Rye flour
+    pl: Mąka żytnia
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 335
+    carbs: 76.0
+    sugars: 1.0
+    fibre: 15.1
+    protein: 10.3
+    fat:
+      total: 1.6
+      saturated: 0.3
+      monounsaturated: 0.2
+      polyunsaturated: 0.7
+
+- name:
+    en: Corn flour
+    pl: Mąka kukurydziana
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 361
+    carbs: 76.9
+    sugars: 0.6
+    fibre: 7.3
+    protein: 6.9
+    fat:
+      total: 3.9
+      saturated: 0.7
+      monounsaturated: 1.3
+      polyunsaturated: 1.8
+
+- name:
+    en: Rice flour
+    pl: Mąka ryżowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 366
+    carbs: 80.1
+    sugars: 0.1
+    fibre: 2.4
+    protein: 5.9
+    fat:
+      total: 1.4
+      saturated: 0.4
+      monounsaturated: 0.4
+      polyunsaturated: 0.4
+
+- name:
+    en: Oat flour
+    pl: Mąka owsiana
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 404
+    carbs: 65.7
+    sugars: 1.0
+    fibre: 9.7
+    protein: 14.7
+    fat:
+      total: 9.1
+      saturated: 1.6
+      monounsaturated: 3.6
+      polyunsaturated: 2.4
+
+- name:
+    en: Barley flour
+    pl: Mąka jęczmienna
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 354
+    carbs: 74.5
+    sugars: 0.8
+    fibre: 10.1
+    protein: 10.5
+    fat:
+      total: 2.3
+      saturated: 0.5
+      monounsaturated: 0.6
+      polyunsaturated: 1.1
+
+- name:
+    en: Buckwheat flour
+    pl: Mąka gryczana
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 335
+    carbs: 70.6
+    sugars: 0.9
+    fibre: 10.0
+    protein: 12.6
+    fat:
+      total: 3.1
+      saturated: 0.7
+      monounsaturated: 1.0
+      polyunsaturated: 1.0
+
+- name:
+    en: Chickpea flour
+    pl: Mąka z ciecierzycy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 387
+    carbs: 57.8
+    sugars: 10.9
+    fibre: 10.8
+    protein: 22.4
+    fat:
+      total: 6.7
+      saturated: 0.7
+      monounsaturated: 1.4
+      polyunsaturated: 3.2
+
+- name:
+    en: Almond flour
+    pl: Mąka migdałowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 571
+    carbs: 21.6
+    sugars: 4.4
+    fibre: 10.4
+    protein: 21.2
+    fat:
+      total: 50.6
+      saturated: 3.8
+      monounsaturated: 31.6
+      polyunsaturated: 12.3
+
+- name:
+    en: Coconut flour
+    pl: Mąka kokosowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 443
+    carbs: 60.0
+    sugars: 6.4
+    fibre: 38.5
+    protein: 18.3
+    fat:
+      total: 13.3
+      saturated: 11.8
+      monounsaturated: 0.8
+      polyunsaturated: 0.2
+

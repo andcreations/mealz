@@ -1,9 +1,17 @@
 import { BadRequestException } from '@nestjs/common';
-import { CreateMealDailyPlanGWRequestV1Impl } from '../dtos';
+
+import { 
+  CreateMealDailyPlanGWRequestV1Impl,
+  UpdateMealDailyPlanGWRequestV1Impl,
+} from '../dtos';
 import { GWMealDailyPlanEntryImpl } from '../types';
 
-export class CreateMealDailyPlanGWRequestV1Validator {
-  public static validate(request: CreateMealDailyPlanGWRequestV1Impl): void {
+export class MealDailyPlanGWRequestV1Validator {
+  public static validate(
+    request:
+      | CreateMealDailyPlanGWRequestV1Impl
+      | UpdateMealDailyPlanGWRequestV1Impl,
+  ): void {
     const entries = request.mealDailyPlan.entries;
     const throwInvalid = (message: string) => {
       throw new BadRequestException(message)
