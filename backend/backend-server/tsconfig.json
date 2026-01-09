@@ -58,6 +58,12 @@
       
       "@mealz/backend-meals-named-service-api": ["src/domains/meals/services/named/service-api"],
       "@mealz/backend-meals-named-gateway-api": ["src/domains/meals/services/named/gateway-api"],
+
+      "@mealz/backend-hydration-daily-plan-service-api": ["src/domains/hydration/services/daily-plan/service-api"],
+      "@mealz/backend-hydration-daily-plan-gateway-api": ["src/domains/hydration/services/daily-plan/gateway-api"],
+
+      "@mealz/backend-hydration-log-service-api": ["src/domains/hydration/services/log/service-api"],
+      "@mealz/backend-hydration-log-gateway-api": ["src/domains/hydration/services/log/gateway-api"],
     
       "@mealz/backend-telegram-common": ["src/domains/telegram/common"],
       "@mealz/backend-telegram-bot-service-api": ["src/domains/telegram/services/bot/service-api"],

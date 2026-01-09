@@ -8,7 +8,7 @@ import {
 } from '@mealz/backend-meals-daily-plan-service-api';
 
 import {
-  MealsDailyPlanV1APIReadManyParamsImpl,
+  ReadMealDailyPlansQueryParamsV1Impl,
   ReadMealDailyPlansGWResponseV1Impl,
   CreateMealDailyPlanGWRequestV1Impl,
   CreateMealDailyPlanGWResponseV1Impl,
@@ -26,7 +26,7 @@ export class MealsDailyPlanGWService {
   ) {}
 
   public async readManyV1(
-    gwParams: MealsDailyPlanV1APIReadManyParamsImpl,
+    gwParams: ReadMealDailyPlansQueryParamsV1Impl,
     userId: string,
     context: Context,
   ): Promise<ReadMealDailyPlansGWResponseV1Impl> {
@@ -34,12 +34,14 @@ export class MealsDailyPlanGWService {
       userId,
       limit: gwParams.limit,
     };
-    const response = await this.mealsDailyPlanTransporter.readManyMealDailyPlansV1(
-      request,
-      context,
-    );
+    const { mealDailyPlans} = await this
+      .mealsDailyPlanTransporter
+      .readManyMealDailyPlansV1(
+        request,
+        context,
+      );
     return {
-      mealDailyPlans: response.mealDailyPlans.map(mealDailyPlan => {
+      mealDailyPlans: mealDailyPlans.map(mealDailyPlan => {
         return this.gwMealDailyPlanMapper.fromMealDailyPlan(mealDailyPlan);
       }),
     };

@@ -15,6 +15,7 @@ import {
   UsersDomainModule,
   IngredientsDomainModule,
   MealsDomainModule,
+  HydrationDomainModule,
   TelegramDomainModule,
   AdminDomainModule,
 } from './domains';
@@ -27,6 +28,7 @@ import { getServeStaticModule } from './web-app';
     UsersDomainModule,
     IngredientsDomainModule,
     MealsDomainModule,
+    HydrationDomainModule,
     TelegramDomainModule,
     AdminDomainModule,
   ],

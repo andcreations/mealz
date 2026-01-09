@@ -2,16 +2,12 @@ import { URLBuilder } from '@andcreations/common';
 import { ifDefined } from '@mealz/backend-shared';
 import { arrayToQueryParam } from '@mealz/backend-gateway-api';
 
+import { ReadManyUserMealsQueryParamsV1 } from './dtos';
+
 export const MEALS_USER_V1_URL = '/api/v1/meals/user';
 
-export interface MealsUserV1APIReadManyParams {
-  lastId?: string;
-  limit: number;
-  typeIds?: string[];
-}
-
 export interface MealsUserV1APIURL {
-  readManyV1: (params: MealsUserV1APIReadManyParams) => string;
+  readManyV1: (params: ReadManyUserMealsQueryParamsV1) => string;
   upsertV1: () => string;
   deleteByTypeV1: (typeId: string) => string;
 }
@@ -23,7 +19,7 @@ export class MealsUserV1API {
      * @param params Query parameters.
      * @response ReadManyUserMealsGWResponseV1
      */
-    readManyV1: (params: MealsUserV1APIReadManyParams) => {
+    readManyV1: (params: ReadManyUserMealsQueryParamsV1) => {
       return URLBuilder.build(
         `${MEALS_USER_V1_URL}/many`,
         {

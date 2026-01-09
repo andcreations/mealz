@@ -1,1 +1,1 @@
-export * from './CreateMealDailyPlanGWRequestV1Validator';
+export * from './MealDailyPlanGWRequestV1Validator';

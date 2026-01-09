@@ -1,1 +1,1 @@
-export * from './ReadIngredientsFromLastGWQueryParamsV1';
+export * from './ReadIngredientsFromLastQueryParamsV1Impl';

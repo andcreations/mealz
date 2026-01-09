@@ -52,7 +52,7 @@ export class MealsDailyPlanCrudService {
       request.mealDailyPlan.id,
       context,
     );
-    if (!existing) {
+    if (!existing || existing.userId !== request.mealDailyPlan.userId) {
       throw new MealDailyPlanByIdNotFoundError(request.mealDailyPlan.id);
     }
     await this.mealsDailyPlanCrudRepository.update(

@@ -1,0 +1,1 @@
+export const HYDRATION_LOG_DB_NAME = 'hydration-log';

@@ -7,7 +7,7 @@ import {
   ReadMealByIdRequestV1,
 } from '@mealz/backend-meals-crud-service-api';
 import {
-  MealsNamedV1APIReadManyFromLastParams,
+  ReadNamedMealsFromLastQueryParamsV1,
 } from '@mealz/backend-meals-named-gateway-api';
 import {
   CreateNamedMealRequestV1,
@@ -65,7 +65,7 @@ export class MealsNamedPlanGWService {
   }
 
   public async readFromLastV1(
-    gwParams: MealsNamedV1APIReadManyFromLastParams,
+    gwParams: ReadNamedMealsFromLastQueryParamsV1,
     userId: string,
     context: Context,
   ): Promise<ReadNamedMealsFromLastGWResponseV1Impl> {

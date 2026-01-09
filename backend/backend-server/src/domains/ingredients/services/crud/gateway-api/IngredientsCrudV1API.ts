@@ -1,17 +1,10 @@
 import { URLBuilder } from '@andcreations/common';
+import { ReadIngredientsFromLastQueryParamsV1 } from './dtos';
 
 export const INGREDIENTS_CRUD_V1_URL = '/api/v1/ingredients/crud';
 
-export interface IngredientsCrudV1APIReadFromLastParams {
-  // Identifier of the last read ingredient.
-  lastId?: string;
-
-  // Number of ingredients to read.
-  limit?: number;
-}
-
 export interface IngredientsCrudV1APIURL {
-  readFromLastV1: (params: IngredientsCrudV1APIReadFromLastParams) => string;
+  readFromLastV1: (params: ReadIngredientsFromLastQueryParamsV1) => string;
 }
 
 export class IngredientsCrudV1API {
@@ -21,7 +14,7 @@ export class IngredientsCrudV1API {
      * @params IngredientsCrudV1APIReadFromLastParams
      * @response ReadIngredientsFromLastGWResponseV1
      */
-    readFromLastV1: (params: IngredientsCrudV1APIReadFromLastParams) => {
+    readFromLastV1: (params: ReadIngredientsFromLastQueryParamsV1) => {
       return URLBuilder.build(
         `${INGREDIENTS_CRUD_V1_URL}/from-last`,
         { ...params },

@@ -1,1 +1,56 @@
-[]
+- name:
+    en: Cottage cheese 5%
+    pl: Serek wiejski 5%
+  unit: g
+  type: generic
+  product:
+    - brand: Piątnica
+  weight: 100
+  facts:
+    calories: 97
+    carbs: 2
+    sugars: 1.5
+    protein: 11
+    fat:
+      total: 5
+      saturated: 3.5
+      #monounsaturated: -
+      #polyunsaturated: -
+
+- name:
+    en: Cottage cheese protein 3%
+    pl: Serek wiejski wysokobiałkowy 3%
+  unit: g
+  type: generic
+  product:
+    - brand: Piątnica
+  weight: 100
+  facts:
+    calories: 93
+    carbs: 2.4
+    sugars: 2
+    protein: 13
+    fat:
+      total: 3
+      saturated: 2
+      #monounsaturated: -
+      #polyunsaturated: -      
+
+- name:
+    en: Cottage cheese light 3%
+    pl: Serek wiejski lekki 3%
+  unit: g
+  type: generic
+  product:
+    - brand: Piątnica
+  weight: 100
+  facts:
+    calories: 81
+    carbs: 2.4
+    sugars: 2
+    protein: 11
+    fat:
+      total: 3
+      saturated: 2
+      #monounsaturated: -
+      #polyunsaturated: -          

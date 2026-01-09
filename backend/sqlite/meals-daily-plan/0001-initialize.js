@@ -5,7 +5,7 @@ async function up(db) {
       user_id TEXT NOT NULL,
       details_version INTEGER NOT NULL,
       details BLOB NOT NULL,
-      createdAt INTEGER NOT NULL
+      created_at INTEGER NOT NULL
     );
   `);
   await db.run(`

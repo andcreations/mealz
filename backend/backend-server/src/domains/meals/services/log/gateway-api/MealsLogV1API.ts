@@ -1,27 +1,16 @@
 import { URLBuilder } from '@andcreations/common';
 
+import {
+  ReadMealLogsByDateRangeQueryParamsV1,
+  SummarizeMealLogQueryParamsV1,
+} from './dtos';
+
 export const MEALS_LOG_V1_URL = '/api/v1/meals/log';
-
-export interface MealsLogV1APISummarizeParams {
-  // Date from which to summarize the meal logs
-  fromDate: number;
-
-  // Date to which to summarize the meal logs
-  toDate: number;
-}
-
-export interface MealsLogV1APIReadByDateRangeParams {
-  // Date from which to read the meal logs
-  fromDate: number;
-
-  // Date to which to read the meal logs
-  toDate: number;
-}
 
 export interface MealsLogV1APIURL {
   logMealV1: () => string;
-  summarizeV1: (params: MealsLogV1APISummarizeParams) => string;
-  readByDateRangeV1: (params: MealsLogV1APIReadByDateRangeParams) => string;
+  summarizeV1: (params: SummarizeMealLogQueryParamsV1) => string;
+  readByDateRangeV1: (params: ReadMealLogsByDateRangeQueryParamsV1) => string;
 }
 
 export class MealsLogV1API {
@@ -36,9 +25,9 @@ export class MealsLogV1API {
     /**
      * @method GET
      * @params MealsLogV1APISummarizeParams
-     * @response SummarizeMealLogResponseV1
+     * @response SummarizeMealLogGWResponseV1
      */
-    summarizeV1: (params: MealsLogV1APISummarizeParams) => {
+    summarizeV1: (params: SummarizeMealLogQueryParamsV1) => {
       return URLBuilder.build(`${MEALS_LOG_V1_URL}/summary`, { ...params });
     },
 
@@ -47,7 +36,7 @@ export class MealsLogV1API {
      * @params MealsLogV1APIReadByDateRangeParams
      * @response ReadMealLogsByDateRangeResponseV1
      */
-    readByDateRangeV1: (params: MealsLogV1APIReadByDateRangeParams) => {
+    readByDateRangeV1: (params: ReadMealLogsByDateRangeQueryParamsV1) => {
       return URLBuilder.build(
         `${MEALS_LOG_V1_URL}/by-date-range`,
         { ...params },

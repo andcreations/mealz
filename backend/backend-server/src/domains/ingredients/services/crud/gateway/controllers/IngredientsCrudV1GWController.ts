@@ -11,7 +11,7 @@ import {
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
-import { ReadIngredientsFromLastGWQueryParamsV1 } from '../dtos';
+import { ReadIngredientsFromLastGWQueryParamsV1Impl } from '../dtos';
 import { IngredientsCrudV1GWService } from '../services';
 
 @Controller(INGREDIENTS_CRUD_V1_URL)
@@ -24,7 +24,7 @@ export class IngredientsCrudV1GWController {
   @Roles([UserRole.USER, UserRole.ADMIN])
   @Get('from-last')
   public async readFromLastV1(
-    @Query() gwParams: ReadIngredientsFromLastGWQueryParamsV1,
+    @Query() gwParams: ReadIngredientsFromLastGWQueryParamsV1Impl,
     @GWContext() context: Context,
   ): Promise<ReadIngredientsFromLastGWResponseV1> {
     return await this.ingredientsCrudV1GWService.readFromLastV1(
