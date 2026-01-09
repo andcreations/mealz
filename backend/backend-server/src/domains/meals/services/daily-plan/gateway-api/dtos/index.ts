@@ -1,4 +1,3 @@
-export * from './ReadMealDailyPlansGWRequestV1';
 export * from './ReadMealDailyPlansGWResponseV1';
 export * from './CreateMealDailyPlanGWRequestV1';
 export * from './CreateMealDailyPlanGWResponseV1';

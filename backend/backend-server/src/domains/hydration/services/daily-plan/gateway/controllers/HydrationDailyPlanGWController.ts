@@ -8,8 +8,12 @@ import {
 } from '@mealz/backend-hydration-daily-plan-gateway-api';
 
 import { 
+  HydrationDailyPlanV1APIReadManyParamsImpl,
+  ReadHydrationDailyPlansGWResponseV1Impl,
   CreateHydrationDailyPlanGWRequestV1Impl,
   CreateHydrationDailyPlanGWResponseV1Impl,
+  UpdateHydrationDailyPlanGWRequestV1Impl,
+  UpdateHydrationDailyPlanGWResponseV1Impl,
 } from '../dtos';
 import { HydrationDailyPlanGWRequestV1Validator } from '../validators';
 import { HydrationDailyPlanGWService } from '../services';
@@ -22,6 +26,21 @@ export class HydrationDailyPlanGWController {
 
   @Auth()
   @Roles([UserRole.USER, UserRole.ADMIN])
+  @Get('many')
+  public async readManyV1(
+    @Query() gwParams: HydrationDailyPlanV1APIReadManyParamsImpl,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<ReadHydrationDailyPlansGWResponseV1Impl> {
+    return await this.hydrationDailyPlanGWService.readManyV1(
+      gwParams,
+      gwUser.id,
+      context,
+    );
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
   @Post('')
   public async createV1(
     @Body() gwRequest: CreateHydrationDailyPlanGWRequestV1Impl,
@@ -30,6 +49,24 @@ export class HydrationDailyPlanGWController {
   ): Promise<CreateHydrationDailyPlanGWResponseV1Impl> {
     HydrationDailyPlanGWRequestV1Validator.validate(gwRequest);
     return await this.hydrationDailyPlanGWService.createV1(
+      gwRequest,
+      gwUser.id,
+      context,
+    );
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Put('/:hydrationDailyPlanId')
+  public async updateV1(
+    @Param('hydrationDailyPlanId') hydrationDailyPlanId: string,
+    @Body() gwRequest: UpdateHydrationDailyPlanGWRequestV1Impl,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<UpdateHydrationDailyPlanGWResponseV1Impl> {
+    HydrationDailyPlanGWRequestV1Validator.validate(gwRequest);
+    return await this.hydrationDailyPlanGWService.updateV1(
+      hydrationDailyPlanId,
       gwRequest,
       gwUser.id,
       context,

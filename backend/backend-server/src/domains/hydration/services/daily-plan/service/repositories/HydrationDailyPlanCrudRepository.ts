@@ -33,6 +33,28 @@ export class HydrationDailyPlanCrudRepository {
     private readonly idGenerator: IdGenerator,
   ) {}
 
+
+  public async readMany(
+    userId: string,
+    limit: number,
+    context: Context,
+  ): Promise<HydrationDailyPlan[]> {
+    const query: Where<HydrationDailyPlanDBEntity> = {
+      user_id: { $eq: userId },
+    };
+    const entities = await this.repository.find(
+      query,
+      { 
+        limit,
+        sort: [
+          { createdAt: 'desc' },
+        ],
+      },
+      context,
+    );
+    return entities.map(entity => this.mapper.fromEntity(entity));
+  }
+
   public async findById(
     hydrationDailyPlanId: string,
     context: Context,

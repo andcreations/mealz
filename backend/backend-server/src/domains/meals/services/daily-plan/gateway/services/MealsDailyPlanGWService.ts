@@ -21,8 +21,8 @@ import { GWMealDailyPlanMapper } from './GWMealDailyPlanMapper';
 export class MealsDailyPlanGWService {
 
   public constructor(
-    private readonly transporter: MealsDailyPlanTransporter,
-    private readonly mapper: GWMealDailyPlanMapper,
+    private readonly mealsDailyPlanTransporter: MealsDailyPlanTransporter,
+    private readonly gwMealDailyPlanMapper: GWMealDailyPlanMapper,
   ) {}
 
   public async readManyV1(
@@ -34,13 +34,15 @@ export class MealsDailyPlanGWService {
       userId,
       limit: gwParams.limit,
     };
-    const response = await this.transporter.readManyMealDailyPlansV1(
-      request,
-      context,
-    );
+    const { mealDailyPlans} = await this
+      .mealsDailyPlanTransporter
+      .readManyMealDailyPlansV1(
+        request,
+        context,
+      );
     return {
-      mealDailyPlans: response.mealDailyPlans.map(mealDailyPlan => {
-        return this.mapper.fromMealDailyPlan(mealDailyPlan);
+      mealDailyPlans: mealDailyPlans.map(mealDailyPlan => {
+        return this.gwMealDailyPlanMapper.fromMealDailyPlan(mealDailyPlan);
       }),
     };
   }
@@ -50,12 +52,12 @@ export class MealsDailyPlanGWService {
     context: Context,
   ): Promise<CreateMealDailyPlanGWResponseV1Impl> {
     const request: CreateMealDailyPlanRequestV1 = {
-      mealDailyPlan: this.mapper.fromGWMealDailyPlanForCreation(
+      mealDailyPlan: this.gwMealDailyPlanMapper.fromGWMealDailyPlanForCreation(
         userId,
         gwRequest.mealDailyPlan,
       ),
     };
-    const { id } = await this.transporter.createMealDailyPlanV1(
+    const { id } = await this.mealsDailyPlanTransporter.createMealDailyPlanV1(
       request,
       context,
     );
@@ -69,13 +71,13 @@ export class MealsDailyPlanGWService {
     context: Context,
   ): Promise<UpdateMealDailyPlanGWResponseV1Impl> {
     const request: UpdateMealDailyPlanRequestV1 = {
-      mealDailyPlan: this.mapper.fromGWMealDailyPlanForUpdate(
+      mealDailyPlan: this.gwMealDailyPlanMapper.fromGWMealDailyPlanForUpdate(
         mealDailyPlanId,
         userId,
         gwRequest.mealDailyPlan,
       ),
     };
-    await this.transporter.updateMealDailyPlanV1(
+    await this.mealsDailyPlanTransporter.updateMealDailyPlanV1(
       request,
       context,
     );

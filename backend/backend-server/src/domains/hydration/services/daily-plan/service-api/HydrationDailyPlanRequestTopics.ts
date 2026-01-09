@@ -5,6 +5,10 @@ import {
 } from './domain-and-service';
 
 export class HydrationDailyPlanRequestTopics {
+  public static readonly ReadManyHydrationDailyPlansV1 = topic(
+    'readManyHydrationDailyPlans',
+    'v1',
+  );
   public static readonly CreateHydrationDailyPlanV1 = topic(
     'createHydrationDailyPlan',
     'v1',

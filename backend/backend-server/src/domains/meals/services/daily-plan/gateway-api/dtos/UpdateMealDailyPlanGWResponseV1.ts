@@ -1,2 +1,1 @@
-export interface UpdateMealDailyPlanGWResponseV1 {
-}
+export interface UpdateMealDailyPlanGWResponseV1 {}

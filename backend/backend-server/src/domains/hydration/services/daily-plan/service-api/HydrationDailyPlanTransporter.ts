@@ -12,6 +12,8 @@ import {
   HydrationDailyPlanRequestTopics,
  } from './HydrationDailyPlanRequestTopics';
 import { 
+  ReadManyHydrationDailyPlansRequestV1,
+  ReadManyHydrationDailyPlansResponseV1,
   CreateHydrationDailyPlanRequestV1,
   CreateHydrationDailyPlanResponseV1,
   UpdateHydrationDailyPlanRequestV1,
@@ -23,6 +25,18 @@ export class HydrationDailyPlanTransporter {
     @Inject(HYDRATION_DAILY_PLAN_REQUEST_TRANSPORTER_TOKEN)
     private readonly transporter: RequestTransporter,
   ) {}
+
+  public async readManyHydrationDailyPlansV1(
+    request: ReadManyHydrationDailyPlansRequestV1,
+    context: Context,
+  ): Promise<ReadManyHydrationDailyPlansResponseV1> {
+    return this.transporter.sendRequest<
+      ReadManyHydrationDailyPlansRequestV1, ReadManyHydrationDailyPlansResponseV1
+    >(
+      HydrationDailyPlanRequestTopics.ReadManyHydrationDailyPlansV1,
+      request, context,
+    );
+  }
 
   public async createHydrationDailyPlanV1(
     request: CreateHydrationDailyPlanRequestV1,
