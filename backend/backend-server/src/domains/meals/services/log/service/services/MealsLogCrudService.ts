@@ -205,30 +205,22 @@ export class MealsLogCrudService {
     request: LogMealRequestV1,
     context: Context,
   ): Promise<LogMealResponseV1> {
-    const latest = await this.mealsLogCrudRepository.readLatestByUserId(
-      request.userId,
-      context,
-    );
     const now = Date.now();
 
     let update = false;
-    // update existing meal log?
-    if (latest) {
-      const FORMAT = 'yyyy-MM-dd';
-      const latestDay = DateTime.fromMillis(latest.loggedAt)
-        .setZone(request.timeZone)
-        .toFormat(FORMAT);
-      const nowDay = DateTime.fromMillis(now)
-        .setZone(request.timeZone)
-        .toFormat(FORMAT);
+    let updateMealLogId: string | undefined;
 
-      // update if it's the same day and the same meal
-      if (
-        latestDay === nowDay &&
-        latest.dailyPlanMealName === request.dailyPlanMealName
-      ) {
-        update = true;
-      }
+    const todaysMealLogs = await this.readTodaysMealsLogs(
+      request.userId,
+      request.timeZone,
+      context,
+    );
+    const index = todaysMealLogs.findIndex(log => {
+      return log.dailyPlanMealName === request.dailyPlanMealName;
+    });
+    if (index !== -1) {
+      update = true;
+      updateMealLogId = todaysMealLogs[index].id;
     }
 
     // update
@@ -237,10 +229,10 @@ export class MealsLogCrudService {
         ...context,
         userId: request.userId,
         meal: request.meal,
-        latest,
+        mealLogId: updateMealLogId,
       });
       await this.upsertMealLog(
-        latest.id,
+        updateMealLogId,
         request.userId,
         now,
         request.meal,
@@ -248,7 +240,7 @@ export class MealsLogCrudService {
         context,
       );
       return {
-        id: latest.id,
+        id: updateMealLogId,
         status: LogMealResponseStatusV1.Updated,
       };
     }
@@ -270,5 +262,30 @@ export class MealsLogCrudService {
       id,
       status: LogMealResponseStatusV1.Created,
     };
+  }
+
+  private async readTodaysMealsLogs(
+    userId: string,
+    timeZone: string,
+    context: Context,
+  ): Promise<MealLog[]> {
+    const now = Date.now();
+    const fromDate = DateTime
+      .fromMillis(now)
+      .setZone(timeZone)
+      .startOf('day')
+      .toMillis();
+    const toDate = DateTime
+      .fromMillis(now)
+      .setZone(timeZone)
+      .endOf('day')
+      .toMillis();
+    const logs = await this.mealsLogCrudRepository.readByUserIdAndDateRange(
+      userId,
+      fromDate,
+      toDate,
+      context,
+    );
+    return logs;
   }
 }

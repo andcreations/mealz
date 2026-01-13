@@ -54,6 +54,23 @@ export class MealsLogCrudRepository {
     );
     return this.mapper.fromEntity(entity);
   }
+
+  public async readByUserIdAndDateRange(
+    userId: string,
+    fromDate: number,
+    toDate: number,
+    context: Context,
+  ): Promise<MealLog[]> {
+    const query: Where<MealLogDBEntity> = {
+      user_id: { $eq: userId },
+      logged_at: {
+        $gte: fromDate,
+        $lte: toDate,
+      },
+    };
+    const entities = await this.repository.find(query, {}, context);
+    return entities.map(entity => this.mapper.fromEntity(entity));
+  }
   
   public async create(
     mealLog: Omit<MealLog, 'id'>,
