@@ -14,3 +14,12 @@ export function createTranslation(translations: Translations): TranslateFunc {
     return format(translations[key] ?? key, values || []);
   };
 }
+
+export function randomKeyByPrefix(
+  translations: Translations,
+  prefix: string,
+): string {
+  const keys = Object.keys(translations).filter(key => key.startsWith(prefix));
+  const index = Math.round(Math.random() * 80777);
+  return keys[index % keys.length];
+}

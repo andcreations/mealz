@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { getStrEnv } from '../env';
 
 export function secondsToMs(seconds: number): number {
@@ -18,4 +19,22 @@ export function daysToMs(days: number): number {
 
 export function resolveTimeZone(): string {
   return getStrEnv('MEALZ_TIME_ZONE', 'UTC');
+}
+
+export function todayRange(timeZone: string): {
+  fromDate: number;
+  toDate: number;
+} {
+  const now = Date.now();
+  const fromDate = DateTime
+    .fromMillis(now)
+    .setZone(timeZone)
+    .startOf('day')
+    .toMillis();
+  const toDate = DateTime
+    .fromMillis(now)
+    .setZone(timeZone)
+    .endOf('day')
+    .toMillis();
+  return { fromDate, toDate };
 }

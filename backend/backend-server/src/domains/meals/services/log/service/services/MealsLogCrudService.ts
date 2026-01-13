@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DateTime } from 'luxon';
 import { Context } from '@mealz/backend-core';
+import { todayRange } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 import { 
   InternalError,
@@ -269,17 +269,7 @@ export class MealsLogCrudService {
     timeZone: string,
     context: Context,
   ): Promise<MealLog[]> {
-    const now = Date.now();
-    const fromDate = DateTime
-      .fromMillis(now)
-      .setZone(timeZone)
-      .startOf('day')
-      .toMillis();
-    const toDate = DateTime
-      .fromMillis(now)
-      .setZone(timeZone)
-      .endOf('day')
-      .toMillis();
+    const { fromDate, toDate } = todayRange(timeZone);
     const logs = await this.mealsLogCrudRepository.readByUserIdAndDateRange(
       userId,
       fromDate,
