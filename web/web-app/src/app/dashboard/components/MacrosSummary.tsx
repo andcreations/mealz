@@ -17,25 +17,29 @@ export function MacrosSummary(props: MacrosSummaryProps) {
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Calories}
         amount={props.macrosSummary.calories}
-        goal={props.goals?.calories}
+        goalFrom={props.goals?.caloriesFrom}
+        goalTo={props.goals?.caloriesTo}
         unit='kcal'
       />
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Carbs}
         amount={props.macrosSummary.carbs}
-        goal={props.goals?.carbs}
+        goalFrom={props.goals?.carbsFrom}
+        goalTo={props.goals?.carbsTo}
         unit='g'
       />
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Protein}
         amount={props.macrosSummary.protein}
-        goal={props.goals?.protein}
+        goalFrom={props.goals?.proteinFrom}
+        goalTo={props.goals?.proteinTo}
         unit='g'
       />
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Fat}
         amount={props.macrosSummary.fat}
-        goal={props.goals?.fat}
+        goalFrom={props.goals?.fatFrom}
+        goalTo={props.goals?.fatTo}
         unit='g'
       />
     </div>

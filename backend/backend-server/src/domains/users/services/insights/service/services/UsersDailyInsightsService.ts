@@ -43,6 +43,7 @@ import {
   UserDailyInsightsAmounts, 
   UserDailyInsightsMeal, 
   UserDailyInsightsInput,
+  GoalsTotals,
 } from '../types';
 import { UserDailyInsightPrompt } from '../prompts';
 import {
@@ -288,11 +289,15 @@ export class UsersDailyInsightsService implements OnModuleInit {
       fat: 0,
       protein: 0,
     };
-    const dailyGoals: MealTotals = {
-      calories: 0,
-      carbs: 0,
-      fat: 0,
-      protein: 0,
+    const dailyGoals: GoalsTotals = {
+      caloriesFrom: 0,
+      caloriesTo: 0,
+      carbsFrom: 0,
+      carbsTo: 0,
+      fatFrom: 0,
+      fatTo: 0,
+      proteinFrom: 0,
+      proteinTo: 0,
     };
 
     // meals
@@ -301,10 +306,14 @@ export class UsersDailyInsightsService implements OnModuleInit {
       const { goals } = entry;
 
       // update goals
-      dailyGoals.calories += goals.calories;
-      dailyGoals.carbs += goals.carbs;
-      dailyGoals.fat += goals.fat;
-      dailyGoals.protein += goals.protein;
+      dailyGoals.caloriesFrom += goals.caloriesFrom;
+      dailyGoals.caloriesTo += goals.caloriesTo;
+      dailyGoals.carbsFrom += goals.carbsFrom;
+      dailyGoals.carbsTo += goals.carbsTo;
+      dailyGoals.fatFrom += goals.fatFrom;
+      dailyGoals.fatTo += goals.fatTo;
+      dailyGoals.proteinFrom += goals.proteinFrom;
+      dailyGoals.proteinTo += goals.proteinTo;
 
       // find meal
       const mealLog = data.mealLogs.find(mealLog => {
@@ -335,13 +344,17 @@ export class UsersDailyInsightsService implements OnModuleInit {
         skipped: false,
         amounts: {
           calories: mealTotals.calories,
-          caloriesGoal: goals.calories,
+          caloriesGoalFrom: goals.caloriesFrom,
+          caloriesGoalTo: goals.caloriesTo,
           carbs: mealTotals.carbs,
-          carbsGoal: goals.carbs,
+          carbsGoalFrom: goals.carbsFrom,
+          carbsGoalTo: goals.carbsTo,
           fat: mealTotals.fat,
-          fatGoal: goals.fat,
+          fatGoalFrom: goals.fatFrom,
+          fatGoalTo: goals.fatTo,
           protein: mealTotals.protein,
-          proteinGoal: goals.protein,
+          proteinGoalFrom: goals.proteinFrom,
+          proteinGoalTo: goals.proteinTo,
         },
       });
 
@@ -355,13 +368,17 @@ export class UsersDailyInsightsService implements OnModuleInit {
     // overall goals
     const overallAmounts: UserDailyInsightsAmounts = {
       calories: dailyTotals.calories,
-      caloriesGoal: dailyGoals.calories,
+      caloriesGoalFrom: dailyGoals.caloriesFrom,
+      caloriesGoalTo: dailyGoals.caloriesTo,
       carbs: dailyTotals.carbs,
-      carbsGoal: dailyGoals.carbs,
+      carbsGoalFrom: dailyGoals.carbsFrom,
+      carbsGoalTo: dailyGoals.carbsTo,
       fat: dailyTotals.fat,
-      fatGoal: dailyGoals.fat,
+      fatGoalFrom: dailyGoals.fatFrom,
+      fatGoalTo: dailyGoals.fatTo,
       protein: dailyTotals.protein,
-      proteinGoal: dailyGoals.protein,
+      proteinGoalFrom: dailyGoals.proteinFrom,
+      proteinGoalTo: dailyGoals.proteinTo,
     };
 
     return { meals, overallAmounts };
@@ -371,6 +388,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
     meals: UserDailyInsightsMeal[],
     overallAmounts: UserDailyInsightsAmounts,
   ): ChunkedUserNotification {
+    // chunks
     const chunks: ChunkedUserNotificationChunk[] = [];
     const bold = (text: string) => {
       chunks.push({
@@ -400,26 +418,26 @@ export class UsersDailyInsightsService implements OnModuleInit {
     // amount
     const amount = (
       amount: number,
-      goal: number,
+      goalFrom: number | undefined,
+      goalTo: number | undefined,
       unit: string,
       padding: number,
     ) => {
-      const percent = (amount / goal) * 100;
+      // amount
       normal(`${amount.toFixed()} ${unit}`);
-      newLine();
-      code(' '.repeat(padding))
-      normal(
-        this.translate('amounts', percent.toFixed(), goal.toFixed(), unit)
-      );
-      const PERCENT_MARGIN_LOW = 5;
-      const PERCENT_MARGIN_HIGH = 15;
 
-      const percentDiff = Math.abs(percent - 100);
-      if (percentDiff > PERCENT_MARGIN_HIGH) {
-        normal(' ‼️');
-      }
-      else if (percentDiff > PERCENT_MARGIN_LOW) {
-        normal(' ❗');
+      // goal
+      if (goalFrom != null && goalTo != null) {
+        newLine();
+        code(' '.repeat(padding))
+        normal(
+          this.translate('amounts', goalFrom.toFixed(), goalTo.toFixed(), unit)
+        );
+
+        const outsideGoal = amount < goalFrom || amount > goalTo;
+        if (outsideGoal) {
+          normal(' 👈');
+        }
       }
     }
 
@@ -428,7 +446,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
     code(caloriesStr);
     amount(
       overallAmounts.calories,
-      overallAmounts.caloriesGoal,
+      overallAmounts.caloriesGoalFrom,
+      overallAmounts.caloriesGoalTo,
       'kcal',
       caloriesStr.length,
     );
@@ -439,7 +458,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
     code(carbsStr);
     amount(
       overallAmounts.carbs,
-      overallAmounts.carbsGoal,
+      overallAmounts.carbsGoalFrom,
+      overallAmounts.carbsGoalTo,
       'g',
       carbsStr.length,
     );
@@ -450,7 +470,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
     code(proteinStr);
     amount(
       overallAmounts.protein,
-      overallAmounts.proteinGoal,
+      overallAmounts.proteinGoalFrom,
+      overallAmounts.proteinGoalTo,
       'g',
       proteinStr.length,
     );
@@ -461,7 +482,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
     code(fatStr);
     amount(
       overallAmounts.fat,
-      overallAmounts.fatGoal,
+      overallAmounts.fatGoalFrom,
+      overallAmounts.fatGoalTo,
       'g',
       fatStr.length,
     );
@@ -483,7 +505,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
       if (!meal.skipped) {
         amount(
           meal.amounts.calories,
-          meal.amounts.caloriesGoal,
+          meal.amounts.caloriesGoalFrom,
+          meal.amounts.caloriesGoalTo,
           'kcal',
           mealNameStr.length,
         );

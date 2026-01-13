@@ -36,16 +36,24 @@ export class MealsDailyPlanService {
     }
 
     const goals: GWMealDailyPlanGoals = {
-      calories: 0,
-      protein: 0,
-      carbs: 0,
-      fat: 0,
+      caloriesFrom: 0,
+      caloriesTo: 0,
+      proteinFrom: 0,
+      proteinTo: 0,
+      carbsFrom: 0,
+      carbsTo: 0,
+      fatFrom: 0,
+      fatTo: 0,
     };
     plan.entries.forEach(entry => {
-      goals.calories += entry.goals.calories;
-      goals.protein += entry.goals.protein;
-      goals.carbs += entry.goals.carbs;
-      goals.fat += entry.goals.fat;
+      goals.caloriesFrom += entry.goals.caloriesFrom;
+      goals.caloriesTo += entry.goals.caloriesTo;
+      goals.proteinFrom += entry.goals.proteinFrom;
+      goals.proteinTo += entry.goals.proteinTo;
+      goals.carbsFrom += entry.goals.carbsFrom;
+      goals.carbsTo += entry.goals.carbsTo;
+      goals.fatFrom += entry.goals.fatFrom;
+      goals.fatTo += entry.goals.fatTo;
     });
     return goals;
   }
@@ -61,16 +69,24 @@ export class MealsDailyPlanService {
     }
     const entries = this.getEntriesByNow(plan);
     const goals: GWMealDailyPlanGoals = {
-      calories: 0,
-      protein: 0,
-      carbs: 0,
-      fat: 0,
+      caloriesFrom: 0,
+      caloriesTo: 0,
+      proteinFrom: 0,
+      proteinTo: 0,
+      carbsFrom: 0,
+      carbsTo: 0,
+      fatFrom: 0,
+      fatTo: 0,
     };
     entries.forEach(entry => {
-      goals.calories += entry.goals.calories;
-      goals.protein += entry.goals.protein;
-      goals.carbs += entry.goals.carbs;
-      goals.fat += entry.goals.fat;
+      goals.caloriesFrom += entry.goals.caloriesFrom;
+      goals.caloriesTo += entry.goals.caloriesTo;
+      goals.proteinFrom += entry.goals.proteinFrom;
+      goals.proteinTo += entry.goals.proteinTo;
+      goals.carbsFrom += entry.goals.carbsFrom;
+      goals.carbsTo += entry.goals.carbsTo;
+      goals.fatFrom += entry.goals.fatFrom;
+      goals.fatTo += entry.goals.fatTo;
     });
     return goals;
   }

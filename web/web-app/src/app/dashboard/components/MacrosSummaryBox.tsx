@@ -14,32 +14,18 @@ export enum MacrosSummaryBoxType {
 export interface MacrosSummaryBoxProps {
   type: MacrosSummaryBoxType;
   amount: number;
-  goal?: number;
+  goalFrom?: number;
+  goalTo?: number;
   unit: string;
 }
 
-const GOAL_ERROR_PERCENTAGE = 10;
-
 export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
-  const { type, amount, goal, unit } = props;
+  const { type, amount, goalFrom, goalTo, unit } = props;
   const translate = useTranslations(MacrosSummaryBoxTranslations);
 
-  // TODO How to display the difference between the amount and the goal?
-  const sign = (value: number) => {
-    if (value === 0) {
-      return '';
-    }
-    return value > 0 ? '+' : '';
-  }
-  const toGoal = goal ? goal - amount : undefined;
-  const toGoalStr = toGoal
-    ? sign(toGoal) + toGoal.toFixed(0)
-    : undefined;
-
   let goalError = false;
-  if (goal && amount > 0) {
-    const toGoalPercent = Math.abs((goal - amount) / goal * 100);
-    goalError = toGoalPercent > GOAL_ERROR_PERCENTAGE;
+  if (goalFrom && goalTo && amount > 0) {
+    goalError = amount < goalFrom || amount > goalTo;
   }
   if (amount === 0) {
     goalError = true;
@@ -90,14 +76,14 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
           {unit}
         </span>
       </div>
-      { goal &&
+      { goalFrom && goalTo &&
         <>
           <div className={goalLabelClassName}>
             {translate('goal')}
           </div>
           <div className='mealz-macros-summary-box-goal-container'>
             <span className='mealz-macros-summary-box-goal'>
-              {goal.toFixed(0)}
+              {goalFrom.toFixed(0)}-{goalTo.toFixed(0)}
             </span>
             <span className='mealz-macros-summary-box-unit'>
               {unit}

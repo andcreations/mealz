@@ -1,13 +1,25 @@
 export interface GWMealDailyPlanGoals {
-  // Calories goal in kcal
-  calories: number;
+  // Calories from goal in kcal
+  caloriesFrom: number;
 
-  // Protein goal in grams
-  protein: number;
+  // Calories to goal in kcal
+  caloriesTo: number;
 
-  // Carbs goal in grams
-  carbs: number;
+  // Protein from goal in grams
+  proteinFrom: number;
 
-  // Fat goal in grams
-  fat: number;
+  // Protein to goal in grams
+  proteinTo: number;
+
+  // Carbs from goal in grams
+  carbsFrom: number;
+
+  // Carbs to goal in grams
+  carbsTo: number;
+
+  // Fat from goal in grams
+  fatFrom: number;
+
+  // Fat to goal in grams
+  fatTo: number;
 }

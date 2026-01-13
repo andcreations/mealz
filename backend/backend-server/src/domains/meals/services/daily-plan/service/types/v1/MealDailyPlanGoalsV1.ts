@@ -1,13 +1,25 @@
 export class MealDailyPlanGoalsV1 {
-  // Calories goal in kcal
-  public calories: number;
+  // Calories from goal in kcal
+  public caloriesFrom: number;
 
-  // Protein goal in grams
-  public protein: number;
+  // Calories to goal in kcal
+  public caloriesTo: number;
 
-  // Carbs goal in grams
-  public carbs: number;
+  // Protein from goal in grams
+  public proteinFrom: number;
 
-  // Fat goal in grams
-  public fat: number;
+  // Protein to goal in grams
+  public proteinTo: number;
+
+  // Carbs from goal in grams
+  public carbsFrom: number;
+
+  // Carbs to goal in grams
+  public carbsTo: number;
+
+  // Fat from goal in grams
+  public fatFrom: number;
+
+  // Fat to goal in grams
+  public fatTo: number;
 }

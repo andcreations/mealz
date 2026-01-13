@@ -22,10 +22,14 @@ export type MealDailyPlanForBuffer = Omit<MealDailyPlan,
 export class MealDailyPlanDetailsV1Mapper {
   private toGoalsV1(goals: MealDailyPlanGoals): MealDailyPlanGoalsV1 {
     return {
-      calories: goals.calories,
-      protein: goals.protein,
-      carbs: goals.carbs,
-      fat: goals.fat,
+      caloriesFrom: goals.caloriesFrom,
+      caloriesTo: goals.caloriesTo,
+      proteinFrom: goals.proteinFrom,
+      proteinTo: goals.proteinTo,
+      carbsFrom: goals.carbsFrom,
+      carbsTo: goals.carbsTo,
+      fatFrom: goals.fatFrom,
+      fatTo: goals.fatTo,
     };
   }
   private toEntryV1(entry: MealDailyPlanEntry): MealDailyPlanEntryDetailsV1 {
@@ -49,10 +53,14 @@ export class MealDailyPlanDetailsV1Mapper {
 
   private fromGoalsV1(goals: MealDailyPlanGoalsV1): MealDailyPlanGoals {
     return {
-      calories: goals.calories,
-      protein: goals.protein,
-      carbs: goals.carbs,
-      fat: goals.fat,
+      caloriesFrom: goals.caloriesFrom,
+      caloriesTo: goals.caloriesTo,
+      proteinFrom: goals.proteinFrom,
+      proteinTo: goals.proteinTo,
+      carbsFrom: goals.carbsFrom,
+      carbsTo: goals.carbsTo,
+      fatFrom: goals.fatFrom,
+      fatTo: goals.fatTo,
     };
   }
 

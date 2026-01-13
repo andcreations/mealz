@@ -2,7 +2,10 @@ import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import { GWUserMeal } from '@mealz/backend-meals-user-gateway-api';
-import { GWMealDailyPlan } from '@mealz/backend-meals-daily-plan-gateway-api';
+import { 
+  GWMealDailyPlan,
+  GWMealDailyPlanGoals,
+} from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../../common';
 import { Log } from '../../../log';
@@ -87,6 +90,14 @@ export function MealPlanner() {
   };
   const clearDirty = () => {
     isDirty.current = false;
+  };
+
+  const caloriesFromGoals = (goals?: GWMealDailyPlanGoals): string => {
+    if (!goals) {
+      return '';
+    }
+    const avg = Math.round((goals.caloriesFrom + goals.caloriesTo) / 2);
+    return avg.toString();
   };
 
   // initial read
@@ -210,6 +221,7 @@ export function MealPlanner() {
         mealDailyPlan,
         Date.now(),
       );
+      const caloriesStr = caloriesFromGoals(entry?.goals) ?? '';
       const dailyPlanMealNameByTime = mealsDailyPlanService.getMealName(
         mealDailyPlan,
         Date.now(),
@@ -218,7 +230,7 @@ export function MealPlanner() {
       if (!userMeal) {
         return {
           ingredients: [],
-          caloriesStr: entry?.goals.calories.toString() ?? '',
+          caloriesStr,
           dailyPlanMealName: dailyPlanMealNameByTime,
           dailyPlanMealCalories: '',
         };
@@ -232,7 +244,6 @@ export function MealPlanner() {
         userMeal.metadata?.mealName !== entry?.mealName &&
         !userMeal.metadata?.fixedMealName
       ) {
-        const caloriesStr = entry?.goals.calories.toString() ?? '';
         return {
           ingredients: [],
           caloriesStr,
@@ -245,13 +256,12 @@ export function MealPlanner() {
       const ingredients = mealMapper.toMealPlannerIngredients(
         userMeal.meal.ingredients
       );     
-      const caloriesStr = userMeal.meal.calories?.toString() ?? '';
       return {
         ingredients,
         caloriesStr,
         dailyPlanMealName:
           userMeal.metadata?.mealName ?? dailyPlanMealNameByTime,
-        dailyPlanMealCalories: entry?.goals.calories.toString(),
+        dailyPlanMealCalories: caloriesStr,
       };
     },
 
@@ -384,7 +394,7 @@ export function MealPlanner() {
         fixedMealName: entryByTime.mealName !== mealName,
         ...ifValueDefined<MealPlannerState>(
           'calories',
-          entryByName?.goals.calories.toString(),
+          caloriesFromGoals(entryByName?.goals),
         ),
       });
     },
