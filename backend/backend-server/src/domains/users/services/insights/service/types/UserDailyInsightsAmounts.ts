@@ -1,10 +1,14 @@
 export interface UserDailyInsightsAmounts {
   calories?: number;
-  caloriesGoal?: number
+  caloriesGoalFrom?: number
+  caloriesGoalTo?: number
   carbs?: number
-  carbsGoal?: number
+  carbsGoalFrom?: number
+  carbsGoalTo?: number
   fat?: number
-  fatGoal?: number
+  fatGoalFrom?: number
+  fatGoalTo?: number
   protein?: number
-  proteinGoal?: number
+  proteinGoalFrom?: number
+  proteinGoalTo?: number
 }

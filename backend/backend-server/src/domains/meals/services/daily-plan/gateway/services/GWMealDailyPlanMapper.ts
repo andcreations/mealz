@@ -26,10 +26,14 @@ export class GWMealDailyPlanMapper {
       endMinute: gwEntry.endMinute,
       mealName: gwEntry.mealName,
       goals: {
-        calories: gwEntry.goals.calories,
-        protein: gwEntry.goals.protein,
-        carbs: gwEntry.goals.carbs,
-        fat: gwEntry.goals.fat,
+        caloriesFrom: gwEntry.goals.caloriesFrom,
+        caloriesTo: gwEntry.goals.caloriesTo,
+        proteinFrom: gwEntry.goals.proteinFrom,
+        proteinTo: gwEntry.goals.proteinTo,
+        carbsFrom: gwEntry.goals.carbsFrom,
+        carbsTo: gwEntry.goals.carbsTo,
+        fatFrom: gwEntry.goals.fatFrom,
+        fatTo: gwEntry.goals.fatTo,
       },
     };
   }
@@ -66,10 +70,14 @@ export class GWMealDailyPlanMapper {
     mealDailyPlanGoals: MealDailyPlanGoals,
   ): GWMealDailyPlanGoals {
     return {
-      calories: mealDailyPlanGoals.calories,
-      protein: mealDailyPlanGoals.protein,
-      carbs: mealDailyPlanGoals.carbs,
-      fat: mealDailyPlanGoals.fat,
+      caloriesFrom: mealDailyPlanGoals.caloriesFrom,
+      caloriesTo: mealDailyPlanGoals.caloriesTo,
+      proteinFrom: mealDailyPlanGoals.proteinFrom,
+      proteinTo: mealDailyPlanGoals.proteinTo,
+      carbsFrom: mealDailyPlanGoals.carbsFrom,
+      carbsTo: mealDailyPlanGoals.carbsTo,
+      fatFrom: mealDailyPlanGoals.fatFrom,
+      fatTo: mealDailyPlanGoals.fatTo,
     };
   }
   private fromMealDailyPlanEntry(

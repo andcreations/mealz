@@ -10,14 +10,13 @@ import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { UserSettingsService } from '../../../user';
-import { MealsDailyPlanService } from '../../../meals';
+import { MealsDailyPlanService, isGoalError } from '../../../meals';
 import { MealCalculator } from '../../services';
 import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealSummaryTranslations } from './MealSummary.translations';
 import { LoaderByStatus, LoaderSize } from '../../../components';
 
 const MAX_CALORIES_DIFFERENCE = 20;
-const GOAL_ERROR_PERCENTAGE = 5;
 const SHOW_FAT_DETAILS = false;
 
 export interface MealSummaryProps {
@@ -91,6 +90,13 @@ export function MealSummary(props: MealSummaryProps) {
       }
       return `(${percentage.toFixed(0)}%)`;
     }
+
+    const goalFactAmount = (from?: number, to?: number) => {
+      if (!from || !to) {
+        return undefined;
+      }
+      return `${from.toFixed(0)}-${to.toFixed(0)}`;
+    }
     
     let row = 1;
     const nextGridRow = () => {
@@ -98,7 +104,7 @@ export function MealSummary(props: MealSummaryProps) {
     }
 
     const createFact = (
-      amount: number | undefined,
+      amount: string | number | undefined,
       unit: string,
       nameKey: string,
       options?: {
@@ -110,6 +116,9 @@ export function MealSummary(props: MealSummaryProps) {
     ) => {
       if (amount === undefined) {
         return [];
+      }
+      if (typeof amount === 'number') {
+        amount = amount.toFixed(0);
       }
       const gridRow = nextGridRow();
       const styles = (column: string) => ({
@@ -131,7 +140,7 @@ export function MealSummary(props: MealSummaryProps) {
           className={`mealz-meal-summary-facts-amount ${commonClassNames}`}
           style={styles('1')}
         >
-          { amount.toFixed(0) }
+          { amount }
         </div>,
         <div
           key={`${nameKey}-unit`}
@@ -180,9 +189,12 @@ export function MealSummary(props: MealSummaryProps) {
     ) => {
       return condition ? createFacts() : [];
     }
-    const ifDiffersFromGoal = (amount: number, goal: number) => {
-      const percent = Math.abs(amount - goal) / goal * 100;
-      return percent > GOAL_ERROR_PERCENTAGE;
+    const ifDiffersFromGoal = (
+      amount: number,
+      goalFrom: number,
+      goalTo: number,
+    ) => {
+      return isGoalError(amount, goalFrom, goalTo);
     }
 
     const difference = props.calories > 0
@@ -209,14 +221,15 @@ export function MealSummary(props: MealSummaryProps) {
       ...factsIf(
         !!goals,
         () => createFact(
-          goals.calories,
+          goalFactAmount(goals.caloriesFrom, goals.caloriesTo),
           'kcal',
           'calories-goal',
           {
             tiny: true,
             highlight: ifDiffersFromGoal(
               summary.total.calories,
-              goals.calories,
+              goals.caloriesFrom,
+              goals.caloriesTo,
             ),
           },
         )
@@ -259,14 +272,15 @@ export function MealSummary(props: MealSummaryProps) {
       ...factsIf(
         !!goals,
         () => createFact(
-          goals.carbs,
+          goalFactAmount(goals.carbsFrom, goals.carbsTo),
           'g',
           'carbs-goal',
           {
             tiny: true,
             highlight: ifDiffersFromGoal(
               summary.total.carbs,
-              goals.carbs,
+              goals.carbsFrom,
+              goals.carbsTo,
             ),
           },
         ),
@@ -294,14 +308,15 @@ export function MealSummary(props: MealSummaryProps) {
       ...factsIf(
         !!goals,
         () => createFact(
-          goals.protein,
+          goalFactAmount(goals.proteinFrom, goals.proteinTo),
           'g',
           'protein-goal',
           {
             tiny: true,
             highlight: ifDiffersFromGoal(
               summary.total.protein,
-              goals.protein,
+              goals.proteinFrom,
+              goals.proteinTo,
             ),
           },
         )
@@ -320,14 +335,15 @@ export function MealSummary(props: MealSummaryProps) {
       ...factsIf(
         !!goals,
         () => createFact(
-          goals.fat,
+          goalFactAmount(goals.fatFrom, goals.fatTo),
           'g',
           'fat-goal',
           {
             tiny: true,
             highlight: ifDiffersFromGoal(
               summary.total.totalFat,
-              goals.fat,
+              goals.fatFrom,
+              goals.fatTo,
             ),
           },
         )

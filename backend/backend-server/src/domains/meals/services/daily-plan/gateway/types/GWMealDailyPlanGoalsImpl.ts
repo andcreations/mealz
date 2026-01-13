@@ -11,26 +11,52 @@ import {
 
 export class GWMealDailyPlanGoalsImpl implements GWMealDailyPlanGoals {
   @ApiProperty({
-    description: 'Calories goal in kcal',
+    description: 'Calories from goal in kcal',
   })
   @IsCalories()
-  public calories: number;
+  public caloriesFrom: number;
 
   @ApiProperty({
-    description: 'Protein goal in grams',
+    description: 'Calories to goal in kcal',
+  })
+  @IsCalories()
+  public caloriesTo: number;
+
+  @ApiProperty({
+    description: 'Protein from goal in grams',
   })
   @IsProtein()
-  public protein: number;
+  public proteinFrom: number;
+
 
   @ApiProperty({
-    description: 'Carbs goal in grams',
+    description: 'Protein to goal in grams',
+  })
+  @IsProtein()
+  public proteinTo: number;
+
+  @ApiProperty({
+    description: 'Carbs from goal in grams',
   })
   @IsCarbs()
-  public carbs: number;
+  public carbsFrom: number;
+
 
   @ApiProperty({
-    description: 'Fat goal in grams',
+    description: 'Carbs to goal in grams',
+  })
+  @IsCarbs()
+  public carbsTo: number;
+
+  @ApiProperty({
+    description: 'Fat from goal in grams',
   })
   @IsFat()
-  public fat: number;
+  public fatFrom: number;
+
+  @ApiProperty({
+    description: 'Fat to goal in grams',
+  })
+  @IsFat()
+  public fatTo: number;
 }

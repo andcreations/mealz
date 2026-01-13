@@ -9,8 +9,7 @@ import {
 
 import { useTranslations } from '../../i18n';
 import { useService } from '../../hooks';
-import { GWMealCalculator } from '../../meals';
-import { isGoalError } from '../utils';
+import { GWMealCalculator, isGoalError } from '../../meals';
 import { MealLogTranslations } from './MealLog.translations';
 
 export interface MealLogProps {
@@ -34,7 +33,8 @@ export function MealLog(props: MealLogProps) {
     factKey: string,
     value: number,
     unit: string,
-    goal?: number,
+    goalFrom?: number,
+    goalTo?: number,
   ) => {
     const nameClassNames = classNames(
       'mealz-meal-log-fact-name',
@@ -44,9 +44,10 @@ export function MealLog(props: MealLogProps) {
       'mealz-meal-log-fact-separator',
       `mealz-meal-log-fact-separator-${factKey}`,
     );
+    const goalError = isGoalError(value, goalFrom, goalTo);
     const goalLabelClassName = classNames(
       'mealz-meal-log-fact-goal-label',
-      { 'mealz-meal-log-fact-goal-error': isGoalError(value, goal) },
+      { 'mealz-meal-log-fact-goal-error': goalError },
     );
 
     return (
@@ -59,13 +60,13 @@ export function MealLog(props: MealLogProps) {
           <span>{ value.toFixed() }</span>
           <span className='mealz-meal-log-fact-unit'>{ unit }</span>
         </div>
-        { goal &&
+        { goalFrom && goalTo &&
           <>
             <div className={goalLabelClassName}>
               { translate('goal') }
             </div>
             <div className='mealz-meal-log-fact-goal-value'>
-              <span>{ goal }</span>
+              <span>{ goalFrom.toFixed(0)}-{goalTo.toFixed(0) }</span>
               <span className='mealz-meal-log-fact-unit'>{ unit }</span>
             </div>
           </>
@@ -81,28 +82,32 @@ export function MealLog(props: MealLogProps) {
             'calories',
             gwMacros.current.calories,
             'kcal',
-            goals?.calories,
+            goals?.caloriesFrom,
+            goals?.caloriesTo,
           )
         }
         { renderFact(
             'carbs',
             gwMacros.current.carbs,
             'g',
-            goals?.carbs,
+            goals?.carbsFrom,
+            goals?.carbsTo,
           )
         }
         { renderFact(
             'protein',
             gwMacros.current.protein,
             'g',
-            goals?.protein,
+            goals?.proteinFrom,
+            goals?.proteinTo,
           )
         }
         { renderFact(
             'fat',
             gwMacros.current.fat,
             'g',
-            goals?.fat,
+            goals?.fatFrom,
+            goals?.fatTo,
           )
         }
       </>
