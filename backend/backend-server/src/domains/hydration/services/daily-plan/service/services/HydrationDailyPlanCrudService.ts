@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { VoidTransporterResponse } from '@mealz/backend-transport';
 import { 
+  ReadCurrentHydrationDailyPlanResponseV1,
+  ReadCurrentHydrationDailyPlanRequestV1,
   ReadManyHydrationDailyPlansRequestV1,
   ReadManyHydrationDailyPlansResponseV1,
   CreateHydrationDailyPlanRequestV1, 
@@ -18,6 +20,18 @@ export class HydrationDailyPlanCrudService {
     private readonly crudRepository: HydrationDailyPlanCrudRepository,
   ) {}
 
+
+  public async readCurrentHydrationDailyPlanV1(
+    request: ReadCurrentHydrationDailyPlanRequestV1,
+    context: Context,
+  ): Promise<ReadCurrentHydrationDailyPlanResponseV1> {
+    const hydrationDailyPlan = await this.crudRepository.findByUserId(
+      request.userId,
+      context,
+    );
+    return { hydrationDailyPlan };
+  }
+  
   public async readManyHydrationDailyPlansV1(
     request: ReadManyHydrationDailyPlansRequestV1,
     context: Context,

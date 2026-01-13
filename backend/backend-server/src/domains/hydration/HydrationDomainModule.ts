@@ -8,6 +8,7 @@ import {
   HydrationLogModule,
   HydrationLogGWModule,
 } from './services/log';
+import { HydrationReminderModule } from './services/reminder';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import {
     HydrationDailyPlanGWModule,
     HydrationLogModule,
     HydrationLogGWModule,
+    HydrationReminderModule,
   ],
 })
 export class HydrationDomainModule {}

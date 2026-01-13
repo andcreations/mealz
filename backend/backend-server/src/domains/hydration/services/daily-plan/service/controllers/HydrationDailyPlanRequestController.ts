@@ -5,6 +5,8 @@ import {
   VoidTransporterResponse,
 } from '@mealz/backend-transport';
 import {
+  ReadCurrentHydrationDailyPlanResponseV1,
+  ReadCurrentHydrationDailyPlanRequestV1,
   ReadManyHydrationDailyPlansResponseV1,
   ReadManyHydrationDailyPlansRequestV1,
   HydrationDailyPlanRequestTopics,
@@ -20,6 +22,17 @@ export class HydrationDailyPlanRequestController {
   public constructor(
     private readonly crudService: HydrationDailyPlanCrudService,
   ) {}
+
+
+  @RequestHandler(
+    HydrationDailyPlanRequestTopics.ReadCurrentHydrationDailyPlanV1
+  )
+  public async readCurrentHydrationDailyPlanV1(
+    request: ReadCurrentHydrationDailyPlanRequestV1,
+    context: Context,
+  ): Promise<ReadCurrentHydrationDailyPlanResponseV1> {
+    return this.crudService.readCurrentHydrationDailyPlanV1(request, context);
+  }
 
   @RequestHandler(HydrationDailyPlanRequestTopics.ReadManyHydrationDailyPlansV1)
   public async readManyHydrationDailyPlansV1(

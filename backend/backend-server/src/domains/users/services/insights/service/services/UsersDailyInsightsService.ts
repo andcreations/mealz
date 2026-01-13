@@ -70,7 +70,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
     private readonly mealsLogTransporter: MealsLogTransporter,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsDailyPlanTransporter: MealsDailyPlanTransporter,
-    private readonly usersNotificationsTransporter: UsersNotificationsTransporter,
+    private readonly usersNotificationsTransporter:
+      UsersNotificationsTransporter,
   ) {
     this.translate = createTranslation(UsersDailyInsightsServiceTranslations);
     this.sendNutritionSummary = getBoolEnv(
@@ -167,7 +168,8 @@ export class UsersDailyInsightsService implements OnModuleInit {
   ): Promise<void> {
     const startTime = Date.now();
 
-    const { 
+    // check if we can send messages to the user
+    const {
       canSendMessagesTo,
     } = await this.usersNotificationsTransporter.readUserNotificationsInfoV1(
       { userId: user.id },
@@ -175,7 +177,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
     );
     if (!canSendMessagesTo) {
       this.logger.debug(
-        'User cannot send messages, skipping daily insights generation', 
+        'Cannot send messages to user, skipping daily insights', 
         {
           ...context,
           userId: user.id,

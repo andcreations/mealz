@@ -58,5 +58,4 @@ export function getLogger(): Logger {
     Logger,
   ]
 })
-export class LoggerModule {
-}
+export class LoggerModule {}
