@@ -31,8 +31,8 @@ export class MealDailyPlanDBEntity {
   public details: Buffer;
 
   @DBField({
-    name: 'createdAt',
+    name: 'created_at',
     type: DBFieldType.INTEGER,
   })
-  public createdAt: number;
+  public created_at: number;
 }

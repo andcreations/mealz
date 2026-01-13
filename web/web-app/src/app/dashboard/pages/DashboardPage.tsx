@@ -9,7 +9,12 @@ import {
   DashboardSectionSeparator,
   DashboardSectionTitle,
 } from '../components';
-import { DailyMealsLog, DailySummary, WeeklySummary } from '../sections';
+import { 
+  DailyHydration,
+  DailyMealsLog,
+  DailySummary,
+  WeeklySummary,
+} from '../sections';
 import { DashboardPageTranslations } from './DashboardPage.translations';
 
 export function DashboardPage() {
@@ -29,6 +34,17 @@ export function DashboardPage() {
           toDate={toDate}
         />
       </DashboardSection>
+
+      <DashboardSectionSeparator/>
+      <DashboardSection>
+        <DashboardSectionTitle
+          title={translate('today-hydration-title')}
+        />
+        <DailyHydration
+          fromDate={fromDate}
+          toDate={toDate}
+        />
+      </DashboardSection>      
 
       <DashboardSectionSeparator/>
       <DashboardSection>

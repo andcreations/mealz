@@ -47,7 +47,7 @@ export class HydrationDailyPlanCrudRepository {
       { 
         limit,
         sort: [
-          { createdAt: 'desc' },
+          { created_at: 'desc' },
         ],
       },
       context,
@@ -77,7 +77,7 @@ export class HydrationDailyPlanCrudRepository {
     await this.repository.insert(
       {
         ...entity, 
-        createdAt: Date.now()
+        created_at: Date.now()
       },
       context,
     );

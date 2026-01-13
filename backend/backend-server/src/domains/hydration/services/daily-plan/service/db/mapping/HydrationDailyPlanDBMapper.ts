@@ -18,7 +18,7 @@ export class HydrationDailyPlanDBMapper {
 
   public toEntity(
     hydrationDailyPlan: Omit<HydrationDailyPlan, 'createdAt'>,
-  ): Omit<HydrationDailyPlanDBEntity, 'createdAt'> {
+  ): Omit<HydrationDailyPlanDBEntity, 'created_at'> {
     return {
       id: hydrationDailyPlan.id,
       user_id: hydrationDailyPlan.userId,
@@ -49,7 +49,7 @@ export class HydrationDailyPlanDBMapper {
     return {
       id: entity.id,
       userId: entity.user_id,
-      createdAt: entity.createdAt,
+      createdAt: entity.created_at,
       ...this.detailsV1Mapper.fromBuffer(entity.details),
     };
   }

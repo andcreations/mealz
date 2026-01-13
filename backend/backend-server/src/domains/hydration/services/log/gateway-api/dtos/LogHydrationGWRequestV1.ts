@@ -1,6 +1,6 @@
-import { GlassFraction } from '@mealz/backend-hydration-log-service-api';
+import { GWGlassFraction } from '../types';
 
 export interface LogHydrationGWRequestV1 {
   // Glass fraction
-  glassFraction: GlassFraction;
+  glassFraction: GWGlassFraction;
 }

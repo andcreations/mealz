@@ -1,0 +1,5 @@
+.mealz-daily-meals-log-empty {
+  @include mealz-font-small();
+  color: $mealz-theme-color-bg;
+  text-align: center;
+}

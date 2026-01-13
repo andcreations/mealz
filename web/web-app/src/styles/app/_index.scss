@@ -42,6 +42,9 @@
 @import './dashboard/components/DailySummary';
 @import './dashboard/components/WeeklySummary';
 @import './dashboard/components/MacrosSummaryChart';
+@import './dashboard/components/ProgressBar';
+@import './dashboard/sections/DailyMealsLog';
+@import './dashboard/sections/DailyHydration';
 
 @import './chef/components/meal-planner/MealPortion';
 @import './chef/components/meal-planner/NamedMealPicker';

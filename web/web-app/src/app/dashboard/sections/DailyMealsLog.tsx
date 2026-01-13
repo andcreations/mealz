@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { GWMealLog } from '@mealz/backend-meals-log-gateway-api';
+import { 
+  GWMealLog,
+} from '@mealz/backend-meals-log-gateway-api';
 import {
   GWMealDailyPlan,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
@@ -8,11 +10,10 @@ import {
 import { LoadStatus } from '../../common';
 import { Log } from '../../log';
 import { usePatchState, useService } from '../../hooks';
-import { LoaderByStatus, LoaderSize } from '../../components';
+import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
-import { NotificationsService } from '../../notifications';
 import { useTranslations } from '../../i18n';
-import { MealLog, MealLogProps } from '../components';
+import { MealLog } from '../components';
 import { DailyMealsLogTranslations } from './DailyMealsLog.translations';
 
 export interface DailyMealsLogProps {
@@ -29,7 +30,6 @@ interface DailyMealsLogState {
 export function DailyMealsLog(props: DailyMealsLogProps) {
   const mealsLogService = useService(MealsLogService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
-  const notificationsService = useService(NotificationsService);
   const translate = useTranslations(DailyMealsLogTranslations);
 
   const [state, setState] = useState<DailyMealsLogState>({
@@ -59,9 +59,6 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
       })
       .catch(error => {
         Log.error('Failed to summarize daily meal log', error);
-        notificationsService.error(
-          translate('failed-to-load-meal-log-summary')
-        );
         patchState({
           loadStatus: LoadStatus.FailedToLoad,
         });
@@ -121,14 +118,35 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
     return mealLogs;
   };
 
+  const loader = {
+    type: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? LoaderType.Error
+        : LoaderType.Info;
+    },
+    subTitle: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? translate('failed-to-load')
+        : undefined;
+    },
+  }
+
+  const hasMealsLog = state.meals?.length > 0;
   return (
     <div className='mealz-daily-meals-log'>
       <LoaderByStatus
         loadStatus={state.loadStatus}
         size={LoaderSize.Small}
+        type={loader.type()}
+        subTitle={loader.subTitle()}
       />
-      { state.loadStatus === LoadStatus.Loaded &&
+      { state.loadStatus === LoadStatus.Loaded && hasMealsLog &&
         renderMealLogs()
+      }
+      { state.loadStatus === LoadStatus.Loaded && !hasMealsLog &&
+        <div className='mealz-daily-meals-log-empty'>
+          { translate('no-meals-log') }
+        </div>
       }
     </div>
   );

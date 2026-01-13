@@ -14,7 +14,7 @@ export class MealDailyPlanDBMapper {
 
   public toEntity(
     mealDailyPlan: Omit<MealDailyPlan, 'createdAt'>,
-  ): Omit<MealDailyPlanDBEntity, 'createdAt'> {
+  ): Omit<MealDailyPlanDBEntity, 'created_at'> {
     return {
       id: mealDailyPlan.id,
       user_id: mealDailyPlan.userId,
@@ -43,7 +43,7 @@ export class MealDailyPlanDBMapper {
     return {
       id: entity.id,
       userId: entity.user_id,
-      createdAt: entity.createdAt,
+      createdAt: entity.created_at,
       ...this.mealDailyPlanDetailsV1Mapper.fromBuffer(entity.details),
     };
   }
