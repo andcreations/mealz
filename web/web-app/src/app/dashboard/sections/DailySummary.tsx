@@ -8,8 +8,7 @@ import {
 import { LoadStatus } from '../../common';
 import { Log } from '../../log';
 import { usePatchState, useService } from '../../hooks';
-import { LoaderByStatus, LoaderSize } from '../../components';
-import { NotificationsService } from '../../notifications';
+import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
 import { useTranslations } from '../../i18n';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
 import { MacrosSummary } from '../components';
@@ -29,7 +28,6 @@ interface DailySummaryState {
 export function DailySummary(props: DailySummaryProps) {
   const mealsLogService = useService(MealsLogService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
-  const notificationsService = useService(NotificationsService);
   const translate = useTranslations(DailySummaryTranslations);
 
   const [state, setState] = useState<DailySummaryState>({
@@ -59,9 +57,6 @@ export function DailySummary(props: DailySummaryProps) {
       })
       .catch(error => {
         Log.error('Failed to summarize daily meal log', error);
-        notificationsService.error(
-          translate('failed-to-load-meal-log-summary')
-        );
         patchState({
           loadStatus: LoadStatus.FailedToLoad,
         });
@@ -70,11 +65,26 @@ export function DailySummary(props: DailySummaryProps) {
     [],
   );
 
+  const loader = {
+    type: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? LoaderType.Error
+        : LoaderType.Info;
+    },
+    subTitle: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? translate('failed-to-load')
+        : undefined;
+    },
+  }  
+
   return (
     <div className='mealz-daily-summary'>
       <LoaderByStatus
         loadStatus={state.loadStatus}
         size={LoaderSize.Small}
+        type={loader.type()}
+        subTitle={loader.subTitle()}
       />
       { state.loadStatus === LoadStatus.Loaded &&
         <MacrosSummary

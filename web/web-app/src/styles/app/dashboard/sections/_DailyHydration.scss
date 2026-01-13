@@ -1,0 +1,42 @@
+.mealz-daily-hydration-empty {
+  @include mealz-font-small();
+  color: $mealz-theme-color-bg;
+  text-align: center;
+}
+
+.mealz-daily-hydration-progress-container {
+  width: 100%;
+  @include mealz-flex-container();
+  @include mealz-flex-center();
+  @include mealz-flex-vertical();
+}
+
+.mealz-daily-hydration-progress-info-glasses {
+  padding: 0 0.125rem;
+}
+
+.mealz-daily-hydration-progress-info-label {
+  color: $mealz-theme-color-bg;
+  padding: 0 0.125rem;
+}
+
+.mealz-daily-hydration-progress-info-goal {
+  padding: 0 0.125rem;
+}
+
+.mealz-daily-hydration-progress-bar {
+  width: 50%;
+  height: 0.5rem;
+  margin-top: 0.5rem;
+
+  // the carbs color is blueish, so it fits to represent water
+  background-color: rgba($mealz-theme-color-carbs, 0.25);
+}
+
+.mealz-daily-hydration-progress-bar-fill {
+  background-color: $mealz-theme-color-carbs;
+}
+
+.mealz-daily-hydration-log-glass-button {
+  margin-top: 2rem;
+}

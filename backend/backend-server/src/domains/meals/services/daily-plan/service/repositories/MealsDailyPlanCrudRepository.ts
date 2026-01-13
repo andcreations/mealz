@@ -46,7 +46,7 @@ export class MealsDailyPlanCrudRepository {
       { 
         limit,
         sort: [
-          { createdAt: 'desc' },
+          { created_at: 'desc' },
         ],
       },
       context,
@@ -76,7 +76,7 @@ export class MealsDailyPlanCrudRepository {
     await this.repository.insert(
       {
         ...entity, 
-        createdAt: Date.now()
+        created_at: Date.now()
       },
       context,
     );
@@ -108,7 +108,7 @@ export class MealsDailyPlanCrudRepository {
       query,
       {
         sort: [
-          { createdAt: 'desc' },
+          { created_at: 'desc' },
         ],
       },
       context,

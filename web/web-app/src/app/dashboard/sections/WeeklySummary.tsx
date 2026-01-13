@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { Log } from '../../log';
 import { LoadStatus } from '../../common';
-import { LoaderByStatus, LoaderSize } from '../../components';
+import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
 import { usePatchState, useService } from '../../hooks';
 import { NotificationsService } from '../../notifications';
 import { useTranslations } from '../../i18n';
@@ -64,11 +64,26 @@ export function WeeklySummary() {
     });
   }
 
+  const loader = {
+    type: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? LoaderType.Error
+        : LoaderType.Info;
+    },
+    subTitle: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? translate('failed-to-load')
+        : undefined;
+    },
+  }  
+
   return (
     <div className='mealz-weekly-summary'>
       <LoaderByStatus
         loadStatus={state.loadStatus}
         size={LoaderSize.Small}
+        type={loader.type()}
+        subTitle={loader.subTitle()}
       />
       { state.loadStatus === LoadStatus.Loaded &&
         <MacrosSummaryChart data={summariesToChartData()}/>

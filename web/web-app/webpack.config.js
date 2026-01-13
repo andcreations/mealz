@@ -64,6 +64,14 @@ module.exports = {
         '@mealz/backend-meals-named-gateway-api',
         'domains/meals/services/named/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-hydration-daily-plan-gateway-api',
+        'domains/hydration/services/daily-plan/gateway-api',
+      ),
+      ...backendAlias(
+        '@mealz/backend-hydration-log-gateway-api',
+        'domains/hydration/services/log/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser
