@@ -16,7 +16,8 @@
 }
 
 .mealz-daily-hydration-progress-info-label {
-  color: $mealz-theme-color-bg;
+  color: $mealz-theme-color-fg-dark;
+  @include mealz-font-small();
   padding: 0 0.125rem;
 }
 

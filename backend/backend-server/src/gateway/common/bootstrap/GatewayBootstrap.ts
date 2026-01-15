@@ -6,7 +6,9 @@ import {
   ValidationPipe,
   ValidationPipeOptions,
 } from '@nestjs/common';
+import { registerMetric } from '@mealz/backend-metrics';
 
+import { METRIC_HTTP_REQUESTS_TOTAL } from '../consts';
 import { ErrorsInterceptor } from '../errors';
 
 export class GatewayBootstrap {
@@ -29,8 +31,18 @@ export class GatewayBootstrap {
     app.useGlobalInterceptors(new ErrorsInterceptor());
   }
 
+  private registerMetrics(): void {
+    registerMetric({
+      name: METRIC_HTTP_REQUESTS_TOTAL,
+      type: 'counter',
+      description: 'Total number of HTTP requests',
+      labels: ['method', 'path', 'status'],
+    });
+  }
+
   public bootstrap(app: INestApplication): void {
     this.useValidationPipe(app);
     this.useExceptionInterceptor(app);
+    this.registerMetrics();
   }
 }

@@ -36,7 +36,7 @@ import { HydrationReminderServiceTranslations } from './HydrationReminderService
 
 @Injectable()
 export class HydrationReminderService implements OnModuleInit {
-  private static readonly DEFAULT_CRON = '5 * * * *';
+  private static readonly DEFAULT_CRON = '*/5 * * * *';
   private static readonly JOB_NAME = 'hydration-reminder';
 
   private job: CronJob | undefined = undefined;
@@ -53,10 +53,6 @@ export class HydrationReminderService implements OnModuleInit {
     private hydrationLogTransporter: HydrationLogTransporter,
   ) {
     this.translate = createTranslation(HydrationReminderServiceTranslations);
-
-    setTimeout(async () => {
-      await this.generateReminders();
-    }, 1001);
   }
 
   public async onModuleInit(): Promise<void> {
@@ -216,11 +212,6 @@ export class HydrationReminderService implements OnModuleInit {
       return false;
     }
 
-    // if the user has not logged any hydration yet, we must remind them
-    if (!lastLog) {
-      return true;
-    }
-
     let shouldSend = false;
     // find matching reminder
     plan.reminders.entries.forEach(reminder => {
@@ -235,6 +226,12 @@ export class HydrationReminderService implements OnModuleInit {
 
       // skip if not between reminder start/end time
       if (nowMinute < startMinute && nowMinute >= endMinute) {
+        return;
+      }
+
+      // send reminder if no hydration logs yet
+      if (!lastLog) {
+        // shouldSend = true; // TODO It doesn't work
         return;
       }
 

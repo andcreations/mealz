@@ -7,14 +7,14 @@ export interface Context {
   [key: string]: any;
 }
 
-export const BOOTSTRAP_CONTEXT: Context = {
-  correlationId: 'bootstrap',
-};
-
-export const SHUTDOWN_CONTEXT: Context = {
-  correlationId: 'shutdown',
-};
-
 export function generateCorrelationId(prefix?: string): string {
   return prefix ? `${prefix}:${v7()}` : v7();
 }
+
+export const BOOTSTRAP_CONTEXT: Context = {
+  correlationId: generateCorrelationId('bootstrap'),
+};
+
+export const SHUTDOWN_CONTEXT: Context = {
+  correlationId: generateCorrelationId('shutdown'),
+};

@@ -1,0 +1,1 @@
+export const METRICS_API_URL = '/api/v1/metrics';

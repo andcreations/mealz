@@ -1,0 +1,1 @@
+export const METRIC_HTTP_REQUESTS_TOTAL = 'http_requests_total';
