@@ -45,4 +45,7 @@ export class GatewayBootstrap {
     this.useExceptionInterceptor(app);
     this.registerMetrics();
   }
+
+  public async shutdown(): Promise<void> {
+  }
 }
