@@ -13,6 +13,7 @@ import {
   minutesToMs,
   randomKeyByPrefix,
   resolveTimeZone,
+  lastMidnight,
   todayRange,
   TranslateFunc,
 } from '@mealz/backend-common';
@@ -32,7 +33,9 @@ import {
   HydrationLogTransporter,
 } from '@mealz/backend-hydration-log-service-api';
 import { sumGlassFractions } from '@mealz/backend-hydration-log-gateway-api';
-import { HydrationReminderServiceTranslations } from './HydrationReminderService.translations';
+import { 
+  HydrationReminderServiceTranslations,
+} from './HydrationReminderService.translations';
 
 @Injectable()
 export class HydrationReminderService implements OnModuleInit {
@@ -40,6 +43,7 @@ export class HydrationReminderService implements OnModuleInit {
   private static readonly JOB_NAME = 'hydration-reminder';
 
   private job: CronJob | undefined = undefined;
+  private lastJobTime = Date.now();
   private readonly translate: TranslateFunc;
 
   public constructor(
@@ -87,38 +91,47 @@ export class HydrationReminderService implements OnModuleInit {
     const context: Context = {
       correlationId: generateCorrelationId(HydrationReminderService.JOB_NAME),
     }
-
+  
     const now = DateTime.now().setZone(resolveTimeZone());
-    const cronNextDate = this.job?.nextDate();
-
     let lastId: string | undefined = undefined;
     const limit = 100;
 
-    // loop until all users are processed
-    while (true) {
-      // read users
-      const { users } = await this.usersCrudTransporter.readUsersFromLastV1(
-        { lastId, limit },
-        context,
-      );
+    try {
+      // loop until all users are processed
+      while (true) {
+        // read users
+        const { users } = await this.usersCrudTransporter.readUsersFromLastV1(
+          { lastId, limit },
+          context,
+        );
 
-      // generate reminders
-      for (const user of users) {
-        await this.generateRemindersForUser(user, now, cronNextDate, context);
-      }
+        // generate reminders
+        for (const user of users) {
+          await this.generateRemindersForUser(
+            user,
+            now,
+            this.lastJobTime,
+            now.toMillis(),
+            context,
+          );
+        }
 
-      // more
-      if (users.length < limit) {
-        break;
+        // more
+        if (users.length < limit) {
+          break;
+        }
+        lastId = users[users.length - 1].id;
       }
-      lastId = users[users.length - 1].id;
-    }    
+    } finally {
+      this.lastJobTime = now.toMillis();
+    }
   }
 
   private async generateRemindersForUser(
     user: UserWithoutPassword,
     now: DateTime,
-    cronNextDate: DateTime,
+    timeStart: number,
+    timeEnd: number,
     context: Context,
   ): Promise<void> {
     // check if we can send messages to the user
@@ -165,10 +178,13 @@ export class HydrationReminderService implements OnModuleInit {
 
     // should send reminder
     const shouldSendReminder = this.shouldSendReminder(
+      user.id,
       now,
-      cronNextDate,
+      timeStart,
+      timeEnd,
       hydrationDailyPlan,
       todaysHydrationLogs,
+      context,
     );
     if (!shouldSendReminder) {
       return;
@@ -193,24 +209,43 @@ export class HydrationReminderService implements OnModuleInit {
   }
 
   private shouldSendReminder(
+    userId: string,
     now: DateTime,
-    cronNextDate: DateTime,
+    timeStart: number,
+    timeEnd: number,
     plan: HydrationDailyPlan,
     logs: HydrationLog[],
+    context: Context,
   ): boolean {
+    const contextForLog = {
+      ...context,
+      userId,
+    };
+
     const glasses = sumGlassFractions(logs.map(log => log.glassFraction));
     const lastLog = logs.sort((a, b) => b.loggedAt - a.loggedAt)[0];
     const nowMinute = this.minuteSinceMidnight(now.hour, now.minute);
 
     // if disabled
     if (!plan.reminders.enabled) {
+      this.logger.debug('Hydration reminders disabled', contextForLog);
       return false;
     }
 
     // if already hit the goal
     if (glasses >= plan.goals.glasses) {
+      this.logger.debug('Already hit hydration goals', contextForLog);
       return false;
     }
+
+    // last logged at
+    const lastLoggedAt = !!lastLog
+      ? lastLog.loggedAt
+      : lastMidnight(resolveTimeZone());
+    this.logger.debug('Last hydration logged at', {
+      ...contextForLog,
+      time: new Date(lastLoggedAt).toISOString(),
+    });
 
     let shouldSend = false;
     // find matching reminder
@@ -225,13 +260,8 @@ export class HydrationReminderService implements OnModuleInit {
       );
 
       // skip if not between reminder start/end time
-      if (nowMinute < startMinute && nowMinute >= endMinute) {
-        return;
-      }
-
-      // send reminder if no hydration logs yet
-      if (!lastLog) {
-        // shouldSend = true; // TODO It doesn't work
+      if (nowMinute < startMinute || nowMinute >= endMinute) {
+        this.logger.debug('Outside hydration reminder time', contextForLog);
         return;
       }
 
@@ -239,12 +269,22 @@ export class HydrationReminderService implements OnModuleInit {
       const reminderTimes = this.resolveReminderTimes(
         now,
         reminder,
-        lastLog.loggedAt,
+        lastLoggedAt,
       );
-      const reminderHitsPeriod = reminderTimes.some(time => {
-        return time >= now.toMillis() && time < cronNextDate.toMillis();
+      const reminderHitPeriod = reminderTimes.some(time => {
+        return time >= timeStart && time < timeEnd;
       })
-      if (reminderHitsPeriod) {
+      this.logger.debug('Hydration reminder hit cron period check', {
+        ...contextForLog,
+        reminderHitPeriod,
+        startMinute,
+        endMinute,
+        nowMinute,
+        reminderTimes,
+        timeStart,
+        timeEnd,
+      })
+      if (reminderHitPeriod) {
         shouldSend = true;
       }
     });
