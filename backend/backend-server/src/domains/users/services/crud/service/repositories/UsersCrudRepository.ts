@@ -30,6 +30,7 @@ export class UsersCrudRepository {
     context: Context,
   ): Promise<UserWithoutPassword> {
     const entity = await this.repository.findOne(
+      this.opName('readUserById'),
       { id: { $eq: id } },
       {},
       context,
@@ -50,6 +51,7 @@ export class UsersCrudRepository {
       query.id = { $gt: lastId };
     }
     const entities = await this.repository.find(
+      this.opName('readUsersFromLast'),
       query,
       { 
         limit,
@@ -74,6 +76,14 @@ export class UsersCrudRepository {
       id: this.idGenerator(),
       roles: user.roles ?? [UserRole.USER],
     });
-    await this.repository.insert(entity, context);
+    await this.repository.insert(
+      this.opName('createUser'),
+      entity,
+      context,
+    );
+  }
+
+  private opName(name: string): string {
+    return `${UsersCrudRepository.name}.${name}`;
   }
 }

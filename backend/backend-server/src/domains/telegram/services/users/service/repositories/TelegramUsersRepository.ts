@@ -23,7 +23,11 @@ export class TelegramUsersRepository {
     context: Context,
   ): Promise<void> {
     const entity = this.mapper.toEntity(user);
-    await this.repository.upsert(entity, context);
+    await this.repository.upsert(
+      this.opName('upsertTelegramUser'),
+      entity,
+      context,
+    );
   }
 
   public async readTelegramUser(
@@ -31,10 +35,15 @@ export class TelegramUsersRepository {
     context: Context,
   ): Promise<TelegramUser> {
     const entity = await this.repository.findOne(
+      this.opName('readTelegramUser'),
       { user_id: { $eq: userId } },
       {},
       context,
     );
     return this.mapper.fromEntity(entity);
+  }
+
+  private opName(name: string): string {
+    return `${TelegramUsersRepository.name}.${name}`;
   }
 }

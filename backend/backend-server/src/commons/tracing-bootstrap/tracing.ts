@@ -21,7 +21,9 @@ import {
 import { getLogger } from '@mealz/backend-logger';
 import { isTracingEnabled } from '@mealz/backend-tracing';
 
-const EXPORTER_TYPES = ['console', 'http'];
+import { ConsoleCompactSpanExporter } from './ConsoleCompactSpanExporter';
+
+const EXPORTER_TYPES = ['console-compact','console', 'http'];
 const PROCESSOR_TYPES = ['simple', 'batch'];
 let sdk: NodeSDK;
 
@@ -29,6 +31,9 @@ function createExporter(): SpanExporter {
   const type = getStrEnv('MEALZ_TRACING_EXPORTER', 'console');
 
   switch (type) {
+    case 'console-compact':
+      return new ConsoleCompactSpanExporter();
+
     case 'console':
       return new ConsoleSpanExporter();
 

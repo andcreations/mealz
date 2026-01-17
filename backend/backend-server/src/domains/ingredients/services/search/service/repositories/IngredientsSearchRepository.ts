@@ -27,6 +27,7 @@ export class IngredientsSearchRepository {
       query.id = { $gt: lastId };
     }
     const entities = await this.repository.find(
+      this.opName('readFromLast'),
       query,
       { 
         limit,
@@ -37,5 +38,9 @@ export class IngredientsSearchRepository {
       context,
     );
     return entities.map(entity => this.mapper.fromEntity(entity));
+  }
+
+  private opName(name: string): string {
+    return `${IngredientsSearchRepository.name}.${name}`;
   }
 }

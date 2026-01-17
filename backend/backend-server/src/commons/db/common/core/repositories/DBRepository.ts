@@ -73,26 +73,38 @@ export abstract class DBRepository<T> {
 
   /**
    * Insert an entity into the database.
+   * @param opName Name of the operation (unique).
    * @param entity Entity to insert.
    * @param context Context of the insert operation.
    */
-  public abstract insert(entity: T, context: Context): Promise<void>;
+  public abstract insert(
+    opName: string,
+    entity: T,
+    context: Context,
+  ): Promise<void>;
 
   /**
    * Upsert an entity into the database.
+   * @param opName Name of the operation (unique).
    * @param entity Entity to upsert.
    * @param context Context of the upsert operation.
    */
-  public abstract upsert(entity: T, context: Context): Promise<void>;
+  public abstract upsert(
+    opName: string,
+    entity: T,
+    context: Context,
+  ): Promise<void>;
 
   /**
    * Find entities in the database.
+   * @param opName Name of the operation (unique).
    * @param where Where clause.
    * @param options Options of the find operation.
    * @param context Context of the find operation.
    * @returns Found entities.
    */
   public abstract find<K extends keyof T>(
+    opName: string,
     where: Where<T>,
     options: FindOptions<T, K>,
     context: Context,
@@ -100,16 +112,19 @@ export abstract class DBRepository<T> {
     
   /**
    * Find one entity in the database.
+   * @param opName Name of the operation (unique).
    * @param where Where clause.
    * @param options Options of the find operation.
    * @returns Found entity.
    */  
   public async findOne<K extends keyof T>(
+    opName: string,
     where: Where<T>,
     options: Omit<FindOptions<T, K>, 'limit'>,
     context: Context,
   ): Promise<Pick<T, K> | undefined> {
     const entities = await this.find(
+      opName,
       where,
       {
         ...options,
@@ -122,11 +137,13 @@ export abstract class DBRepository<T> {
 
   /**
    * Update entities in the database.
+   * @param opName Name of the operation (unique).
    * @param where Where clause.
    * @param update Update operator.
    * @param context Context of the update operation.
    */
   public abstract update(
+    opName: string,
     where: Where<T>,
     update: Update<T>,
     context: Context,
@@ -134,10 +151,12 @@ export abstract class DBRepository<T> {
 
   /**
    * Delete entities from the database.
+   * @param opName Name of the operation (unique).
    * @param where Where clause.
    * @param context Context of the delete operation.
    */
   public abstract delete(
+    opName: string,
     where: Where<T>,
     context: Context,
   ): Promise<void>;

@@ -35,7 +35,16 @@ export class MealsLogHistoryRepository {
         $lte: toDate,
       },
     };
-    const entities = await this.repository.find(query, {}, context);
+    const entities = await this.repository.find(
+      this.opName('readByDateRange'),
+      query,
+      {},
+      context,
+    );
     return entities.map(entity => this.mapper.fromEntity(entity));
+  }
+
+  private opName(name: string): string {
+    return `${MealsLogHistoryRepository.name}.${name}`;
   }
 }

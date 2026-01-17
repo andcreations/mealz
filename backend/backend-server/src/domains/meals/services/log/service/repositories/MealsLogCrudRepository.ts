@@ -31,7 +31,12 @@ export class MealsLogCrudRepository {
     context: Context,
   ): Promise<MealLog | undefined> {
     const query: Where<MealLogDBEntity> = { id: { $eq: id } };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('readById'),
+      query,
+      {},
+      context,
+    );
     if (!entity) {
       return;
     }
@@ -44,6 +49,7 @@ export class MealsLogCrudRepository {
   ): Promise<MealLog | undefined> {
     const query: Where<MealLogDBEntity> = { user_id: { $eq: userId } };
     const entity = await this.repository.findOne(
+      this.opName('readLatestByUserId'),
       query,
       { 
         sort: [
@@ -68,7 +74,12 @@ export class MealsLogCrudRepository {
         $lte: toDate,
       },
     };
-    const entities = await this.repository.find(query, {}, context);
+    const entities = await this.repository.find(
+      this.opName('readByUserIdAndDateRange'),
+      query,
+      {},
+      context,
+    );
     return entities.map(entity => this.mapper.fromEntity(entity));
   }
   
@@ -81,7 +92,11 @@ export class MealsLogCrudRepository {
       ...mealLog,
       id,
     });
-    await this.repository.insert(entity, context);
+    await this.repository.insert(
+      this.opName('create'),
+      entity,
+      context,
+    );
     return { id };
   }
 
@@ -90,7 +105,11 @@ export class MealsLogCrudRepository {
     context: Context,
   ): Promise<void> {
     const query: Where<MealLogDBEntity> = { id: { $eq: id } };
-    await this.repository.delete(query, context);
+    await this.repository.delete(
+      this.opName('delete'),
+      query,
+      context,
+    );
   }
 
   public async upsert(
@@ -99,7 +118,15 @@ export class MealsLogCrudRepository {
   ): Promise<Pick<MealLog, 'id'>> {
     const id = mealLog.id ?? this.idGenerator();
     const entity = this.mapper.toEntity({ ...mealLog, id });
-    await this.repository.upsert(entity, context);
+    await this.repository.upsert(
+      this.opName('upsert'),
+      entity,
+      context,
+    );
     return { id };
-  }  
+  }
+
+  private opName(name: string): string {
+    return `${MealsLogCrudRepository.name}.${name}`;
+  }
 }

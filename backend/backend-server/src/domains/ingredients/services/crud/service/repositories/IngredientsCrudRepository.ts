@@ -22,7 +22,12 @@ export class IngredientsCrudRepository {
     context: Context,
   ): Promise<Ingredient[]> {
     const query: Where<IngredientDBEntity> = { id: { $in: ids } };
-    const entities = await this.repository.find(query, {}, context);
+    const entities = await this.repository.find(
+      this.opName('readManyById'),
+      query,
+      {},
+      context,
+    );
     return entities.map(entity => this.mapper.fromEntity(entity));
   }
 
@@ -36,6 +41,7 @@ export class IngredientsCrudRepository {
       query.id = { $gt: lastId };
     }
     const entities = await this.repository.find(
+      this.opName('readFromLast'),
       query,
       { 
         limit,
@@ -47,4 +53,8 @@ export class IngredientsCrudRepository {
     );
     return entities.map(entity => this.mapper.fromEntity(entity));
   }  
+
+  private opName(name: string): string {
+    return `${IngredientsCrudRepository.name}.${name}`;
+  }
 }

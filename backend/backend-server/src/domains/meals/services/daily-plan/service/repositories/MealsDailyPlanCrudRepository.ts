@@ -42,6 +42,7 @@ export class MealsDailyPlanCrudRepository {
       user_id: { $eq: userId },
     };
     const entities = await this.repository.find(
+      this.opName('readMany'),
       query,
       { 
         limit,
@@ -61,7 +62,12 @@ export class MealsDailyPlanCrudRepository {
     const query: Where<MealDailyPlanDBEntity> = {
       id: { $eq: mealDailyPlanId },
     };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('findById'),
+      query,
+      {},
+      context,
+    );
     return this.mapper.fromEntity(entity);
   }
 
@@ -74,6 +80,7 @@ export class MealsDailyPlanCrudRepository {
       id: this.idGenerator(),
     });
     await this.repository.insert(
+      this.opName('create'),
       {
         ...entity, 
         created_at: Date.now()
@@ -94,7 +101,12 @@ export class MealsDailyPlanCrudRepository {
     const update: Update<MealDailyPlanDBEntity> = {
       details: { $set: entity.details },
     };
-    await this.repository.update(query, update, context);
+    await this.repository.update(
+      this.opName('update'),
+      query,
+      update,
+      context,
+    );
   }
 
   public async readCurrent(
@@ -105,6 +117,7 @@ export class MealsDailyPlanCrudRepository {
       user_id: { $eq: userId },
     };
     const entity = await this.repository.findOne(
+      this.opName('readCurrent'),
       query,
       {
         sort: [
@@ -114,5 +127,9 @@ export class MealsDailyPlanCrudRepository {
       context,
     );
     return this.mapper.fromEntity(entity);
+  }
+
+  private opName(name: string): string {
+    return `${MealsDailyPlanCrudRepository.name}.${name}`;
   }
 }

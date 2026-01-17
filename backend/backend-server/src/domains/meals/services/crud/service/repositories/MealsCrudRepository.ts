@@ -30,7 +30,12 @@ export class MealsCrudRepository {
     context: Context,
   ): Promise<Meal | undefined> {
     const query: Where<MealDBEntity> = { id: { $eq: id } };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('readMealById'),
+      query,
+      {},
+      context,
+    );
     if (!entity) {
       return;
     }
@@ -42,7 +47,12 @@ export class MealsCrudRepository {
     context: Context,
   ): Promise<Meal[]> {
     const query: Where<MealDBEntity> = { id: { $in: ids } };
-    const entities = await this.repository.find(query, {}, context);
+    const entities = await this.repository.find(
+      this.opName('readMealsById'),
+      query,
+      {},
+      context,
+    );
     return this.mapper.fromEntities(entities);
   }
 
@@ -56,7 +66,11 @@ export class MealsCrudRepository {
       ...meal,
     });
 
-    await this.repository.insert(entity, context);
+    await this.repository.insert(
+      this.opName('createMeal'),
+      entity,
+      context,
+    );
     return { id };
   }
 
@@ -66,7 +80,11 @@ export class MealsCrudRepository {
   ): Promise<Pick<Meal, 'id'>> {
     const id = meal.id ?? this.idGenerator();
     const entity = this.mapper.toEntity({ ...meal, id });
-    await this.repository.upsert(entity, context);
+    await this.repository.upsert(
+      this.opName('upsertMeal'),
+      entity,
+      context,
+    );
     return { id };
   }
 
@@ -75,6 +93,14 @@ export class MealsCrudRepository {
     context: Context,
   ): Promise<void> {
     const query: Where<MealDBEntity> = { id: { $eq: id } };
-    await this.repository.delete(query, context);
+    await this.repository.delete(
+      this.opName('deleteMealById'),
+      query,
+      context,
+    );
+  }
+
+  private opName(name: string): string {
+    return `${MealsCrudRepository.name}.${name}`;
   }
 }

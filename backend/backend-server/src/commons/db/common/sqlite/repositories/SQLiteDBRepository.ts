@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { SpanStatusCode, trace, Tracer } from "@opentelemetry/api";
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
 
@@ -8,7 +9,6 @@ import {
   DBFieldSpec,
   DBRepository,
   FindOptions,
-  IterateCallback,
   Update,
   Where,
 } from '../../core';
@@ -16,6 +16,7 @@ import { COLUMN_TO_FIELD_MAPPING, SQLiteResultCodes } from '../const';
 import { SQLiteError, UnmappedSQLiteColumnTypeError } from '../errors';
 import { SQLiteDB } from '../db';
 import { SQLiteSQLBuilder } from '../services';
+import { SpanImpl, withActiveSpan } from '@mealz/backend-tracing';
 
 interface SQLiteColumn {
   name: string;
@@ -60,7 +61,11 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     });
   }
 
-  public async insert(entity: T, context: Context): Promise<void> {
+  public async insert(
+    opName: string,
+    entity: T,
+    context: Context,
+  ): Promise<void> {
     const statement = this.sqlBuilder.buildInsert(
       this.tableName,
       this.getEntityName(),
@@ -91,7 +96,11 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     }
   }
 
-  public async upsert(entity: T, context: Context): Promise<void> {
+  public async upsert(
+    opName: string,
+    entity: T,
+    context: Context,
+  ): Promise<void> {
     const statement = this.sqlBuilder.buildInsert(
       this.tableName,
       this.getEntityName(),
@@ -127,28 +136,46 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
   }
 
   public async find<K extends keyof T>(
+    opName: string,
     where: Where<T>,
     options: FindOptions<T, K>,
     context: Context,
   ): Promise<Pick<T, K>[]> {
-    const statement = this.sqlBuilder.buildSelect(
-      this.tableName,
-      this.getEntityName(),
-      this.getFieldsSpec(),
-      where,
-      options,
-    );
-    this.logger.verbose(
-      'Running SQL query',
-      {
-        ...context,
-        ...statement.toContext(),
+    return withActiveSpan(
+      this.getTracer(),
+      `SQLite ${opName}`,
+      async (span) => {
+        try {
+          const statement = this.sqlBuilder.buildSelect(
+            this.tableName,
+            this.getEntityName(),
+            this.getFieldsSpec(),
+            where,
+            options,
+          );
+          span.setAttribute('sql', statement.getSQL());
+          this.logger.verbose(
+            'Running SQL query',
+            {
+              ...context,
+              ...statement.toContext(),
+            },
+          );
+          const result = await this.db.getAll(statement);
+          span.ok();
+          return result;
+        } catch (error) {
+          span.error(error);
+          throw error;
+        } finally {
+          span.end();
+        }
       },
     );
-    return this.db.getAll(statement);
   }
 
   public async update(
+    opName: string,
     where: Where<T>,
     update: Update<T>,
     context: Context,
@@ -172,6 +199,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
   }
 
   public async delete(
+    opName: string,
     where: Where<T>,
     context: Context,
   ): Promise<void> {
@@ -193,5 +221,9 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
 
   public async transaction(func: () => Promise<void>): Promise<void> {
     await this.db.transaction(func);
+  }
+
+  private getTracer(): Tracer {
+    return trace.getTracer(SQLiteDBRepository.name);
   }
 }

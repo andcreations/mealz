@@ -41,6 +41,14 @@ export class HydrationLogCrudRepository {
       glassFraction,
       loggedAt: Date.now(),
     });
-    await this.repository.insert(entity, context);
+    await this.repository.insert(
+      this.opName('logHydrationV1'),
+      entity,
+      context,
+    );
+  }
+
+  private opName(name: string): string {
+    return `${HydrationLogCrudRepository.name}.${name}`;
   }
 }
