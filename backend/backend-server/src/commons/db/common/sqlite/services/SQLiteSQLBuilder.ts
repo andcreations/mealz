@@ -510,7 +510,7 @@ export class SQLiteSQLBuilder {
 
     const context = new SQLiteStatementContext();
     let statement: SQLiteStatement = new SQLiteStatement(
-      `INSERT ${upsert ? 'OR REPLACE' : ''} INTO ${tableName} `,
+      `INSERT${upsert ? ' OR REPLACE' : ''} INTO ${tableName} `,
     );
 
     const values: Array<{

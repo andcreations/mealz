@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
+import { WithActiveSpan } from '@mealz/backend-tracing';
 import { SearchIndex } from '@mealz/backend-common';
 
 import { IngredientsSearchRepository } from '../repositories';
@@ -27,6 +28,7 @@ export class IngredientsSearchService implements OnModuleInit {
     await this.loadIngredients(context);
   }
   
+  @WithActiveSpan('IngredientsSearch.load')
   private async loadIngredients(context: Context): Promise<void> {
     this.logger.info('Loading ingredients for search', context);
 

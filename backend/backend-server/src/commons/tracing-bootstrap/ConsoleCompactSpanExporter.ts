@@ -1,3 +1,4 @@
+import * as colors from 'ansi-colors';
 import { SpanExporter } from '@opentelemetry/sdk-trace-base';
 import { ReadableSpan } from '@opentelemetry/sdk-trace-base';
 import { ExportResult, ExportResultCode } from '@opentelemetry/core';
@@ -26,25 +27,37 @@ export class ConsoleCompactSpanExporter implements SpanExporter {
     resultCallback: (result: ExportResult) => void,
   ): void {
     spans.forEach(span => {
+      const spanContext = span.spanContext();
       console.log(
-        `----------------------------------------\n` +
-        `     name: ${span.name}\n` +
-        `     kind: ${SPAN_NAME[span.kind]}\n` +
-        `   status: ${SPAN_STATUS_CODE[span.status.code]}\n` +
-        `  traceId: ${this.traceIndex(span.spanContext().traceId)}\n` +
-        `   spanId: ${this.spanIndex(span.spanContext().spanId)}`
+        `${colors.gray('----------------------------------------')}\n` +
+        `      name: ${colors.cyan(span.name)}\n` +
+        `      kind: ${colors.cyan(SPAN_NAME[span.kind])}\n` +
+        `    status: ${colors.cyan(SPAN_STATUS_CODE[span.status.code])}\n` +
+        `   traceId: ` +
+        `${colors.green(this.traceIndex(spanContext.traceId))}\n` +
+        `    spanId: ` +
+        `${colors.green(this.spanIndex(spanContext.spanId))}`
       );
+      const keys = Object.keys(span.attributes);
+      if (keys.length > 0) {
+        console.log(`attributes:`);
+        keys.forEach(key => {
+          const value = span.attributes[key];
+          const valueStr = typeof value === 'string'
+            ? value
+            : JSON.stringify(value);
+          console.log(`     ${key}: ${colors.yellow(valueStr)}`);
+        });
+      }
       if (span.parentSpanContext) {
+        const parentContext = span.parentSpanContext;
         console.log(
           `  parentTraceId: ` +
-          `${this.traceIndex(span.parentSpanContext.traceId)}\n` +
-          `   parentSpanId: ${this.spanIndex(span.parentSpanContext.spanId)}`,
+          `${colors.green(this.traceIndex(parentContext.traceId))}\n` +
+          `   parentSpanId: ` +
+          `${colors.green(this.spanIndex(parentContext.spanId))}`,
         );
       }
-      const keys = Object.keys(span.attributes);
-      keys.forEach(key => {
-        console.log(`     ${key}: ${span.attributes[key]}`);
-      });
     });
     resultCallback({ code: ExportResultCode.SUCCESS });
   }

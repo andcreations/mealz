@@ -18,6 +18,7 @@ import {
   TranslateFunc,
 } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
+import { WithActiveSpan } from '@mealz/backend-tracing';
 import { UserWithoutPassword } from '@mealz/backend-users-common';
 import { UsersCrudTransporter } from '@mealz/backend-users-crud-service-api';
 import { 
@@ -87,6 +88,7 @@ export class HydrationReminderService implements OnModuleInit {
     this.job.start();
   }
 
+  @WithActiveSpan('HydrationReminder.generate')
   private async generateReminders(): Promise<void> {
     const context: Context = {
       correlationId: generateCorrelationId(HydrationReminderService.JOB_NAME),

@@ -9,7 +9,7 @@ import {
 
 export const HYDRATION_LOG_SQLITE_DB_MODULE_OPTIONS: SQLiteDBModuleFeature = {
   name: HYDRATION_LOG_DB_NAME,
-  dbFilename: requireStrEnv('MEALZ_HYDRATION_LOG_PLAN_SQLITE_DB_FILE'),
+  dbFilename: requireStrEnv('MEALZ_HYDRATION_LOG_SQLITE_DB_FILE'),
   entities: [
     {
       entityName: HYDRATION_LOG_DB_ENTITY_NAME,

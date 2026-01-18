@@ -1,4 +1,8 @@
-import { Span as OTLSpan, SpanStatusCode } from '@opentelemetry/api';
+import { 
+  AttributeValue,
+  Span as OTLSpan,
+  SpanStatusCode,
+} from '@opentelemetry/api';
 import { Span } from './Span';
 
 export class SpanImpl implements Span {
@@ -8,7 +12,7 @@ export class SpanImpl implements Span {
     this.span = span;
   }
 
-  public setAttribute(key: string, value: string): void {
+  public setAttribute(key: string, value: AttributeValue): void {
     this.span.setAttribute(key, value);
   }
   public ok(): void {

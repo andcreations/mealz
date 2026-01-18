@@ -15,6 +15,7 @@ import {
   TranslateFunc,
 } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
+import { WithActiveSpan } from '@mealz/backend-tracing';
 import { AIProvider } from '@mealz/backend-ai';
 import { UserWithoutPassword } from '@mealz/backend-users-common';
 import { Meal, MealCalculator, MealTotals } from '@mealz/backend-meals-common';
@@ -114,6 +115,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
     job.start();
   }
 
+  @WithActiveSpan('UsersDailyInsights.generate')
   private async generateInsights(): Promise<void> {
     const context: Context = {
       correlationId: generateCorrelationId(UsersDailyInsightsService.JOB_NAME),

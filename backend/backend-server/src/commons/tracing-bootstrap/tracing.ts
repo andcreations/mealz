@@ -6,9 +6,11 @@ import {
   SimpleSpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { Instrumentation } from '@opentelemetry/instrumentation';
 import {
   getNodeAutoInstrumentations
 } from '@opentelemetry/auto-instrumentations-node';
+import { ExpressLayerType } from '@opentelemetry/instrumentation-express';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { BOOTSTRAP_CONTEXT, SHUTDOWN_CONTEXT } from '@mealz/backend-core';
@@ -25,7 +27,9 @@ import { ConsoleCompactSpanExporter } from './ConsoleCompactSpanExporter';
 
 const EXPORTER_TYPES = ['console-compact','console', 'http'];
 const PROCESSOR_TYPES = ['simple', 'batch'];
+
 let sdk: NodeSDK;
+let shuttingDown = false;
 
 function createExporter(): SpanExporter {
   const type = getStrEnv('MEALZ_TRACING_EXPORTER', 'console');
@@ -73,6 +77,28 @@ function createSpanProcessor(exporter: SpanExporter): SpanProcessor {
   }
 }
 
+function createInstrumentations(): Instrumentation[] {
+  return getNodeAutoInstrumentations({
+    '@opentelemetry/instrumentation-dns': {
+      enabled: false,
+    }, 
+    '@opentelemetry/instrumentation-nestjs-core': {
+      enabled: false,
+    },
+    '@opentelemetry/instrumentation-net': {
+      enabled: false,
+    },  
+    '@opentelemetry/instrumentation-express': {
+      ignoreLayers: ['/api/v1/metrics'],
+      ignoreLayersType: [
+        ExpressLayerType.MIDDLEWARE,
+        ExpressLayerType.REQUEST_HANDLER,
+        ExpressLayerType.ROUTER,
+      ],
+    }
+  });
+}
+
 export function bootstrapTracing() {
   // create
   const exporter = createExporter();
@@ -84,7 +110,7 @@ export function bootstrapTracing() {
     }),
     traceExporter: exporter,
     spanProcessors: [createSpanProcessor(exporter)],
-    instrumentations: [getNodeAutoInstrumentations()],
+    instrumentations: createInstrumentations(),
   });
 
   // start
@@ -95,6 +121,11 @@ export function bootstrapTracing() {
 }
 
 export async function shutdownTracing(): Promise<void> {
+  if (shuttingDown) {
+    return;
+  }
+  shuttingDown = true;
+
   if (sdk) {
     getLogger().info('Shutting down tracing', SHUTDOWN_CONTEXT);
     sdk.shutdown().catch((error) => {

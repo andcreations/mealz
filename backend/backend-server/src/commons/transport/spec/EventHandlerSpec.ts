@@ -1,4 +1,6 @@
+import { trace } from '@opentelemetry/api';
 import { Context } from '@mealz/backend-core'
+import { withActiveSpan } from '@mealz/backend-tracing';
 
 import {
   EventHandlerSpecNotFoundError,
@@ -14,6 +16,7 @@ export interface EventHandlerSpec {
   classInstance?: object
 }
 
+const tracer = trace.getTracer('event-handler');
 const eventHandlerSpecs: EventHandlerSpec[] = []
 
 export function addEventHandlerSpec(spec: EventHandlerSpec): void {
@@ -54,7 +57,7 @@ export async function callEventHandlers<TEvent>(
     return
   }
   const results = await Promise.allSettled(
-    specs.map(async (spec) => callEventHandler(spec, event, context))
+    specs.map(async (spec) => callEventHandler(spec, topic, event, context))
   )
   for (const result of results) {
     if (result.status === 'rejected') {
@@ -65,6 +68,7 @@ export async function callEventHandlers<TEvent>(
 
 async function callEventHandler<TEvent>(
   spec: EventHandlerSpec,
+  topic: string,
   event: TEvent,
   context: Context
 ): Promise<void> {
@@ -72,5 +76,22 @@ async function callEventHandler<TEvent>(
   if (!classInstance) {
     throw new EventHandlerNotFoundError(spec.topic)
   }
-  await classInstance[methodName](event, context)
+
+  return withActiveSpan(
+    tracer,
+    `local-transporter EVENT ${topic}`,
+    async (span) => {
+      span.setAttribute('event.topic', topic);
+      span.setAttribute('handler.class', spec.clazz.name);
+      span.setAttribute('handler.method', methodName);
+      try {
+        return await classInstance[methodName](event, context);
+      } catch (error) {
+        span.error(error);
+        throw error;
+      } finally {
+        span.end();
+      }
+    },
+  );
 }
