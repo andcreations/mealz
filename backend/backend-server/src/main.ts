@@ -1,5 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
+// must be imported before Express, Fastify, NestJS
+import '@mealz/backend-tracing-bootstrap';
+
 import { NestFactory } from '@nestjs/core';
 import {
   ExpressAdapter,
@@ -53,11 +57,10 @@ function readCertificateAndKey(): CertificateAndKey | undefined {
   }
 }
 
-/** */
 async function bootstrap() {
   let app: INestApplication;
 
-// create
+  // create
   if (isFastify()) {
     getLogger().info('Creating fastify application', BOOTSTRAP_CONTEXT);
     const fastifyApp = await NestFactory
@@ -84,20 +87,23 @@ async function bootstrap() {
     throw new InternalError('Invalid web application type');
   }
 
-// configure
+  // configure
   app.enableShutdownHooks();
 
-// gateway
+  // gateway
   const gatewayBootstrap = new GatewayBootstrap();
   gatewayBootstrap.bootstrap(app);
 
-// listen
+  // listen
   const port = getIntEnv('MEALZ_PORT', 8080);
   getLogger().info(`Starting server`, {
     ...BOOTSTRAP_CONTEXT,
     port,
   });
   await app.listen(port, '0.0.0.0');
+
+  // shutdown
+  await gatewayBootstrap.shutdown();
 }
 
 bootstrap()

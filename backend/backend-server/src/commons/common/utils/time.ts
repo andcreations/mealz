@@ -38,3 +38,11 @@ export function todayRange(timeZone: string): {
     .toMillis();
   return { fromDate, toDate };
 }
+
+export function lastMidnight(timeZone: string): number {
+  return DateTime
+    .now()
+    .setZone(timeZone)
+    .startOf('day')
+    .toMillis();
+}

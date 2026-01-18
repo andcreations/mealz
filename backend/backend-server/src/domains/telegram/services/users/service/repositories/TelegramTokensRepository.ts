@@ -23,7 +23,11 @@ export class TelegramTokensRepository {
     context: Context,
   ): Promise<void> {
     const entity = this.mapper.toEntity(token);
-    await this.repository.upsert(entity, context);
+    await this.repository.upsert(
+      this.opName('upsertToken'),
+      entity,
+      context,
+    );
   }
 
   public async readToken(
@@ -31,10 +35,15 @@ export class TelegramTokensRepository {
     context: Context,
   ): Promise<TelegramToken | undefined> {
     const entity = await this.repository.findOne(
+      this.opName('readToken'),
       { token: { $eq: token }},
       {},
       context,
     );
     return this.mapper.fromEntity(entity);
+  }
+
+  private opName(name: string): string {
+    return `${TelegramTokensRepository.name}.${name}`;
   }
 }

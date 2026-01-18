@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { SpanStatusCode, trace, Tracer } from "@opentelemetry/api";
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
 
@@ -8,7 +9,6 @@ import {
   DBFieldSpec,
   DBRepository,
   FindOptions,
-  IterateCallback,
   Update,
   Where,
 } from '../../core';
@@ -16,6 +16,8 @@ import { COLUMN_TO_FIELD_MAPPING, SQLiteResultCodes } from '../const';
 import { SQLiteError, UnmappedSQLiteColumnTypeError } from '../errors';
 import { SQLiteDB } from '../db';
 import { SQLiteSQLBuilder } from '../services';
+import { Span, SpanImpl, withActiveSpan } from '@mealz/backend-tracing';
+import { SQLiteStatement } from '../types';
 
 interface SQLiteColumn {
   name: string;
@@ -26,6 +28,7 @@ interface SQLiteColumn {
 @Injectable()
 export class SQLiteDBRepository<T> extends DBRepository<T>{
   private tableName: string;
+  private tracer = trace.getTracer(SQLiteDBRepository.name);
 
   public constructor(
     private readonly db: SQLiteDB,
@@ -60,13 +63,19 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     });
   }
 
-  public async insert(entity: T, context: Context): Promise<void> {
+  private async insertWithSpan(
+    opName: string,
+    entity: T,
+    span: Span,
+    context: Context,
+  ): Promise<void> {
     const statement = this.sqlBuilder.buildInsert(
       this.tableName,
       this.getEntityName(),
       this.getFieldsSpec(),
       entity,
     );
+    this.spanAttributes2(span, statement, opName);
 
     this.logger.verbose(
       'Running SQL insert',
@@ -78,6 +87,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
 
     try {
       await this.db.run(statement);
+      span.ok();
     } catch (error) {
       if (error instanceof SQLiteError) {
         if (error.errno === SQLiteResultCodes.CONSTRAINT) {
@@ -91,7 +101,25 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     }
   }
 
-  public async upsert(entity: T, context: Context): Promise<void> {
+  public async insert(
+    opName: string,
+    entity: T,
+    context: Context,
+  ): Promise<void> {
+    return this.withActiveSpan(
+      'INSERT',
+      async (span) => {
+        return await this.insertWithSpan(opName, entity, span, context);
+      }
+    );
+  }
+
+  private async upsertWithSpan(
+    opName: string,
+    entity: T,
+    span: Span,
+    context: Context,
+  ): Promise<void> {
     const statement = this.sqlBuilder.buildInsert(
       this.tableName,
       this.getEntityName(),
@@ -101,6 +129,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
         upsert: true,
       },
     );
+    this.spanAttributes2(span, statement, opName);
 
     this.logger.verbose(
       'Running SQL upsert',
@@ -112,6 +141,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
 
     try {
       await this.db.run(statement);
+      span.ok();
     } catch (error) {
       if (error instanceof SQLiteError) {
         if (error.errno === SQLiteResultCodes.CONSTRAINT) {
@@ -126,9 +156,24 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     }    
   }
 
-  public async find<K extends keyof T>(
+  public async upsert(
+    opName: string,
+    entity: T,
+    context: Context,
+  ): Promise<void> {
+    return this.withActiveSpan(
+      'UPSERT',
+      async (span) => {
+        return await this.upsertWithSpan(opName, entity, span, context);
+      }
+    );
+  }
+
+  private async findWithSpan<K extends keyof T>(
+    opName: string,
     where: Where<T>,
     options: FindOptions<T, K>,
+    span: Span,
     context: Context,
   ): Promise<Pick<T, K>[]> {
     const statement = this.sqlBuilder.buildSelect(
@@ -138,6 +183,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       where,
       options,
     );
+    this.spanAttributes2(span, statement, opName);
     this.logger.verbose(
       'Running SQL query',
       {
@@ -145,12 +191,36 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
         ...statement.toContext(),
       },
     );
-    return this.db.getAll(statement);
+    const result = await this.db.getAll(statement);
+    span.ok();
+    return result;
   }
 
-  public async update(
+  public async find<K extends keyof T>(
+    opName: string,
+    where: Where<T>,
+    options: FindOptions<T, K>,
+    context: Context,
+  ): Promise<Pick<T, K>[]> {
+    return this.withActiveSpan(
+      'SELECT',
+      async (span) => {
+        return await this.findWithSpan(
+          opName,
+          where,
+          options,
+          span,
+          context,
+        );
+      },
+    );
+  }
+
+  private async updateWithSpan(
+    opName: string,
     where: Where<T>,
     update: Update<T>,
+    span: Span,
     context: Context,
   ): Promise<void> {
     const statement = this.sqlBuilder.buildUpdate(
@@ -160,6 +230,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       update,
       where,
     );
+    this.spanAttributes2(span, statement, opName);
     this.logger.verbose(
       'Running SQL update',
       {
@@ -169,10 +240,27 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     );
 
     await this.db.run(statement);
+    span.ok();
   }
 
-  public async delete(
+  public async update(
+    opName: string,
     where: Where<T>,
+    update: Update<T>,
+    context: Context,
+  ): Promise<void> {
+    return this.withActiveSpan(
+      'UPDATE',
+      async (span) => {
+        return await this.updateWithSpan(opName, where, update, span, context);
+      }
+    );
+  }
+
+  private async deleteWithSpan(
+    opName: string,
+    where: Where<T>,
+    span: Span,
     context: Context,
   ): Promise<void> {
     const statement = this.sqlBuilder.buildDelete(
@@ -181,6 +269,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       this.getFieldsSpec(),
       where,
     );
+    this.spanAttributes2(span, statement, opName);
     this.logger.verbose(
       'Running SQL delete',
       {
@@ -189,9 +278,52 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       },
     );
     await this.db.run(statement);
+    span.ok();
+  }
+
+  public async delete(
+    opName: string,
+    where: Where<T>,
+    context: Context,
+  ): Promise<void> {
+    return this.withActiveSpan(
+      'DELETE',
+      async (span) => {
+        return await this.deleteWithSpan(opName, where, span, context);
+      }
+    );
   }
 
   public async transaction(func: () => Promise<void>): Promise<void> {
     await this.db.transaction(func);
+  }
+
+  private async withActiveSpan<R>(
+    dbOpName: string,
+    func: (span: Span) => Promise<R>
+  ): Promise<R> {
+    return withActiveSpan(
+      this.tracer,
+      `sqlite ${dbOpName} ${this.tableName}`,
+      async (span) => {
+        try {
+          return await func(span);
+        } catch (error) {
+          span.error(error);
+          throw error;
+        } finally {
+          span.end();
+        }
+      }
+    );
+  }
+
+  private spanAttributes2(
+    span: Span,
+    statement: SQLiteStatement,
+    opName: string,
+  ): void {
+    span.setAttribute('db.op', opName);
+    span.setAttribute('db.sql', statement.getSQL());
   }
 }

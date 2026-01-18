@@ -40,7 +40,12 @@ export class HydrationDailyPlanCrudRepository {
     const query: Where<HydrationDailyPlanDBEntity> = {
       user_id: { $eq: userId },
     };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('findByUserId'),
+      query,
+      {},
+      context,
+    );
     return this.mapper.fromEntity(entity);
   }
 
@@ -53,6 +58,7 @@ export class HydrationDailyPlanCrudRepository {
       user_id: { $eq: userId },
     };
     const entities = await this.repository.find(
+      this.opName('readMany'),
       query,
       { 
         limit,
@@ -72,7 +78,12 @@ export class HydrationDailyPlanCrudRepository {
     const query: Where<HydrationDailyPlanDBEntity> = {
       id: { $eq: hydrationDailyPlanId },
     };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('findById'),
+      query,
+      {},
+      context,
+    );
     return this.mapper.fromEntity(entity);
   }
 
@@ -85,6 +96,7 @@ export class HydrationDailyPlanCrudRepository {
       id: this.idGenerator(),
     });
     await this.repository.insert(
+      this.opName('create'),
       {
         ...entity, 
         created_at: Date.now()
@@ -105,6 +117,15 @@ export class HydrationDailyPlanCrudRepository {
     const update: Update<HydrationDailyPlanDBEntity> = {
       details: { $set: entity.details },
     };
-    await this.repository.update(query, update, context);
+    await this.repository.update(
+      this.opName('update'),
+      query,
+      update,
+      context,
+    );
+  }
+
+  private opName(name: string): string {
+    return `${HydrationDailyPlanCrudRepository.name}.${name}`;
   }
 }

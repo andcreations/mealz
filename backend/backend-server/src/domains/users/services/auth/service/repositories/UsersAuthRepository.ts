@@ -22,6 +22,7 @@ export class UsersAuthRepository {
     const entity = await this.repository.findOne<
       'id' | 'password' | 'roles'
     >(
+      this.opName('findUserByEmailForAuth'),
       { email: { $eq: email } },
       { projection: ['id', 'password', 'roles'] },
       context,
@@ -36,6 +37,7 @@ export class UsersAuthRepository {
     const entity = await this.repository.findOne<
       'password'
     >(
+      this.opName('readPasswordByUserId'),
       { id: { $eq: userId } },
       { projection: ['password'] },
       context,
@@ -49,9 +51,14 @@ export class UsersAuthRepository {
     context: Context,
   ): Promise<void> {
     await this.repository.update(
+      this.opName('updatePasswordByUserId'),
       { id: { $eq: userId } }, 
       { password: { $set: hashedPassword } },
       context,
     );
+  }
+
+  private opName(name: string): string {
+    return `${UsersAuthRepository.name}.${name}`;
   }
 }

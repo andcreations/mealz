@@ -1,4 +1,6 @@
+import { trace } from '@opentelemetry/api';
 import { Context } from '@mealz/backend-core';
+import { withActiveSpan } from '@mealz/backend-tracing';
 
 import { RequestControllerClass } from '../types';
 import {
@@ -15,6 +17,7 @@ export interface RequestHandlerSpec {
   classInstance?: object;
 }
 
+const tracer = trace.getTracer('request-handler');
 const requestHandlerSpecs: RequestHandlerSpec[] = [];
 
 export function addRequestHandlerSpec(
@@ -61,5 +64,22 @@ export function callRequestHandler<TRequest, TResponse>(
   if (!classInstance) {
     throw new RequestHandlerNotFoundError(topic);
   }
-  return classInstance[methodName](request, context);
+
+  return withActiveSpan(
+    tracer,
+    `local-transporter REQUEST ${topic}`,
+    async (span) => {
+      span.setAttribute('request.topic', topic);
+      span.setAttribute('handler.class', spec.clazz.name);
+      span.setAttribute('handler.method', methodName);
+      try {
+        return await classInstance[methodName](request, context);
+      } catch (error) {
+        span.error(error);
+        throw error;
+      } finally {
+        span.end();
+      }
+    },
+  );
 }

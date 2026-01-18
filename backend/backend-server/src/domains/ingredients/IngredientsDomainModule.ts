@@ -6,11 +6,13 @@ import {
 } from './services/crud';
 import { IngredientsSearchModule } from './services/search';
 
+const SEARCH_ENABLED = false;
+
 @Module({
   imports: [
     IngredientsCrudModule,
     IngredientsCrudGWModule,
-    IngredientsSearchModule,
+    ...(SEARCH_ENABLED ? [IngredientsSearchModule] : []),
   ],
 })
 export class IngredientsDomainModule {

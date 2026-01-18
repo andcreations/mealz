@@ -6,9 +6,11 @@ import {
   Type,
 } from '@nestjs/common';
 import { SQLiteDBModule } from '@mealz/backend-db';
+import { MetricsModule } from '@mealz/backend-metrics'
 import { 
   CorrelationIdMiddleware,
   RequestLogMiddleware,
+  MetricsMiddleware,
 } from '@mealz/backend-gateway-common';
 
 import {
@@ -21,16 +23,21 @@ import {
 } from './domains';
 import { getServeStaticModule } from './web-app';
 
+const DOMAIN_MODULES = [
+  UsersDomainModule,
+  IngredientsDomainModule,
+  MealsDomainModule,
+  HydrationDomainModule,
+  TelegramDomainModule,
+  AdminDomainModule,
+]
+
 @Module({
   imports: [
     getServeStaticModule(),
     SQLiteDBModule.forRoot(),
-    UsersDomainModule,
-    IngredientsDomainModule,
-    MealsDomainModule,
-    HydrationDomainModule,
-    TelegramDomainModule,
-    AdminDomainModule,
+    MetricsModule.forRoot(),
+    ...DOMAIN_MODULES,
   ],
 })
 export class AppModule implements NestModule {
@@ -44,6 +51,7 @@ export class AppModule implements NestModule {
     return [
       CorrelationIdMiddleware,
       RequestLogMiddleware,
+      MetricsMiddleware,
     ];
   }
 }

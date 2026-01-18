@@ -31,7 +31,12 @@ export class MealsUserRepository {
     context: Context,
   ): Promise<UserMeal | undefined> {
     const query: Where<UserMealDBEntity> = { id: { $eq: id } };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('readUserMealById'),
+      query,
+      {},
+      context,
+    );
     if (!entity) {
       return;
     }
@@ -47,7 +52,12 @@ export class MealsUserRepository {
       user_id: { $eq: userId },
       type_id: { $eq: typeId },
     };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('readUserMeal'),
+      query,
+      {},
+      context,
+    );
     if (!entity) {
       return;
     }
@@ -71,6 +81,7 @@ export class MealsUserRepository {
       query.type_id = { $in: typeIds };
     }
     const entities = await this.repository.find(
+      this.opName('readMany'),
       query,
       { 
         limit,
@@ -92,7 +103,11 @@ export class MealsUserRepository {
       ...userMeal,
       id,
     });
-    await this.repository.insert(entity, context);
+    await this.repository.insert(
+      this.opName('createUserMeal'),
+      entity,
+      context,
+    );
     return { id };
   }
 
@@ -102,7 +117,11 @@ export class MealsUserRepository {
   ): Promise<Pick<UserMeal, 'id'>> {
     const id = userMeal.id ?? this.idGenerator();
     const entity = this.mapper.toEntity({ ...userMeal, id });
-    await this.repository.upsert(entity, context);
+    await this.repository.upsert(
+      this.opName('upsertUserMeal'),
+      entity,
+      context,
+    );
     return { id };
   }
 
@@ -111,7 +130,11 @@ export class MealsUserRepository {
     context: Context,
   ): Promise<void> {
     const query: Where<UserMealDBEntity> = { id: { $eq: id } };
-    await this.repository.delete(query, context);
+    await this.repository.delete(
+      this.opName('deleteUserMealById'),
+      query,
+      context,
+    );
   }
 
   public async deleteUserMeal(
@@ -123,6 +146,14 @@ export class MealsUserRepository {
       user_id: { $eq: userId },
       type_id: { $eq: typeId },
     };
-    await this.repository.delete(query, context);
+    await this.repository.delete(
+      this.opName('deleteUserMeal'),
+      query,
+      context,
+    );
+  }
+
+  private opName(name: string): string {
+    return `${MealsUserRepository.name}.${name}`;
   }
 }

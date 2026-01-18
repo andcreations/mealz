@@ -35,7 +35,12 @@ export class MealsNamedCrudRepository {
     context: Context,
   ): Promise<NamedMeal | undefined> {
     const query: Where<NamedMealDBEntity> = { id: { $eq: id } };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('readById'),
+      query,
+      {},
+      context,
+    );
     if (!entity) {
       return;
     }
@@ -51,7 +56,12 @@ export class MealsNamedCrudRepository {
       user_id: { $eq: userId },
       meal_name: { $eq: mealName },
     };
-    const entity = await this.repository.findOne(query, {}, context);
+    const entity = await this.repository.findOne(
+      this.opName('readByUserIdAndMealName'),
+      query,
+      {},
+      context,
+    );
     return this.mapper.fromEntity(entity);
   }
 
@@ -66,6 +76,7 @@ export class MealsNamedCrudRepository {
       query.id = { $gt: lastId };
     }
     const entities = await this.repository.find(
+      this.opName('readFromLastByUserId'),
       query,
       { 
         limit,
@@ -84,7 +95,11 @@ export class MealsNamedCrudRepository {
   ): Promise<Pick<NamedMeal, 'id'>> {
     const id = this.idGenerator();
     const entity = this.mapper.toEntity({ ...namedMeal, id });
-    await this.repository.insert(entity, context);
+    await this.repository.insert(
+      this.opName('create'),
+      entity,
+      context,
+    );
     return { id };
   }
 
@@ -93,7 +108,11 @@ export class MealsNamedCrudRepository {
     context: Context,
   ): Promise<void> {
     const query: Where<NamedMealDBEntity> = { id: { $eq: id } };
-    await this.repository.delete(query, context);
+    await this.repository.delete(
+      this.opName('deleteById'),
+      query,
+      context,
+    );
   }
 
   public async update(
@@ -106,6 +125,15 @@ export class MealsNamedCrudRepository {
     const update: Update<NamedMealDBEntity> = {
       meal_name: { $set: namedMeal.mealName },
     };
-    await this.repository.update(query, update, context);
+    await this.repository.update(
+      this.opName('update'),
+      query,
+      update,
+      context,
+    );
+  }
+
+  private opName(name: string): string {
+    return `${MealsNamedCrudRepository.name}.${name}`;
   }
 }
