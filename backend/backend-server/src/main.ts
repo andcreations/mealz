@@ -23,7 +23,7 @@ import {
   isExpress,
   isFastify,
 } from '@mealz/backend-common';
-import { getLogger, initLogger } from '@mealz/backend-logger';
+import { getLogger } from '@mealz/backend-logger';
 import { GatewayBootstrap } from '@mealz/backend-gateway-common';
 
 import { AppModule } from './AppModule';
@@ -59,9 +59,6 @@ function readCertificateAndKey(): CertificateAndKey | undefined {
 
 async function bootstrap() {
   let app: INestApplication;
-
-  // initialize logger
-  await initLogger();
 
   // create
   if (isFastify()) {

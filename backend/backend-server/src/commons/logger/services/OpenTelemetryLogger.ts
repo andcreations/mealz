@@ -14,6 +14,7 @@ import {
   MealzError,
   requireStrEnv,
 } from '@mealz/backend-common';
+import { getCurrentTraceAndSpanId } from '@mealz/backend-tracing';
 
 import { Logger } from './Logger';
 
@@ -52,7 +53,7 @@ export class OpenTelemetryLogger extends Logger {
     }
   }
 
-  public async init(): Promise<void> {
+  public init(): void {
     // exporter
     this.logExporter = this.createExporter();
 
@@ -69,34 +70,42 @@ export class OpenTelemetryLogger extends Logger {
   }
 
   private emitLogRecord(
-    severity: apiLogs.SeverityNumber,
+    severityNumber: apiLogs.SeverityNumber,
+    severityText: string,
     msg: string,
     context: Context,
   ): void {
+    const { traceId, spanId } = getCurrentTraceAndSpanId();
+
     const logRecord: apiLogs.LogRecord = {
-      severityNumber: severity,
+      severityNumber,
+      severityText,
       body: msg,
       timestamp: performance.now(),
-      attributes: contextToAttributes(context),
+      attributes: {
+        ...contextToAttributes(context),
+        ...(traceId ? { trace_id: traceId } : {}),
+        ...(spanId ? { span_id: spanId } : {}),
+      },
       ...(context.eventName ? { eventName: context.eventName } : {}),
     };
     this.logger.emit(logRecord);
   }
 
   public verbose(msg: string, context: Context): void {
-    this.emitLogRecord(apiLogs.SeverityNumber.TRACE, msg, context);
+    this.emitLogRecord(apiLogs.SeverityNumber.TRACE, 'TRACE', msg, context);
   }
 
   public debug(msg: string, context: Context): void {
-    this.emitLogRecord(apiLogs.SeverityNumber.DEBUG, msg, context);
+    this.emitLogRecord(apiLogs.SeverityNumber.DEBUG, 'DEBUG', msg, context);
   }
 
   public info(msg: string, context: Context): void {
-    this.emitLogRecord(apiLogs.SeverityNumber.INFO, msg, context);
+    this.emitLogRecord(apiLogs.SeverityNumber.INFO, 'INFO', msg, context);
   }
 
   public warning(msg: string, context: Context): void {
-    this.emitLogRecord(apiLogs.SeverityNumber.WARN, msg, context);
+    this.emitLogRecord(apiLogs.SeverityNumber.WARN, 'WARN', msg, context);
   }
 
   public error(msg: string, context: Context, error?: any): void {
@@ -114,6 +123,7 @@ export class OpenTelemetryLogger extends Logger {
     }
     this.emitLogRecord(
       apiLogs.SeverityNumber.ERROR,
+      'ERROR',
       msg,
       {
         ...context,

@@ -50,13 +50,11 @@ export function getLogger(): Logger {
   }
 
   logger = new MultiLogger(loggers);
+  logger.init();
+  
   return logger;
 }
 
-export async function initLogger(): Promise<void> {
-  const logger = getLogger();
-  await logger.init();
-}
 
 @Module({
   providers: [
