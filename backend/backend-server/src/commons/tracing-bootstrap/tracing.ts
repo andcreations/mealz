@@ -54,7 +54,7 @@ function createExporter(): SpanExporter {
 
     default:
       throw new InternalError(
-        `Invalid tracing exporter type ${MealzError.quote(type)}. ` +
+        `Invalid tracing exporter ${MealzError.quote(type)}. ` +
         `Valid types are ${MealzError.quote(EXPORTER_TYPES)}`,
       );
   }

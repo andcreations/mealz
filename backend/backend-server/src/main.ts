@@ -5,6 +5,7 @@ import * as path from 'path';
 import '@mealz/backend-tracing-bootstrap';
 
 import { NestFactory } from '@nestjs/core';
+import { INestApplication } from '@nestjs/common';
 import {
   ExpressAdapter,
   NestExpressApplication,
@@ -22,11 +23,10 @@ import {
   isExpress,
   isFastify,
 } from '@mealz/backend-common';
-import { getLogger } from '@mealz/backend-logger';
+import { getLogger, initLogger } from '@mealz/backend-logger';
 import { GatewayBootstrap } from '@mealz/backend-gateway-common';
 
 import { AppModule } from './AppModule';
-import { INestApplication } from '@nestjs/common';
 
 interface CertificateAndKey {
   cert: Buffer;
@@ -59,6 +59,9 @@ function readCertificateAndKey(): CertificateAndKey | undefined {
 
 async function bootstrap() {
   let app: INestApplication;
+
+  // initialize logger
+  await initLogger();
 
   // create
   if (isFastify()) {

@@ -8,6 +8,12 @@ export class MultiLogger extends Logger {
     super();
   }
 
+  public async init(): Promise<void> {
+    for (const logger of this.loggers) {
+      await logger.init();
+    }
+  }
+
   public verbose(msg: string, context: Context): void {
     this.loggers.forEach((logger) => logger.verbose(msg, context));
   }

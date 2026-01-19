@@ -11,6 +11,7 @@ import {
   ConsoleLogger,
   FileLogger,
   LogtailLogger,
+  OpenTelemetryLogger,
   MultiLogger,
 } from './services';
 
@@ -37,14 +38,24 @@ export function getLogger(): Logger {
       case 'logtail':
         partialLogger = new LogtailLogger();
         break;
+      case 'opentelemetry':
+        partialLogger = new OpenTelemetryLogger();
+        break;
       default:
-        throw new InternalError(`Invalid log type ${MealzError.quote(logType)}`);
+        throw new InternalError(
+          `Invalid log type ${MealzError.quote(logType)}`,
+        );
     }
     loggers.push(partialLogger);
   }
 
   logger = new MultiLogger(loggers);
   return logger;
+}
+
+export async function initLogger(): Promise<void> {
+  const logger = getLogger();
+  await logger.init();
 }
 
 @Module({
