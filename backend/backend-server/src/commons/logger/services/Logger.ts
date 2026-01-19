@@ -32,6 +32,8 @@ export abstract class Logger {
     return context ? this.stringifyContext(context) : '';
   }
 
+  public init(): void {}
+
   abstract verbose(msg: string, context: Context): void;
 
   abstract debug(msg: string, context: Context): void;

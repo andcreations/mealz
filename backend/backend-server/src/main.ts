@@ -5,6 +5,7 @@ import * as path from 'path';
 import '@mealz/backend-tracing-bootstrap';
 
 import { NestFactory } from '@nestjs/core';
+import { INestApplication } from '@nestjs/common';
 import {
   ExpressAdapter,
   NestExpressApplication,
@@ -26,7 +27,6 @@ import { getLogger } from '@mealz/backend-logger';
 import { GatewayBootstrap } from '@mealz/backend-gateway-common';
 
 import { AppModule } from './AppModule';
-import { INestApplication } from '@nestjs/common';
 
 interface CertificateAndKey {
   cert: Buffer;
