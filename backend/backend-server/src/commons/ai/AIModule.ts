@@ -1,5 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { LoggerModule } from '@mealz/backend-logger';
+import { MetricsModule } from '@mealz/backend-metrics';
 
 import { AIProvider } from './types';
 import { OpenAIProvider } from './providers';
@@ -11,6 +12,7 @@ export class AIModule {
       module: AIModule,
       imports: [
         LoggerModule,
+        MetricsModule.forFeature(),
       ],
       providers: [
         {

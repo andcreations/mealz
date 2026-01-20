@@ -53,7 +53,7 @@ export class SQLiteDBRepositoryFactory implements OnModuleInit {
     backupService: SQLiteDBBackupService,
   ): Promise<DBRepository<unknown>> {
     // create database
-    const db = new SQLiteDB( dbFilename , backupService);
+    const db = new SQLiteDB(dbFilename, backupService);
     await db.init();
 
     // create repository

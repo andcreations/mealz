@@ -38,6 +38,13 @@ export function incMetric(
   tags: Record<string, string>,
   value: number,
 ): void {
+  if (value == 0) {
+    return;
+  }
+  if (value < 0) {
+    throw new InternalError(`Negative metric ${MealzError.quote(name)} value`);
+  }
+
   const metric = singleValueMetrics[name];
   if (!metric) {
     throw new InternalError(`Metric ${MealzError.quote(name)} not found`);
