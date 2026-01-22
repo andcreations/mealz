@@ -8,7 +8,13 @@ import {
   TelegramWebhookInfo,
 } from '@andcreations/telegram-bot';
 import { Logger } from '@mealz/backend-logger';
-import { InternalError, getStrEnv, requireStrEnv } from '@mealz/backend-common';
+import { 
+  InternalError, 
+  RetryOptions, 
+  getStrEnv, 
+  requireStrEnv, 
+  retry,
+} from '@mealz/backend-common';
 import { BOOTSTRAP_CONTEXT, Context } from '@mealz/backend-core';
 import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 
@@ -48,14 +54,40 @@ export class TelegramBotClient implements OnModuleInit {
       ); 
     }
 
+    // url
+    const webhookUrl = requireStrEnv('MEALZ_TELEGRAM_WEBHOOK_URL');
+
     // set webhook
-    this.logger.info('Setting Telegram webhook', BOOTSTRAP_CONTEXT);
+    const retryOptions: RetryOptions = {
+      maxAttempts: 5,
+      onRetry: (error, attempt) => {
+        this.logger.error(`Failed to set Telegram webhook: ${error.message}`, {
+          ...BOOTSTRAP_CONTEXT,
+          attempt,
+        });
+      },
+    };
+    await retry(
+      async () => {
+        await this.setWebhook(webhookUrl, certificatePath, BOOTSTRAP_CONTEXT);
+      },
+      retryOptions,
+    );
+
+  }
+
+  private async setWebhook(
+    webhookUrl: string,
+    certificatePath: string,
+    context: Context,
+  ): Promise<void> {
     const webhook: TelegramWebhook = {
-      url: requireStrEnv('MEALZ_TELEGRAM_WEBHOOK_URL'),
+      url: webhookUrl,
       max_connections: 1,
       certificate: certificatePath,
     };
     await this.telegramBot.setWebhook(webhook);
+    this.logger.info('Successfully set Telegram webhook', context);
   }
 
   public async getWebhook(): Promise<TelegramWebhookInfo> {
