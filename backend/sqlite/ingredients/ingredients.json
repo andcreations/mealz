@@ -1101,6 +1101,56 @@
   },
   {
     "name": {
+      "en": "Buckwheat pasta",
+      "pl": "Makaron gryczany"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 354
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 79
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 7
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Butter",
       "pl": "Masło"
     },
@@ -1601,6 +1651,56 @@
   },
   {
     "name": {
+      "en": "Chickpea pasta",
+      "pl": "Makaron z ciecierzycy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 333
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 54
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 22
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Ciabatta",
       "pl": "Ciabatta"
     },
@@ -1846,6 +1946,56 @@
         "id": 7,
         "unit": 1,
         "amount": 2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Corn pasta",
+      "pl": "Makaron kukurydziany"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 361
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 72
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
       }
     ]
   },
@@ -2149,6 +2299,56 @@
         "id": 7,
         "unit": 1,
         "amount": 4
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Durum wheat pasta",
+      "pl": "Makaron pszenny (durum)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 338
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 75
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 13
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
       }
     ]
   },
@@ -2949,6 +3149,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.12
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Lentil pasta",
+      "pl": "Makaron z soczewicy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 344
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 58
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 24
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.4
       }
     ]
   },
@@ -5310,6 +5560,56 @@
   },
   {
     "name": {
+      "en": "Rice pasta",
+      "pl": "Makaron ryżowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 364
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 83
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Ricotta",
       "pl": "Ser ricotta"
     },
@@ -6505,6 +6805,56 @@
         "id": 7,
         "unit": 1,
         "amount": 1.9
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Whole wheat pasta",
+      "pl": "Makaron pełnoziarnisty"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 320
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 74
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 13
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.8
       }
     ]
   },

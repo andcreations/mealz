@@ -1,0 +1,127 @@
+# The below is pulled from ChatGPT using .prompt.md.
+
+- name:
+    en: Durum wheat pasta
+    pl: Makaron pszenny (durum)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 338
+    carbs: 75
+    sugars: 3
+    fibre: 2.5
+    protein: 13
+    fat:
+      total: 2
+      saturated: 0.5
+      monounsaturated: 0.2
+      polyunsaturated: 0.5
+
+- name:
+    en: Whole wheat pasta
+    pl: Makaron pełnoziarnisty
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 320
+    carbs: 74
+    sugars: 3
+    fibre: 10
+    protein: 13
+    fat:
+      total: 2
+      saturated: 0.3
+      monounsaturated: 0.4
+      polyunsaturated: 0.8
+
+- name:
+    en: Rice pasta
+    pl: Makaron ryżowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 364
+    carbs: 83
+    sugars: 2
+    fibre: 2
+    protein: 3
+    fat:
+      total: 1
+      saturated: 0.2
+      monounsaturated: 0.2
+      polyunsaturated: 0.5
+
+- name:
+    en: Corn pasta
+    pl: Makaron kukurydziany
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 361
+    carbs: 72
+    sugars: 3
+    fibre: 12
+    protein: 8
+    fat:
+      total: 2
+      saturated: 0.3
+      monounsaturated: 0.4
+      polyunsaturated: 1
+
+- name:
+    en: Lentil pasta
+    pl: Makaron z soczewicy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 344
+    carbs: 58
+    sugars: 3
+    fibre: 4
+    protein: 24
+    fat:
+      total: 1
+      saturated: 0.2
+      monounsaturated: 0.2
+      polyunsaturated: 0.4
+
+- name:
+    en: Chickpea pasta
+    pl: Makaron z ciecierzycy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 333
+    carbs: 54
+    sugars: 3
+    fibre: 14
+    protein: 22
+    fat:
+      total: 5
+      saturated: 0.6
+      monounsaturated: 2
+      polyunsaturated: 1.5
+
+- name:
+    en: Buckwheat pasta
+    pl: Makaron gryczany
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 354
+    carbs: 79
+    sugars: 1
+    fibre: 5
+    protein: 7
+    fat:
+      total: 1
+      saturated: 0.2
+      monounsaturated: 0.2
+      polyunsaturated: 0.5
