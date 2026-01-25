@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { OpenAI } from 'openai'
 import { ResponseInputContent } from 'openai/resources/responses/responses';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
@@ -6,6 +6,7 @@ import { InternalError, requireStrEnv } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 import { MetricsService } from '@mealz/backend-metrics';
 
+import { AI_FOR_SERVICE_OPTIONS } from '../consts';
 import {
   AIProvider,
   CreateCompletionInput,
@@ -13,6 +14,7 @@ import {
   CreateResponseInput,
   CreateResponseInputItem,
   CreateResponseOutput,
+  AIModuleForServiceOptions,
 } from '../types';
 
 @Injectable()
@@ -25,19 +27,21 @@ export class OpenAIProvider implements AIProvider, OnModuleInit {
 
   public constructor(
     private readonly logger: Logger,
+    @Inject(AI_FOR_SERVICE_OPTIONS)
+    private readonly options: AIModuleForServiceOptions,
     private readonly metricsService: MetricsService,
   ) {
     this.metricsService.registerMetric({
       name: OpenAIProvider.METRIC_INPUT_TOKENS,
       type: 'counter',
       description: 'Number of input tokens used by OpenAI',
-      labels: ['model_name'],
+      labels: ['model_name', 'domain', 'service'],
     });
     this.metricsService.registerMetric({
       name: OpenAIProvider.METRIC_OUTPUT_TOKENS,
       type: 'counter',
       description: 'Number of output tokens used by OpenAI',
-      labels: ['model_name'],
+      labels: ['model_name', 'domain', 'service'],
     });
   }
 
@@ -62,12 +66,20 @@ export class OpenAIProvider implements AIProvider, OnModuleInit {
     // metrics
     this.metricsService.incMetric(
       OpenAIProvider.METRIC_INPUT_TOKENS,
-      { model_name: modelName },
+      {
+        model_name: modelName,
+        domain: this.options.domain,
+        service: this.options.service,
+      },
       response.usage?.prompt_tokens ?? 0,
     );
     this.metricsService.incMetric(
       OpenAIProvider.METRIC_OUTPUT_TOKENS,
-      { model_name: modelName },
+      { 
+        model_name: modelName,
+        domain: this.options.domain,
+        service: this.options.service,
+      },
       response.usage?.completion_tokens ?? 0,
     );
 
@@ -137,12 +149,20 @@ export class OpenAIProvider implements AIProvider, OnModuleInit {
     // metrics
     this.metricsService.incMetric(
       OpenAIProvider.METRIC_INPUT_TOKENS,
-      { model_name: modelName },
+      {
+        model_name: modelName,
+        domain: this.options.domain,
+        service: this.options.service,
+      },
       response.usage?.input_tokens ?? 0,
     );
     this.metricsService.incMetric(
       OpenAIProvider.METRIC_OUTPUT_TOKENS,
-      { model_name: modelName },
+      {
+        model_name: modelName,
+        domain: this.options.domain,
+        service: this.options.service,
+      },
       response.usage?.output_tokens ?? 0,
     );
 

@@ -30,6 +30,8 @@
 @import './components/charts/ChartLegend';
 @import './components/mealz/MealzLogo';
 
+@import './camera/components/TakePhotoButton';
+
 @import './auth/components/SignInForm';
 @import './auth/pages/SignInPage';
 
@@ -46,6 +48,9 @@
 @import './dashboard/sections/DailyMealsLog';
 @import './dashboard/sections/DailyHydration';
 
+@import './chef/components/ai-meal-scanner/AIMealScannerCamera';
+@import './chef/components/ai-meal-scanner/AIMealScannerAnalyze';
+@import './chef/components/ai-meal-scanner/AIMealScanner';
 @import './chef/components/meal-planner/MealPortion';
 @import './chef/components/meal-planner/NamedMealPicker';
 @import './chef/components/meal-planner/NamedMealPickerDropdown';

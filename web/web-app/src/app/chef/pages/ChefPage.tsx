@@ -9,7 +9,6 @@ import { usePatchState, useService } from '../../hooks';
 import { Center, LoaderType } from '../../components';
 import { PageLoader, PageWrapper } from '../../page';
 import { IngredientsCrudService } from '../../ingredients';
-import { MealsDailyPlanService } from '../../meals';
 import { MealPlanner } from '../components';
 import { ChefPageTranslations } from './ChefPage.translations';
 
@@ -20,7 +19,6 @@ interface ChefPageState {
 
 export function ChefPage() {
   const ingredientsCrudService = useService(IngredientsCrudService);
-  const mealsDailyPlanService = useService(MealsDailyPlanService);
 
   const [state, setState] = useState<ChefPageState>({
     loadStatus: LoadStatus.Loading,

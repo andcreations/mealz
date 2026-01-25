@@ -2,6 +2,10 @@ export abstract class AIProvider {
   public abstract createCompletion(
     input: CreateCompletionInput,
   ): Promise<CreateCompletionOutput>;
+
+  public abstract createResponse(
+    input: CreateResponseInput,
+  ): Promise<CreateResponseOutput>;
 }
 
 export interface CreateCompletionInput {

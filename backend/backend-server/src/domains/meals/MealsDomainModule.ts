@@ -8,6 +8,7 @@ import {
   MealsDailyPlanGWModule,
 } from './services/daily-plan';
 import { MealsNamedModule, MealsNamedGWModule } from './services/named';
+import { MealsAIScanModule, MealsAIScanGWModule } from './services/ai-scan';
 
 @Module({
   imports: [
@@ -20,6 +21,8 @@ import { MealsNamedModule, MealsNamedGWModule } from './services/named';
     MealsDailyPlanGWModule,
     MealsNamedModule,
     MealsNamedGWModule,
+    MealsAIScanModule,
+    MealsAIScanGWModule,
   ],
 })
 export class MealsDomainModule {

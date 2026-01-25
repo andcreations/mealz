@@ -1,0 +1,21 @@
+.mealz-ai-meal-scanner-analyze {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.mealz-ai-meal-scanner-analyze-photo { 
+  border-radius: $mealz-border-radius;
+  border: solid 1px $mealz-theme-color-border;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
