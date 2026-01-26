@@ -21,7 +21,6 @@ export class MealsAIScanService {
       request.photoBase64,
       request.mimeType,
     );
-    console.log(photoScan);
     return { photoScan };
   }
 }

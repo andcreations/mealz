@@ -18,22 +18,6 @@ export class MealPhotoScanner {
     photoBase64: string,
     mimeType: string,
   ): Promise<PhotoScan> {
-    type ResponseType = {
-      meals: {
-        name: string;
-        calories: number;
-        carbs: number;
-        protein: number;
-        fat: number;
-        ingredients: {
-          name: string;
-          amount: number;
-          alternativeNames: string[];
-          confidence: number;
-        }[];
-      }[];
-    };
-
     const imageUrl = `data:${mimeType};base64,${photoBase64}`;
     const response = await this.aiProvider.createResponse({
       modelName: this.modelName,
@@ -53,21 +37,27 @@ export class MealPhotoScanner {
              type: 'array',
              items: {
               type: 'object',
+              description: 'Meal visible on a separate plate/bowl/container',
               properties: {
                 name: {
                   type: 'string',
+                  description: 'Name of the meal',
                 },
                 calories: {
                   type: 'number',
+                  description: 'Calories of the meal in kcal',
                 },
                 carbs: {
                   type: 'number',
+                  description: 'Carbs of the meal in grams',
                 },
                 protein: {
                   type: 'number',
+                  description: 'Protein of the meal in grams',
                 },
                 fat: {
                   type: 'number',
+                  description: 'Fat of the meal in grams',
                 },
                 ingredients: {
                   type: 'array',
@@ -76,13 +66,32 @@ export class MealPhotoScanner {
                     properties: {
                       name: {
                         type: 'string',
+                        description: 'Name of the ingredient',
                       },
                       amount: {
                         type: 'number',
                         description: 'Amount of the ingredient in grams',
                       },
+                      alternativeNames: {
+                        type: 'array',
+                        items: {
+                          type: 'string',
+                          description: 'Alternative names of the ingredient',
+                        },
+                      },
+                      confidence: {
+                        type: 'number',
+                        description: 'Confidence in the ingredient amount',
+                        minimum: 0,
+                        maximum: 1,
+                      },
                     },
-                    required: ['name', 'amount'],
+                    required: [
+                      'name',
+                      'amount',
+                      'alternativeNames',
+                      'confidence',
+                    ],
                     additionalProperties: false,
                   },
                 },
@@ -103,8 +112,43 @@ export class MealPhotoScanner {
         additionalProperties: false,
       },
     });
-    const responseJson = JSON.parse(response.text) as ResponseType;
-    console.log(JSON.stringify(responseJson, null, 2));
-    return {};
+    const scanPhotoResponse = JSON.parse(response.text) as ScanPhotoResponse;
+    return this.convertResponseToPhotoScan(scanPhotoResponse);
   }
+
+  private convertResponseToPhotoScan(
+    scanPhotoResponse: ScanPhotoResponse,
+  ): PhotoScan {
+    return {
+      meals: scanPhotoResponse.meals.map(meal => ({
+        name: meal.name,
+        calories: meal.calories,
+        carbs: meal.carbs,
+        protein: meal.protein,
+        fat: meal.fat,
+        ingredients: meal.ingredients.map(ingredient => ({
+          name: ingredient.name,
+          amount: ingredient.amount,
+          alternativeNames: ingredient.alternativeNames,
+          confidence: ingredient.confidence,
+        })),
+      })),
+    };
+  }
+}
+
+type ScanPhotoResponse = {
+  meals: {
+    name: string;
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+    ingredients: {
+      name: string;
+      amount: number;
+      alternativeNames: string[];
+      confidence: number;
+    }[];
+  }[];
 }

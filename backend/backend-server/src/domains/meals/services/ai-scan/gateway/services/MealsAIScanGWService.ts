@@ -29,7 +29,7 @@ export class MealsAIScanGWService {
       userId,
       hintsFromUser: gwRequest.hintsFromUser,
     };
-    const response = await this.mealsAIScanTransporter.scanPhotoV1(
+    const { photoScan } = await this.mealsAIScanTransporter.scanPhotoV1(
       request,
       context,
     );
