@@ -33,6 +33,10 @@ export class MealPhotoScanner {
       jsonSchema: {
         type: 'object',
         properties: {
+          photoContent: {
+            type: 'string',
+            description: 'Content of the photo',
+          },
           meals: {
              type: 'array',
              items: {
@@ -108,7 +112,7 @@ export class MealPhotoScanner {
             }
           },
         },
-        required: ['meals'],
+        required: ['photoContent', 'meals'],
         additionalProperties: false,
       },
     });
@@ -120,6 +124,7 @@ export class MealPhotoScanner {
     scanPhotoResponse: ScanPhotoResponse,
   ): PhotoScan {
     return {
+      photoContent: scanPhotoResponse.photoContent,
       meals: scanPhotoResponse.meals.map(meal => ({
         name: meal.name,
         calories: meal.calories,
@@ -138,6 +143,7 @@ export class MealPhotoScanner {
 }
 
 type ScanPhotoResponse = {
+  photoContent: string;
   meals: {
     name: string;
     calories: number;
