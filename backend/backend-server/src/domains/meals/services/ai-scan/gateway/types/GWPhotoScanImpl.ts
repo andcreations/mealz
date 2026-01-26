@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { 
-  ScanPhotoGWResponseV1,
+  GWPhotoScan,
 } from '@mealz/backend-meals-ai-scan-gateway-api';
 
-import { GWPhotoScanMealImpl } from '../types';
+import { GWPhotoScanMealImpl } from './GWPhotoScanMealImpl';
 
-export class ScanPhotoGWResponseV1Impl implements ScanPhotoGWResponseV1 {
+export class GWPhotoScanImpl implements GWPhotoScan {
   @ApiProperty({
     description: 'Meals of the photo scan',
   })

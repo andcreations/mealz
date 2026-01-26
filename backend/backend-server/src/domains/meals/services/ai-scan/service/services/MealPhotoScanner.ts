@@ -68,16 +68,16 @@ export class MealPhotoScanner {
                         type: 'string',
                         description: 'Name of the ingredient',
                       },
-                      amount: {
-                        type: 'number',
-                        description: 'Amount of the ingredient in grams',
-                      },
                       alternativeNames: {
                         type: 'array',
                         items: {
                           type: 'string',
                           description: 'Alternative names of the ingredient',
                         },
+                      },
+                      amount: {
+                        type: 'number',
+                        description: 'Amount of the ingredient in grams',
                       },
                       confidence: {
                         type: 'number',
@@ -88,8 +88,8 @@ export class MealPhotoScanner {
                     },
                     required: [
                       'name',
-                      'amount',
                       'alternativeNames',
+                      'amount',
                       'confidence',
                     ],
                     additionalProperties: false,
@@ -128,8 +128,8 @@ export class MealPhotoScanner {
         fat: meal.fat,
         ingredients: meal.ingredients.map(ingredient => ({
           name: ingredient.name,
-          amount: ingredient.amount,
           alternativeNames: ingredient.alternativeNames,
+          amount: ingredient.amount,
           confidence: ingredient.confidence,
         })),
       })),

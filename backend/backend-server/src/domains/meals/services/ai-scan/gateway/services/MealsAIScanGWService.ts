@@ -9,12 +9,14 @@ import {
   ScanPhotoGWRequestV1Impl,
   ScanPhotoGWResponseV1Impl,
 } from '../dtos';
+import { GWScanPhotoMealMapper } from './GWScanPhotoMealMapper';
 
 @Injectable()
 export class MealsAIScanGWService {
 
   public constructor(
     private readonly mealsAIScanTransporter: MealsAIScanTransporter,
+    private readonly gwScanPhotoMealMapper: GWScanPhotoMealMapper,
   ) {}
 
   public async scanPhotoV1(
@@ -33,6 +35,6 @@ export class MealsAIScanGWService {
       request,
       context,
     );
-    return {};
+    return this.gwScanPhotoMealMapper.fromPhotoScan(photoScan);
   }
 }
