@@ -1,6 +1,4 @@
 import { Response } from 'express';
-import { FastifyReply } from 'fastify';
-import { InternalError, isExpress, isFastify } from '@mealz/backend-common';
 
 export interface CookieOptions {
   httpOnly?: boolean;
@@ -13,22 +11,10 @@ export interface CookieOptions {
 }
 
 export function setCookie(
-  response: Response | FastifyReply,
+  response: Response,
   name: string,
   value: string,
   options: CookieOptions,
 ) {
-  if (isFastify()) {
-    const fastifyResponse = response as FastifyReply;
-    fastifyResponse.setCookie(name, value, options);
-    return;
-  }
-  
-  if (isExpress()) {
-    const expressResponse = response as Response;
-    expressResponse.cookie(name, value, options);
-    return;
-  }
-
-  throw new InternalError('Invalid response type when setting cookie');
+  response.cookie(name, value, options);
 }

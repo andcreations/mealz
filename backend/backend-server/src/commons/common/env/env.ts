@@ -74,14 +74,6 @@ export function isProduction(): boolean {
   return process.env.NODE_ENV === 'production';
 }
 
-export function isFastify(): boolean {
-  return isProduction() === true;
-}
-
-export function isExpress(): boolean {
-  return isProduction() === false;
-}
-
 export function isSecure(): boolean {
   return false;
 }
