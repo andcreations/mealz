@@ -94,6 +94,7 @@ export function useCamera(options: UseCameraOptions = {}) {
         type?: 'image/jpeg' | 'image/png';
         quality?: number; // only for jpeg/webp
         fileName?: string;
+        maxWidth?: number;
       } = {},
     ) => {
       const video = videoRef.current;
@@ -110,11 +111,17 @@ export function useCamera(options: UseCameraOptions = {}) {
         opts.fileName ?? `photo_${new Date().toISOString().replace(/[:.]/g, '-')}.${type === 'image/png' ? 'png' : 'jpg'}`;
 
       // use actual video dimensions for best quality
-      const width = video.videoWidth;
-      const height = video.videoHeight;
+      let width = video.videoWidth;
+      let height = video.videoHeight;
+
+      // scale to maximum width
+      if (opts.maxWidth && width > opts.maxWidth) {
+        height = opts.maxWidth * height / width;
+        width = opts.maxWidth;
+      }
 
       // create canvas
-      const canvas = document.createElement('canvas');
+      let canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
 

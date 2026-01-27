@@ -7,8 +7,6 @@ import { DashboardPage } from '../../dashboard/pages';
 import { ChefPage } from '../../chef/pages';
 import { Private } from './Private';
 
-import { CameraPage } from '../../camera/components/CameraPage';
-
 export function AppRouter() {
   return (
     <HashRouter>
@@ -16,7 +14,6 @@ export function AppRouter() {
         <Route path='/' element={<Private><DashboardPage/></Private>}/>
         <Route path='/sign-in' element={<SignInPage/>}/>
         <Route path='/chef' element={<Private><ChefPage/></Private>}/>
-        <Route path='/camera' element={<Private><CameraPage/></Private>}/>
         <Route path='*' element={<NotFoundPage/>}/>
       </Routes>
     </HashRouter>

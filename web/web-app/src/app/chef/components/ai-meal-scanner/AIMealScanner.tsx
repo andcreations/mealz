@@ -9,22 +9,21 @@ export interface AIMealScannerProps {
 }
 
 interface AIMealScannerState {
-  photoUrl: string | null;
+  photo: File | null;
 }
 
 export function AIMealScanner(props: AIMealScannerProps) {
   const [state, setState] = useState<AIMealScannerState>({
-    photoUrl: null,
+    photo: null,
   });
   const patchState = usePatchState(setState);
 
   const onPhotoTaken = (photo: File) => {
-    const photoUrl = URL.createObjectURL(photo);
-    patchState({ photoUrl });
+    patchState({ photo });
   };
 
-  const canTakePhoto = state.photoUrl === null;
-  const canAnalyze = state.photoUrl !== null;
+  const canTakePhoto = state.photo === null;
+  const canAnalyze = state.photo !== null;
 
   return (
     <div className='mealz-ai-meal-scanner'>
@@ -32,7 +31,7 @@ export function AIMealScanner(props: AIMealScannerProps) {
         <AIMealScannerCamera onPhotoTaken={onPhotoTaken}/>
       }
       { canAnalyze &&
-        <AIMealScannerAnalyze photoUrl={state.photoUrl}/>
+        <AIMealScannerAnalyze photo={state.photo}/>
       }
     </div>
   );

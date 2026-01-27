@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { usePatchState } from '../../../hooks';
+import { Log } from '../../../log';
+import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { Loader, LoaderType, LoaderSize } from '../../../components';
+import { AIMealScanService } from '../../../meals';
 import { 
   AIMealScannerAnalyzeTranslations,
 } from './AIMealScannerAnalyze.translations';
 
 export interface AIMealScannerAnalyzeProps {
-  photoUrl: string;
+  photo: File;
 }
 
 interface AIMealScannerAnalyzeState {
@@ -17,6 +19,7 @@ interface AIMealScannerAnalyzeState {
 }
 
 export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
+  const aiMealScanService = useService(AIMealScanService);
   const translate = useTranslations(AIMealScannerAnalyzeTranslations);
 
   const [state, setState] = useState<AIMealScannerAnalyzeState>({
@@ -24,10 +27,18 @@ export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
   });
   const patchState = usePatchState(setState);
 
+  useEffect(() => {
+    Log.debug('Scanning photo');
+    aiMealScanService.scanPhoto(props.photo).then(() => {
+      Log.debug('Photo scanned');
+      patchState({ isAnalyzing: false });
+    });
+  }, [props.photo]);
+
   return (
     <div className='mealz-ai-meal-scanner-analyze'>
       <div className='mealz-ai-meal-scanner-analyze-photo'>
-        <img src={props.photoUrl}/>
+        <img src={URL.createObjectURL(props.photo)}/>
       </div>
       { state.isAnalyzing &&
         <Loader

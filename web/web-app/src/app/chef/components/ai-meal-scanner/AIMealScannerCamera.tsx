@@ -16,6 +16,8 @@ export interface AIMealScannerCameraProps {
   onPhotoTaken: (photo: File) => void;
 }
 
+const MAX_WIDTH = 1280;
+
 interface AIMealScannerCameraState {
   isReady: boolean;
 }
@@ -44,8 +46,8 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
   });
 
   const onTakePhoto = () => {
-    takePhoto()
-      .then((photo) => {
+    takePhoto({ maxWidth: MAX_WIDTH })
+      .then((photo) => {        
         props.onPhotoTaken(photo);
       })
       .catch((error) => {
