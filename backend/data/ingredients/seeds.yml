@@ -1,0 +1,107 @@
+- name:
+    en: Chia seeds
+    pl: Nasiona chia
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 486
+    carbs: 40.3
+    sugars: 0.8
+    fibre: 34.4
+    protein: 16.5
+    fat:
+      total: 30.7
+      saturated: 3.3
+      monounsaturated: 2.3
+      polyunsaturated: 23.7
+
+- name:
+    en: Poppy seeds
+    pl: Mak
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 525
+    carbs: 28.1
+    sugars: 2.99
+    fibre: 19.5
+    protein: 17.9
+    fat:
+      total: 41.6
+      saturated: 4.5
+      monounsaturated: 7.7
+      polyunsaturated: 28.6
+
+- name:
+    en: Sesame seeds
+    pl: Sezam
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 573
+    carbs: 23.4
+    sugars: 0.3
+    fibre: 11.8
+    protein: 17.7
+    fat:
+      total: 49.7
+      saturated: 7.0
+      monounsaturated: 18.8
+      polyunsaturated: 21.8
+
+- name:
+    en: Linseed
+    pl: Siemię lniane
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 534
+    carbs: 28.9
+    sugars: 1.6
+    fibre: 27.3
+    protein: 18.3
+    fat:
+      total: 42.2
+      saturated: 3.7
+      monounsaturated: 7.5
+      polyunsaturated: 28.7
+
+- name:
+    en: Sunflower seeds
+    pl: Nasiona słonecznika
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 584
+    carbs: 20.0
+    sugars: 2.6
+    fibre: 8.6
+    protein: 20.8
+    fat:
+      total: 51.5
+      saturated: 4.5
+      monounsaturated: 18.5
+      polyunsaturated: 23.1
+
+- name:
+    en: Pumpkin seeds
+    pl: Pestki dyni
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 559
+    carbs: 10.7
+    sugars: 1.4
+    fibre: 6.0
+    protein: 30.2
+    fat:
+      total: 49.0
+      saturated: 8.7
+      monounsaturated: 16.2
+      polyunsaturated: 20.9

@@ -252,3 +252,92 @@
       monounsaturated: 0.6
       polyunsaturated: 1.1
 
+- name:
+    en: Corn tortilla
+    pl: Tortilla kukurydziana
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 218
+    carbs: 44.6
+    sugars: 0.8
+    fibre: 6.3
+    protein: 5.7
+    fat:
+      total: 2.9
+      saturated: 0.4
+      monounsaturated: 0.8
+      polyunsaturated: 1.4
+
+- name:
+    en: Multigrain tortilla
+    pl: Tortilla wieloziarnista
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 313
+    carbs: 53.0
+    sugars: 3.7
+    fibre: 6.5
+    protein: 8.7
+    fat:
+      total: 7.9
+      saturated: 2.2
+      monounsaturated: 2.3
+      polyunsaturated: 2.6
+
+- name:
+    en: Flour tortilla
+    pl: Tortilla pszenna
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 304
+    carbs: 50.6
+    sugars: 3.6
+    fibre: 2.7
+    protein: 8.0
+    fat:
+      total: 7.9
+      saturated: 2.3
+      monounsaturated: 2.2
+      polyunsaturated: 2.7
+
+- name:
+    en: Spinach tortilla
+    pl: Tortilla szpinakowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 304
+    carbs: 50.6
+    sugars: 3.6
+    fibre: 2.7
+    protein: 8.0
+    fat:
+      total: 7.9
+      saturated: 2.3
+      monounsaturated: 2.2
+      polyunsaturated: 2.7
+
+- name:
+    en: Tomato tortilla
+    pl: Tortilla pomidorowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 304
+    carbs: 50.6
+    sugars: 3.6
+    fibre: 2.7
+    protein: 8.0
+    fat:
+      total: 7.9
+      saturated: 2.3
+      monounsaturated: 2.2
+      polyunsaturated: 2.7

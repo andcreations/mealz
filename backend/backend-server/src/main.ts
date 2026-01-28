@@ -49,6 +49,7 @@ function readCertificateAndKey(): CertificateAndKey | undefined {
 }
 
 async function bootstrap() {
+  getLogger(); // initialize logger
   let app: INestApplication;
 
   getLogger().info('Creating express application', BOOTSTRAP_CONTEXT);

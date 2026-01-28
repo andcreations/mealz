@@ -1,2 +1,53 @@
-# TODO
-[]
+- name:
+    en: Raisins
+    pl: Rodzynki
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 299
+    carbs: 79.3
+    sugars: 59.2
+    fibre: 3.7
+    protein: 3.1
+    fat:
+      total: 0.5
+      saturated: 0.1
+      monounsaturated: 0.0
+      polyunsaturated: 0.1
+
+- name:
+    en: Dried dates
+    pl: Daktyle suszone
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 282
+    carbs: 75.0
+    sugars: 63.4
+    fibre: 8.0
+    protein: 2.5
+    fat:
+      total: 0.4
+      saturated: 0.0
+      monounsaturated: 0.0
+      polyunsaturated: 0.0
+
+- name:
+    en: Dried apricot
+    pl: Morele suszone
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 241
+    carbs: 62.6
+    sugars: 53.4
+    fibre: 7.3
+    protein: 3.4
+    fat:
+      total: 0.5
+      saturated: 0.0
+      monounsaturated: 0.2
+      polyunsaturated: 0.1

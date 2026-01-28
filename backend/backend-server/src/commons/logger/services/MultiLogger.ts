@@ -10,7 +10,7 @@ export class MultiLogger extends Logger {
 
   public async init(): Promise<void> {
     for (const logger of this.loggers) {
-      await logger.init();
+      logger.init();
     }
   }
 

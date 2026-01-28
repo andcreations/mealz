@@ -8,6 +8,7 @@ import {
   IsOptional,
   Min,
   ValidateNested,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -69,6 +70,7 @@ export class YamlProduct {
 // Represents an ingredient as it is stored in a YAML file.
 export class YamlIngredient {
   @IsDefined()
+  @IsObject()
   @ValidateNested()
   @Type(() => YamlName)
   name: YamlName;
@@ -84,11 +86,13 @@ export class YamlIngredient {
   weight: number;
 
   @IsDefined()
+  @IsObject()
   @ValidateNested()
   @Type(() => YamlFacts)
   facts: YamlFacts;
   
   @IsOptional()
+  @IsObject()
   @ValidateNested()
   @Type(() => YamlProduct)
   product?: YamlProduct;

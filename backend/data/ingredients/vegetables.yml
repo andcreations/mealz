@@ -520,3 +520,38 @@
       polyunsaturated: 0.1
   link: https://www.nutritionix.com/food/red-pepper
 
+- name:
+    en: Tomato paste
+    pl: Koncentrat pomidorowy
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 82
+    carbs: 18.9
+    sugars: 12.6
+    fibre: 4.1
+    protein: 4.3
+    fat:
+      total: 0.5
+      saturated: 0.1
+      monounsaturated: 0.1
+      polyunsaturated: 0.2
+
+- name:
+    en: Passata
+    pl: Passata pomidorowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 32
+    carbs: 7.4
+    sugars: 4.1
+    fibre: 1.5
+    protein: 1.6
+    fat:
+      total: 0.2
+      saturated: 0.0
+      monounsaturated: 0.0
+      polyunsaturated: 0.1
