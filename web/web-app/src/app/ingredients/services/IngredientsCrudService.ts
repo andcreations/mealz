@@ -119,6 +119,12 @@ export class IngredientsCrudService implements OnBootstrap {
     });
   }
 
+  public async waitForIngredientsToLoad(): Promise<void> {
+    if (this.isLoaded()) {
+      return;
+    }
+    await this.loadAll();
+  }
 
   public isLoaded(): boolean {
     return this.loadStatus === LoadStatus.Loaded;
