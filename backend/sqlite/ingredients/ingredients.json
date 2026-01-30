@@ -3310,6 +3310,112 @@
   },
   {
     "name": {
+      "en": "Dry cottage cheese 0%",
+      "pl": "Twaróg wiejski chudy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 90
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 19
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Piątnica"
+    }
+  },
+  {
+    "name": {
+      "en": "Dry cottage cheese 4%",
+      "pl": "Twaróg wiejski półtusty"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 115
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.8
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 16
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2.4
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Piątnica"
+    }
+  },
+  {
+    "name": {
       "en": "Duck (raw)",
       "pl": "Kaczka (surowa)"
     },
@@ -5610,8 +5716,8 @@
   },
   {
     "name": {
-      "en": "Milk",
-      "pl": "Mleko"
+      "en": "Milk 2%",
+      "pl": "Mleko 2%"
     },
     "type": 0,
     "unitPer100": 0,
@@ -5624,37 +5730,87 @@
       {
         "id": 1,
         "unit": 1,
-        "amount": 4.92
+        "amount": 4.8
       },
       {
         "id": 2,
         "unit": 1,
-        "amount": 4.92
+        "amount": 4.8
       },
       {
         "id": 3,
         "unit": 1,
-        "amount": 3.32
+        "amount": 3.4
       },
       {
         "id": 4,
         "unit": 1,
-        "amount": 1.97
+        "amount": 2
       },
       {
         "id": 5,
         "unit": 1,
-        "amount": 1.27
+        "amount": 1.2
       },
       {
         "id": 6,
         "unit": 1,
-        "amount": 0.57
+        "amount": 0.6
       },
       {
         "id": 7,
         "unit": 1,
-        "amount": 0.08
+        "amount": 0.1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Milk 3.2%",
+      "pl": "Mleko 3,2%"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 61
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.8
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3.3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.2
       }
     ]
   },
@@ -8963,6 +9119,59 @@
         "amount": 0.8
       }
     ]
+  },
+  {
+    "name": {
+      "en": "Soy drink (vanilla)",
+      "pl": "Napój sojowy (waniliowy)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 57
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 6.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6.7
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.1
+      }
+    ],
+    "product": {
+      "brand": "Alpro"
+    }
   },
   {
     "name": {

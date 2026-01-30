@@ -53,4 +53,61 @@
       total: 3
       saturated: 2
       #monounsaturated: -
-      #polyunsaturated: -          
+      #polyunsaturated: -
+
+- name:
+    en: Dry cottage cheese 4%
+    pl: Twaróg wiejski półtusty
+  unit: g
+  type: generic
+  product:
+    brand: Piątnica
+  weight: 100
+  facts:
+    calories: 115
+    carbs: 3.8
+    sugars: 3.8
+    protein: 16
+    fat:
+      total: 4
+      saturated: 2.4
+      #monounsaturated: -
+      #polyunsaturated: -
+
+- name:
+    en: Dry cottage cheese 0%
+    pl: Twaróg wiejski chudy
+  unit: g
+  type: generic
+  product:
+    brand: Piątnica
+  weight: 100
+  facts:
+    calories: 90
+    carbs: 3.5
+    sugars: 3.5
+    protein: 19
+    fat:
+      total: 0
+      saturated: 0
+      #monounsaturated: -
+      #polyunsaturated: -
+
+- name:
+    en: Soy drink (vanilla)
+    pl: Napój sojowy (waniliowy)
+  unit: g
+  type: generic
+  product:
+    brand: Alpro
+  weight: 100
+  facts:
+    calories: 57
+    carbs: 6.7
+    sugars: 6.7
+    protein: 3
+    fat:
+      total: 1.8
+      saturated: 0.3
+      monounsaturated: 0.4
+      polyunsaturated: 1.1
