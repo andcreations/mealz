@@ -1,5 +1,5 @@
-import { GWPhotoScanMeal } from '../types';
+import { GWPhotoScan } from '../types';
 
 export interface ScanPhotoGWResponseV1 {
-  meals: GWPhotoScanMeal[];
+  photoScan: GWPhotoScan;
 }

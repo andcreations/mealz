@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 
 import { usePatchState } from '../../../hooks';
+import { AIMealScanResult } from '../../types';
 import { AIMealScannerCamera } from './AIMealScannerCamera';
 import { AIMealScannerAnalyze } from './AIMealScannerAnalyze';
 
 export interface AIMealScannerProps {
+  onAccept: (result: AIMealScanResult) => void;
+  onClose: () => void;
 }
 
 interface AIMealScannerState {
@@ -22,6 +26,14 @@ export function AIMealScanner(props: AIMealScannerProps) {
     patchState({ photo });
   };
 
+  const onAccept = (result: AIMealScanResult) => {
+    props.onAccept(result);
+  };
+
+  const onClose = () => {
+    props.onClose();
+  };
+
   const canTakePhoto = state.photo === null;
   const canAnalyze = state.photo !== null;
 
@@ -31,7 +43,11 @@ export function AIMealScanner(props: AIMealScannerProps) {
         <AIMealScannerCamera onPhotoTaken={onPhotoTaken}/>
       }
       { canAnalyze &&
-        <AIMealScannerAnalyze photo={state.photo}/>
+        <AIMealScannerAnalyze 
+          photo={state.photo}
+          onAccept={onAccept}
+          onClose={onClose}
+        />
       }
     </div>
   );

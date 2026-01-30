@@ -38,6 +38,19 @@ $input-placeholder-color: color.scale($mealz-theme-color-bg, $lightness: 16%);
   border-color: $mealz-theme-color-fg !important;
 }
 
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:active,
+.btn-secondary:visited {
+  color: $mealz-theme-color-bg-dark !important;
+  background-color: $mealz-theme-color-bg !important;
+  border-color: $mealz-theme-color-bg !important;
+}
+
+.btn-secondary:focus {
+  box-shadow: $mealz-box-shadow-wide !important;
+  border-color: $mealz-theme-color-bg !important;
+}
 
 // modal
 .modal-content {

@@ -10,7 +10,11 @@ import {
 import { LoadStatus } from '../../../common';
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
-import { CalculateAmountsResult, MealPlannerIngredient } from '../../types';
+import { 
+  AIMealScanResult, 
+  CalculateAmountsResult,
+  MealPlannerIngredient,
+} from '../../types';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
 import { LoaderType, ModalMenuItem, ModalMenu } from '../../../components';
 import { PageLoader } from '../../../page';
@@ -445,6 +449,25 @@ export function MealPlanner() {
       patchState({ showAIMealScannerModal: true });
     },
 
+    onAcceptAIMealScan: (result: AIMealScanResult) => {
+      const per100 = (value: number) => value * 100 / result.weightOfAllMeals;
+      const ingredients: MealPlannerIngredient[] = [
+        {
+          adHocIngredient: {
+            name: result.nameOfAllMeals,
+            caloriesPer100: per100(result.macros.calories),
+          },
+          enteredAmount: result.weightOfAllMeals.toString(),
+        }
+      ];
+      markDirty();
+      recalculate(
+        state.calories,
+        ingredients,
+        { showAIMealScannerModal: false },
+      );
+    },
+
     onCloseAIMealScanner: () => {
       patchState({ showAIMealScannerModal: false });
     },
@@ -728,6 +751,7 @@ export function MealPlanner() {
       { state.showAIMealScannerModal &&
         <AIMealScannerModal
           show={state.showAIMealScannerModal}
+          onAccept={meal.onAcceptAIMealScan}
           onClose={meal.onCloseAIMealScanner}
         />
       }

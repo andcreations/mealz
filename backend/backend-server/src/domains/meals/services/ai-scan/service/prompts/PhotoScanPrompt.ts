@@ -28,7 +28,7 @@ General behavior:
 - calories are kcal; carbs/protein/fat are grams.
 - Estimate ingredient amounts in grams.
 - Include only ingredients likely present/visible. If uncertain, include with lower confidence and provide plausible alternativeNames.
-- confidence is 0.00–1.00 (higher = more certain). Round to 2 decimals.
+- confidence is 0.00-1.00 (higher = more certain). Round to 2 decimals.
 - Round calories to nearest 10; macros to whole grams; ingredient amounts to nearest 5g.
 - Keep macros/calories internally consistent (avoid impossible totals).
 - If you cannot confidently identify any meals, return {"meals": []}.

@@ -11,7 +11,7 @@ export class MealPhotoScanner {
     this.modelName = getStrEnv(
       'MEALZ_MEALS_AI_SCAN_MODEL_NAME',
       'gpt-4o-mini',
-    );
+    );  
   }
 
   public async scanPhoto(
@@ -36,6 +36,16 @@ export class MealPhotoScanner {
           photoContent: {
             type: 'string',
             description: 'Content of the photo',
+          },
+          nameOfAllMeals: {
+            type: 'string',
+            description:
+              'Short name of all meals visible on the photo, ' +
+              'e.g. "Salad with chicken, Chicken with rice"',
+          },
+          weightOfAllMeals: {
+            type: 'number',
+            description: 'Weight of all meals in grams',
           },
           meals: {
              type: 'array',
@@ -112,7 +122,12 @@ export class MealPhotoScanner {
             }
           },
         },
-        required: ['photoContent', 'meals'],
+        required: [
+          'photoContent',
+          'nameOfAllMeals',
+          'weightOfAllMeals',
+          'meals',
+        ],
         additionalProperties: false,
       },
     });
@@ -125,6 +140,8 @@ export class MealPhotoScanner {
   ): PhotoScan {
     return {
       photoContent: scanPhotoResponse.photoContent,
+      nameOfAllMeals: scanPhotoResponse.nameOfAllMeals,
+      weightOfAllMeals: scanPhotoResponse.weightOfAllMeals,
       meals: scanPhotoResponse.meals.map(meal => ({
         name: meal.name,
         calories: meal.calories,
@@ -144,6 +161,8 @@ export class MealPhotoScanner {
 
 type ScanPhotoResponse = {
   photoContent: string;
+  nameOfAllMeals: string;
+  weightOfAllMeals: number;
   meals: {
     name: string;
     calories: number;

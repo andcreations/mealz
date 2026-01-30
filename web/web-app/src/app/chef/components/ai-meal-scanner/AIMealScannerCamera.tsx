@@ -67,6 +67,21 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
     [],
   );
 
+  const loader = {
+    type: () => {
+      if (error) {
+        return LoaderType.Error;
+      }
+      return LoaderType.Info;
+    },
+
+    subTitle: () => {
+      if (error) {
+        return translate('error');
+      }
+      return translate('setting-camera');
+    },
+  }
 
   const frameClassNames = classNames(
     'mealz-ai-meal-scanner-camera-frame',
@@ -85,9 +100,9 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
       }
       { !canTakePhoto &&
         <Loader
-          type={LoaderType.Info}
+          type={loader.type()}
           size={LoaderSize.Small}
-          subTitle={translate('setting-camera')}
+          subTitle={loader.subTitle()}
         />
       }
       <div className={frameClassNames}>
@@ -100,13 +115,6 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
           muted
         />
       </div>
-      { error &&
-        <Loader
-          type={LoaderType.Error}
-          size={LoaderSize.Small}
-          subTitle={translate('error')}
-        />
-      }
       { canTakePhoto &&
         <TakePhotoButton
           className='mealz-ai-meal-scanner-camera-button'

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Modal from 'react-bootstrap/Modal';
 
+import { AIMealScanResult } from '../../types';
 import { AIMealScanner } from './AIMealScanner';
 
 export interface AIMealScannerModalProps {
   show: boolean;
+  onAccept: (result: AIMealScanResult) => void;
   onClose: () => void;
 }
 
@@ -18,7 +20,10 @@ export function AIMealScannerModal(props: AIMealScannerModalProps) {
       onHide={props.onClose}
       onEscapeKeyDown={props.onClose}
     >
-      <AIMealScanner/>
+      <AIMealScanner
+        onAccept={props.onAccept}
+        onClose={props.onClose}
+      />
     </Modal>
   );
 }

@@ -30,6 +30,8 @@
 @import './components/charts/BarChart';
 @import './components/charts/ChartLegend';
 @import './components/mealz/MealzLogo';
+@import './components/macros/MacrosSummary';
+@import './components/macros/MacrosSummaryBox';
 
 @import './camera/components/TakePhotoButton';
 
@@ -39,8 +41,6 @@
 @import './dashboard/components/DashboardSectionTitle';
 @import './dashboard/components/DashboardSectionSeparator';
 @import './dashboard/components/DashboardSection';
-@import './dashboard/components/MacrosSummary';
-@import './dashboard/components/MacrosSummaryBox';
 @import './dashboard/components/MealLog';
 @import './dashboard/components/DailySummary';
 @import './dashboard/components/WeeklySummary';

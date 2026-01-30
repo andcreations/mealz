@@ -35,6 +35,7 @@ export class MealsAIScanGWService {
       request,
       context,
     );
-    return this.gwScanPhotoMealMapper.fromPhotoScan(photoScan);
+    const gwPhotoScan = this.gwScanPhotoMealMapper.fromPhotoScan(photoScan);
+    return { photoScan: gwPhotoScan };
   }
 }

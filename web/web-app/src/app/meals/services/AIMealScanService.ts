@@ -1,14 +1,14 @@
 import { Service } from '@andcreations/common';
-import { HTTPWebClientService } from '@andcreations/web-common';
 import { 
-  ScanPhotoGWRequestV1,
   ScanPhotoGWResponseV1,
   MealsAIScanV1API,
 } from '@mealz/backend-meals-ai-scan-gateway-api';
 
+import { ScanPhotoResult } from '../types';
+
 @Service()
 export class AIMealScanService {
-  public async scanPhoto(photo: File): Promise<void> {
+  public async scanPhoto(photo: File): Promise<ScanPhotoResult> {
     const formData = new FormData();
     formData.append('photo', photo);
 
@@ -18,6 +18,11 @@ export class AIMealScanService {
       body: formData,
     });
     const scanPhotoResponse = await response.json() as ScanPhotoGWResponseV1;
-    console.log('response', scanPhotoResponse);
+    const photoScan = scanPhotoResponse.photoScan;
+    return { 
+      meals: photoScan.meals,
+      nameOfAllMeals: photoScan.nameOfAllMeals,
+      weightOfAllMeals: photoScan.weightOfAllMeals,
+    };
   }
 }

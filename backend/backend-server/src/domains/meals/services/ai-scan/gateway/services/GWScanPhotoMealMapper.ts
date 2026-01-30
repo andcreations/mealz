@@ -41,6 +41,8 @@ export class GWScanPhotoMealMapper {
     photoScan: PhotoScan,
   ): GWPhotoScanImpl {
     return {
+      nameOfAllMeals: photoScan.nameOfAllMeals,
+      weightOfAllMeals: photoScan.weightOfAllMeals,
       meals: photoScan.meals.map(meal => this.fromPhotoScanMeal(meal)),
     };
   }

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Log } from '../../log';
 
 export type FacingMode = 'user' | 'environment';
 
@@ -22,6 +23,13 @@ export function useCamera(options: UseCameraOptions = {}) {
   const [isActive, setIsActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const hasCameraAPI = useCallback(
+    () => {
+      return typeof navigator?.mediaDevices?.getUserMedia === 'function';
+    },
+    [],
+  );
+
   const waitForVideoReady = useCallback(
     (video: HTMLVideoElement) =>
       new Promise<void>((resolve) => {
@@ -43,6 +51,10 @@ export function useCamera(options: UseCameraOptions = {}) {
       setError(null);
 
       try {
+        if (!hasCameraAPI()) {
+          throw new Error('Camera not supported or not allowed');
+        }
+
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
           video: {
@@ -68,6 +80,7 @@ export function useCamera(options: UseCameraOptions = {}) {
         // notify that the video is ready
         options.onReady?.();
       } catch (error: any) {
+        Log.error('Failed to start camera', error);
         setIsActive(false);
         setError(error?.message ?? 'Failed to start camera');
       }

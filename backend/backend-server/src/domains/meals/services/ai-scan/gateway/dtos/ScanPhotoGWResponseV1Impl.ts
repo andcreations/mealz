@@ -3,11 +3,12 @@ import {
   ScanPhotoGWResponseV1,
 } from '@mealz/backend-meals-ai-scan-gateway-api';
 
-import { GWPhotoScanMealImpl } from '../types';
+import { GWPhotoScanImpl } from '../types';
 
 export class ScanPhotoGWResponseV1Impl implements ScanPhotoGWResponseV1 {
   @ApiProperty({
-    description: 'Meals of the photo scan',
+    description: 'Photo scan',
+    type: GWPhotoScanImpl,
   })
-  public meals: GWPhotoScanMealImpl[];
+  public photoScan: GWPhotoScanImpl;
 }
