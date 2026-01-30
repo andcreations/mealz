@@ -79,7 +79,7 @@ const adHocIngredient = (
   enteredAmount: string,
   calculatedAmount?: number,
 ): MealPlannerIngredient => {
-  return {  adHocIngredient, enteredAmount, calculatedAmount };
+  return { adHocIngredient, enteredAmount, calculatedAmount };
 }
 
 describe('MealCalculator.calculateAmounts', () => {
