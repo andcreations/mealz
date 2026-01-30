@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classNames from 'classnames';
 import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import {
   GWMealDailyPlanGoals,
@@ -7,13 +8,15 @@ import {
 import { MacrosSummaryBox, MacrosSummaryBoxType } from './MacrosSummaryBox';
 
 export interface MacrosSummaryProps {
+  className?: string;
   macrosSummary: GWMacros;
   goals?: GWMealDailyPlanGoals;
 }
 
 export function MacrosSummary(props: MacrosSummaryProps) {
+  const className = classNames('mealz-macros-summary', props.className);
   return (
-    <div className='mealz-macros-summary'>
+    <div className={className}>
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Calories}
         amount={props.macrosSummary.calories}

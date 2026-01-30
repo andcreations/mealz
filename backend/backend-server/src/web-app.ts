@@ -2,12 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DynamicModule } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import {
-  requireStrEnv,
-  isFastify,
-  isExpress,
-  InternalError,
-} from '@mealz/backend-common';
+import { requireStrEnv, InternalError } from '@mealz/backend-common';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
 import { getLogger } from '@mealz/backend-logger';
 
@@ -49,23 +44,12 @@ function setHeaders(
 }
 
 export function getServeStaticModule(): DynamicModule {
-  if (isFastify()) {
-    return ServeStaticModule.forRoot({
-      rootPath: getStaticFilesDir(),
-      renderPath: '/(?!api).*',
-      serveStaticOptions: {
-        setHeaders,
-      },
-    });
-  }
-  if (isExpress()) {
-    return ServeStaticModule.forRoot({
-      rootPath: getStaticFilesDir(),
-      serveRoot: '/',
-      exclude: ['/api'],
-      serveStaticOptions: {
-        setHeaders,
-      },
-    });  
-  }
+  return ServeStaticModule.forRoot({
+    rootPath: getStaticFilesDir(),
+    serveRoot: '/',
+    exclude: ['/api'],
+    serveStaticOptions: {
+      setHeaders,
+    },
+  });
 }

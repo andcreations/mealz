@@ -65,6 +65,10 @@ module.exports = {
         'domains/meals/services/named/gateway-api',
       ),
       ...backendAlias(
+        '@mealz/backend-meals-ai-scan-gateway-api',
+        'domains/meals/services/ai-scan/gateway-api',
+      ),
+      ...backendAlias(
         '@mealz/backend-hydration-daily-plan-gateway-api',
         'domains/hydration/services/daily-plan/gateway-api',
       ),

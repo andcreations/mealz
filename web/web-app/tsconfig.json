@@ -48,6 +48,9 @@
       "@mealz/backend-meals-named-gateway-api": [
         "../../backend/backend-server/src/domains/meals/services/named/gateway-api"
       ],
+      "@mealz/backend-meals-ai-scan-gateway-api": [
+        "../../backend/backend-server/src/domains/meals/services/ai-scan/gateway-api"
+      ],
       "@mealz/backend-hydration-daily-plan-gateway-api": [
         "../../backend/backend-server/src/domains/hydration/services/daily-plan/gateway-api"
       ],

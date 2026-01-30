@@ -10,6 +10,7 @@ import {
 
 export interface MealPlannerActionBarProps {
   onLogMeal: () => void;
+  onTakePhoto: () => void;
   onClearMeal: () => void;
   onLoadMeal: () => void;
   onSaveMeal: () => void;
@@ -75,6 +76,12 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
           className='mealz-meal-planner-action-bar-icon'
           icon='note_add'
           onClick={props.onLogMeal}
+        />
+        <Separator/>
+        <MaterialIcon
+          className='mealz-meal-planner-action-bar-icon'
+          icon='photo_camera'
+          onClick={props.onTakePhoto}
         />
         <Separator/>
         <MaterialIcon

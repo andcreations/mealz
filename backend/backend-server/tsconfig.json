@@ -63,6 +63,9 @@
       "@mealz/backend-meals-named-service-api": ["src/domains/meals/services/named/service-api"],
       "@mealz/backend-meals-named-gateway-api": ["src/domains/meals/services/named/gateway-api"],
 
+      "@mealz/backend-meals-ai-scan-service-api": ["src/domains/meals/services/ai-scan/service-api"],
+      "@mealz/backend-meals-ai-scan-gateway-api": ["src/domains/meals/services/ai-scan/gateway-api"],
+
       "@mealz/backend-hydration-daily-plan-service-api": ["src/domains/hydration/services/daily-plan/service-api"],
       "@mealz/backend-hydration-daily-plan-gateway-api": ["src/domains/hydration/services/daily-plan/gateway-api"],
 

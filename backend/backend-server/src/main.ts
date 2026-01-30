@@ -1,28 +1,19 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-// must be imported before Express, Fastify, NestJS
+// must be imported before Express, NestJS
 import '@mealz/backend-tracing-bootstrap';
 
 import { NestFactory } from '@nestjs/core';
+import * as express from 'express';
 import { INestApplication } from '@nestjs/common';
 import {
   ExpressAdapter,
   NestExpressApplication,
 } from '@nestjs/platform-express';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import fastifyCookie from '@fastify/cookie';
 import * as cookieParser from 'cookie-parser';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
-import {
-  getIntEnv,
-  InternalError,
-  isExpress,
-  isFastify,
-} from '@mealz/backend-common';
+import { getIntEnv, InternalError } from '@mealz/backend-common';
 import { getLogger } from '@mealz/backend-logger';
 import { GatewayBootstrap } from '@mealz/backend-gateway-common';
 
@@ -58,30 +49,18 @@ function readCertificateAndKey(): CertificateAndKey | undefined {
 }
 
 async function bootstrap() {
+  getLogger(); // initialize logger
   let app: INestApplication;
 
-  // create
-  if (isFastify()) {
-    getLogger().info('Creating fastify application', BOOTSTRAP_CONTEXT);
-    const fastifyApp = await NestFactory
-      .create<NestFastifyApplication>(
-        AppModule,
-        new FastifyAdapter({ https: readCertificateAndKey() })
-      );
-    await fastifyApp.register(fastifyCookie, {});      
-    app = fastifyApp;
-  }
-
-  if (isExpress()) {
-    getLogger().info('Creating express application', BOOTSTRAP_CONTEXT);
-    app = await NestFactory
-      .create<NestExpressApplication>(
-        AppModule,
-        new ExpressAdapter(),
-        { httpsOptions: readCertificateAndKey() },
-      );  
-    app.use(cookieParser());
-  }
+  getLogger().info('Creating express application', BOOTSTRAP_CONTEXT);
+  app = await NestFactory
+    .create<NestExpressApplication>(
+      AppModule,
+      new ExpressAdapter(),
+      { httpsOptions: readCertificateAndKey() },
+    );  
+  app.use(cookieParser());
+  app.use(express.urlencoded({ extended: true }));
 
   if (!app) {
     throw new InternalError('Invalid web application type');

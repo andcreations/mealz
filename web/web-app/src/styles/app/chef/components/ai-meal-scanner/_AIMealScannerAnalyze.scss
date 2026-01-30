@@ -1,0 +1,46 @@
+.mealz-ai-meal-scanner-analyze {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.mealz-ai-meal-scanner-analyze-photo { 
+  border-radius: $mealz-border-radius;
+  border: solid 1px $mealz-theme-color-border;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
+
+.mealz-ai-meal-scanner-analyze-no-meals {
+  @include mealz-font-small();
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.mealz-ai-meal-scanner-analyze-totals {
+  margin-top: 2rem;
+}
+
+.mealz-ai-meal-scanner-analyze-all-meals-name {
+  @include mealz-font-small();
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.mealz-ai-meal-scanner-analyze-button-bar {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}

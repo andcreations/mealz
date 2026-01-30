@@ -8,10 +8,14 @@ import {
 import { LoadStatus } from '../../common';
 import { Log } from '../../log';
 import { usePatchState, useService } from '../../hooks';
-import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
+import { 
+  LoaderByStatus,
+  LoaderSize,
+  LoaderType,
+  MacrosSummary,
+} from '../../components';
 import { useTranslations } from '../../i18n';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
-import { MacrosSummary } from '../components';
 import { DailySummaryTranslations } from './DailySummary.translations';
 
 export interface DailySummaryProps {

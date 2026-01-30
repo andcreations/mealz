@@ -8,7 +8,6 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
 import { Response } from 'express';
 import { ACCESS_TOKEN_COOKIE_NAME, UserRole } from '@mealz/backend-api';
 import { Context } from '@mealz/backend-core';
@@ -43,7 +42,7 @@ export class UserAuthGWController {
   public async signInV1(
     @Body() gwRequest: UserAuthGWRequestV1Impl,
     @GWContext() context: Context,
-    @Res({ passthrough: true }) response: Response | FastifyReply,
+    @Res({ passthrough: true }) response: Response,
   ): Promise<UserAuthGWResponseV1Impl> {
     const authResponse = await this.userAuthGWService.userAuthV1(
       gwRequest,
@@ -71,7 +70,7 @@ export class UserAuthGWController {
   @Delete('')
   @HttpCode(HttpStatus.OK)
   public async signOutV1(
-    @Res({ passthrough: true }) response: Response | FastifyReply,
+    @Res({ passthrough: true }) response: Response,
   ): Promise<void> {
     setCookie(
       response,

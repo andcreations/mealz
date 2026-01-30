@@ -10,7 +10,11 @@ import {
 import { LoadStatus } from '../../../common';
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
-import { CalculateAmountsResult, MealPlannerIngredient } from '../../types';
+import { 
+  AIMealScanResult, 
+  CalculateAmountsResult,
+  MealPlannerIngredient,
+} from '../../types';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
 import { LoaderType, ModalMenuItem, ModalMenu } from '../../../components';
 import { PageLoader } from '../../../page';
@@ -31,6 +35,7 @@ import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
 import { MealPortion } from './MealPortion';
+import { AIMealScannerModal } from '../ai-meal-scanner';
 
 enum Focus { Calories };
 
@@ -53,6 +58,7 @@ interface MealPlannerState {
   showLoadMealPicker: boolean;
   showDeleteMealPicker: boolean;
   showMealPortion: boolean;
+  showAIMealScannerModal: boolean;
 }
 
 export function MealPlanner() {
@@ -77,6 +83,7 @@ export function MealPlanner() {
     showLoadMealPicker: false,
     showDeleteMealPicker: false,
     showMealPortion: false,
+    showAIMealScannerModal: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -438,6 +445,33 @@ export function MealPlanner() {
         });
     },
 
+    onTakePhoto: () => {
+      patchState({ showAIMealScannerModal: true });
+    },
+
+    onAcceptAIMealScan: (result: AIMealScanResult) => {
+      const per100 = (value: number) => value * 100 / result.weightOfAllMeals;
+      const ingredients: MealPlannerIngredient[] = [
+        {
+          adHocIngredient: {
+            name: result.nameOfAllMeals,
+            caloriesPer100: per100(result.macros.calories),
+          },
+          enteredAmount: result.weightOfAllMeals.toString(),
+        }
+      ];
+      markDirty();
+      recalculate(
+        state.calories,
+        ingredients,
+        { showAIMealScannerModal: false },
+      );
+    },
+
+    onCloseAIMealScanner: () => {
+      patchState({ showAIMealScannerModal: false });
+    },
+
     onClear: () => {
     // clear
       markDirty();
@@ -632,6 +666,7 @@ export function MealPlanner() {
             </div>
             <MealPlannerActionBar
               onLogMeal={meal.onLog}
+              onTakePhoto={meal.onTakePhoto}
               onClearMeal={meal.onClear}
               onSaveMeal={namedMeal.onShowSave}
               onLoadMeal={namedMeal.onShowLoad}
@@ -711,6 +746,13 @@ export function MealPlanner() {
           show={state.showMealPortion}
           onClose={meal.onClosePortion}
           onPortion={meal.onPortion}
+        />
+      }
+      { state.showAIMealScannerModal &&
+        <AIMealScannerModal
+          show={state.showAIMealScannerModal}
+          onAccept={meal.onAcceptAIMealScan}
+          onClose={meal.onCloseAIMealScanner}
         />
       }
     </>

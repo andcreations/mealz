@@ -11,7 +11,10 @@
 }
 
 .mealz-named-meal-picker-dropdown-item {
-  padding: 0rem 0.675rem;
+  @include mealz-font-small();
+  @include mealz-ellipsis();
+  max-width: 100%;
+  padding: 0.175rem 0.675rem;
 }
 
 .mealz-named-meal-picker-dropdown-item-selected {

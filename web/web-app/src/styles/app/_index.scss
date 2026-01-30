@@ -3,6 +3,7 @@
 @import './html';
 @import './flex';
 @import './font';
+@import './text';
 @import './colors';
 @import './breakpoints';
 
@@ -29,6 +30,10 @@
 @import './components/charts/BarChart';
 @import './components/charts/ChartLegend';
 @import './components/mealz/MealzLogo';
+@import './components/macros/MacrosSummary';
+@import './components/macros/MacrosSummaryBox';
+
+@import './camera/components/TakePhotoButton';
 
 @import './auth/components/SignInForm';
 @import './auth/pages/SignInPage';
@@ -36,8 +41,6 @@
 @import './dashboard/components/DashboardSectionTitle';
 @import './dashboard/components/DashboardSectionSeparator';
 @import './dashboard/components/DashboardSection';
-@import './dashboard/components/MacrosSummary';
-@import './dashboard/components/MacrosSummaryBox';
 @import './dashboard/components/MealLog';
 @import './dashboard/components/DailySummary';
 @import './dashboard/components/WeeklySummary';
@@ -46,6 +49,9 @@
 @import './dashboard/sections/DailyMealsLog';
 @import './dashboard/sections/DailyHydration';
 
+@import './chef/components/ai-meal-scanner/AIMealScannerCamera';
+@import './chef/components/ai-meal-scanner/AIMealScannerAnalyze';
+@import './chef/components/ai-meal-scanner/AIMealScanner';
 @import './chef/components/meal-planner/MealPortion';
 @import './chef/components/meal-planner/NamedMealPicker';
 @import './chef/components/meal-planner/NamedMealPickerDropdown';

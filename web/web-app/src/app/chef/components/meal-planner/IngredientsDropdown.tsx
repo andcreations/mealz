@@ -1,10 +1,10 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
+import { GWFactId, GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
 import { INGREDIENT_LANGUAGE } from '../../../common';
 import { useTranslations } from '../../../i18n';
-import { getCaloriesPer100 } from '../../../ingredients';
+import { getFact, getFacts } from '../../../ingredients';
 import { useService } from '../../../hooks';
 import { SettingsService } from '../../../settings';
 import {
@@ -44,7 +44,10 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
     );
 
     const name = buildName(ingredient);
-    const calories = getCaloriesPer100(ingredient);
+    const amount = (factId: GWFactId, unit: string) => {
+      const fact = getFact(ingredient, factId);
+      return (fact ? `${fact.amount.toFixed(0)}` : '0') + unit;
+    };
 
     return (
       <div 
@@ -55,11 +58,28 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
         <div className='mealz-ingredients-dropdown-ingredient-name'>
           { name }
         </div>
-        <div className='mealz-ingredients-dropdown-ingredient-separator'>
+        <div className='mealz-ingredients-dropdown-ingredient-details'>
+          <div className='mealz-ingredients-dropdown-ingredient-details-calories'>
+            { amount(GWFactId.Calories, ' kcal') }
+          </div>
+          <div className='mealz-ingredients-dropdown-ingredient-separator'>
           ·
-        </div>
-        <div className='mealz-ingredients-dropdown-ingredient-calories'>
-          { calories ? `${calories.toFixed(0)} kcal` : '' }
+          </div>
+          <div className='mealz-ingredients-dropdown-ingredient-details-carbs'>
+            { amount(GWFactId.Carbs, ' g') }
+          </div>
+          <div className='mealz-ingredients-dropdown-ingredient-separator'>
+          ·
+          </div>
+          <div className='mealz-ingredients-dropdown-ingredient-details-protein'>
+            { amount(GWFactId.Protein, ' g') }
+          </div>
+          <div className='mealz-ingredients-dropdown-ingredient-separator'>
+          ·
+          </div>
+          <div className='mealz-ingredients-dropdown-ingredient-details-fat'>
+            { amount(GWFactId.TotalFat, ' g') }
+          </div>
         </div>
       </div>
     );

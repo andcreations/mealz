@@ -10,9 +10,10 @@ import {
 import { LoadStatus } from '../../common';
 import { Log } from '../../log';
 import { usePatchState, useService } from '../../hooks';
+import { useTranslations } from '../../i18n';
 import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
-import { useTranslations } from '../../i18n';
+import { IngredientsCrudService } from '../../ingredients';
 import { MealLog } from '../components';
 import { DailyMealsLogTranslations } from './DailyMealsLog.translations';
 
@@ -30,6 +31,7 @@ interface DailyMealsLogState {
 export function DailyMealsLog(props: DailyMealsLogProps) {
   const mealsLogService = useService(MealsLogService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
+  const ingredientsService = useService(IngredientsCrudService);
   const translate = useTranslations(DailyMealsLogTranslations);
 
   const [state, setState] = useState<DailyMealsLogState>({
@@ -49,8 +51,12 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
           () => mealsDailyPlanService.readCurrentDailyPlan(),
           'Failed to read current daily plan',
         ),
+        Log.logAndRethrow(
+          () => ingredientsService.waitForIngredientsToLoad(),
+          'Failed to wait for ingredients to load',
+        ),
       ])
-      .then(([meals, mealDailyPlan]) => {
+      .then(([meals, mealDailyPlan, _]) => {
         patchState({
           meals,
           mealDailyPlan,
