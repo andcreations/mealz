@@ -106,8 +106,6 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
         />
       }
       <div className={frameClassNames}>
-        <div className='mealz-ai-meal-scanner-camera-frame-overlay'>
-        </div>
         <video
           ref={videoRef}
           autoPlay

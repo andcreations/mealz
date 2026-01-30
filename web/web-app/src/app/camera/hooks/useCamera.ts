@@ -13,8 +13,8 @@ export interface UseCameraOptions {
 export function useCamera(options: UseCameraOptions = {}) {
   const {
     facingMode = 'environment',
-    widthIdeal = 1280,
-    heightIdeal = 720,
+    widthIdeal = 720,
+    heightIdeal = 1280,
   } = options;
 
   const videoRef = useRef<HTMLVideoElement>(null);

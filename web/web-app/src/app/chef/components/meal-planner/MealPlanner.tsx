@@ -107,6 +107,15 @@ export function MealPlanner() {
     return avg.toString();
   };
 
+  const caloriesFromUserMeal = (
+    userMeal?: GWUserMeal<UserDraftMealMetadata>,
+  ): string => {
+    if (!userMeal) {
+      return '';
+    }
+    return userMeal.meal.calories?.toString() ?? '';
+  };
+
   // initial read
   useEffect(
     () => {
@@ -228,7 +237,10 @@ export function MealPlanner() {
         mealDailyPlan,
         Date.now(),
       );
-      const caloriesStr = caloriesFromGoals(entry?.goals) ?? '';
+      let caloriesStr =  caloriesFromGoals(entry?.goals);
+      if (caloriesStr === '') {
+        caloriesStr = caloriesFromUserMeal(userMeal);
+      }
       const dailyPlanMealNameByTime = mealsDailyPlanService.getMealName(
         mealDailyPlan,
         Date.now(),
