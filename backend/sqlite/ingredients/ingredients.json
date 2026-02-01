@@ -801,6 +801,59 @@
   },
   {
     "name": {
+      "en": "Bean spread with apple",
+      "pl": "Smalczyk z fasoli z jabłkiem"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 232
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 16.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 9.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 14.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Lidl"
+    }
+  },
+  {
+    "name": {
       "en": "Beef (raw)",
       "pl": "Wołowina (surowa)"
     },

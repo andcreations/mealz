@@ -111,3 +111,23 @@
       saturated: 0.3
       monounsaturated: 0.4
       polyunsaturated: 1.1
+
+- name:
+    en: Bean spread with apple
+    pl: Smalczyk z fasoli z jabłkiem
+  unit: g
+  type: generic
+  product:
+    brand: Lidl
+  weight: 100
+  facts:
+    calories: 232
+    carbs: 16.5
+    sugars: 9.6
+    fibre: 7.0
+    protein: 6.0
+    fat:
+      total: 14.2
+      saturated: 1.2
+      #monounsaturated: -
+      #polyunsaturated: -
