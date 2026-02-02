@@ -468,6 +468,7 @@ export function MealPlanner() {
           adHocIngredient: {
             name: result.nameOfAllMeals,
             caloriesPer100: per100(result.macros.calories),
+            // TODO Add macros
           },
           enteredAmount: result.weightOfAllMeals.toString(),
         }

@@ -7,9 +7,6 @@ import {
 import {
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
-import {
-  GWPhotoScanMeal,
-} from '@mealz/backend-meals-ai-scan-gateway-api';
 
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';

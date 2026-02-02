@@ -25,6 +25,9 @@ import { usePatchState, useService } from '../../../hooks';
 import { MealPlannerIngredient } from '../../types';
 import {
   getCaloriesPer100,
+  getCarbsPer100,
+  getProteinPer100,
+  getFatPer100,
   IngredientsCrudService,
   IngredientsSearch,
 } from '../../../ingredients';
@@ -69,6 +72,12 @@ interface IngredientPickerState {
 }
 
 export function IngredientPicker(props: IngredientPickerProps) {
+  // format calories and macros
+  const formatAmount = (amount: number) => {
+    const reminder = amount % 1;
+    return reminder >= 0.1 ? amount.toFixed(1) : amount.toFixed(0);
+  };
+
   const ingredientStateFromProps = (): Pick<IngredientPickerState,
     'ingredientId' | 'ingredientSelected' | 'name' | 'amount'
   > => {
@@ -80,7 +89,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
       return {
         ingredientId: undefined,
         ingredientSelected: true,
-        name: toAdHocIngredientStr(adHocIngredient),
+        name: toAdHocIngredientStr(adHocIngredient, formatAmount),
         amount,
       };
     }
@@ -194,6 +203,36 @@ export function IngredientPicker(props: IngredientPickerProps) {
       const fullIngredient = ingredient.full();
       if (fullIngredient) {
         return getCaloriesPer100(fullIngredient);
+      }
+    },
+    carbsPer100: () : number | undefined => {
+      const adHocIngredient = ingredient.adHoc();
+      if (adHocIngredient) {
+        return adHocIngredient.carbsPer100;
+      }
+      const fullIngredient = ingredient.full();
+      if (fullIngredient) {
+        return getCarbsPer100(fullIngredient);
+      }
+    },
+    proteinPer100: () : number | undefined => {
+      const adHocIngredient = ingredient.adHoc();
+      if (adHocIngredient) {
+        return adHocIngredient.proteinPer100;
+      }
+      const fullIngredient = ingredient.full();
+      if (fullIngredient) {
+        return getProteinPer100(fullIngredient);
+      }
+    },
+    fatPer100: () : number | undefined => {
+      const adHocIngredient = ingredient.adHoc();
+      if (adHocIngredient) {
+        return adHocIngredient.fatPer100;
+      }
+      const fullIngredient = ingredient.full();
+      if (fullIngredient) {
+        return getFatPer100(fullIngredient);
       }
     },
   };
@@ -321,17 +360,65 @@ export function IngredientPicker(props: IngredientPickerProps) {
       'mealz-ingredient-picker-ingredient-details-label',
       { 'mealz-error': !ingredient.has() || !amount.isValid() },
     ),
-    label: (): string => {
+    adHocLabel: (): React.ReactNode | undefined => {
+      const adHoc = ingredient.adHoc();
+      if (!adHoc) {
+        return undefined;
+      }
+
+      const calories = adHoc.caloriesPer100;
+      const carbs = adHoc.carbsPer100;
+      const protein = adHoc.proteinPer100;
+      const fat = adHoc.fatPer100;
+
+      return (
+        <div className='mealz-ingredient-picker-ad-hoc-details'>
+          <div className='mealz-ingredient-picker-ad-hoc-details-label'>
+            { translate('ad-hoc') }
+          </div>
+          <div className='mealz-color-calories'>
+            { formatAmount(calories) } kcal
+          </div>
+          { carbs > 0 &&
+            <>
+              <div className='mealz-ingredient-picker-details-separator'>
+                ·
+              </div>
+              <div className='mealz-color-carbs'>
+                { formatAmount(carbs) } g
+              </div>
+            </>
+          }
+          { protein > 0 &&
+            <>
+            <div className='mealz-ingredient-picker-details-separator'>
+              ·
+            </div>
+              <div className='mealz-color-protein'>
+                { formatAmount(protein) } g
+              </div>
+            </>
+          }
+          { fat > 0 &&
+            <>
+              <div className='mealz-ingredient-picker-details-separator'>
+                ·
+              </div>
+              <div className='mealz-color-fat'>
+                { formatAmount(fat) } g
+              </div>
+            </>
+          }
+        </div>
+      );
+    },
+    label: (): string | React.ReactNode => {
+      const isAdHoc = !!ingredient.adHoc();
       if (state.focus === Focus.Name) {
         // Always show ad-hoc ingredients to let the user know
-        // they properly entered an ad-hoc ingredient.
-        const isAdHoc = !!ingredient.adHoc();
+        // if they properly entered an ad-hoc ingredient.
         if (isAdHoc) {
-          const calories = ingredient.caloriesPer100();
-          return (
-            `${calories.toFixed(0)} kcal ` +
-            `(${translate('ad-hoc-ingredient')})`
-          );
+          return details.adHocLabel();
         }
         return '';
       }
@@ -346,11 +433,17 @@ export function IngredientPicker(props: IngredientPickerProps) {
         return translate('invalid-amount');
       }
 
-      const adHocLabel = !!ingredient.adHoc()
-        ? ` ${translate('ad-hoc-ingredient')}`
-        : '';
       const calories = ingredient.caloriesPer100();
-      return calories ? `${calories.toFixed(0)} kcal${adHocLabel}` : '';
+      if (!calories) {
+        return '';
+      }
+
+      return isAdHoc
+        ? details.adHocLabel()
+        : translate(
+            'full-ingredient-details',
+            calories.toFixed(0),
+          );
     },
   };
 

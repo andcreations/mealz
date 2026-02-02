@@ -233,6 +233,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
         ...context,
         userId: user.id,
         data,
+        prompt,
         promptInput,
         insights: insights.text,
         duration: Date.now() - startTime,

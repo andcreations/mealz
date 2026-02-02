@@ -21,6 +21,9 @@ export class MealDetailsV1Mapper {
     return {
       name: adHocIngredient.name,
       caloriesPer100: adHocIngredient.caloriesPer100,
+      carbsPer100: adHocIngredient.carbsPer100,
+      proteinPer100: adHocIngredient.proteinPer100,
+      fatPer100: adHocIngredient.fatPer100,
     }
   }
 
@@ -61,6 +64,9 @@ export class MealDetailsV1Mapper {
     return {
       name: adHocIngredientV1.name,
       caloriesPer100: adHocIngredientV1.caloriesPer100,
+      carbsPer100: adHocIngredientV1.carbsPer100,
+      proteinPer100: adHocIngredientV1.proteinPer100,
+      fatPer100: adHocIngredientV1.fatPer100,
     }
   }
 

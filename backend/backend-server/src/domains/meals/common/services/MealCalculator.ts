@@ -187,6 +187,31 @@ export class MealCalculator {
           newIngredient.adHocIngredient.caloriesPer100,
         );
         hasTotalCalories = true;
+
+        if (newIngredient.adHocIngredient.carbsPer100 !== undefined) {
+          totals.carbs += calculateFact(
+            newIngredient.calculatedAmount,
+            newIngredient.adHocIngredient.carbsPer100,
+          );
+          hasTotalCarbs = true;
+        }
+
+        if (newIngredient.adHocIngredient.proteinPer100 !== undefined) {
+          totals.protein += calculateFact(
+            newIngredient.calculatedAmount,
+            newIngredient.adHocIngredient.proteinPer100,
+          );
+          hasTotalProtein = true;
+        }
+
+        if (newIngredient.adHocIngredient.fatPer100 !== undefined) {
+          totals.fat += calculateFact(
+            newIngredient.calculatedAmount,
+            newIngredient.adHocIngredient.fatPer100,
+          );
+          hasTotalFat = true;
+        }
+
         continue;
       }
 

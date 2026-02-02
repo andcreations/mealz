@@ -18,6 +18,24 @@ export function getCaloriesPer100(
   return getFact(ingredient, GWFactId.Calories)?.amount;
 }
 
+export function getCarbsPer100(
+  ingredient: GWIngredient,
+): number | undefined {
+  return getFact(ingredient, GWFactId.Carbs)?.amount;
+}
+
+export function getProteinPer100(
+  ingredient: GWIngredient,
+): number | undefined {
+  return getFact(ingredient, GWFactId.Protein)?.amount;
+}
+
+export function getFatPer100(
+  ingredient: GWIngredient,
+): number | undefined {
+  return getFact(ingredient, GWFactId.TotalFat)?.amount;
+}
+
 export function getFacts(ingredient: GWIngredient): IngredientFacts {
   const amount = (factId: GWFactId) => {
     return getFact(ingredient, factId)?.amount;
