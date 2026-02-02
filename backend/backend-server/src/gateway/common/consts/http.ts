@@ -1,0 +1,1 @@
+export const SYSTEM_ADMIN_TOKEN_HTTP_HEADER = 'x-mealz-system-admin-token';
