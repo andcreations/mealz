@@ -7069,6 +7069,59 @@
   },
   {
     "name": {
+      "en": "Peanut protein waffers",
+      "pl": "Wafle z kremem arachidowym"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 462
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 42
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 17
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 28
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Lidl"
+    }
+  },
+  {
+    "name": {
       "en": "Peanuts",
       "pl": "Orzeszki ziemne"
     },
@@ -8016,6 +8069,59 @@
         "amount": 1
       }
     ]
+  },
+  {
+    "name": {
+      "en": "Protein bar Dubai style",
+      "pl": "Baton proteinowy w stylu dubajskim"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 538
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 42
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 30
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 17
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 33
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 11
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Olimp"
+    }
   },
   {
     "name": {
@@ -9325,59 +9431,6 @@
   },
   {
     "name": {
-      "en": "Soy drink (vanilla)",
-      "pl": "Napój sojowy (waniliowy)"
-    },
-    "type": 0,
-    "unitPer100": 0,
-    "factsPer100": [
-      {
-        "id": 0,
-        "unit": 0,
-        "amount": 57
-      },
-      {
-        "id": 1,
-        "unit": 1,
-        "amount": 6.7
-      },
-      {
-        "id": 2,
-        "unit": 1,
-        "amount": 6.7
-      },
-      {
-        "id": 3,
-        "unit": 1,
-        "amount": 3
-      },
-      {
-        "id": 4,
-        "unit": 1,
-        "amount": 1.8
-      },
-      {
-        "id": 5,
-        "unit": 1,
-        "amount": 0.3
-      },
-      {
-        "id": 6,
-        "unit": 1,
-        "amount": 0.4
-      },
-      {
-        "id": 7,
-        "unit": 1,
-        "amount": 1.1
-      }
-    ],
-    "product": {
-      "brand": "Alpro"
-    }
-  },
-  {
-    "name": {
       "en": "Spelt bread",
       "pl": "Chleb orkiszowy"
     },
@@ -10225,6 +10278,59 @@
         "amount": 0
       }
     ]
+  },
+  {
+    "name": {
+      "en": "Vanilla soy drink",
+      "pl": "Napój sojowy waniliowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 57
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 6.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6.7
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.1
+      }
+    ],
+    "product": {
+      "brand": "Alpro"
+    }
   },
   {
     "name": {

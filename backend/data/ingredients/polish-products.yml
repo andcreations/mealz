@@ -94,8 +94,8 @@
       #polyunsaturated: -
 
 - name:
-    en: Soy drink (vanilla)
-    pl: Napój sojowy (waniliowy)
+    en: Vanilla soy drink
+    pl: Napój sojowy waniliowy
   unit: g
   type: generic
   product:
@@ -129,5 +129,43 @@
     fat:
       total: 14.2
       saturated: 1.2
+      #monounsaturated: -
+      #polyunsaturated: -
+
+- name:
+    en: Protein bar Dubai style
+    pl: Baton proteinowy w stylu dubajskim
+  unit: g
+  type: generic
+  product:
+    brand: Olimp
+  weight: 100
+  facts:
+    calories: 538
+    carbs: 42
+    sugars: 30
+    protein: 17
+    fat:
+      total: 33
+      saturated: 11
+      #monounsaturated: -
+      #polyunsaturated: -
+
+- name:
+    en: Peanut protein waffers
+    pl: Wafle z kremem arachidowym
+  unit: g
+  type: generic
+  product:
+    brand: Lidl
+  weight: 100
+  facts:
+    calories: 462
+    carbs: 42
+    sugars: 6.5
+    protein: 17
+    fat:
+      total: 28
+      saturated: 14
       #monounsaturated: -
       #polyunsaturated: -
