@@ -11,6 +11,7 @@ import { LoadStatus } from '../../../common';
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { 
+  AIMealScanIngredient,
   AIMealScanResult, 
   CalculateAmountsResult,
   MealPlannerIngredient,
@@ -462,17 +463,26 @@ export function MealPlanner() {
     },
 
     onAcceptAIMealScan: (result: AIMealScanResult) => {
-      const per100 = (value: number) => value * 100 / result.weightOfAllMeals;
-      const ingredients: MealPlannerIngredient[] = [
-        {
+      const mapIngredient = (
+        ingredient: AIMealScanIngredient,
+      ): MealPlannerIngredient => {
+        const per100 = (value: number) => {
+          return value * 100 / ingredient.weightInGrams;
+        };
+        return {
           adHocIngredient: {
-            name: result.nameOfAllMeals,
-            caloriesPer100: per100(result.macros.calories),
-            // TODO Add macros
+            name: ingredient.name,
+            caloriesPer100: per100(ingredient.macros.calories),
+            carbsPer100: per100(ingredient.macros.carbs),
+            proteinPer100: per100(ingredient.macros.protein),
+            fatPer100: per100(ingredient.macros.fat),
           },
-          enteredAmount: result.weightOfAllMeals.toString(),
-        }
-      ];
+          enteredAmount: ingredient.weightInGrams.toString(),
+        };
+      };
+      const ingredients = result.ingredients.map(ingredient => {
+        return mapIngredient(ingredient);
+      });
       markDirty();
       recalculate(
         state.calories,

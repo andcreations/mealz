@@ -1,7 +1,5 @@
-import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
+import { AIMealScanIngredient } from './AIMealScanIngredient';
 
 export interface AIMealScanResult {
-  nameOfAllMeals: string;
-  weightOfAllMeals: number;
-  macros: GWMacros;
+  ingredients: AIMealScanIngredient[];
 }

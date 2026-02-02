@@ -1104,6 +1104,56 @@
   },
   {
     "name": {
+      "en": "Boiled whole wheat pasta",
+      "pl": "Makaron pełnoziarnisty gotowany"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 124
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 26
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 5.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Brazil nuts",
       "pl": "Orzechy brazylijskie"
     },

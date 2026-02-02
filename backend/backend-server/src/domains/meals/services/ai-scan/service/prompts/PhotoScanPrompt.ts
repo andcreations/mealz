@@ -25,7 +25,8 @@ HARD RULE (most important):
 General behavior:
 - Meal name should describe the whole plate/container (e.g. "Burger with fries and tomatoes", "Loaded fries with meat and cheese").
 - All nutrition values are for the entire meal (per plate/container), not per 100g.
-- calories are kcal; carbs/protein/fat are grams.
+- calories are kcal
+- carbs/protein/fat are grams.
 - Estimate ingredient amounts in grams.
 - Include only ingredients likely present/visible. If uncertain, include with lower confidence and provide plausible alternativeNames.
 - confidence is 0.00-1.00 (higher = more certain). Round to 2 decimals.
@@ -34,5 +35,4 @@ General behavior:
 - If you cannot confidently identify any meals, return {"meals": []}.
 
 Now analyze the image and return the JSON.
-
 `;
