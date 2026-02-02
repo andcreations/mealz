@@ -480,9 +480,17 @@ export function MealPlanner() {
           enteredAmount: ingredient.weightInGrams.toString(),
         };
       };
-      const ingredients = result.ingredients.map(ingredient => {
-        return mapIngredient(ingredient);
-      });
+      const ingredients = result.ingredients
+        .filter(ingredient => {
+          return (
+            ingredient.weightInGrams > 0 &&
+            ingredient.name !== '' &&
+            ingredient.macros.calories > 0
+          );
+        })
+        .map(ingredient => {
+         return mapIngredient(ingredient);
+        });
       markDirty();
       recalculate(
         state.calories,
