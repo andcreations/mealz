@@ -180,6 +180,42 @@ export class MealCalculator {
     let hasTotalFat = false;
     let hasTotalProtein = false;
     for (const newIngredient of newIngredients) {
+      // ad-hoc ingredient
+      if (newIngredient.adHocIngredient) {
+        totals.calories += calculateFact(
+          newIngredient.calculatedAmount,
+          newIngredient.adHocIngredient.caloriesPer100,
+        );
+        hasTotalCalories = true;
+
+        if (newIngredient.adHocIngredient.carbsPer100 !== undefined) {
+          totals.carbs += calculateFact(
+            newIngredient.calculatedAmount,
+            newIngredient.adHocIngredient.carbsPer100,
+          );
+          hasTotalCarbs = true;
+        }
+
+        if (newIngredient.adHocIngredient.proteinPer100 !== undefined) {
+          totals.protein += calculateFact(
+            newIngredient.calculatedAmount,
+            newIngredient.adHocIngredient.proteinPer100,
+          );
+          hasTotalProtein = true;
+        }
+
+        if (newIngredient.adHocIngredient.fatPer100 !== undefined) {
+          totals.fat += calculateFact(
+            newIngredient.calculatedAmount,
+            newIngredient.adHocIngredient.fatPer100,
+          );
+          hasTotalFat = true;
+        }
+
+        continue;
+      }
+
+      // full ingredient
       const ingredient = ingredients.find(ingredient => {
         return ingredient.id === newIngredient.ingredientId;
       });
@@ -189,25 +225,37 @@ export class MealCalculator {
 
       const calories = getFactAmount(ingredient, FactId.Calories);
       if (calories != null) {
-        totals.calories += getFactAmount(ingredient, FactId.Calories);
+        totals.calories += calculateFact(
+          newIngredient.calculatedAmount,
+          calories,
+        );
         hasTotalCalories = true;
       }
 
       const carbs = getFactAmount(ingredient, FactId.Carbs);
       if (carbs != null) {
-        totals.carbs += carbs;
+        totals.carbs += calculateFact(
+          newIngredient.calculatedAmount,
+          carbs,
+        );
         hasTotalCarbs = true;
       }
 
       const fat = getFactAmount(ingredient, FactId.TotalFat);
       if (fat != null) {
-        totals.fat += fat;
+        totals.fat += calculateFact(
+          newIngredient.calculatedAmount,
+          fat,
+        );
         hasTotalFat = true;
       }
 
       const protein = getFactAmount(ingredient, FactId.Protein);
       if (protein != null) {
-        totals.protein += protein;
+        totals.protein += calculateFact(
+          newIngredient.calculatedAmount,
+          protein,
+        );
         hasTotalProtein = true;
       }
     }

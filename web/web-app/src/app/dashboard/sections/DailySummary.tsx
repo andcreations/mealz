@@ -15,6 +15,7 @@ import {
   MacrosSummary,
 } from '../../components';
 import { useTranslations } from '../../i18n';
+import { IngredientsCrudService } from '../../ingredients';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
 import { DailySummaryTranslations } from './DailySummary.translations';
 
@@ -30,6 +31,7 @@ interface DailySummaryState {
 }
 
 export function DailySummary(props: DailySummaryProps) {
+  const ingredientsCrudService = useService(IngredientsCrudService);
   const mealsLogService = useService(MealsLogService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
   const translate = useTranslations(DailySummaryTranslations);
@@ -44,15 +46,32 @@ export function DailySummary(props: DailySummaryProps) {
     () => {
       Promise.all([
         Log.logAndRethrow(
-          () => mealsLogService.summarize(props.fromDate, props.toDate),
-          'Failed to summarize daily meal log',
+          () => ingredientsCrudService.waitForIngredientsToLoad(),
+          'Failed to wait for ingredients to load',
         ),
         Log.logAndRethrow(
-          () => mealsDailyPlanService.readCurrentDailyGoalsByNow(),
-          'Failed to read current daily plan',
+          () => mealsLogService.readByDateRange(props.fromDate, props.toDate),
+          'Failed to read daily meal log',
+        ),
+        Log.logAndRethrow(
+          () => mealsDailyPlanService.readEntriesByNow(),
+          'Failed to read current daily plan entries',
         ),
       ])
-      .then(([summary, goals]) => {
+      .then(([_, meals, dailyPlanEntries]) => {
+        const lastEntry = dailyPlanEntries[dailyPlanEntries.length - 1];
+        if (lastEntry) {
+          const hasLastMeal = meals.some(meal => {
+            return meal.dailyPlanMealName === lastEntry.mealName;
+          });
+          if (!hasLastMeal) {
+            dailyPlanEntries.pop();
+          }
+        }
+
+        const summary = mealsLogService.summarizeMeals(meals);
+        const goals = mealsDailyPlanService.summarizeEntries(dailyPlanEntries);
+
         patchState({
           summary,
           goals,

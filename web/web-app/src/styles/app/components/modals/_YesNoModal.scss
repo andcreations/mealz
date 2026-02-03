@@ -1,0 +1,26 @@
+.mealz-yes-no-modal {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  @include mealz-flex-center();
+
+  .modal-content {
+    padding: 1rem;
+  }
+}
+
+.mealz-yes-no-modal-title {
+  text-align: center;
+}
+
+.mealz-yes-no-modal-message {
+  @include mealz-font-small();
+  text-align: center;
+}
+
+.mealz-yes-no-modal-buttons {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  @include mealz-flex-center();
+  margin-top: 1rem;
+  gap: 1rem;
+}

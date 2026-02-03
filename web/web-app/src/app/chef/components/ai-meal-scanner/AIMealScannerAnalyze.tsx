@@ -7,9 +7,6 @@ import {
 import {
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
-import {
-  GWPhotoScanMeal,
-} from '@mealz/backend-meals-ai-scan-gateway-api';
 
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
@@ -25,7 +22,7 @@ import {
   MealsDailyPlanService,
   ScanPhotoResult,
 } from '../../../meals';
-import { AIMealScanResult } from '../../types';
+import { AIMealScanResult, AIMealScanIngredient } from '../../types';
 import { 
   AIMealScannerAnalyzeTranslations,
 } from './AIMealScannerAnalyze.translations';
@@ -80,16 +77,28 @@ export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
   }, [props.photo]);
 
   const onAccept = () => {
-    const macros = totalMacros();
     const photoScanResult = state.result;
     if (!photoScanResult) {
       return;
     }
-    props.onAccept({
-      nameOfAllMeals: photoScanResult?.nameOfAllMeals,
-      weightOfAllMeals: photoScanResult?.weightOfAllMeals,
-      macros,
-    });
+    const ingredients: AIMealScanIngredient[] = photoScanResult.meals
+      .map(meal => {
+        let weightInGrams: number = 0;
+        meal.ingredients.forEach(ingredient => {
+          weightInGrams += ingredient.amount ?? 0;
+        });
+        return {
+          name: meal.name,
+          weightInGrams,
+          macros: {
+            calories: meal.calories,
+            carbs: meal.carbs,
+            protein: meal.protein,
+            fat: meal.fat,
+          },
+        };
+      });
+    props.onAccept({ ingredients });
   }
 
   const onCancel = () => {

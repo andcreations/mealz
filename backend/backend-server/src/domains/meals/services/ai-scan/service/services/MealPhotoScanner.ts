@@ -10,8 +10,8 @@ export class MealPhotoScanner {
   public constructor(private readonly aiProvider: AIProvider) {
     this.modelName = getStrEnv(
       'MEALZ_MEALS_AI_SCAN_MODEL_NAME',
-      'gpt-4o-mini',
-    );  
+      'gpt-4o',
+    );
   }
 
   public async scanPhoto(

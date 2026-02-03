@@ -132,6 +132,11 @@ export class UsersDailyInsightsService implements OnModuleInit {
       .setZone(resolveTimeZone())
       .minus({ days: 0 })
       .endOf('day');
+    this.logger.info('Generating insights for day', {
+      ...context,
+      dayStart: dayStart.toISO(),
+      dayEnd: dayEnd.toISO(),
+    });
 
     let lastId: string | undefined = undefined;
     const limit = 100;
@@ -227,6 +232,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
       this.logger.info('Generated insights for user', {
         ...context,
         userId: user.id,
+        data,
         prompt,
         promptInput,
         insights: insights.text,
@@ -304,9 +310,9 @@ export class UsersDailyInsightsService implements OnModuleInit {
       proteinTo: 0,
     };
 
-    // meals
+    // meals according to the daily plan
     const meals: UserDailyInsightsMeal[] = [];
-    for (const entry of data.mealDailyPlan.entries) {
+    for (const entry of data.mealDailyPlan?.entries ?? []) {
       const { goals } = entry;
 
       // update goals
@@ -359,6 +365,52 @@ export class UsersDailyInsightsService implements OnModuleInit {
           protein: mealTotals.protein,
           proteinGoalFrom: goals.proteinFrom,
           proteinGoalTo: goals.proteinTo,
+        },
+      });
+
+      // update totals
+      dailyTotals.calories += mealTotals.calories ?? 0;
+      dailyTotals.carbs += mealTotals.carbs ?? 0;
+      dailyTotals.fat += mealTotals.fat ?? 0;
+      dailyTotals.protein += mealTotals.protein ?? 0;
+    }
+    
+    // ad-hoc meals
+    for (const mealLog of data.mealLogs) {
+      const isInDailyPlan = data.mealDailyPlan.entries.some(entry => {
+        return entry.mealName === mealLog.dailyPlanMealName;
+      });
+      if (isInDailyPlan) {
+        continue;
+      }
+      const meal = data.meals.find(meal => {
+        return meal.id === mealLog.mealId;
+      });
+      if (!meal) {
+        this.logger.error('Meal not found for user insights', {
+          ...context,
+          mealId: mealLog.mealId,
+        });
+        continue;
+      }
+
+      // meal totals
+      const {
+        totals: mealTotals,
+      } = await this.mealCalculator.calculateAmounts(
+        meal,
+        context,
+      );
+
+      // push meal
+      meals.push({
+        name: mealLog.dailyPlanMealName,
+        skipped: false,
+        amounts: {
+          calories: mealTotals.calories,
+          carbs: mealTotals.carbs,
+          fat: mealTotals.fat,
+          protein: mealTotals.protein,
         },
       });
 

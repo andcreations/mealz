@@ -33,6 +33,9 @@ export class MealMapper {
       ? {
           name: gwAdHocIngredient.name,
           caloriesPer100: gwAdHocIngredient.caloriesPer100,
+          carbsPer100: gwAdHocIngredient.carbsPer100,
+          proteinPer100: gwAdHocIngredient.proteinPer100,
+          fatPer100: gwAdHocIngredient.fatPer100,
         }
       : undefined;
 
@@ -77,6 +80,9 @@ export class MealMapper {
      ? {
         name: adHocIngredient.name,
         caloriesPer100: adHocIngredient.caloriesPer100,
+        carbsPer100: adHocIngredient.carbsPer100,
+        proteinPer100: adHocIngredient.proteinPer100,
+        fatPer100: adHocIngredient.fatPer100,
        }
      : undefined;
 

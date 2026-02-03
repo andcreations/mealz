@@ -11,12 +11,19 @@ import { LoadStatus } from '../../../common';
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { 
+  AIMealScanIngredient,
   AIMealScanResult, 
   CalculateAmountsResult,
   MealPlannerIngredient,
 } from '../../types';
 import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
-import { LoaderType, ModalMenuItem, ModalMenu } from '../../../components';
+import { 
+  LoaderType,
+  ModalMenuItem,
+  ModalMenu,
+  YesNoModal,
+  htmlToReact,
+} from '../../../components';
 import { PageLoader } from '../../../page';
 import { NotificationsService, NotificationType } from '../../../notifications';
 import {
@@ -50,15 +57,23 @@ interface MealPlannerState {
     calories: string;
   },
   dailyMealPlan?: GWMealDailyPlan;
-  dailyPlanMealCalories: string;
-  dailyPlanMealName?: string;
+
+  // calories from the daily plan or from the draft meal (picked by the user)
+  targetMealCalories: string;
+
+  // name of the meal (picked by the user)
+  mealName?: string;
+  
+  // meal name is fixed it it doesn't come from the daily plan
   fixedMealName: boolean;
+  
   showMealNamePicker: boolean;
   showSaveMealPicker: boolean;
   showLoadMealPicker: boolean;
   showDeleteMealPicker: boolean;
   showMealPortion: boolean;
   showAIMealScannerModal: boolean;
+  showMealLogConfirmationModal: boolean;
 }
 
 export function MealPlanner() {
@@ -76,14 +91,15 @@ export function MealPlanner() {
     ingredients: [],
     calories: '',
     calculateAmountsError: null,
-    dailyPlanMealCalories: '',
-    fixedMealName: false,
+    targetMealCalories: '',
+    fixedMealName: false,    
     showMealNamePicker: false,
     showSaveMealPicker: false,
     showLoadMealPicker: false,
     showDeleteMealPicker: false,
     showMealPortion: false,
     showAIMealScannerModal: false,
+    showMealLogConfirmationModal: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -107,6 +123,15 @@ export function MealPlanner() {
     return avg.toString();
   };
 
+  const caloriesFromUserMeal = (
+    userMeal?: GWUserMeal<UserDraftMealMetadata>,
+  ): string => {
+    if (!userMeal) {
+      return '';
+    }
+    return userMeal.meal.calories?.toString() ?? '';
+  };
+
   // initial read
   useEffect(
     () => {
@@ -128,8 +153,8 @@ export function MealPlanner() {
         const {
           ingredients,
           caloriesStr,
-          dailyPlanMealName,
-          dailyPlanMealCalories,
+          mealName,
+          targetMealCalories,
         } = userMealDraft.resolve(
           userMeal,
           dailyMealPlan,
@@ -139,9 +164,9 @@ export function MealPlanner() {
           ingredients,
           {
             loadStatus: LoadStatus.Loaded,
-            dailyPlanMealCalories,
+            targetMealCalories,
             dailyMealPlan,
-            dailyPlanMealName,
+            mealName,
             fixedMealName: userMeal?.metadata?.fixedMealName ?? false,
           },
         );
@@ -184,7 +209,7 @@ export function MealPlanner() {
     [
       state.ingredients,
       state.calories,
-      state.dailyPlanMealName,
+      state.mealName,
       state.calculateAmountsError,
     ],
   )
@@ -221,14 +246,17 @@ export function MealPlanner() {
     ): {
       ingredients: MealPlannerIngredient[];
       caloriesStr: string;
-      dailyPlanMealName: string;
-      dailyPlanMealCalories: string;
+      mealName: string;
+      targetMealCalories: string;
     } => {
       const entry = mealsDailyPlanService.getEntryByTime(
         mealDailyPlan,
         Date.now(),
       );
-      const caloriesStr = caloriesFromGoals(entry?.goals) ?? '';
+      let caloriesStr = caloriesFromGoals(entry?.goals);
+      if (caloriesStr === '') {
+        caloriesStr = caloriesFromUserMeal(userMeal);
+      }
       const dailyPlanMealNameByTime = mealsDailyPlanService.getMealName(
         mealDailyPlan,
         Date.now(),
@@ -238,8 +266,8 @@ export function MealPlanner() {
         return {
           ingredients: [],
           caloriesStr,
-          dailyPlanMealName: dailyPlanMealNameByTime,
-          dailyPlanMealCalories: '',
+          mealName: dailyPlanMealNameByTime,
+          targetMealCalories: '',
         };
       }
 
@@ -254,8 +282,8 @@ export function MealPlanner() {
         return {
           ingredients: [],
           caloriesStr,
-          dailyPlanMealName: dailyPlanMealNameByTime,
-          dailyPlanMealCalories: caloriesStr,
+          mealName: dailyPlanMealNameByTime,
+          targetMealCalories: caloriesStr,
         };
       }
 
@@ -266,9 +294,9 @@ export function MealPlanner() {
       return {
         ingredients,
         caloriesStr,
-        dailyPlanMealName:
+        mealName:
           userMeal.metadata?.mealName ?? dailyPlanMealNameByTime,
-        dailyPlanMealCalories: caloriesStr,
+          targetMealCalories: caloriesStr,
       };
     },
 
@@ -285,7 +313,7 @@ export function MealPlanner() {
     ) => {
       const gwMeal = mealMapper.toGWMeal(calories, ingredients);
       const metadata: UserDraftMealMetadata = {
-        mealName: state.dailyPlanMealName,
+        mealName: state.mealName,
         fixedMealName: state.fixedMealName,
       };
       mealsUserService.upsertUserDraftMeal(gwMeal, metadata)
@@ -383,7 +411,7 @@ export function MealPlanner() {
     },
 
     onPick: (mealName: string) => {
-      if (mealName === state.dailyPlanMealName) {
+      if (mealName === state.mealName) {
         return;
       }
       const entryByName = mealsDailyPlanService.getEntryByMealName(
@@ -396,7 +424,7 @@ export function MealPlanner() {
       );
       markDirty();
       patchState({
-        dailyPlanMealName: mealName,
+        mealName: mealName,
         showMealNamePicker: false,
         fixedMealName: entryByTime.mealName !== mealName,
         ...ifValueDefined<MealPlannerState>(
@@ -409,7 +437,7 @@ export function MealPlanner() {
 
   const meal = {
     name: (): string | undefined => {
-      return state.dailyPlanMealName;
+      return state.mealName;
     },
 
     weightInGrams: (): number => {
@@ -418,11 +446,24 @@ export function MealPlanner() {
       }, 0);
     },
 
-    onLog: () => {
+    onLog: (force?: boolean) => {
       if (state.calculateAmountsError) {
         notificationsService.error(
           translate('cannot-log-meal-with-errors')
         );
+        return;
+      }
+
+      const dailyPlanMealName = mealsDailyPlanService.getMealName(
+        state.dailyMealPlan,
+        Date.now(),
+      );
+      if (
+        dailyPlanMealName &&
+        dailyPlanMealName !== state.mealName &&
+        !force
+      ) {
+        patchState({ showMealLogConfirmationModal: true });
         return;
       }
 
@@ -445,21 +486,60 @@ export function MealPlanner() {
         });
     },
 
+    mealLogConfirmationMessage: (): string => {
+      const dailyPlanMealName = mealsDailyPlanService.getMealName(
+        state.dailyMealPlan,
+        Date.now(),
+      );
+      return translate(
+        'meal-log-confirmation-message',
+        state.mealName,
+        dailyPlanMealName,
+      );
+    },
+
+    onConfirmMealLog: () => {
+      meal.onLog(true);
+      patchState({ showMealLogConfirmationModal: false });
+    },
+
+    onCloseMealLogConfirmation: () => {
+      patchState({ showMealLogConfirmationModal: false });
+    },
+
     onTakePhoto: () => {
       patchState({ showAIMealScannerModal: true });
     },
 
     onAcceptAIMealScan: (result: AIMealScanResult) => {
-      const per100 = (value: number) => value * 100 / result.weightOfAllMeals;
-      const ingredients: MealPlannerIngredient[] = [
-        {
+      const mapIngredient = (
+        ingredient: AIMealScanIngredient,
+      ): MealPlannerIngredient => {
+        const per100 = (value: number) => {
+          return value * 100 / ingredient.weightInGrams;
+        };
+        return {
           adHocIngredient: {
-            name: result.nameOfAllMeals,
-            caloriesPer100: per100(result.macros.calories),
+            name: ingredient.name,
+            caloriesPer100: per100(ingredient.macros.calories),
+            carbsPer100: per100(ingredient.macros.carbs),
+            proteinPer100: per100(ingredient.macros.protein),
+            fatPer100: per100(ingredient.macros.fat),
           },
-          enteredAmount: result.weightOfAllMeals.toString(),
-        }
-      ];
+          enteredAmount: ingredient.weightInGrams.toString(),
+        };
+      };
+      const ingredients = result.ingredients
+        .filter(ingredient => {
+          return (
+            ingredient.weightInGrams > 0 &&
+            ingredient.name !== '' &&
+            ingredient.macros.calories > 0
+          );
+        })
+        .map(ingredient => {
+         return mapIngredient(ingredient);
+        });
       markDirty();
       recalculate(
         state.calories,
@@ -478,7 +558,7 @@ export function MealPlanner() {
       setState(prevState => ({
         ...prevState,
         ingredients: [],
-        calories: prevState.dailyPlanMealCalories,
+        calories: prevState.targetMealCalories,
         clearUndo: {
           ingredients: prevState.ingredients,
           calories: prevState.calories,
@@ -665,7 +745,7 @@ export function MealPlanner() {
               </div>
             </div>
             <MealPlannerActionBar
-              onLogMeal={meal.onLog}
+              onLogMeal={() => meal.onLog()}
               onTakePhoto={meal.onTakePhoto}
               onClearMeal={meal.onClear}
               onSaveMeal={namedMeal.onShowSave}
@@ -754,6 +834,16 @@ export function MealPlanner() {
           onAccept={meal.onAcceptAIMealScan}
           onClose={meal.onCloseAIMealScanner}
         />
+      }
+      { state.showMealLogConfirmationModal &&
+        <YesNoModal
+          show={state.showMealLogConfirmationModal}
+          onYes={meal.onConfirmMealLog}
+          onNo={meal.onCloseMealLogConfirmation}
+          onClose={meal.onCloseMealLogConfirmation}
+        >
+          { htmlToReact(meal.mealLogConfirmationMessage()) }
+        </YesNoModal>
       }
     </>
   );

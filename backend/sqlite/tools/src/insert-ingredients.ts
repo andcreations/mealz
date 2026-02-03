@@ -108,7 +108,11 @@ async function readAllIngredientsFromDB(db: SQLiteDB): Promise<DBIngredient[]> {
     if (lastId) {
       where = `WHERE id > '${lastId}'`;
     }
-    const query = `SELECT id, details FROM ingredients ${where} LIMIT ${limit}`;
+    const query =
+      `SELECT id, details ` +
+      `FROM ingredients ${where} ` +
+      `ORDER BY id ASC ` +
+      `LIMIT ${limit}`;
     const rows = await db.select<any>(query, []);
 
     // keep

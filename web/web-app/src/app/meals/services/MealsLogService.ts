@@ -15,6 +15,7 @@ import {
 import { DateService, SystemService } from '../../system';
 import { Log } from '../../log';
 import { GWMacrosWithDayOfWeek } from '../types';
+import { GWMealCalculator } from './GWMealCalculator';
 
 @Service()
 export class MealsLogService {
@@ -22,6 +23,7 @@ export class MealsLogService {
     private readonly http: HTTPWebClientService,
     private readonly systemService: SystemService,
     private readonly dateService: DateService,
+    private readonly gwMealCalculator: GWMealCalculator,
   ) {}
 
   public async logMeal(
@@ -70,6 +72,23 @@ export class MealsLogService {
     );
 
     return this.summarize(fromDate, toDate);
+  }
+
+  public summarizeMeals(meals: GWMealLog[]): GWMacros {
+    const summary: GWMacros = {
+      calories: 0,
+      carbs: 0,
+      protein: 0,
+      fat: 0,
+    };
+    for (const meal of meals) {
+      const mealAmounts = this.gwMealCalculator.calculateMacros(meal.meal);
+      summary.calories += mealAmounts.calories;
+      summary.carbs += mealAmounts.carbs;
+      summary.protein += mealAmounts.protein;
+      summary.fat += mealAmounts.fat;
+    }
+    return summary;
   }
 
   public async fetchWeeklySummary(): Promise<GWMacrosWithDayOfWeek[]> {

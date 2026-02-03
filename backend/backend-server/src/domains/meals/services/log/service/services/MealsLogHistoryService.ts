@@ -69,11 +69,13 @@ export class MealsLogHistoryService {
         context,
       );
       mealWithAmounts.ingredients.forEach(mealIngredient => {
+        // full ingredient
         if (mealIngredient.ingredientId) {
           const ingredient = ingredients.find(ingredient => {
             return ingredient.id === mealIngredient.ingredientId;
           });
 
+          // for each fact
           Object.entries(MacrosSummaryToFactIds).forEach(([field, factId]) => {
             const factAmount = getFactAmount(ingredient, factId) ?? 0;
             const factValue = calculateFact(
@@ -84,12 +86,38 @@ export class MealsLogHistoryService {
           });
         }
 
+        // ad-hoc ingredient
         if (mealIngredient.adHocIngredient) {
+          // calories
           const calories = calculateFact(
             mealIngredient.calculatedAmount,
             mealIngredient.adHocIngredient.caloriesPer100,
           );
           macrosSummary.calories += calories;
+
+          // carbs
+          if (mealIngredient.adHocIngredient.carbsPer100 !== undefined) {
+            macrosSummary.carbs += calculateFact(
+              mealIngredient.calculatedAmount,
+              mealIngredient.adHocIngredient.carbsPer100,
+            );
+          }
+
+          // protein
+          if (mealIngredient.adHocIngredient.proteinPer100 !== undefined) {
+            macrosSummary.protein += calculateFact(
+              mealIngredient.calculatedAmount,
+              mealIngredient.adHocIngredient.proteinPer100,
+            );
+          }
+
+          // fat
+          if (mealIngredient.adHocIngredient.fatPer100 !== undefined) {
+            macrosSummary.fat += calculateFact(
+              mealIngredient.calculatedAmount,
+              mealIngredient.adHocIngredient.fatPer100,
+            );
+          }
         }
       });
     }

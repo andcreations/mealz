@@ -137,7 +137,9 @@ export class MealsNamedService implements OnBootstrap {
     const queryNormalized = stripDiacritics(query.toLowerCase());
     return this.namedMeals
       .filter(namedMeal => {
-        const mealNameNormalized = stripDiacritics(namedMeal.name.toLowerCase());
+        const mealNameNormalized = stripDiacritics(
+          namedMeal.name.toLowerCase(),
+        );
         return (
           mealNameNormalized.includes(queryNormalized) ||
           isStringSimilar(mealNameNormalized, queryNormalized)

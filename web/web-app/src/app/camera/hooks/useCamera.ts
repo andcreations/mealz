@@ -13,7 +13,7 @@ export interface UseCameraOptions {
 export function useCamera(options: UseCameraOptions = {}) {
   const {
     facingMode = 'environment',
-    widthIdeal = 1280,
+    widthIdeal = 720,
     heightIdeal = 720,
   } = options;
 

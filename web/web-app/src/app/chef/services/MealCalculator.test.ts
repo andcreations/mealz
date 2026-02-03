@@ -65,6 +65,20 @@ const COCONUT_MILK: AdHocIngredient = {
   name: 'Coconut milk',
   caloriesPer100: 240,
 };
+const PROTEIN_BAR: AdHocIngredient = {
+  name: 'Protein bar',
+  caloriesPer100: 200,
+  carbsPer100: 10,
+  proteinPer100: 20,
+  fatPer100: 5,
+};
+const PEANUT_BUTTER: AdHocIngredient = {
+  name: 'Peanut butter',
+  caloriesPer100: 600,
+  carbsPer100: 30,
+  proteinPer100: 20,
+  fatPer100: 40,
+};
 
 const fullIngredient = (
   fullIngredient: GWIngredient,
@@ -79,7 +93,7 @@ const adHocIngredient = (
   enteredAmount: string,
   calculatedAmount?: number,
 ): MealPlannerIngredient => {
-  return {  adHocIngredient, enteredAmount, calculatedAmount };
+  return { adHocIngredient, enteredAmount, calculatedAmount };
 }
 
 describe('MealCalculator.calculateAmounts', () => {
@@ -523,5 +537,76 @@ describe('MealCalculator.summarize', () => {
         hasAdHocIngredients: true,
       },
     })
-  });  
+  });
+
+  test('One ad-hoc ingredients with macros', () => {
+    runTest({
+      ingredients: [
+        adHocIngredient(PROTEIN_BAR, '80', 80),
+      ],
+      expected: {
+        total: {
+          calories: 160,
+          carbs: 8,
+          sugars: 0,
+          protein: 16,
+          totalFat: 4,
+          saturatedFat: 0,
+          monounsaturatedFat: 0,
+          polyunsaturatedFat: 0,          
+          grams: 80,
+        },
+        hasFullIngredients: false,
+        hasAdHocIngredients: true,
+      },
+    })
+  });
+
+  test('Two ad-hoc ingredients with macros', () => {
+    runTest({
+      ingredients: [
+        adHocIngredient(PROTEIN_BAR, '80', 80),
+        adHocIngredient(PEANUT_BUTTER, '100', 100),
+      ],
+      expected: {
+        total: {
+          calories: 160 + 600,
+          carbs: 8 + 30,
+          sugars: 0,
+          protein: 16 + 20,
+          totalFat: 4 + 40,
+          saturatedFat: 0,
+          monounsaturatedFat: 0,
+          polyunsaturatedFat: 0,          
+          grams: 80 + 100,
+        },
+        hasFullIngredients: false,
+        hasAdHocIngredients: true,
+      },
+    })
+  }); 
+
+  test('One full, one ad-hoc ingredients with macros', () => {
+    runTest({
+      ingredients: [
+        adHocIngredient(PROTEIN_BAR, '80', 80),
+        fullIngredient(APPLE, '100', 100),
+      ],
+      expected: {
+        total: {
+          calories: 160 + 100,
+          carbs: 8 + 15,
+          sugars: 0 + 10,
+          protein: 16 + 4,
+          totalFat: 4 + 6,
+          saturatedFat: 0 + 4,
+          monounsaturatedFat: 0 + 3,
+          polyunsaturatedFat: 0 + 1,          
+          grams: 80 + 100,
+        },
+        hasFullIngredients: true,
+        hasAdHocIngredients: true,
+      },
+    })
+  });
 });

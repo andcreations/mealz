@@ -17,22 +17,40 @@
   link: https://www.nutritionix.com/food/coconut-milk
 
 - name:
-    en: Milk
-    pl: Mleko
+    en: Milk 2%
+    pl: Mleko 2%
   unit: g
   type: generic
-  weight: 244
+  weight: 100
   facts:
-    calories: 122
-    carbs: 12
-    sugars: 12
-    protein: 8.1
+    calories: 50
+    carbs: 4.8
+    sugars: 4.8
+    fibre: 0
+    protein: 3.4
     fat:
-      total: 4.8
-      saturated: 3.1
-      monounsaturated: 1.4
+      total: 2.0
+      saturated: 1.2
+      monounsaturated: 0.6
+      polyunsaturated: 0.1
+
+- name:
+    en: Milk 3.2%
+    pl: Mleko 3,2%
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 61
+    carbs: 4.8
+    sugars: 4.8
+    fibre: 0
+    protein: 3.2
+    fat:
+      total: 3.3
+      saturated: 1.9
+      monounsaturated: 1.0
       polyunsaturated: 0.2
-  link: https://www.nutritionix.com/food/milk
 
 - name:
     en: Cottage cheese 1%

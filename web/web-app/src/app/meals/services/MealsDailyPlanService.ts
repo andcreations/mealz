@@ -34,28 +34,7 @@ export class MealsDailyPlanService {
     if (!plan) {
       return undefined;
     }
-
-    const goals: GWMealDailyPlanGoals = {
-      caloriesFrom: 0,
-      caloriesTo: 0,
-      proteinFrom: 0,
-      proteinTo: 0,
-      carbsFrom: 0,
-      carbsTo: 0,
-      fatFrom: 0,
-      fatTo: 0,
-    };
-    plan.entries.forEach(entry => {
-      goals.caloriesFrom += entry.goals.caloriesFrom;
-      goals.caloriesTo += entry.goals.caloriesTo;
-      goals.proteinFrom += entry.goals.proteinFrom;
-      goals.proteinTo += entry.goals.proteinTo;
-      goals.carbsFrom += entry.goals.carbsFrom;
-      goals.carbsTo += entry.goals.carbsTo;
-      goals.fatFrom += entry.goals.fatFrom;
-      goals.fatTo += entry.goals.fatTo;
-    });
-    return goals;
+    return this.summarizeEntries(plan.entries);
   }
 
   public async readCurrentDailyGoalsByNow(
@@ -68,6 +47,12 @@ export class MealsDailyPlanService {
       return undefined;
     }
     const entries = this.getEntriesByNow(plan);
+    return this.summarizeEntries(entries);
+  }
+
+  public summarizeEntries(
+    entries: GWMealDailyPlanEntry[],
+  ): GWMealDailyPlanGoals {
     const goals: GWMealDailyPlanGoals = {
       caloriesFrom: 0,
       caloriesTo: 0,
@@ -89,6 +74,11 @@ export class MealsDailyPlanService {
       goals.fatTo += entry.goals.fatTo;
     });
     return goals;
+  }
+
+  public async readEntriesByNow(): Promise<GWMealDailyPlanEntry[]> {
+    const plan = await this.readCurrentDailyPlan();
+    return this.getEntriesByNow(plan);
   }
 
   public async readCurrentEntry(): Promise<GWMealDailyPlanEntry | undefined> {
@@ -149,6 +139,10 @@ export class MealsDailyPlanService {
     plan: GWMealDailyPlan | undefined,
     timestamp: number,
   ): GWMealDailyPlanEntry | undefined {
+    if (!plan) {
+      return undefined;
+    }
+
     const timeZone = this.systemService.getTimeZone();
     const dateTime = DateTime.fromMillis(timestamp).setZone(timeZone);
 
@@ -193,6 +187,9 @@ export class MealsDailyPlanService {
     plan: GWMealDailyPlan | undefined,
     timestamp: number,
   ): string | undefined {
+    if (!plan) {
+      return undefined;
+    }
     const entry = this.getEntryByTime(plan, timestamp);
     return entry?.mealName;
   }

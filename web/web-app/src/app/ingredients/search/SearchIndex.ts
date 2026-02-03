@@ -31,7 +31,7 @@ export class SearchIndex<T extends SearchDocument> {
       idField: 'id',
       searchOptions: {
         prefix: true,
-        fuzzy: 0.4,
+        fuzzy: 1,
       },
     };
     return new MiniSearchCtr(minisearchOptions);    
