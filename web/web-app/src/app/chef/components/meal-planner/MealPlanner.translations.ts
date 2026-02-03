@@ -44,4 +44,7 @@ export const MealPlannerTranslations: Translations = {
 
   // portion
   'cannot-portion-meal-with-errors': 'Please fix the issues with the meal before portioning',
+
+  // meal log confirmation
+  'meal-log-confirmation-message': `Are you sure you want to log <b>{0}</b>? It's <b>{1}</b> time.`,
 };

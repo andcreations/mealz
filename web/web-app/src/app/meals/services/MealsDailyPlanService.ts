@@ -139,6 +139,10 @@ export class MealsDailyPlanService {
     plan: GWMealDailyPlan | undefined,
     timestamp: number,
   ): GWMealDailyPlanEntry | undefined {
+    if (!plan) {
+      return undefined;
+    }
+
     const timeZone = this.systemService.getTimeZone();
     const dateTime = DateTime.fromMillis(timestamp).setZone(timeZone);
 
@@ -183,6 +187,9 @@ export class MealsDailyPlanService {
     plan: GWMealDailyPlan | undefined,
     timestamp: number,
   ): string | undefined {
+    if (!plan) {
+      return undefined;
+    }
     const entry = this.getEntryByTime(plan, timestamp);
     return entry?.mealName;
   }
