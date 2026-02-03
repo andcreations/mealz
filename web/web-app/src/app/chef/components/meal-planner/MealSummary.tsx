@@ -382,10 +382,14 @@ export function MealSummary(props: MealSummaryProps) {
 
   return (
     <div className={mealSummaryClassNames}>
-      <LoaderByStatus
-        loadStatus={state.loadStatus}
-        size={LoaderSize.Small}
-      />
+      { state.loadStatus !== LoadStatus.Loaded &&
+        <div className='mealz-meal-summary-loader'>
+          <LoaderByStatus
+            loadStatus={state.loadStatus}
+            size={LoaderSize.Small}
+          />
+        </div>
+      }
       { state.loadStatus === LoadStatus.Loaded &&
         <>
           { !!state.status &&

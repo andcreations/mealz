@@ -17,7 +17,7 @@
   @include mealz-flex-container();
   @include mealz-flex-horizontal();
   @include mealz-flex-center();
-  background-color: rgba($mealz-theme-color-bg-medium, 0.25);
+  background-color: $mealz-theme-color-bg-dark;
   @include mealz-font-small();
   @include mealz-border();
   width: 32rem;
@@ -60,4 +60,7 @@
   @include mealz-font-small();
   flex-grow: 0;
   flex-shrink: 1;
+  padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+  border-radius: $mealz-border-radius;
+  background-color: $mealz-theme-color-bg-dark;
 }
