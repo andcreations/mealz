@@ -7,7 +7,6 @@ export function parseAdHocIngredient(
     .trim()
     .split(' ')
     .filter(value => value.length > 0);
-  console.log('values', values);
 
   const parseLastNumber = () => {
     const value = values[values.length - 1];
