@@ -8,9 +8,14 @@ export function parseAdHocIngredient(
     .split(' ')
     .filter(value => value.length > 0);
 
+  const isFloat = (value: string) => {
+    const regex = /^[0-9]+\.[0-9]+$/;
+    return regex.test(value);
+  }
+
   const parseLastNumber = () => {
     const value = values[values.length - 1];
-    if (!value) {
+    if (!value || !isFloat(value)) {
       return undefined;
     }
     const number = parseFloat(value);

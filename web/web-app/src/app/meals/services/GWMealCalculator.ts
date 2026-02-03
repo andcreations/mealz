@@ -28,6 +28,9 @@ export class GWMealCalculator {
           ? {
             name: adHocIngredient.name,
             caloriesPer100: adHocIngredient.caloriesPer100,
+            carbsPer100: adHocIngredient.carbsPer100,
+            proteinPer100: adHocIngredient.proteinPer100,
+            fatPer100: adHocIngredient.fatPer100,
           }
           : undefined;
         return {

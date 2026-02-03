@@ -92,7 +92,7 @@ export class MealCalculator {
 
     let totalKnownCalories = 0;
     let missingAmountCount = 0;
-  // calculate total known calories
+    // calculate total known calories
     validIngredients.forEach(ingredient => {
       const amount = this.fromEnteredAmount(ingredient);
       if (amount === INVALID_AMOUNT) {
@@ -106,7 +106,7 @@ export class MealCalculator {
 
     const missingCalories = Math.max(0, calories - totalKnownCalories);
     const missingCaloriesPerIngredient = missingCalories / missingAmountCount;
-  // calculate amounts
+    // calculate amounts
     result
       .filter(ingredient => this.isValidIngredient(ingredient))
       .forEach(ingredient => {

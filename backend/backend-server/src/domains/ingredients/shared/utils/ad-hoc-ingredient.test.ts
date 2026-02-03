@@ -76,6 +76,11 @@ describe('parseAdHocIngredient', () => {
     expect(ingredient).toBeUndefined();
   });
 
+  it('should not parse an ad-hoc ingredient with percent at the end', () => {
+    const ingredient = parseAdHocIngredient('Cottage cheese 10%');
+    expect(ingredient).toBeUndefined();
+  });
+
   it('should not parse an ad-hoc ingredient with no values', () => {
     const ingredient = parseAdHocIngredient('');
     expect(ingredient).toBeUndefined();
