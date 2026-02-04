@@ -9,7 +9,7 @@ import { AD_HOC_UNIT, INGREDIENT_LANGUAGE } from '../../../common';
 import { useTranslations } from '../../../i18n';
 import { usePatchState, useService } from '../../../hooks';
 import { UserSettingsService } from '../../../user';
-import { MealPlannerIngredient } from '../../types';
+import { Macros, MealPlannerIngredient } from '../../types';
 import {
   IngredientsEditorTranslations,
 } from './IngredientsEditor.translations';
@@ -169,7 +169,8 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     }
 
     // details
-    let details = '';
+    let calories = undefined;
+    let macros: Partial<Macros> | undefined;
 
     // calories as details
     if (
@@ -177,10 +178,20 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
       userSettings.showCaloriesInIngredientsEditor() &&
       ingredient.calculatedAmount !== INVALID_AMOUNT
     ) {
-      const caloriesPer100 = mealCalculator.getCaloriesPer100(ingredient);
-      const calories = caloriesPer100 * ingredient.calculatedAmount / 100;
-      details = `(${calories.toFixed(0)} kcal)`
+      calories = mealCalculator.getCaloriesForAmount(
+        ingredient,
+        ingredient.calculatedAmount,
+      );
+      macros = mealCalculator.getMacrosForAmount(
+        ingredient,
+        ingredient.calculatedAmount,
+      );
     }
+
+    const hasCalories = calories > 0;
+    const hasMacros = (
+      macros && (macros.carbs > 0 || macros.protein > 0 || macros.fat > 0)
+    );
 
     const nameClassNames = classNames(
       'mealz-ingredients-editor-name',
@@ -195,9 +206,49 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
         <span>
           {name}
         </span>
-        { details &&
+        { (hasCalories || hasMacros) &&
           <span className='mealz-ingredients-editor-name-details'>
-            {details}
+            { calories > 0 &&
+              <span className='mealz-ingredients-editor-name-details-calories'>
+                { calories.toFixed(0) } kcal
+              </span>
+            }
+            { macros?.carbs > 0 &&
+              <>
+                <span
+                  className='mealz-ingredients-editor-name-details-separator'
+                >
+                  ·
+                </span>
+                <span className='mealz-ingredients-editor-name-details-carbs'>
+                  { macros.carbs.toFixed(0) } g
+                </span>
+              </>
+            }
+            { macros?.protein > 0 &&
+              <>
+                <span
+                  className='mealz-ingredients-editor-name-details-separator'
+                >
+                  ·
+                </span>
+                <span className='mealz-ingredients-editor-name-details-protein'>
+                  { macros.protein.toFixed(0) } g
+                </span>
+              </>
+            }
+            { macros?.fat > 0 &&
+              <>
+                <span
+                  className='mealz-ingredients-editor-name-details-separator'
+                >
+                  ·
+                </span>
+                <span className='mealz-ingredients-editor-name-details-fat'>
+                  { macros.fat.toFixed(0) } g
+                </span>
+              </>
+            }
           </span>
         }
       </div>
@@ -216,9 +267,27 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     return entries;
   };
 
-  const rowCount = state.ingredients.length || 1;
+  const resolveGridRows = () => {
+    if (state.ingredients.length === 0) {
+      return '1.5rem';
+    }
+    let rows = '';
+    state.ingredients.forEach((ingredient, index) => {
+      const hasIngredient = (
+        !!ingredient.fullIngredient || 
+        !!ingredient.adHocIngredient
+      );
+      if (hasIngredient) {
+        rows += '2.625rem ';
+      } else {
+        rows += '1.5rem ';
+      }
+    });
+    return rows;
+  };
+
   const entriesStyles = {
-    gridTemplateRows: `repeat(${rowCount}, 1.5rem)`,
+    gridTemplateRows: resolveGridRows(),
   };
   const editorClassNames = classNames(
     'mealz-ingredients-editor',
