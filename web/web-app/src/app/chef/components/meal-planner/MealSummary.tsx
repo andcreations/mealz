@@ -15,6 +15,7 @@ import { MealCalculator } from '../../services';
 import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealSummaryTranslations } from './MealSummary.translations';
 import { LoaderByStatus, LoaderSize } from '../../../components';
+import { IngredientsCrudService } from '../../../ingredients';
 
 const MAX_CALORIES_DIFFERENCE = 20;
 const SHOW_FAT_DETAILS = false;
@@ -36,7 +37,8 @@ interface MealSummaryState {
 export function MealSummary(props: MealSummaryProps) {
   const userSettings = useService(UserSettingsService);
   const mealCalculator = useService(MealCalculator);
-
+  const ingredientsService = useService(IngredientsCrudService);
+  
   const [state, setState] = useState<MealSummaryState>({
     status: null,
     summary: null,
@@ -44,6 +46,29 @@ export function MealSummary(props: MealSummaryProps) {
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealSummaryTranslations);
+
+  // initial read
+  useEffect(
+    () => {
+      Promise.all([
+        Log.logAndRethrow(
+          () => ingredientsService.waitForIngredientsToLoad(),
+          'Failed to wait for ingredients to load',
+        ),
+      ])
+      .then(([_]) => {
+        patchState({
+          loadStatus: LoadStatus.Loaded,
+        });
+      })
+      .catch(error => {
+        patchState({
+          loadStatus: LoadStatus.FailedToLoad,
+        });
+      });
+    },
+    [],
+  );
 
   useEffect(
     () => {

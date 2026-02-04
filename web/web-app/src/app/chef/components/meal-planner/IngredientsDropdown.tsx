@@ -44,6 +44,7 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
     );
 
     const name = buildName(ingredient);
+    const brand = ingredient.product?.brand;
     const amount = (factId: GWFactId, unit: string) => {
       const fact = getFact(ingredient, factId);
       return (fact ? `${fact.amount.toFixed(0)}` : '0') + unit;
@@ -80,6 +81,18 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
           <div className='mealz-ingredients-dropdown-ingredient-details-fat'>
             { amount(GWFactId.TotalFat, ' g') }
           </div>
+          { brand &&
+            <>
+              <div className='mealz-ingredients-dropdown-ingredient-separator'>
+              ·
+              </div>
+              <div
+                className='mealz-ingredients-dropdown-ingredient-details-brand'
+              >
+                { brand }
+              </div>
+            </>
+          }
         </div>
       </div>
     );
