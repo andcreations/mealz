@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsBoolean,
   IsEnum,
   IsOptional,
   IsString,
@@ -45,4 +46,9 @@ export class IngredientDetailsV1 {
   @ValidateNested()
   @Type(() => ProductV1)
   public product?: ProductV1;
+
+  // Indicates if an ingredient is not visible to the user
+  @IsOptional()
+  @IsBoolean()
+  public isHidden?: boolean;
 }

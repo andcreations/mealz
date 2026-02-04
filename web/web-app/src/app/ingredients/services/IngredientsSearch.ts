@@ -56,6 +56,9 @@ export class IngredientsSearch implements OnBootstrap {
       fields: ['primaryName', 'secondaryName'],
     });
     ingredients.forEach(ingredient => {
+      if (ingredient.isHidden) {
+        return;
+      }
       this.index.addDocument({
         id: ingredient.id,
         primaryName: stripDiacritics(ingredient.name[INGREDIENT_LANGUAGE]),

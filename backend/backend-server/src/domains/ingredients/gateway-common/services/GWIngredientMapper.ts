@@ -106,6 +106,7 @@ export class GWIngredientMapper {
         'product',
         this.fromProduct(ingredient.product),
       ),
+      isHidden: ingredient.isHidden,
     };
   }
 }
