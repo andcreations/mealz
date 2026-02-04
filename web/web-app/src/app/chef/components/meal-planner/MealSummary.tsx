@@ -10,7 +10,7 @@ import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { UserSettingsService } from '../../../user';
-import { MealsDailyPlanService, isGoalError } from '../../../meals';
+import { isGoalError } from '../../../meals';
 import { MealCalculator } from '../../services';
 import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealSummaryTranslations } from './MealSummary.translations';
@@ -24,18 +24,17 @@ export interface MealSummaryProps {
   status?: string;
   calories?: number;
   ingredients: MealPlannerIngredient[];
+  goals?: GWMealDailyPlanGoals;
 }
 
 interface MealSummaryState {
   status: string | null;
   summary?: MealSummaryResult;
-  goals?: GWMealDailyPlanGoals;
   loadStatus: LoadStatus;
 }
 
 export function MealSummary(props: MealSummaryProps) {
   const userSettings = useService(UserSettingsService);
-  const mealsDailyPlanService = useService(MealsDailyPlanService);
   const mealCalculator = useService(MealCalculator);
 
   const [state, setState] = useState<MealSummaryState>({
@@ -45,25 +44,6 @@ export function MealSummary(props: MealSummaryProps) {
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealSummaryTranslations);
-
-  // initial read
-  useEffect(
-    () => {
-      Promise.all([
-        Log.logAndRethrow(
-          () => mealsDailyPlanService.readCurrentGoals(),
-          'Failed to read current goals',
-        ),
-      ])
-      .then(([goals]) => {
-        patchState({
-          goals,
-          loadStatus: LoadStatus.Loaded,
-        });
-      });
-    },
-    [],
-  );
 
   useEffect(
     () => {
@@ -77,7 +57,8 @@ export function MealSummary(props: MealSummaryProps) {
   );
 
   const renderFacts = () => {
-    const { summary, goals } = state;
+    const { summary } = state;
+    const { goals } = props;
 
     const percentages = mealCalculator.calculateMacrosPercentages(
       summary.total.carbs,

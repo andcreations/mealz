@@ -59,13 +59,19 @@ export function DailySummary(props: DailySummaryProps) {
         ),
       ])
       .then(([_, meals, dailyPlanEntries]) => {
-        const lastEntry = dailyPlanEntries[dailyPlanEntries.length - 1];
-        if (lastEntry) {
-          const hasLastMeal = meals.some(meal => {
-            return meal.dailyPlanMealName === lastEntry.mealName;
-          });
-          if (!hasLastMeal) {
-            dailyPlanEntries.pop();
+        // if there are no meals, just take the first goals of the daily plan...
+        if (meals.length > 0) {
+          // ...otherwise, remove the last entry if it doesn't have a meal, so
+          // that the user can check calories or macros of what then have
+          // eaten so far today
+          const lastEntry = dailyPlanEntries[dailyPlanEntries.length - 1];
+          if (lastEntry) {
+            const hasLastMeal = meals.some(meal => {
+              return meal.dailyPlanMealName === lastEntry.mealName;
+            });
+            if (!hasLastMeal) {
+              dailyPlanEntries.pop();
+            }
           }
         }
 
