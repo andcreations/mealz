@@ -239,10 +239,6 @@ export class MealCalculator {
     };
   }
 
-  /**
-   * Summarize rules:
-   * - Facts other than calories are returned only if there are full ingredients.
-   */
   public summarize(
     ingredients: MealPlannerIngredient[],
   ): MealSummaryResult {
@@ -300,7 +296,7 @@ export class MealCalculator {
       }
 
       // full ingredient
-      if (ingredient.fullIngredient) {
+      if (!!ingredient.fullIngredient) {
         const facts = getFacts(ingredient.fullIngredient);
         summary.total.calories += calculateFact(amount, facts.calories);
 

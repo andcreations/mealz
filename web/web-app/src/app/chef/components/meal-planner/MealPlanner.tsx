@@ -43,6 +43,7 @@ import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
 import { MealPortion } from './MealPortion';
 import { AIMealScannerModal } from '../ai-meal-scanner';
+import { MealNameMenuItem } from './MealNameMenuItem';
 
 enum Focus { Calories };
 
@@ -172,7 +173,6 @@ export function MealPlanner() {
           {
             loadStatus: LoadStatus.Loaded,
             targetMealCalories,
-            // dailyMealPlan,
             mealName,
             goals: entryByName?.goals,
             fixedMealName: userMeal?.metadata?.fixedMealName ?? false,
@@ -414,10 +414,20 @@ export function MealPlanner() {
     },
 
     getMenuItems: (): ModalMenuItem[] => {
-      return mealName.getMealNames().map(name => ({
-        name,
-        onClick: (item: ModalMenuItem) => mealName.onPick(item.name),
-      }));
+      return mealName.getMealNames().map(name => {
+        const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
+          dailyMealPlan.current,
+          name,
+        );
+        return {
+          key: name,
+          content: <MealNameMenuItem
+            name={name}
+            goals={dailyPlanEntry?.goals}
+          />,
+          onClick: (item: ModalMenuItem) => mealName.onPick(item.key),
+        }
+      });
     },
 
     onPick: (mealName: string) => {

@@ -61,7 +61,7 @@ export function MealSummary(props: MealSummaryProps) {
           loadStatus: LoadStatus.Loaded,
         });
       })
-      .catch(error => {
+      .catch(() => {
         patchState({
           loadStatus: LoadStatus.FailedToLoad,
         });

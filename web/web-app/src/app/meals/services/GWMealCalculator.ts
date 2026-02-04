@@ -10,7 +10,6 @@ import {
 
 @Service()
 export class GWMealCalculator {
-
   public constructor(
     private readonly ingredientsCrudService: IngredientsCrudService,
     private readonly chefMealCalculator: ChefMealCalculator,
