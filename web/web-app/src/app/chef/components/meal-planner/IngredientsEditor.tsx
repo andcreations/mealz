@@ -115,6 +115,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
   ) => {
     const hasFullIngredient = !!ingredient.fullIngredient;
     const hasAdHocIngredient = !!ingredient.adHocIngredient;
+    const hasEnteredAmount = !!ingredient.enteredAmount;
 
     const fromCalculatedAmount = () => {
       return ingredient.calculatedAmount !== INVALID_AMOUNT
@@ -122,7 +123,11 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
         : '?';
     };
 
-    const amount = (hasFullIngredient || hasAdHocIngredient)
+    let amount = '';
+    if (!hasEnteredAmount) {
+      amount += '*';
+    }
+    amount += (hasFullIngredient || hasAdHocIngredient)
       ? fromCalculatedAmount()
       : '';
     let unit = '';
@@ -203,11 +208,11 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
         className={nameClassNames}
         onClick={() => onOpenIngredientPicker(ingredientIndex)}
       >
-        <span>
+        <div>
           {name}
-        </span>
+        </div>
         { (hasCalories || hasMacros) &&
-          <span className='mealz-ingredients-editor-name-details'>
+          <div className='mealz-ingredients-editor-name-details'>
             { calories > 0 &&
               <span className='mealz-ingredients-editor-name-details-calories'>
                 { calories.toFixed(0) } kcal
@@ -249,7 +254,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
                 </span>
               </>
             }
-          </span>
+          </div>
         }
       </div>
     );

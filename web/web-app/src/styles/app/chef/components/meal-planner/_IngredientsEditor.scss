@@ -7,6 +7,7 @@
   @include mealz-border();
   padding: 0.875rem 0;
   grid-template-columns: 4rem auto;
+  width: 100%;
 }
 
 .mealz-ingredients-editor-no-ingredients {
@@ -42,11 +43,14 @@
 }
 
 .mealz-ingredients-editor-name {
-  @include mealz-flex-container();
-  @include mealz-flex-vertical();  
   margin-left: 1rem;
-  text-align: left;
+  margin-right: 0.5rem;
   cursor: pointer;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  // ellipsis doesn't work with grid cell with auto width
 }
 
 .mealz-ingredients-editor-name-details {

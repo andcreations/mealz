@@ -6,6 +6,6 @@ export const UsersDailyInsightsServiceTranslations: Translations = {
   'carbs':    '     Carbs: ',
   'protein':  '   Protein: ',
   'fat':      '       Fat: ',
-  'amounts': '{0}-{1} {2} (goal)',
+  'amounts': '{0} - {1} {2} (goal)',
   'skipped': 'skipped 👈',
 };

@@ -70,8 +70,12 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
       key: 'portion-meal',
       content: translate('portion-meal'),
       onClick: props.onPortionMeal,
+    },
+    {
+      key: 'take-photo',
+      content: translate('take-photo'),
+      onClick: props.onTakePhoto,
     }
-
   ];
 
   return (
@@ -81,12 +85,6 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
           className='mealz-meal-planner-action-bar-icon'
           icon='note_add'
           onClick={props.onLogMeal}
-        />
-        <Separator/>
-        <MaterialIcon
-          className='mealz-meal-planner-action-bar-icon'
-          icon='photo_camera'
-          onClick={props.onTakePhoto}
         />
         <Separator/>
         <MaterialIcon

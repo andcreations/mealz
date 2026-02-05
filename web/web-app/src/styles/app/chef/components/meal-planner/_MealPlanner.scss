@@ -1,19 +1,22 @@
-.mealz-meal-planner {
-  $padding: 0.875rem;
-  
+$mealz-meal-planner-padding: 0rem;
+
+.mealz-meal-planner {  
   @include mealz-flex-container();
   @include mealz-flex-vertical();
-  display: relative;
   align-items: center;
-  left: $padding;
-  width: calc(100vw - 2 * #{$padding});
+  margin-left: $mealz-meal-planner-padding;
+  margin-right: $mealz-meal-planner-padding;
+  width: calc(100% - 2 * #{$mealz-meal-planner-padding});
 }
 
 .mealz-meal-planner-top-bar {
   @include mealz-flex-container();
   @include mealz-flex-horizontal();
+  gap: 1rem;
   align-items: center;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding-bottom: 1rem;
 }
 
@@ -24,6 +27,14 @@
   flex-shrink: 1;
   align-items: center;
   margin-left: $mealz-border-radius;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.mealz-meal-planner-meal-name {
+  cursor: pointer;
+  max-width: 100%;
+  @include mealz-ellipsis();
 }
 
 .mealz-meal-planner-calories-unit {
@@ -32,8 +43,11 @@
 }
 
 .mealz-meal-planner-calories-value {
+  $width: 4rem;
+
   padding-left: 0.5rem;
-  width: 5rem;
+  width: $width;
+  min-width: $width;
 
   .form-control, .form-control:focus {
     text-align: right;

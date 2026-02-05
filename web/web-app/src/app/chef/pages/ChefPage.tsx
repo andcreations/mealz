@@ -6,7 +6,7 @@ import { LoadStatus } from '../../common';
 import { Log } from '../../log';
 import { useTranslations } from '../../i18n';
 import { usePatchState, useService } from '../../hooks';
-import { Center, LoaderType } from '../../components';
+import { LoaderType } from '../../components';
 import { PageLoader, PageWrapper } from '../../page';
 import { IngredientsCrudService } from '../../ingredients';
 import { MealPlanner } from '../components';
@@ -52,26 +52,24 @@ export function ChefPage() {
 
   return (
     <PageWrapper title={translate('title')}>
-      <Center>
-        { state.loadStatus === LoadStatus.Loaded &&
-          <MealPlanner/>
-        }
-        { state.loadStatus === LoadStatus.Loading &&
-          <PageLoader
-            type={LoaderType.Info}
-            title={translate('hang-tight')}
-            subTitle={translate('loading-ingredients')}
-          />
-        }
-        { state.loadStatus === LoadStatus.FailedToLoad &&
-          <PageLoader
-            type={LoaderType.Error}
-            title={translate('try-again-later')}
-            subTitle={translate('failed-to-load-ingredients')}
-            delay={0}
-          />
-        }
-      </Center>
+      { state.loadStatus === LoadStatus.Loaded &&
+        <MealPlanner/>
+      }
+      { state.loadStatus === LoadStatus.Loading &&
+        <PageLoader
+          type={LoaderType.Info}
+          title={translate('hang-tight')}
+          subTitle={translate('loading-ingredients')}
+        />
+      }
+      { state.loadStatus === LoadStatus.FailedToLoad &&
+        <PageLoader
+          type={LoaderType.Error}
+          title={translate('try-again-later')}
+          subTitle={translate('failed-to-load-ingredients')}
+          delay={0}
+        />
+      }
     </PageWrapper>
   );
 }

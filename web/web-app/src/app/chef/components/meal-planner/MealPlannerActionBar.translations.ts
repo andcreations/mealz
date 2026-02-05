@@ -6,4 +6,5 @@ export const MealPlannerActionBarTranslations: Translations = {
   'load-meal': 'Load a meal',
   'delete-meal': 'Delete a meal',
   'portion-meal': 'Portion the meal',
+  'take-photo': 'Scan a photo of a meal',
 };
