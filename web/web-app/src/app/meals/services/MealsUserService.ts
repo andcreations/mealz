@@ -20,8 +20,18 @@ export class MealsUserService {
     private readonly authService: AuthService,
   ) {}
 
-  public async readUserDraftMeal(): Promise<
-    GWUserMeal<UserDraftMealMetadata> | undefined
+  private buildDraftMealTypeId(
+    mealName: string,
+    dateFingerprint: string,
+  ): string {
+    return `${MealsUserService.DRAFT_TYPE_ID}-${mealName}-${dateFingerprint}`;
+  }
+
+  public async readUserDraftMeal(
+    mealName: string,
+    dateFingerprint: string,
+  ): Promise<
+    GWUserMeal<void> | undefined
   > {
     if (!this.authService.isSignedIn()) {
       return undefined;
@@ -31,15 +41,17 @@ export class MealsUserService {
       MealsUserV1API.url.readManyV1({
         lastId: undefined,
         limit: 1,
-        typeIds: [MealsUserService.DRAFT_TYPE_ID],
+        typeIds: [this.buildDraftMealTypeId(mealName, dateFingerprint)],
       }),
     );
     return data.userMeals[0];
   }
 
   public async upsertUserDraftMeal(
+    mealName: string,
+    dateFingerprint: string,
     meal: GWMealWithoutId,
-    metadata: UserDraftMealMetadata,
+    // metadata: UserDraftMealMetadata,
   ): Promise<void> {
     await this.http.post<
       UpsertUserMealGWRequestV1,
@@ -47,9 +59,8 @@ export class MealsUserService {
     >(
       MealsUserV1API.url.upsertV1(),
       {
-        typeId: MealsUserService.DRAFT_TYPE_ID,
+        typeId: this.buildDraftMealTypeId(mealName, dateFingerprint),
         meal,
-        metadata,
       }
     );
   }
@@ -62,10 +73,6 @@ export class MealsUserService {
 }
 
 export interface UserDraftMealMetadata {
-  mealName?: string;
-
-  // True if the user picked the meal name and it's not current daily plan
-  // meal name according to the time of the day. When it's true, then whenever
-  // the user opens Chef, the picked meal will be shown.
-  fixedMealName?: boolean;
+  // calories entered by the user
+  caloriesStr?: string;
 }

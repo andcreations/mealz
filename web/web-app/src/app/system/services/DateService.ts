@@ -18,4 +18,10 @@ export class DateService {
 
     return { fromDate, toDate };
   }
+
+  public getTodayFingerprint(): string {
+    const timeZone = this.systemService.getTimeZone();
+    const now = DateTime.now().setZone(timeZone);
+    return now.toFormat('yyyyLLdd');
+  }
 }

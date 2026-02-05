@@ -115,6 +115,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
   ) => {
     const hasFullIngredient = !!ingredient.fullIngredient;
     const hasAdHocIngredient = !!ingredient.adHocIngredient;
+    const hasIngredient = hasFullIngredient || hasAdHocIngredient;
     const hasEnteredAmount = !!ingredient.enteredAmount;
 
     const fromCalculatedAmount = () => {
@@ -124,12 +125,10 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     };
 
     let amount = '';
-    if (!hasEnteredAmount) {
+    if (hasIngredient && !hasEnteredAmount) {
       amount += '*';
     }
-    amount += (hasFullIngredient || hasAdHocIngredient)
-      ? fromCalculatedAmount()
-      : '';
+    amount += hasIngredient ? fromCalculatedAmount() : '';
     let unit = '';
     if (hasFullIngredient) {
       unit = ingredient.fullIngredient.unitPer100;
