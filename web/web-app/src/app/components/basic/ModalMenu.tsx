@@ -4,8 +4,8 @@ import Modal from 'react-bootstrap/Modal';
 import { nameToKey } from '../../utils';
 
 export interface ModalMenuItem {
-  id?: string;
-  name: string;
+  key: string;
+  content: string | React.ReactNode;
   onClick: (item: ModalMenuItem) => void;
 }
 
@@ -29,11 +29,11 @@ export function ModalMenu(props: ModalMenuProps) {
     return props.items.map((item) => {
       return (
         <div
-          key={nameToKey(item.name)}
+          key={item.key}
           className='mealz-modal-menu-item'
           onClick={() => onItemClick(item)}
         >
-          {item.name}
+          {item.content}
         </div>
       );
     });

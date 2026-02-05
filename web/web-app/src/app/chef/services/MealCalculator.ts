@@ -8,6 +8,9 @@ import { I18nService } from '../../i18n';
 import {
   IngredientFacts,
   getCaloriesPer100,
+  getCarbsPer100,
+  getProteinPer100,
+  getFatPer100,
   getFacts,
 } from '../../ingredients';
 import { INVALID_AMOUNT } from '../const';
@@ -47,6 +50,78 @@ export class MealCalculator {
       return ingredient.adHocIngredient.caloriesPer100;
     }
     return undefined;
+  }
+
+  public getCaloriesForAmount(
+    ingredient: MealPlannerIngredient,
+    amount: number,
+  ): number | undefined {
+    const caloriesPer100 = this.getCaloriesPer100(ingredient);
+    return calculateFact(amount, caloriesPer100);
+  }
+
+  public getCarbsPer100(
+    ingredient: MealPlannerIngredient,
+  ): number | undefined {
+    if (ingredient.fullIngredient) {
+      return getCarbsPer100(ingredient.fullIngredient);
+    }
+    if (ingredient.adHocIngredient) {
+      return ingredient.adHocIngredient.carbsPer100;
+    }
+    return undefined;
+  }
+
+  public getProteinPer100(
+    ingredient: MealPlannerIngredient,
+  ): number | undefined {
+    if (ingredient.fullIngredient) {
+      return getProteinPer100(ingredient.fullIngredient);
+    }
+    if (ingredient.adHocIngredient) {
+      return ingredient.adHocIngredient.proteinPer100;
+    }
+    return undefined;
+  }
+
+  public getFatPer100(
+    ingredient: MealPlannerIngredient,
+  ): number | undefined {
+    if (ingredient.fullIngredient) {
+      return getFatPer100(ingredient.fullIngredient);
+    }
+    if (ingredient.adHocIngredient) {
+      return ingredient.adHocIngredient.fatPer100;
+    }
+    return undefined;
+  }
+
+  public getMacrosPer100(
+    ingredient: MealPlannerIngredient,
+  ): Partial<Macros> {
+    return {
+      carbs: this.getCarbsPer100(ingredient),
+      protein: this.getProteinPer100(ingredient),
+      fat: this.getFatPer100(ingredient),
+    };
+  }
+
+  public getMacrosForAmount(
+    ingredient: MealPlannerIngredient,
+    amount: number,
+  ): Partial<Macros> {
+    const macrosPer100 = this.getMacrosPer100(ingredient);
+    const calculate = (amount: number, factPer100?: number) => {
+      if (factPer100 === undefined) {
+        return undefined;
+      }
+      return calculateFact(amount, factPer100);
+    };
+    return {
+      carbs: calculate(amount, macrosPer100.carbs),
+      protein: calculate(amount, macrosPer100.protein),
+      fat: calculate(amount, macrosPer100.fat),
+    };
   }
 
   /**
@@ -164,10 +239,6 @@ export class MealCalculator {
     };
   }
 
-  /**
-   * Summarize rules:
-   * - Facts other than calories are returned only if there are full ingredients.
-   */
   public summarize(
     ingredients: MealPlannerIngredient[],
   ): MealSummaryResult {
@@ -225,7 +296,7 @@ export class MealCalculator {
       }
 
       // full ingredient
-      if (ingredient.fullIngredient) {
+      if (!!ingredient.fullIngredient) {
         const facts = getFacts(ingredient.fullIngredient);
         summary.total.calories += calculateFact(amount, facts.calories);
 

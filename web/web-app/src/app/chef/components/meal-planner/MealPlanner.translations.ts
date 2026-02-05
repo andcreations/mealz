@@ -6,7 +6,7 @@ export const MealPlannerTranslations: Translations = {
   'try-again-later': 'Please try again later',
   'failed-to-prepare-meal-planner': `We couldn't prepare your meal planner`,
   'default-meal-name': 'Meal',
-  'ad-hoc-meal-name': 'Ad-hoc',
+  'ad-hoc-meal-names': 'Ad-hoc #1,Ad-hoc #2,Ad-hoc #3',
   'kcal': 'kcal',
   'meal-cleared': 'Meal cleared',
 

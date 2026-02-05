@@ -29,5 +29,8 @@ export class Ingredient {
 
   // Product if ingredient is a product
   public product?: Product;
+
+  // Indicates if an ingredient is not visible to the user
+  public isHidden?: boolean;
 }
 

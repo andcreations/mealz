@@ -57,6 +57,7 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
     },
   );
 
+  const hasGoal = !!goalFrom && !!goalTo;
   const goalLabelClassName = classNames(
     'mealz-macros-summary-box-goal-label',
     { 'mealz-macros-summary-box-goal-label-error': goalError }
@@ -76,7 +77,7 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
           {unit}
         </span>
       </div>
-      { goalFrom && goalTo &&
+      { hasGoal &&
         <>
           <div className={goalLabelClassName}>
             {translate('goal')}

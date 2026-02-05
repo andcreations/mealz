@@ -1,8 +1,16 @@
 .mealz-meal-summary {
   @include mealz-flex-container();
   @include mealz-flex-horizontal();
-  width: 100%;
+  width: calc(100% - $mealz-border-radius * 2);
   margin: 0 $mealz-border-radius;
+}
+
+.mealz-meal-summary-loader {
+  width: 100%;
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
 }
 
 .mealz-meal-summary-status {

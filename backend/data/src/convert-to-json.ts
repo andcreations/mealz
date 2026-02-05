@@ -198,6 +198,7 @@ function convertToJson(ingredients: YamlIngredient[]): any {
         ? { product: convertProduct(ingredient.product) }
         : {}
       ),
+      isHidden: ingredient.hidden,
     });
   }
 

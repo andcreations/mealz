@@ -43,22 +43,32 @@
   flex-grow: 1;
   margin-top: -0.25rem; // to move closer to the name
   opacity: 0.75;
+  max-width: 100%;
 }
 
 .mealz-ingredients-dropdown-ingredient-details-calories {
   color: $mealz-theme-color-calories;
+  white-space: nowrap;
 }
 
 .mealz-ingredients-dropdown-ingredient-details-carbs {
   color: $mealz-theme-color-carbs;
+  white-space: nowrap;
 }
 
 .mealz-ingredients-dropdown-ingredient-details-protein {
   color: $mealz-theme-color-protein;
+  white-space: nowrap;
 }
 
 .mealz-ingredients-dropdown-ingredient-details-fat {
   color: $mealz-theme-color-fat;
+  white-space: nowrap;
+}
+
+.mealz-ingredients-dropdown-ingredient-details-brand {
+  @include mealz-ellipsis();
+  max-width: 100%;
 }
 
 .mealz-ingredients-dropdown-entry-selected {
@@ -66,6 +76,7 @@
   .mealz-ingredients-dropdown-ingredient-details-carbs,
   .mealz-ingredients-dropdown-ingredient-details-protein,
   .mealz-ingredients-dropdown-ingredient-details-fat,
+  .mealz-ingredients-dropdown-ingredient-details-brand,
   .mealz-ingredients-dropdown-ingredient-separator {
     color: $mealz-color;
   }

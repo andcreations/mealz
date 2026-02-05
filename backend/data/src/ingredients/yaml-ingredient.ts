@@ -9,6 +9,7 @@ import {
   Min,
   ValidateNested,
   IsObject,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -100,4 +101,8 @@ export class YamlIngredient {
   @IsOptional()
   @IsUrl()
   link?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  hidden?: boolean;
 }

@@ -5919,6 +5919,57 @@
   },
   {
     "name": {
+      "en": "Milk",
+      "pl": "Mleko"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 50
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.92
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.92
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.32
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.97
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.27
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.57
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ],
+    "isHidden": true
+  },
+  {
+    "name": {
       "en": "Milk 2%",
       "pl": "Mleko 2%"
     },

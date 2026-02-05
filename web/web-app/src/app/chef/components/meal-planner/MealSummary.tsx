@@ -10,11 +10,12 @@ import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { UserSettingsService } from '../../../user';
-import { MealsDailyPlanService, isGoalError } from '../../../meals';
+import { isGoalError } from '../../../meals';
 import { MealCalculator } from '../../services';
 import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealSummaryTranslations } from './MealSummary.translations';
 import { LoaderByStatus, LoaderSize } from '../../../components';
+import { IngredientsCrudService } from '../../../ingredients';
 
 const MAX_CALORIES_DIFFERENCE = 20;
 const SHOW_FAT_DETAILS = false;
@@ -24,20 +25,20 @@ export interface MealSummaryProps {
   status?: string;
   calories?: number;
   ingredients: MealPlannerIngredient[];
+  goals?: GWMealDailyPlanGoals;
 }
 
 interface MealSummaryState {
   status: string | null;
   summary?: MealSummaryResult;
-  goals?: GWMealDailyPlanGoals;
   loadStatus: LoadStatus;
 }
 
 export function MealSummary(props: MealSummaryProps) {
   const userSettings = useService(UserSettingsService);
-  const mealsDailyPlanService = useService(MealsDailyPlanService);
   const mealCalculator = useService(MealCalculator);
-
+  const ingredientsService = useService(IngredientsCrudService);
+  
   const [state, setState] = useState<MealSummaryState>({
     status: null,
     summary: null,
@@ -51,14 +52,18 @@ export function MealSummary(props: MealSummaryProps) {
     () => {
       Promise.all([
         Log.logAndRethrow(
-          () => mealsDailyPlanService.readCurrentGoals(),
-          'Failed to read current goals',
+          () => ingredientsService.waitForIngredientsToLoad(),
+          'Failed to wait for ingredients to load',
         ),
       ])
-      .then(([goals]) => {
+      .then(([_]) => {
         patchState({
-          goals,
           loadStatus: LoadStatus.Loaded,
+        });
+      })
+      .catch(() => {
+        patchState({
+          loadStatus: LoadStatus.FailedToLoad,
         });
       });
     },
@@ -77,7 +82,8 @@ export function MealSummary(props: MealSummaryProps) {
   );
 
   const renderFacts = () => {
-    const { summary, goals } = state;
+    const { summary } = state;
+    const { goals } = props;
 
     const percentages = mealCalculator.calculateMacrosPercentages(
       summary.total.carbs,
@@ -382,10 +388,14 @@ export function MealSummary(props: MealSummaryProps) {
 
   return (
     <div className={mealSummaryClassNames}>
-      <LoaderByStatus
-        loadStatus={state.loadStatus}
-        size={LoaderSize.Small}
-      />
+      { state.loadStatus !== LoadStatus.Loaded &&
+        <div className='mealz-meal-summary-loader'>
+          <LoaderByStatus
+            loadStatus={state.loadStatus}
+            size={LoaderSize.Small}
+          />
+        </div>
+      }
       { state.loadStatus === LoadStatus.Loaded &&
         <>
           { !!state.status &&

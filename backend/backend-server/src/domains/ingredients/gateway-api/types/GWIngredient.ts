@@ -29,4 +29,7 @@ export interface GWIngredient {
 
   // Product if ingredient is a product
   product?: GWProduct;
+
+  // Indicates if an ingredient is not visible to the user
+  isHidden?: boolean;
 }

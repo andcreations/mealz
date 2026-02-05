@@ -7,6 +7,7 @@
   @include mealz-border();
   padding: 0.875rem 0;
   grid-template-columns: 4rem auto;
+  width: 100%;
 }
 
 .mealz-ingredients-editor-no-ingredients {
@@ -43,14 +44,41 @@
 
 .mealz-ingredients-editor-name {
   margin-left: 1rem;
-  text-align: left;
+  margin-right: 0.5rem;
   cursor: pointer;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  // ellipsis doesn't work with grid cell with auto width
 }
 
 .mealz-ingredients-editor-name-details {
-  @include mealz-font-small();
-  padding-left: 0.25rem;
+  @include mealz-font-tiny();
   color: $mealz-theme-color-fg-dark;
+  margin-top: -0.125rem; // move closer to the name
+}
+
+.mealz-ingredients-editor-name-details-separator {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-ingredients-editor-name-details-calories {
+  color: $mealz-theme-color-calories;
+}
+
+.mealz-ingredients-editor-name-details-carbs {
+  color: $mealz-theme-color-carbs;
+}
+
+.mealz-ingredients-editor-name-details-protein {
+  color: $mealz-theme-color-protein;
+}
+
+.mealz-ingredients-editor-name-details-fat {
+  color: $mealz-theme-color-fat;
 }
 
 .mealz-ingredients-editor-not-picked {

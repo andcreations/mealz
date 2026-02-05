@@ -105,6 +105,7 @@ export class IngredientDetailsV1Mapper {
         ? { product: this.fromProductV1(details.product) }
         : {}
       ),
+      isHidden: details.isHidden,
     };
   }
 }

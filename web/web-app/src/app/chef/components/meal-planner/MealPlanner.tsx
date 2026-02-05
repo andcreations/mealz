@@ -43,6 +43,7 @@ import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
 import { MealPortion } from './MealPortion';
 import { AIMealScannerModal } from '../ai-meal-scanner';
+import { MealNameMenuItem } from './MealNameMenuItem';
 
 enum Focus { Calories };
 
@@ -56,13 +57,15 @@ interface MealPlannerState {
     ingredients: MealPlannerIngredient[];
     calories: string;
   },
-  dailyMealPlan?: GWMealDailyPlan;
 
   // calories from the daily plan or from the draft meal (picked by the user)
   targetMealCalories: string;
 
   // name of the meal (picked by the user)
   mealName?: string;
+
+  // goals for the current meal
+  goals?: GWMealDailyPlanGoals;
   
   // meal name is fixed it it doesn't come from the daily plan
   fixedMealName: boolean;
@@ -104,6 +107,7 @@ export function MealPlanner() {
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
 
+  const dailyMealPlan = useRef<GWMealDailyPlan | undefined>(undefined);
   const namedMeals = useRef<NamedMeal[]>([]);
 
   // dirty flag
@@ -149,7 +153,7 @@ export function MealPlanner() {
           'Failed to load named meals',
         ),
       ])
-      .then(([userMeal, dailyMealPlan, loadedNamedMeals]) => {
+      .then(([userMeal, currentDailyMealPlan, loadedNamedMeals]) => {
         const {
           ingredients,
           caloriesStr,
@@ -157,7 +161,11 @@ export function MealPlanner() {
           targetMealCalories,
         } = userMealDraft.resolve(
           userMeal,
-          dailyMealPlan,
+          currentDailyMealPlan,
+        );
+        const entryByName = mealsDailyPlanService.getEntryByMealName(
+          currentDailyMealPlan,
+          mealName,
         );
         recalculate(
           caloriesStr,
@@ -165,11 +173,12 @@ export function MealPlanner() {
           {
             loadStatus: LoadStatus.Loaded,
             targetMealCalories,
-            dailyMealPlan,
             mealName,
+            goals: entryByName?.goals,
             fixedMealName: userMeal?.metadata?.fixedMealName ?? false,
           },
         );
+        dailyMealPlan.current = currentDailyMealPlan;
         namedMeals.current = loadedNamedMeals;
       })
       .catch(() => {
@@ -391,23 +400,34 @@ export function MealPlanner() {
     },
 
     getMealNames: (): string[] => {
-      if (!state.dailyMealPlan) {
+      const adHocMealNames = translate('ad-hoc-meal-names').split(',');
+      if (!dailyMealPlan.current) {
         return [
           translate('default-meal-name'),
-          translate('ad-hoc-meal-name'),
+          ...adHocMealNames,
         ];
       }
       return [
-        ...mealsDailyPlanService.getMealNames(state.dailyMealPlan),
-        translate('ad-hoc-meal-name'),
+        ...mealsDailyPlanService.getMealNames(dailyMealPlan.current),
+        ...adHocMealNames,
       ];
     },
 
     getMenuItems: (): ModalMenuItem[] => {
-      return mealName.getMealNames().map(name => ({
-        name,
-        onClick: (item: ModalMenuItem) => mealName.onPick(item.name),
-      }));
+      return mealName.getMealNames().map(name => {
+        const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
+          dailyMealPlan.current,
+          name,
+        );
+        return {
+          key: name,
+          content: <MealNameMenuItem
+            name={name}
+            goals={dailyPlanEntry?.goals}
+          />,
+          onClick: (item: ModalMenuItem) => mealName.onPick(item.key),
+        }
+      });
     },
 
     onPick: (mealName: string) => {
@@ -415,16 +435,17 @@ export function MealPlanner() {
         return;
       }
       const entryByName = mealsDailyPlanService.getEntryByMealName(
-        state.dailyMealPlan,
+        dailyMealPlan.current,
         mealName,
       );
       const entryByTime = mealsDailyPlanService.getEntryByTime(
-        state.dailyMealPlan,
+        dailyMealPlan.current,
         Date.now(),
       );
       markDirty();
       patchState({
-        mealName: mealName,
+        mealName,
+        goals: entryByName?.goals,
         showMealNamePicker: false,
         fixedMealName: entryByTime.mealName !== mealName,
         ...ifValueDefined<MealPlannerState>(
@@ -455,7 +476,7 @@ export function MealPlanner() {
       }
 
       const dailyPlanMealName = mealsDailyPlanService.getMealName(
-        state.dailyMealPlan,
+        dailyMealPlan.current,
         Date.now(),
       );
       if (
@@ -488,7 +509,7 @@ export function MealPlanner() {
 
     mealLogConfirmationMessage: (): string => {
       const dailyPlanMealName = mealsDailyPlanService.getMealName(
-        state.dailyMealPlan,
+        dailyMealPlan.current,
         Date.now(),
       );
       return translate(
@@ -765,6 +786,7 @@ export function MealPlanner() {
               status={state.calculateAmountsError}
               calories={calories.get()}
               ingredients={state.ingredients}
+              goals={state.goals}
             />
           </div>
         </div>

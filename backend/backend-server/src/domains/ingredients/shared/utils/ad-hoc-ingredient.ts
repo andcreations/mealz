@@ -9,7 +9,7 @@ export function parseAdHocIngredient(
     .filter(value => value.length > 0);
 
   const isFloat = (value: string) => {
-    const regex = /^[0-9]+\.[0-9]+$/;
+    const regex = /^[0-9]+(\.[0-9]+)?$/;
     return regex.test(value);
   }
 

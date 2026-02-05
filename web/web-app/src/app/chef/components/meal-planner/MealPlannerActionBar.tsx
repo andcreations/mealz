@@ -47,26 +47,35 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
 
   const menuItems: ModalMenuItem[] = [
     {
-      name: translate('clear-meal'),
+      key: 'clear-meal',
+      content: translate('clear-meal'),
       onClick: props.onClearMeal,
     },
     {
-      name: translate('load-meal'),
+      key: 'load-meal',
+      content: translate('load-meal'),
       onClick: props.onLoadMeal,
     },
     {
-      name: translate('save-meal'),
+      key: 'save-meal',
+      content: translate('save-meal'),
       onClick: props.onSaveMeal,
     },
-    {
-      name: translate('delete-meal'),
+    { 
+      key: 'delete-meal',
+      content: translate('delete-meal'),
       onClick: props.onDeleteMeal,
     },
     {
-      name: translate('portion-meal'),
+      key: 'portion-meal',
+      content: translate('portion-meal'),
       onClick: props.onPortionMeal,
+    },
+    {
+      key: 'take-photo',
+      content: translate('take-photo'),
+      onClick: props.onTakePhoto,
     }
-
   ];
 
   return (
@@ -76,12 +85,6 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
           className='mealz-meal-planner-action-bar-icon'
           icon='note_add'
           onClick={props.onLogMeal}
-        />
-        <Separator/>
-        <MaterialIcon
-          className='mealz-meal-planner-action-bar-icon'
-          icon='photo_camera'
-          onClick={props.onTakePhoto}
         />
         <Separator/>
         <MaterialIcon
