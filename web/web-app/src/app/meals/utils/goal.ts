@@ -6,5 +6,5 @@ export function isGoalError(
   if (!goalFrom || !goalTo) {
     return false;
   }
-  return Math.ceil(amount) < goalFrom || Math.floor(amount) > goalTo;
+  return amount < goalFrom || amount > goalTo;
 }

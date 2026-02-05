@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+import { truncateNumber } from '../../utils';
 import { useTranslations } from '../../i18n';
 import { MacrosSummaryBoxTranslations } from './MacrosSummaryBox.translations';
 
@@ -20,8 +21,12 @@ export interface MacrosSummaryBoxProps {
 }
 
 export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
-  const { type, amount, goalFrom, goalTo, unit } = props;
+  const { type, unit } = props;
   const translate = useTranslations(MacrosSummaryBoxTranslations);
+
+  const amount = truncateNumber(props.amount);
+  const goalFrom = truncateNumber(props.goalFrom);
+  const goalTo = truncateNumber(props.goalTo);
 
   let goalError = false;
   if (goalFrom && goalTo && amount > 0) {
@@ -66,12 +71,12 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
   return (
     <div className='mealz-macros-summary-box'>
       <div className={nameClassNames}>
-        {translate(type)}
+        { translate(type) }
       </div>
       <div className={separatorClassNames}></div>
       <div className='mealz-macros-summary-box-amount-container'>
         <span className='mealz-macros-summary-box-amount'>
-          {amount.toFixed(0)}
+          { truncateNumber(amount).toString() }
         </span>
         <span className='mealz-macros-summary-box-unit'>
           {unit}
@@ -80,14 +85,14 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
       { hasGoal &&
         <>
           <div className={goalLabelClassName}>
-            {translate('goal')}
+            { translate('goal') }
           </div>
           <div className='mealz-macros-summary-box-goal-container'>
             <span className='mealz-macros-summary-box-goal'>
-              {goalFrom.toFixed(0)}-{goalTo.toFixed(0)}
+              { goalFrom.toString() }-{ goalTo.toString() }
             </span>
             <span className='mealz-macros-summary-box-unit'>
-              {unit}
+              { unit }
             </span>
           </div>
         </>
