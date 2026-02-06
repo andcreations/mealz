@@ -30,7 +30,7 @@ export class MealsUserService {
     request: ReadManyUserMealsRequestV1,
     context: Context,
   ): Promise<ReadManyUserMealsResponseV1> {
-    const userMeals = await this.mealsUserRepository.readMany(
+    const userMeals = await this.mealsUserRepository.readManyByUserIdAndTypeIds(
       request.lastId,
       request.limit,
       request.userId,
@@ -79,7 +79,7 @@ export class MealsUserService {
         {
           getId: () => 'create-user-meal',
           do: async (sagaContext: SagaContext) => {
-            const { id } = await this.mealsUserRepository.createUserMeal(
+            const { id } = await this.mealsUserRepository.create(
               {
                 mealId: sagaContext.newMealId,
                 typeId: request.typeId,
@@ -91,7 +91,7 @@ export class MealsUserService {
           },
           undo: async (sagaContext: SagaContext) => {
             if (sagaContext.newUserMealId) {
-              await this.mealsUserRepository.deleteUserMealById(
+              await this.mealsUserRepository.deleteById(
                 sagaContext.newUserMealId,
                 context,
               );
@@ -131,7 +131,7 @@ export class MealsUserService {
             if (!request.id) {
               return;
             }
-            const userMeal = await this.mealsUserRepository.readUserMealById(
+            const userMeal = await this.mealsUserRepository.readById(
               request.id,
               context,
             );
@@ -199,7 +199,7 @@ export class MealsUserService {
               sagaContext.originalUserMeal?.id ??
               request.id
             );
-            const { id } = await this.mealsUserRepository.upsertUserMeal(
+            const { id } = await this.mealsUserRepository.upsert(
               {
                 ...ifDefined<UserMeal>('id', userMealId),
                 mealId,
@@ -215,14 +215,14 @@ export class MealsUserService {
           },
           undo: async (sagaContext: SagaContext) => {
             if (sagaContext.originalUserMeal) {
-              await this.mealsUserRepository.upsertUserMeal(
+              await this.mealsUserRepository.upsert(
                 sagaContext.originalUserMeal,
                 context,
               );
               return;
             }
             if (sagaContext.newUserMealId) {
-              await this.mealsUserRepository.deleteUserMealById(
+              await this.mealsUserRepository.deleteById(
                 sagaContext.newUserMealId,
                 context,
               );
@@ -260,7 +260,7 @@ export class MealsUserService {
         {
           getId: () => 'read-user-meal',
           do: async (sagaContext: SagaContext) => {
-            const userMeal = await this.mealsUserRepository.readUserMeal(
+            const userMeal = await this.mealsUserRepository.readByUserIdAndTypeId(
               request.userId,
               request.typeId,
               context,
@@ -271,7 +271,7 @@ export class MealsUserService {
         {
           getId: () => 'delete-user-meal',
           do: async (_sagaContext: SagaContext) => {
-            await this.mealsUserRepository.deleteUserMeal(
+            await this.mealsUserRepository.delete(
               request.userId,
               request.typeId,
               context,
@@ -288,7 +288,7 @@ export class MealsUserService {
           },
           undo: async (sagaContext: SagaContext) => {
             if (sagaContext.originalUserMeal) {
-              await this.mealsUserRepository.upsertUserMeal(
+              await this.mealsUserRepository.upsert(
                 sagaContext.originalUserMeal,
                 context,
               );

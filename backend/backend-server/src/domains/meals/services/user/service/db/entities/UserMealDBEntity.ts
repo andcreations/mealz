@@ -36,4 +36,10 @@ export class UserMealDBEntity {
     optional: true,
   })
   public metadata?: Buffer;
+
+  @DBField({
+    name: 'created_at',
+    type: DBFieldType.INTEGER,
+  })
+  public created_at: number;
 }

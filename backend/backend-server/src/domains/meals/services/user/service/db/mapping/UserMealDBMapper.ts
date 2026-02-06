@@ -7,7 +7,9 @@ import { UserMealDBEntity } from '../entities';
 
 @Injectable()
 export class UserMealDBMapper {
-  public toEntity(userMeal: UserMeal): UserMealDBEntity {
+  public toEntity(
+    userMeal: Omit<UserMeal, 'createdAt'>,
+  ): Omit<UserMealDBEntity, 'created_at'> {
     return {
       id: userMeal.id,
       user_id: userMeal.userId,
@@ -37,6 +39,7 @@ export class UserMealDBMapper {
         entity.metadata,
         (metadata) => decode(metadata),
       ),
+      createdAt: entity.created_at,
     }
   }
 }
