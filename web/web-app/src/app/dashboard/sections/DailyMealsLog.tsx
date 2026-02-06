@@ -95,6 +95,7 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
         );
       }
       else {
+        // display meal name and info not yet logged
         mealLogs.push(
           <MealLog
             key={entry.mealName}

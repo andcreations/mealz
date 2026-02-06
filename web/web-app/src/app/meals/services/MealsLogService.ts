@@ -12,6 +12,7 @@ import {
   MealsLogV1API,
 } from '@mealz/backend-meals-log-gateway-api';
 
+import { truncateNumber } from '../../utils';
 import { DateService, SystemService } from '../../system';
 import { Log } from '../../log';
 import { GWMacrosWithDayOfWeek } from '../types';
@@ -83,10 +84,10 @@ export class MealsLogService {
     };
     for (const meal of meals) {
       const mealAmounts = this.gwMealCalculator.calculateMacros(meal.meal);
-      summary.calories += mealAmounts.calories;
-      summary.carbs += mealAmounts.carbs;
-      summary.protein += mealAmounts.protein;
-      summary.fat += mealAmounts.fat;
+      summary.calories += truncateNumber(mealAmounts.calories);
+      summary.carbs += truncateNumber(mealAmounts.carbs);
+      summary.protein += truncateNumber(mealAmounts.protein);
+      summary.fat += truncateNumber(mealAmounts.fat);
     }
     return summary;
   }

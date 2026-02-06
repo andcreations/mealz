@@ -13,7 +13,6 @@ export const MealPlannerTranslations: Translations = {
   // draft meal
   'failed-to-read-user-draft-meal': 'Failed to read your draft meal',
   'failed-to-upsert-user-draft-meal': 'Failed to save your draft meal',
-  'failed-to-delete-user-draft-meal': 'Failed to save your draft meal',
 
   // log
   'meal-logged-created': 'Meal log created',

@@ -239,16 +239,6 @@ export function MealPlanner() {
           Log.error('Failed to save your draft meal', error);
         });
     },
-
-    delete: () => {
-      mealsUserService.deleteUserDraftMeal()
-        .catch(error => {
-          notificationsService.error(
-            translate('failed-to-delete-user-draft-meal')
-          );
-          Log.error('Failed to delete user draft meal', error);
-        });
-    },
   };
 
   const onIngredientsChange = (ingredients: MealPlannerIngredient[]) => {

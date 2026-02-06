@@ -8,6 +8,7 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { useTranslations } from '../../i18n';
+import { truncateNumber } from '../../utils';
 import { useService } from '../../hooks';
 import { GWMealCalculator, isGoalError } from '../../meals';
 import { MealLogTranslations } from './MealLog.translations';
@@ -44,7 +45,11 @@ export function MealLog(props: MealLogProps) {
       'mealz-meal-log-fact-separator',
       `mealz-meal-log-fact-separator-${factKey}`,
     );
-    const goalError = isGoalError(value, goalFrom, goalTo);
+    const goalError = isGoalError(
+      truncateNumber(value),
+      truncateNumber(goalFrom),
+      truncateNumber(goalTo),
+    );
     const goalLabelClassName = classNames(
       'mealz-meal-log-fact-goal-label',
       { 'mealz-meal-log-fact-goal-error': goalError },
@@ -57,7 +62,7 @@ export function MealLog(props: MealLogProps) {
         </div>
         <div className={separatorClassName}></div>
         <div className='mealz-meal-log-fact-value'>
-          <span>{ value.toFixed() }</span>
+          <span>{ truncateNumber(value).toFixed() }</span>
           <span className='mealz-meal-log-fact-unit'>{ unit }</span>
         </div>
         { goalFrom && goalTo &&
