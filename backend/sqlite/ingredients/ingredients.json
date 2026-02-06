@@ -9482,6 +9482,56 @@
   },
   {
     "name": {
+      "en": "Soy sauce",
+      "pl": "Sos sojowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 53
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Spelt bread",
       "pl": "Chleb orkiszowy"
     },
@@ -9927,6 +9977,106 @@
         "id": 7,
         "unit": 1,
         "amount": 23
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Tempeh",
+      "pl": "Tempeh"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 193
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 9.4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 20.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 10.8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 4.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2.7
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Tofu",
+      "pl": "Tofu"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 76
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 1.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 8.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4.8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2.7
       }
     ]
   },
