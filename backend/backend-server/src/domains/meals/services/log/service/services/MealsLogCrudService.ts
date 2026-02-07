@@ -18,6 +18,9 @@ import {
 } from '@mealz/backend-meals-log-service-api';
 
 import { MealsLogCrudRepository } from '../repositories';
+import {
+  AdHocIngredientsNotificationService,
+} from './AdHocIngredientsNotificationService';
 
 @Injectable()
 export class MealsLogCrudService {
@@ -26,6 +29,8 @@ export class MealsLogCrudService {
     private readonly sagaService: SagaService,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsLogCrudRepository: MealsLogCrudRepository,
+    private readonly adHocIngredientsNotificationService:
+      AdHocIngredientsNotificationService,
   ) {}
 
   private async createMealLog(
@@ -207,6 +212,12 @@ export class MealsLogCrudService {
   ): Promise<LogMealResponseV1> {
     const now = Date.now();
 
+    // notify about ad-hoc ingredients
+    void this.adHocIngredientsNotificationService.notify(
+      request.meal,
+      context,
+    );
+
     let update = false;
     let updateMealLogId: string | undefined;
 
@@ -277,5 +288,23 @@ export class MealsLogCrudService {
       context,
     );
     return logs;
+  }
+
+  private notifyAdHocIngredients(
+    meal: MealWithoutId,
+    context: Context,
+  ): Promise<void> {
+    const adHocIngredients = meal.ingredients.filter(ingredient => {
+      return ingredient.adHocIngredient;
+    });
+    if (adHocIngredients.length === 0) {
+      return;
+    }
+
+    const adHocIngredientsNames = adHocIngredients.map(ingredient => ingredient.adHocIngredient.name);
+    const adHocIngredientsNamesString = adHocIngredientsNames.join(', ');
+    this.logger.info(`Ad-hoc ingredients: ${adHocIngredientsNamesString}`, {
+      ...context,
+    });
   }
 }

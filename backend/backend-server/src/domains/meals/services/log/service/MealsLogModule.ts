@@ -3,6 +3,9 @@ import { IdGeneratorProvider, SagaModule } from '@mealz/backend-common';
 import { LoggerModule } from '@mealz/backend-logger';
 import { SQLiteDBModule } from '@mealz/backend-db';
 import { MealsCommonModule } from '@mealz/backend-meals-common';
+import {
+  AdminNotificationsAPIModule,
+} from '@mealz/backend-admin-notifications-service-api';
 import { MealsCrudAPIModule } from '@mealz/backend-meals-crud-service-api';
 
 import { MEALS_LOG_SQLITE_DB_MODULE_OPTIONS, MealsLogDBModule } from './db';
@@ -10,7 +13,11 @@ import {
   MealsLogCrudRepository,
   MealsLogHistoryRepository,
 } from './repositories';
-import { MealsLogCrudService, MealsLogHistoryService } from './services';
+import { 
+  AdHocIngredientsNotificationService,
+  MealsLogCrudService,
+  MealsLogHistoryService,
+} from './services';
 import { MealsLogRequestController } from './controllers';
 
 @Module({
@@ -20,10 +27,12 @@ import { MealsLogRequestController } from './controllers';
     MealsCommonModule,
     MealsLogDBModule,
     SQLiteDBModule.forFeature(MEALS_LOG_SQLITE_DB_MODULE_OPTIONS),
+    AdminNotificationsAPIModule.forRoot({}),
     MealsCrudAPIModule.forRoot({}),
   ],
   providers: [
     IdGeneratorProvider,
+    AdHocIngredientsNotificationService,
     MealsLogCrudRepository,
     MealsLogCrudService,
     MealsLogHistoryRepository,

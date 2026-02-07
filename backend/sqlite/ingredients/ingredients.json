@@ -1904,6 +1904,406 @@
   },
   {
     "name": {
+      "en": "Canned chickpeas",
+      "pl": "Ciecierzyca konserwowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 120
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 20
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 6.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Canned green beans",
+      "pl": "Fasolka szparagowa konserwowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 19
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Canned lentils",
+      "pl": "Soczewica konserwowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 88
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 15
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 6.9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Canned peas",
+      "pl": "Groszek konserwowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 66
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 11.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 4.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Canned red beans",
+      "pl": "Fasola czerwona konserwowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 92
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 16.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Canned sardines",
+      "pl": "Sardynki konserwowe"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 208
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 24.6
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 11.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 4.5
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Canned sweet corn",
+      "pl": "Kukurydza konserwowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 86
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 19
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 4.5
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Canned tuna",
+      "pl": "Tuńczyk konserwowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 116
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 26
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.3
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Carp",
       "pl": "Karp"
     },
@@ -9377,6 +9777,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.8
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Smoked salmon",
+      "pl": "Łosoś wędzony"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 117
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 18.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4.3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.7
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.2
       }
     ]
   },
