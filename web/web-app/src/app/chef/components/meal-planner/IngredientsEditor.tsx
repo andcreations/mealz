@@ -115,6 +115,7 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
   ) => {
     const hasFullIngredient = !!ingredient.fullIngredient;
     const hasAdHocIngredient = !!ingredient.adHocIngredient;
+    const hasIngredient = hasFullIngredient || hasAdHocIngredient;
     const hasEnteredAmount = !!ingredient.enteredAmount;
 
     const fromCalculatedAmount = () => {
@@ -124,12 +125,10 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     };
 
     let amount = '';
-    if (!hasEnteredAmount) {
+    if (hasIngredient && !hasEnteredAmount) {
       amount += '*';
     }
-    amount += (hasFullIngredient || hasAdHocIngredient)
-      ? fromCalculatedAmount()
-      : '';
+    amount += hasIngredient ? fromCalculatedAmount() : '';
     let unit = '';
     if (hasFullIngredient) {
       unit = ingredient.fullIngredient.unitPer100;
@@ -159,10 +158,8 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     ingredientIndex: number,
     ingredient: MealPlannerIngredient,
   ) => {
-    const hasIngredient = (
-      !!ingredient.fullIngredient || 
-      !!ingredient.adHocIngredient
-    );
+    const hasAdHocIngredient = !!ingredient.adHocIngredient;
+    const hasIngredient = !!ingredient.fullIngredient || hasAdHocIngredient;
 
     // name
     let name = translate('pick-ingredient');
@@ -254,6 +251,11 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
                 </span>
               </>
             }
+            { hasAdHocIngredient &&
+              <span className='mealz-ingredients-editor-name-details-ad-hoc'>
+                { translate('ad-hoc') }
+              </span>
+            }            
           </div>
         }
       </div>

@@ -44,7 +44,7 @@ export class SQLiteDBMigrations {
   private async readMigrations(): Promise<Migration[]> {
     return new Promise<Migration[]>((resolve, reject) => {
       this.db.all(
-        'SELECT filename, status, runAt FROM migrations',
+        'SELECT filename, status, runAt FROM migrations ORDER BY runAt ASC',
         (error, rows) => {
           if (error) {
             reject(error);
@@ -128,6 +128,15 @@ export class SQLiteDBMigrations {
   public async runMigrationsFromDirectory(directory: string): Promise<void> {
     await this.createMigrationsTable();
     const migrations = await this.readMigrations();
+
+    const lastMigration = migrations[migrations.length - 1];
+    if (lastMigration && FAILED_STATUS.includes(lastMigration.status)) {
+      Log.info(Colors.gray(
+        `Last migration ${Colors.red(lastMigration.filename)} ` +
+        `failed. ` + Colors.yellow(`Fix it manually and re-try.`)
+      ));
+      return;
+    }
     
     const files = fs.readdirSync(directory)
       .filter(file => file.endsWith('js') && !file.startsWith('._'));
@@ -172,6 +181,7 @@ export class SQLiteDBMigrations {
 }
 
 type MigrationStatus = 'up' | 'down' | 'up-failed' | 'down-failed';
+const FAILED_STATUS: MigrationStatus[] = ['up-failed', 'down-failed'];
 
 interface Migration {
   filename: string;

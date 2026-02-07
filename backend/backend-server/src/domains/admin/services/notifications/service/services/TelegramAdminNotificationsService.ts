@@ -3,7 +3,7 @@ import {
   TelegramAnonymousMessage,
   TelegramMessageBuilder,
 } from '@andcreations/telegram-bot';
-import { Context } from '@mealz/backend-core';
+import { BOOTSTRAP_CONTEXT, Context } from '@mealz/backend-core';
 import { getStrEnv } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 import {
@@ -27,6 +27,10 @@ export class TelegramAdminNotificationsService {
     private readonly telegramBotTransporter: TelegramBotTransporter,
   ) {
     this.telegramAdminUserIds = this.resolveTelegramAdminUserIds();
+    this.logger.info('Telegram admin users', {
+      ...BOOTSTRAP_CONTEXT,
+      userIds: this.telegramAdminUserIds,
+    });
   }
 
   private resolveTelegramAdminUserIds(): string[] {

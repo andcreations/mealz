@@ -26,7 +26,7 @@ export class MealsUserRepository {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  public async readUserMealById(
+  public async readById(
     id: string,
     context: Context,
   ): Promise<UserMeal | undefined> {
@@ -43,7 +43,7 @@ export class MealsUserRepository {
     return this.mapper.fromEntity(entity);
   }
 
-  public async readUserMeal(
+  public async readByUserIdAndTypeId(
     userId: string,
     typeId: string,
     context: Context,
@@ -64,7 +64,7 @@ export class MealsUserRepository {
     return this.mapper.fromEntity(entity);
   }
 
-  public async readMany(
+  public async readManyByUserIdAndTypeIds(
     lastId: string | undefined,
     limit: number,
     userId: string,
@@ -94,8 +94,8 @@ export class MealsUserRepository {
     return entities.map(entity => this.mapper.fromEntity(entity));
   }
 
-  public async createUserMeal(
-    userMeal: Omit<UserMeal, 'id'>,
+  public async create(
+    userMeal: Omit<UserMeal, 'id' | 'createdAt'>,
     context: Context,
   ): Promise<Pick<UserMeal, 'id'>> {
     const id = this.idGenerator();
@@ -105,27 +105,33 @@ export class MealsUserRepository {
     });
     await this.repository.insert(
       this.opName('createUserMeal'),
-      entity,
+      {
+        ...entity,
+        created_at: Date.now(),
+      },
       context,
     );
     return { id };
   }
 
-  public async upsertUserMeal(
-    userMeal: UpsertObject<UserMeal, 'id'>,
+  public async upsert(
+    userMeal: UpsertObject<UserMeal, 'id' | 'createdAt'>,
     context: Context,
   ): Promise<Pick<UserMeal, 'id'>> {
     const id = userMeal.id ?? this.idGenerator();
     const entity = this.mapper.toEntity({ ...userMeal, id });
     await this.repository.upsert(
       this.opName('upsertUserMeal'),
-      entity,
+      {
+        ...entity,
+        created_at: Date.now(),
+      },
       context,
     );
     return { id };
   }
 
-  public async deleteUserMealById(
+  public async deleteById(
     id: string,
     context: Context,
   ): Promise<void> {
@@ -137,7 +143,7 @@ export class MealsUserRepository {
     );
   }
 
-  public async deleteUserMeal(
+  public async delete(
     userId: string,
     typeId: string,
     context: Context,

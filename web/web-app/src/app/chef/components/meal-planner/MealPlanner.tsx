@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { GWUserMeal } from '@mealz/backend-meals-user-gateway-api';
 import { 
   GWMealDailyPlan,
+  GWMealDailyPlanEntry,
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
@@ -16,7 +17,7 @@ import {
   CalculateAmountsResult,
   MealPlannerIngredient,
 } from '../../types';
-import { ifEnterKey, ifValueDefined, focusRef, blurRef } from '../../../utils';
+import { ifEnterKey, ifValueDefined, focusRef, blurRef, nameToKey, truncateNumber } from '../../../utils';
 import { 
   LoaderType,
   ModalMenuItem,
@@ -30,11 +31,11 @@ import {
   MealsUserService,
   MealsLogService,
   MealsDailyPlanService,
-  UserDraftMealMetadata,
   MealsNamedService,
   NamedMeal,
 } from '../../../meals';
 import { useTranslations } from '../../../i18n';
+import { DateService } from '../../../system';
 import { MealCalculator, MealMapper } from '../../services';
 import { MealPlannerActionBar } from './MealPlannerActionBar';
 import { IngredientsEditor } from './IngredientsEditor';
@@ -66,10 +67,7 @@ interface MealPlannerState {
 
   // goals for the current meal
   goals?: GWMealDailyPlanGoals;
-  
-  // meal name is fixed it it doesn't come from the daily plan
-  fixedMealName: boolean;
-  
+    
   showMealNamePicker: boolean;
   showSaveMealPicker: boolean;
   showLoadMealPicker: boolean;
@@ -80,6 +78,7 @@ interface MealPlannerState {
 }
 
 export function MealPlanner() {
+  const dateService = useService(DateService);
   const notificationsService = useService(NotificationsService);
   const mealsUserService = useService(MealsUserService);
   const mealsLogService = useService(MealsLogService);
@@ -95,7 +94,6 @@ export function MealPlanner() {
     calories: '',
     calculateAmountsError: null,
     targetMealCalories: '',
-    fixedMealName: false,    
     showMealNamePicker: false,
     showSaveMealPicker: false,
     showLoadMealPicker: false,
@@ -119,31 +117,12 @@ export function MealPlanner() {
     isDirty.current = false;
   };
 
-  const caloriesFromGoals = (goals?: GWMealDailyPlanGoals): string => {
-    if (!goals) {
-      return '';
-    }
-    const avg = Math.round((goals.caloriesFrom + goals.caloriesTo) / 2);
-    return avg.toString();
-  };
-
-  const caloriesFromUserMeal = (
-    userMeal?: GWUserMeal<UserDraftMealMetadata>,
-  ): string => {
-    if (!userMeal) {
-      return '';
-    }
-    return userMeal.meal.calories?.toString() ?? '';
-  };
-
   // initial read
   useEffect(
     () => {
+      let mealName: string | undefined;
+      let dailyPlanEntry: GWMealDailyPlanEntry | undefined;
       Promise.all([
-        Log.logAndRethrow(
-          () => userMealDraft.read(),
-          'Failed to read user draft meal',
-        ),
         Log.logAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
           'Failed to read current daily plan',
@@ -153,35 +132,36 @@ export function MealPlanner() {
           'Failed to load named meals',
         ),
       ])
-      .then(([userMeal, currentDailyMealPlan, loadedNamedMeals]) => {
-        const {
-          ingredients,
-          caloriesStr,
-          mealName,
-          targetMealCalories,
-        } = userMealDraft.resolve(
-          userMeal,
+      .then(([currentDailyMealPlan, loadedNamedMeals]) => {
+        dailyMealPlan.current = currentDailyMealPlan;
+        namedMeals.current = loadedNamedMeals;
+
+        // resolve meal name
+        dailyPlanEntry = mealsDailyPlanService.getEntryByTime(
           currentDailyMealPlan,
+          Date.now(),
         );
-        const entryByName = mealsDailyPlanService.getEntryByMealName(
-          currentDailyMealPlan,
-          mealName,
+        mealName = dailyPlanEntry?.mealName ?? translate('default-meal-name');
+        
+        // read meal
+        return userMealDraft.read(mealName);
+      })
+      .then((userMeal) => {
+        const ingredients = mealMapper.toMealPlannerIngredients(
+          userMeal?.meal.ingredients ?? [],
         );
-        recalculate(
-          caloriesStr,
+        meal.recalculate(
+          calories.resolve(dailyPlanEntry?.goals, userMeal),
           ingredients,
           {
             loadStatus: LoadStatus.Loaded,
-            targetMealCalories,
             mealName,
-            goals: entryByName?.goals,
-            fixedMealName: userMeal?.metadata?.fixedMealName ?? false,
-          },
+            goals: dailyPlanEntry?.goals,  
+          }
         );
-        dailyMealPlan.current = currentDailyMealPlan;
-        namedMeals.current = loadedNamedMeals;
       })
-      .catch(() => {
+      .catch((error) => {
+        Log.error('Failed to load meal planner', error);
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -223,90 +203,11 @@ export function MealPlanner() {
     ],
   )
 
-  const recalculate = (
-    caloriesStr: string,
-    ingredients: MealPlannerIngredient[],
-    extraState?: Partial<MealPlannerState>,
-  ): CalculateAmountsResult => {
-    const result = mealCalculator.calculateAmounts(
-      calories.fromStr(caloriesStr),
-      ingredients,
-    );
-    patchState({
-      calories: caloriesStr,
-      ingredients: result.ingredients,
-      ...ifValueDefined<MealPlannerState>(
-        'calculateAmountsError',
-        result.error,
-      ),
-      ...extraState,
-    });
-    return result;
-  };
-
   const userMealDraft = {
-    read: () => {
-      return mealsUserService.readUserDraftMeal();
-    },
-
-    resolve: (
-      userMeal: GWUserMeal<UserDraftMealMetadata> | undefined,
-      mealDailyPlan: GWMealDailyPlan | undefined,
-    ): {
-      ingredients: MealPlannerIngredient[];
-      caloriesStr: string;
-      mealName: string;
-      targetMealCalories: string;
-    } => {
-      const entry = mealsDailyPlanService.getEntryByTime(
-        mealDailyPlan,
-        Date.now(),
-      );
-      let caloriesStr = caloriesFromGoals(entry?.goals);
-      if (caloriesStr === '') {
-        caloriesStr = caloriesFromUserMeal(userMeal);
-      }
-      const dailyPlanMealNameByTime = mealsDailyPlanService.getMealName(
-        mealDailyPlan,
-        Date.now(),
-      );
-
-      if (!userMeal) {
-        return {
-          ingredients: [],
-          caloriesStr,
-          mealName: dailyPlanMealNameByTime,
-          targetMealCalories: '',
-        };
-      }
-
-      // If the names are different, but it's not a fixed meal name,
-      // then this means that this is another meal.
-      // Clear the draft meal in this case.
-      if (
-        userMeal &&
-        userMeal.metadata?.mealName !== entry?.mealName &&
-        !userMeal.metadata?.fixedMealName
-      ) {
-        return {
-          ingredients: [],
-          caloriesStr,
-          mealName: dailyPlanMealNameByTime,
-          targetMealCalories: caloriesStr,
-        };
-      }
-
-      // go with the draft user meal
-      const ingredients = mealMapper.toMealPlannerIngredients(
-        userMeal.meal.ingredients
-      );     
-      return {
-        ingredients,
-        caloriesStr,
-        mealName:
-          userMeal.metadata?.mealName ?? dailyPlanMealNameByTime,
-          targetMealCalories: caloriesStr,
-      };
+    read: (mealName: string) => {
+      const dateFingerprint = dateService.getTodayFingerprint();
+      const mealNameKey = nameToKey(mealName);
+      return mealsUserService.readUserDraftMeal(mealNameKey, dateFingerprint);
     },
 
     tryUpsert: () => {
@@ -320,12 +221,14 @@ export function MealPlanner() {
       calories: number | undefined,
       ingredients: MealPlannerIngredient[],
     ) => {
+      const mealNameKey = nameToKey(state.mealName);
+      const dateFingerprint = dateService.getTodayFingerprint();
       const gwMeal = mealMapper.toGWMeal(calories, ingredients);
-      const metadata: UserDraftMealMetadata = {
-        mealName: state.mealName,
-        fixedMealName: state.fixedMealName,
-      };
-      mealsUserService.upsertUserDraftMeal(gwMeal, metadata)
+      mealsUserService.upsertUserDraftMeal(
+        mealNameKey,
+        dateFingerprint,
+        gwMeal
+      )
         .then(() => {
           clearDirty();
         })
@@ -336,21 +239,11 @@ export function MealPlanner() {
           Log.error('Failed to save your draft meal', error);
         });
     },
-
-    delete: () => {
-      mealsUserService.deleteUserDraftMeal()
-        .catch(error => {
-          notificationsService.error(
-            translate('failed-to-delete-user-draft-meal')
-          );
-          Log.error('Failed to delete user draft meal', error);
-        });
-    },
   };
 
   const onIngredientsChange = (ingredients: MealPlannerIngredient[]) => {
     markDirty();
-    recalculate(state.calories, ingredients);
+    meal.recalculate(state.calories, ingredients);
   };
 
   const calories = {
@@ -370,7 +263,7 @@ export function MealPlanner() {
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
       const caloriesStr = event.target.value;
-      recalculate(caloriesStr, state.ingredients);
+      meal.recalculate(caloriesStr, state.ingredients);
     },
 
     onEnter: () => {
@@ -379,6 +272,35 @@ export function MealPlanner() {
 
     onBlur: () => {
       userMealDraft.tryUpsert();
+    },
+
+    fromGoals: (goals?: GWMealDailyPlanGoals) => {
+      if (!goals) {
+        return '';
+      }
+      const avg = (goals.caloriesFrom + goals.caloriesTo) / 2;
+      return truncateNumber(avg).toString();
+    },
+
+    fromUserMeal: (userMeal?: GWUserMeal<void>) => {
+      if (!userMeal) {
+        return '';
+      }
+      return userMeal.meal.calories?.toString() ?? '';
+    },
+
+    resolve: (goals?: GWMealDailyPlanGoals, userMeal?: GWUserMeal<void>) => {
+      const fromGoals = calories.fromGoals(goals);
+      if (fromGoals) {
+        return fromGoals;
+      }
+
+      const fromUserMeal = calories.fromUserMeal(userMeal);
+      if (fromUserMeal) {
+        return fromUserMeal;
+      }
+
+      return '';
     },
   };
 
@@ -434,25 +356,31 @@ export function MealPlanner() {
       if (mealName === state.mealName) {
         return;
       }
-      const entryByName = mealsDailyPlanService.getEntryByMealName(
+      const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
         dailyMealPlan.current,
         mealName,
       );
-      const entryByTime = mealsDailyPlanService.getEntryByTime(
-        dailyMealPlan.current,
-        Date.now(),
-      );
-      markDirty();
-      patchState({
-        mealName,
-        goals: entryByName?.goals,
-        showMealNamePicker: false,
-        fixedMealName: entryByTime.mealName !== mealName,
-        ...ifValueDefined<MealPlannerState>(
-          'calories',
-          caloriesFromGoals(entryByName?.goals),
-        ),
-      });
+      userMealDraft.read(mealName)
+        .then((userMeal) => {
+          const ingredients = mealMapper.toMealPlannerIngredients(
+            userMeal?.meal.ingredients ?? [],
+          );
+          const caloriesStr = calories.resolve(dailyPlanEntry?.goals, userMeal);
+          meal.recalculate(
+            calories.resolve(dailyPlanEntry?.goals, userMeal),
+            ingredients,
+            {
+              mealName,
+              goals: dailyPlanEntry?.goals,  
+            }
+          );          
+        })
+        .catch((error) => {
+          Log.error('Failed to read meal', error);
+          notificationsService.error(
+            translate('failed-to-read-user-draft-meal')
+          );
+        });
     },
   };
 
@@ -465,6 +393,36 @@ export function MealPlanner() {
       return state.ingredients.reduce((acc, ingredient) => {
         return acc + (ingredient.calculatedAmount ?? 0);
       }, 0);
+    },
+
+    recalculate: (
+      caloriesStr: string,
+      ingredients: MealPlannerIngredient[],
+      extraState?: Partial<MealPlannerState>,
+    ): CalculateAmountsResult => {
+      const result = mealCalculator.calculateAmounts(
+        calories.fromStr(caloriesStr),
+        ingredients,
+      );
+      patchState({
+        calories: caloriesStr,
+        ingredients: result.ingredients,
+        ...ifValueDefined<MealPlannerState>(
+          'calculateAmountsError',
+          result.error,
+        ),
+        ...extraState,
+      });
+      return result;
+    },
+
+    read: (mealName: string) => {
+      userMealDraft.read(mealName)
+        .then((userMeal) => {
+        })
+        .catch((error) => {
+          Log.error('Failed to read meal', error);
+        });
     },
 
     onLog: (force?: boolean) => {
@@ -562,7 +520,7 @@ export function MealPlanner() {
          return mapIngredient(ingredient);
         });
       markDirty();
-      recalculate(
+      meal.recalculate(
         state.calories,
         ingredients,
         { showAIMealScannerModal: false },
@@ -667,11 +625,11 @@ export function MealPlanner() {
 
     onLoad: (name: string) => {
       mealsNamedService.loadByName(name)
-        .then((meal) => {
+        .then((loadedMeal) => {
           markDirty();
-          recalculate(
-            meal.calories?.toString() ?? '',
-            mealMapper.toMealPlannerIngredients(meal.ingredients),
+          meal.recalculate(
+            loadedMeal.calories?.toString() ?? '',
+            mealMapper.toMealPlannerIngredients(loadedMeal.ingredients),
             {
               showLoadMealPicker: false
             }

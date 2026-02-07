@@ -99,7 +99,7 @@ export class HydrationDailyPlanCrudRepository {
       this.opName('create'),
       {
         ...entity, 
-        created_at: Date.now()
+        created_at: Date.now(),
       },
       context,
     );

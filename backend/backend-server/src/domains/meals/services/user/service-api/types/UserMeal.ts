@@ -14,4 +14,7 @@ export class UserMeal<T = any> {
 
   // Metadata (serialized to message pack)
   public metadata?: T;
+
+  // Created at
+  public createdAt: number;
 }

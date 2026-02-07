@@ -5,6 +5,7 @@ import {
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
+import { truncateNumber } from '../../../utils';
 import { LoadStatus } from '../../../common';
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
@@ -83,7 +84,16 @@ export function MealSummary(props: MealSummaryProps) {
 
   const renderFacts = () => {
     const { summary } = state;
-    const { goals } = props;
+    const goals: GWMealDailyPlanGoals = {
+      caloriesFrom: truncateNumber(props.goals?.caloriesFrom),
+      caloriesTo: truncateNumber(props.goals?.caloriesTo),
+      proteinFrom: truncateNumber(props.goals?.proteinFrom),
+      proteinTo: truncateNumber(props.goals?.proteinTo),
+      carbsFrom: truncateNumber(props.goals?.carbsFrom),
+      carbsTo: truncateNumber(props.goals?.carbsTo),
+      fatFrom: truncateNumber(props.goals?.fatFrom),
+      fatTo: truncateNumber(props.goals?.fatTo),
+    }
 
     const percentages = mealCalculator.calculateMacrosPercentages(
       summary.total.carbs,
@@ -94,7 +104,8 @@ export function MealSummary(props: MealSummaryProps) {
       if (!userSettings.showPercentageInMealSummary()) {
         return undefined;
       }
-      return `(${percentage.toFixed(0)}%)`;
+      const percentageToShow = truncateNumber(percentage);
+      return `(${percentageToShow.toFixed(0)}%)`;
     }
 
     const goalFactAmount = (from?: number, to?: number) => {
@@ -124,7 +135,7 @@ export function MealSummary(props: MealSummaryProps) {
         return [];
       }
       if (typeof amount === 'number') {
-        amount = amount.toFixed(0);
+        amount = truncateNumber(amount).toString();
       }
       const gridRow = nextGridRow();
       const styles = (column: string) => ({

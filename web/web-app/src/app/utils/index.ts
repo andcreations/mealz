@@ -9,3 +9,4 @@ export * from './validation';
 export * from './number-parsing';
 export * from './debounce';
 export * from './name-to-key';
+export * from './number';

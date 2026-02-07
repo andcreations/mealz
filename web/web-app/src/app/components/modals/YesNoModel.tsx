@@ -31,12 +31,14 @@ export function YesNoModal(props: React.PropsWithChildren<YesNoModalProps>) {
       }
       <div className='mealz-yes-no-modal-buttons'>
         <Button
+          size='sm'
           variant='primary'
           onClick={props.onYes}
         >
           { translate('yes') }
         </Button>
         <Button
+          size='sm'
           variant='secondary'
           onClick={props.onNo}
         >
