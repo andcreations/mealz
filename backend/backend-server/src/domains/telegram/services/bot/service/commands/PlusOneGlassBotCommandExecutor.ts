@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
+import { createTranslation, TranslateFunc } from '@mealz/backend-common';
 import { Logger } from '@mealz/backend-logger';
 import {
   TelegramUsersTransporter,
@@ -10,10 +11,14 @@ import {
 
 import { TelegramBotCommand, TelegramBotCommandExecutor } from '../types';
 import { TelegramBotClient } from '../services';
+import { 
+  PlusOneGlassBotCommandExecutorTranslations,
+} from './PlusOneGlassBotCommandExecutor.translations';
 
 @Injectable()
 export class PlusOneGlassBotCommandExecutor extends TelegramBotCommandExecutor {
   private static readonly NAME = 'glass';
+  private readonly translate: TranslateFunc;
 
   public constructor(
     private readonly logger: Logger,
@@ -28,6 +33,9 @@ export class PlusOneGlassBotCommandExecutor extends TelegramBotCommandExecutor {
         addToCommandList: true,
       },
       telegramBotClient,
+    );
+    this.translate = createTranslation(
+      PlusOneGlassBotCommandExecutorTranslations,
     );
   }
   
@@ -54,6 +62,13 @@ export class PlusOneGlassBotCommandExecutor extends TelegramBotCommandExecutor {
         userId: telegramUser.userId,
         glassFraction: 'full',
       },
+      context,
+    );
+
+    // reply
+    await this.sendMessage(
+      command,
+      this.translate('glass-logged'),
       context,
     );
   }
