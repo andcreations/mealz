@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useRef } from 'react';
 import classNames from 'classnames';
+import { truncateNumber } from '@mealz/backend-shared';
 import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import { 
@@ -8,7 +9,6 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { useTranslations } from '../../i18n';
-import { truncateNumber } from '../../utils';
 import { useService } from '../../hooks';
 import { GWMealCalculator, isGoalError } from '../../meals';
 import { MealLogTranslations } from './MealLog.translations';

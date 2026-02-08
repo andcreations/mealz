@@ -28,7 +28,7 @@ interface LoaderState {
   visible: boolean;
 }
 
-export const LOADER_DEFAULT_DELAY = 384;
+const LOADER_DEFAULT_DELAY = 384;
 
 export function Loader(props: LoaderProps) {
   const {

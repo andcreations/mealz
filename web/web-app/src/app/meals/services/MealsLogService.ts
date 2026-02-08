@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { Service } from '@andcreations/common';
 import { HTTPWebClientService } from '@andcreations/web-common';
+import { truncateNumber } from '@mealz/backend-shared';
 import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 import { 
   GWMealLog,
@@ -12,7 +13,6 @@ import {
   MealsLogV1API,
 } from '@mealz/backend-meals-log-gateway-api';
 
-import { truncateNumber } from '../../utils';
 import { DateService, SystemService } from '../../system';
 import { Log } from '../../log';
 import { GWMacrosWithDayOfWeek } from '../types';

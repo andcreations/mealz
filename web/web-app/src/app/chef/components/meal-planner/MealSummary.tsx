@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames';
+import { truncateNumber } from '@mealz/backend-shared';
 import {
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
-import { truncateNumber } from '../../../utils';
 import { LoadStatus } from '../../../common';
 import { Log } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
