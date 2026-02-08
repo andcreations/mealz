@@ -6,10 +6,12 @@ import { SignInPage } from '../../auth/pages';
 import { DashboardPage } from '../../dashboard/pages';
 import { ChefPage } from '../../chef/pages';
 import { Private } from './Private';
+import { ScrollToTop } from './ScrollToTop';
 
 export function AppRouter() {
   return (
     <HashRouter>
+      <ScrollToTop/>
       <Routes>
         <Route path='/' element={<Private><DashboardPage/></Private>}/>
         <Route path='/sign-in' element={<SignInPage/>}/>
