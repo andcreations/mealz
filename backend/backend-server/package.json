@@ -47,6 +47,7 @@
     "openai": "^6.15.0",
     "protobufjs": "^7.5.3",
     "reflect-metadata": "^0.1.13",
+    "rimraf": "^6.1.2",
     "rxjs": "^7.1.0",
     "sqlite3": "^5.1.7",
     "uuid": "^11.1.0",
