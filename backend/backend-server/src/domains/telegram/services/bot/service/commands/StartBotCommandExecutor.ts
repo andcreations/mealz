@@ -25,7 +25,14 @@ export class StartBotCommandExecutor extends TelegramBotCommandExecutor {
     private readonly telegramUsersTransporter: TelegramUsersTransporter,
     telegramBotClient: TelegramBotClient,
   ) {
-    super(StartBotCommandExecutor.NAME, telegramBotClient);
+    super(
+      {
+        name: StartBotCommandExecutor.NAME,
+        description: 'Start the bot',
+        addToCommmandList: false,
+      },
+      telegramBotClient,
+    );
     this.translate = createTranslation(StartBotCommandExecutorTranslations);
   }
 

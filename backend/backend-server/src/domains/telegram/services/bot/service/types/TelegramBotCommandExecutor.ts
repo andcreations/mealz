@@ -3,16 +3,27 @@ import { Context } from '@mealz/backend-core';
 
 import { TelegramBotCommand } from './TelegramBotCommand';
 import { TelegramBotClient } from '../services';
+import { 
+  TelegramBotCommandExecutorInput,
+} from './TelegramBotCommandExecutorInput';
 
 export abstract class TelegramBotCommandExecutor {
   protected constructor(
-    private readonly name: string,
+    private readonly input: TelegramBotCommandExecutorInput,
     private readonly telegramBotClient: TelegramBotClient,
   ) {
   }
 
   public getName(): string {
-    return this.name;
+    return this.input.name;
+  }
+
+  public getDescription(): string {
+    return this.input.description;
+  }
+
+  public getAddToCommandList(): boolean {
+    return this.input.addToCommmandList;
   }
 
   protected async sendMessage(

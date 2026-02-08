@@ -26,6 +26,10 @@ export class TelegramBotCommandProvider implements OnModuleInit {
     }
   }
 
+  public getCommands(): TelegramBotCommandExecutor[] {
+    return Object.values(this.commands);
+  }
+
   public getCommandExecutor(
     name: string,
   ): TelegramBotCommandExecutor | undefined {

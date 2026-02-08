@@ -18,11 +18,16 @@ import {
 import { BOOTSTRAP_CONTEXT, Context } from '@mealz/backend-core';
 import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 
+import { TelegramBotCommandProvider } from './TelegramBotCommandProvider';
+
 @Injectable()
 export class TelegramBotClient implements OnModuleInit {
   private telegramBot: TelegramBot;
 
-  public constructor(private readonly logger: Logger) {}
+  public constructor(
+    private readonly logger: Logger,
+    private readonly telegramBotCommandProvider: TelegramBotCommandProvider,
+  ) {}
 
   public async onModuleInit(): Promise<void> {
     if (!isTelegramEnabled()) {
@@ -51,8 +56,17 @@ export class TelegramBotClient implements OnModuleInit {
       this.logger.info(
         'Skipping Telegram webhook certificate',
         BOOTSTRAP_CONTEXT,
-      ); 
+      );
     }
+
+    // commands
+    const commands = this.telegramBotCommandProvider.getCommands()
+      .filter(command => command.getAddToCommandList())
+      .map(command => ({
+        command: command.getName(),
+        description: command.getDescription(),
+      }));
+    this.telegramBot.setCommands(commands);
 
     // url
     const webhookUrl = requireStrEnv('MEALZ_TELEGRAM_WEBHOOK_URL');
