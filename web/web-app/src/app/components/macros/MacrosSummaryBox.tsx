@@ -1,9 +1,11 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import { truncateNumber } from '@mealz/backend-shared';
 
-import { truncateNumber } from '../../utils';
 import { useTranslations } from '../../i18n';
-import { MacrosSummaryBoxTranslations } from './MacrosSummaryBox.translations';
+import {
+  MacrosSummaryBoxTranslations,
+} from './MacrosSummaryBox.translations';
 
 export enum MacrosSummaryBoxType {
   Calories = 'calories',

@@ -14,6 +14,7 @@ import {
   resolveTimeZone,
   TranslateFunc,
 } from '@mealz/backend-common';
+import { truncateNumber } from '@mealz/backend-shared';
 import { Logger } from '@mealz/backend-logger';
 import { WithActiveSpan } from '@mealz/backend-tracing';
 import { AIProvider } from '@mealz/backend-ai';
@@ -353,26 +354,26 @@ export class UsersDailyInsightsService implements OnModuleInit {
         name: entry.mealName,
         skipped: false,
         amounts: {
-          calories: mealTotals.calories,
+          calories: truncateNumber(mealTotals.calories),
           caloriesGoalFrom: goals.caloriesFrom,
           caloriesGoalTo: goals.caloriesTo,
-          carbs: mealTotals.carbs,
+          carbs: truncateNumber(mealTotals.carbs),
           carbsGoalFrom: goals.carbsFrom,
           carbsGoalTo: goals.carbsTo,
-          fat: mealTotals.fat,
+          fat: truncateNumber(mealTotals.fat),
           fatGoalFrom: goals.fatFrom,
           fatGoalTo: goals.fatTo,
-          protein: mealTotals.protein,
+          protein: truncateNumber(mealTotals.protein),
           proteinGoalFrom: goals.proteinFrom,
           proteinGoalTo: goals.proteinTo,
         },
       });
 
       // update totals
-      dailyTotals.calories += mealTotals.calories ?? 0;
-      dailyTotals.carbs += mealTotals.carbs ?? 0;
-      dailyTotals.fat += mealTotals.fat ?? 0;
-      dailyTotals.protein += mealTotals.protein ?? 0;
+      dailyTotals.calories += truncateNumber(mealTotals.calories ?? 0);
+      dailyTotals.carbs += truncateNumber(mealTotals.carbs ?? 0);
+      dailyTotals.fat += truncateNumber(mealTotals.fat ?? 0);
+      dailyTotals.protein += truncateNumber(mealTotals.protein ?? 0);
     }
     
     // ad-hoc meals
@@ -415,10 +416,10 @@ export class UsersDailyInsightsService implements OnModuleInit {
       });
 
       // update totals
-      dailyTotals.calories += mealTotals.calories ?? 0;
-      dailyTotals.carbs += mealTotals.carbs ?? 0;
-      dailyTotals.fat += mealTotals.fat ?? 0;
-      dailyTotals.protein += mealTotals.protein ?? 0;
+      dailyTotals.calories += truncateNumber(mealTotals.calories ?? 0);
+      dailyTotals.carbs += truncateNumber(mealTotals.carbs ?? 0);
+      dailyTotals.fat += truncateNumber(mealTotals.fat ?? 0);
+      dailyTotals.protein += truncateNumber(mealTotals.protein ?? 0);
     }
 
     // overall goals
@@ -473,21 +474,30 @@ export class UsersDailyInsightsService implements OnModuleInit {
     
     // amount
     const amount = (
-      amount: number,
-      goalFrom: number | undefined,
-      goalTo: number | undefined,
+      amountRaw: number,
+      goalFromRaw: number | undefined,
+      goalToRaw: number | undefined,
       unit: string,
       padding: number,
     ) => {
+      const amount = truncateNumber(amountRaw);
+      const goalFrom = truncateNumber(goalFromRaw);
+      const goalTo = truncateNumber(goalToRaw);
+
       // amount
-      normal(`${amount.toFixed()} ${unit}`);
+      normal(`${amount} ${unit}`);
 
       // goal
       if (goalFrom != null && goalTo != null) {
         newLine();
         code(' '.repeat(padding))
         normal(
-          this.translate('amounts', goalFrom.toFixed(), goalTo.toFixed(), unit)
+          this.translate(
+            'amounts',
+            goalFrom.toString(),
+            goalTo.toString(),
+            unit,
+          )
         );
 
         const outsideGoal = amount < goalFrom || amount > goalTo;

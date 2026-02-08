@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
+import { truncateNumber } from '@mealz/backend-shared';
 import { GWUserMeal } from '@mealz/backend-meals-user-gateway-api';
 import { 
   GWMealDailyPlan,
@@ -17,16 +18,26 @@ import {
   CalculateAmountsResult,
   MealPlannerIngredient,
 } from '../../types';
-import { ifEnterKey, ifValueDefined, focusRef, blurRef, nameToKey, truncateNumber } from '../../../utils';
+import {
+  ifEnterKey,
+  ifValueDefined,
+  focusRef,
+  blurRef,
+  nameToKey,
+} from '../../../utils';
 import { 
   LoaderType,
   ModalMenuItem,
   ModalMenu,
   YesNoModal,
   htmlToReact,
+  FullScreenLoader,
 } from '../../../components';
 import { PageLoader } from '../../../page';
-import { NotificationsService, NotificationType } from '../../../notifications';
+import {
+  NotificationsService,
+  NotificationType,
+} from '../../../notifications';
 import {
   MealsUserService,
   MealsLogService,
@@ -50,6 +61,7 @@ enum Focus { Calories };
 
 interface MealPlannerState {
   loadStatus: LoadStatus;
+  fullScreenLoadStatus: LoadStatus | null;
   focus: Focus,
   ingredients: MealPlannerIngredient[];
   calories: string;
@@ -89,6 +101,7 @@ export function MealPlanner() {
 
   const [state, setState] = useState<MealPlannerState>({
     loadStatus: LoadStatus.Loading,
+    fullScreenLoadStatus: null,
     focus: Focus.Calories,
     ingredients: [],
     calories: '',
@@ -356,6 +369,7 @@ export function MealPlanner() {
       if (mealName === state.mealName) {
         return;
       }
+      patchState({ fullScreenLoadStatus: LoadStatus.Loading });
       const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
         dailyMealPlan.current,
         mealName,
@@ -365,7 +379,6 @@ export function MealPlanner() {
           const ingredients = mealMapper.toMealPlannerIngredients(
             userMeal?.meal.ingredients ?? [],
           );
-          const caloriesStr = calories.resolve(dailyPlanEntry?.goals, userMeal);
           meal.recalculate(
             calories.resolve(dailyPlanEntry?.goals, userMeal),
             ingredients,
@@ -373,10 +386,12 @@ export function MealPlanner() {
               mealName,
               goals: dailyPlanEntry?.goals,  
             }
-          );          
+          );
+          patchState({ fullScreenLoadStatus: LoadStatus.Loaded });
         })
         .catch((error) => {
           Log.error('Failed to read meal', error);
+          patchState({ fullScreenLoadStatus: LoadStatus.FailedToLoad });
           notificationsService.error(
             translate('failed-to-read-user-draft-meal')
           );
@@ -696,6 +711,12 @@ export function MealPlanner() {
           type={LoaderType.Error}
           title={translate('try-again-later')}
           subTitle={translate('failed-to-prepare-meal-planner')}
+        />
+      }
+      { state.fullScreenLoadStatus === LoadStatus.Loading &&
+        <FullScreenLoader
+          title={translate('taking-longer')}
+          delay={1536}
         />
       }
       { state.loadStatus === LoadStatus.Loaded &&

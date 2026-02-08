@@ -14,6 +14,7 @@ import { AuthService } from '../../auth';
 @Service()
 export class MealsUserService {
   private static readonly DRAFT_TYPE_ID = 'draft';
+  private index = 0;
 
   public constructor(
     private readonly http: HTTPWebClientService,
@@ -36,6 +37,11 @@ export class MealsUserService {
     if (!this.authService.isSignedIn()) {
       return undefined;
     }
+
+    if (this.index > 0) {
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+    this.index++;    
 
     const { data } = await this.http.get<ReadManyUserMealsGWResponseV1>(
       MealsUserV1API.url.readManyV1({

@@ -2,6 +2,7 @@ import { Translations } from '../../../i18n';
 
 export const MealPlannerTranslations: Translations = {
   'hang-tight': 'Hang tight',
+  'taking-longer': 'Taking longer than usual',
   'preparing-meal-planner': `We're preparing your meal planner`,
   'try-again-later': 'Please try again later',
   'failed-to-prepare-meal-planner': `We couldn't prepare your meal planner`,
