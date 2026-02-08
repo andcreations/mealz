@@ -29,7 +29,7 @@ export class StartBotCommandExecutor extends TelegramBotCommandExecutor {
       {
         name: StartBotCommandExecutor.NAME,
         description: 'Start the bot',
-        addToCommmandList: false,
+        addToCommandList: false,
       },
       telegramBotClient,
     );

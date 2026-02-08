@@ -23,7 +23,7 @@ export abstract class TelegramBotCommandExecutor {
   }
 
   public getAddToCommandList(): boolean {
-    return this.input.addToCommmandList;
+    return this.input.addToCommandList;
   }
 
   protected async sendMessage(

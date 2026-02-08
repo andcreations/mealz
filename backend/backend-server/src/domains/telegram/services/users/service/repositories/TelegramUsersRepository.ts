@@ -43,6 +43,19 @@ export class TelegramUsersRepository {
     return this.mapper.fromEntity(entity);
   }
 
+  public async readTelegramUserByChatId(
+    telegramChatId: number,
+    context: Context,
+  ): Promise<TelegramUser> {
+    const entity = await this.repository.findOne(
+      this.opName('readTelegramUserByChatId'),
+      { telegram_chat_id: { $eq: telegramChatId } },
+      {},
+      context,
+    );
+    return this.mapper.fromEntity(entity);
+  }
+
   private opName(name: string): string {
     return `${TelegramUsersRepository.name}.${name}`;
   }

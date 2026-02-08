@@ -16,6 +16,10 @@ export class TelegramUsersRequestTopics {
     'readTelegramUserInfo',
     'v1',
   );
+  public static readonly ReadTelegramUserByChatIdV1 = topic(
+    'readTelegramUserByChatId',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

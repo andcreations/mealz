@@ -16,6 +16,15 @@ export class TelegramBotCommandProvider implements OnModuleInit {
   ) {}
 
   public async onModuleInit(): Promise<void> {
+    await this.resolveCommandExecutors();
+  }
+
+  private async resolveCommandExecutors(): Promise<void> {
+    const hasCommands = Object.keys(this.commands).length > 0;
+    if (hasCommands) {
+      return;
+    }
+
     for (const commandType of TELEGRAM_BOT_COMMAND_TYPES) {
       const commandExecutor = this.moduleRef.get(commandType);
       this.logger.info('Registering Telegram bot command', {
@@ -26,7 +35,8 @@ export class TelegramBotCommandProvider implements OnModuleInit {
     }
   }
 
-  public getCommands(): TelegramBotCommandExecutor[] {
+  public async getCommandExecutors(): Promise<TelegramBotCommandExecutor[]> {
+    await this.resolveCommandExecutors();
     return Object.values(this.commands);
   }
 

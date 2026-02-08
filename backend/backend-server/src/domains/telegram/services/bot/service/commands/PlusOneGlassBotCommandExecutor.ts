@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
+import {
+  TelegramUsersTransporter,
+} from '@mealz/backend-telegram-users-service-api';
+import {
+  HydrationLogTransporter,
+} from '@mealz/backend-hydration-log-service-api';
 
 import { TelegramBotCommand, TelegramBotCommandExecutor } from '../types';
 import { TelegramBotClient } from '../services';
@@ -12,12 +18,14 @@ export class PlusOneGlassBotCommandExecutor extends TelegramBotCommandExecutor {
   public constructor(
     private readonly logger: Logger,
     telegramBotClient: TelegramBotClient,
+    private readonly telegramUsersTransporter: TelegramUsersTransporter,
+    private readonly hydrationLogTransporter: HydrationLogTransporter,
   ) {
     super(
       {
         name: PlusOneGlassBotCommandExecutor.NAME,
         description: 'Log glass of water intake',
-        addToCommmandList: true,
+        addToCommandList: true,
       },
       telegramBotClient,
     );
@@ -27,5 +35,26 @@ export class PlusOneGlassBotCommandExecutor extends TelegramBotCommandExecutor {
     command: TelegramBotCommand,
     context: Context,
   ): Promise<void> {
+    // read user
+    const { telegramUser } = await this.telegramUsersTransporter
+      .readTelegramUserByChatIdV1(
+        { telegramChatId: command.update.message.chat.id },
+        context,
+      );
+
+    // log
+    this.logger.info('Logging hydration through Telegram bot', {
+      ...context,
+      userId: telegramUser.userId,
+    });
+
+    // log hydration
+    await this.hydrationLogTransporter.logHydrationV1(
+      {
+        userId: telegramUser.userId,
+        glassFraction: 'full',
+      },
+      context,
+    );
   }
 }

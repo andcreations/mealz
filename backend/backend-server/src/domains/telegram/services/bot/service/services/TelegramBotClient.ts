@@ -26,7 +26,7 @@ export class TelegramBotClient implements OnModuleInit {
 
   public constructor(
     private readonly logger: Logger,
-    private readonly telegramBotCommandProvider: TelegramBotCommandProvider,
+    private readonly commandProvider: TelegramBotCommandProvider,
   ) {}
 
   public async onModuleInit(): Promise<void> {
@@ -60,12 +60,18 @@ export class TelegramBotClient implements OnModuleInit {
     }
 
     // commands
-    const commands = this.telegramBotCommandProvider.getCommands()
-      .filter(command => command.getAddToCommandList())
-      .map(command => ({
-        command: command.getName(),
-        description: command.getDescription(),
+    const commandExecutors = await this.commandProvider.getCommandExecutors();
+    const commands = commandExecutors
+      .filter(commandExecutor => commandExecutor.getAddToCommandList())
+      .map(commandExecutor => ({
+        command: commandExecutor.getName(),
+        description: commandExecutor.getDescription(),
       }));
+    const commandNames = commands.map(command => command.command);
+    this.logger.info('Setting Telegram bot commands', {
+      ...BOOTSTRAP_CONTEXT,
+      commandNames,
+    });
     this.telegramBot.setCommands(commands);
 
     // url
@@ -87,7 +93,6 @@ export class TelegramBotClient implements OnModuleInit {
       },
       retryOptions,
     );
-
   }
 
   private async setWebhook(

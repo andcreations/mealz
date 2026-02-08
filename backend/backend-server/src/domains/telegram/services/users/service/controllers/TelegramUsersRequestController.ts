@@ -7,6 +7,8 @@ import {
 import {
   GenerateStartLinkRequestV1,
   GenerateStartLinkResponseV1,
+  ReadTelegramUserByChatIdRequestV1,
+  ReadTelegramUserByChatIdResponseV1,
   ReadTelegramUserInfoRequestV1,
   ReadTelegramUserInfoResponseV1,
   ReadTelegramUserRequestV1,
@@ -75,6 +77,17 @@ export class TelegramUsersRequestController {
     context: Context,
   ): Promise<ReadTelegramUserInfoResponseV1> {
     return this.telegramUsersRequestService.readTelegramUserInfoV1(
+      request,
+      context,
+    );
+  }
+
+  @RequestHandler(TelegramUsersRequestTopics.ReadTelegramUserByChatIdV1)
+  public async readTelegramUserByChatIdV1(
+    request: ReadTelegramUserByChatIdRequestV1,
+    context: Context,
+  ): Promise<ReadTelegramUserByChatIdResponseV1> {
+    return this.telegramUsersRequestService.readTelegramUserByChatIdV1(
       request,
       context,
     );
