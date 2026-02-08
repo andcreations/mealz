@@ -7,3 +7,5 @@ export * from './ReadTelegramUserRequestV1';
 export * from './ReadTelegramUserResponseV1';
 export * from './ReadTelegramUserInfoRequestV1';
 export * from './ReadTelegramUserInfoResponseV1';
+export * from './ReadTelegramUserByChatIdRequestV1';
+export * from './ReadTelegramUserByChatIdResponseV1';

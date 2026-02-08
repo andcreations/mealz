@@ -4,6 +4,9 @@ import { UsersCrudAPIModule } from '@mealz/backend-users-crud-service-api';
 import {
   TelegramUsersAPIModule,
 } from '@mealz/backend-telegram-users-service-api';
+import {
+  HydrationLogAPIModule,
+} from '@mealz/backend-hydration-log-service-api';
 
 import { getTelegramBotCommandProviders } from './commands';
 import {
@@ -19,6 +22,7 @@ import { TelegramBotRequestController } from './controllers';
     LoggerModule,
     UsersCrudAPIModule.forRoot({}),
     TelegramUsersAPIModule.forRoot({}),
+    HydrationLogAPIModule.forRoot({}),
   ],
   providers: [
     TelegramBotClient,

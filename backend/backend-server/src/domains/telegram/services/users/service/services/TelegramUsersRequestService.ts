@@ -14,6 +14,8 @@ import {
   ReadTelegramUserResponseV1,
   ReadTelegramUserInfoResponseV1,
   ReadTelegramUserInfoRequestV1,
+  ReadTelegramUserByChatIdResponseV1,
+  ReadTelegramUserByChatIdRequestV1,
 } from '@mealz/backend-telegram-users-service-api';
 
 import { InvalidTokenError, TelegramUserNotFoundError } from '../errors';
@@ -118,5 +120,17 @@ export class TelegramUsersRequestService {
       telegramUser,
       canSendMessagesTo: isTelegramUserEnabled && isTelegramEnabled(),
     };
+  }
+
+  public async readTelegramUserByChatIdV1(
+    request: ReadTelegramUserByChatIdRequestV1,
+    context: Context,
+  ): Promise<ReadTelegramUserByChatIdResponseV1> {
+    const telegramUser = await this.telegramUsersService
+      .readTelegramUserByChatId(
+        request.telegramChatId,
+        context,
+      );
+    return { telegramUser };
   }
 }

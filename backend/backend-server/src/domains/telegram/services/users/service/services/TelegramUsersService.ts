@@ -30,4 +30,18 @@ export class TelegramUsersService {
     }
     return telegramUser;
   }
+
+  public async readTelegramUserByChatId(
+    telegramChatId: number,
+    context: Context,
+  ): Promise<TelegramUser> {
+    const telegramUser = await this.telegramUsersRepository
+      .readTelegramUserByChatId(
+        telegramChatId, context,
+      );
+    if (!telegramUser) {
+      throw new TelegramUserNotFoundError();
+    }
+    return telegramUser;
+  }
 }
