@@ -10,9 +10,7 @@ export class MetricsAuthService {
     this.metricsAuthToken = requireStrEnv('MEALZ_METRICS_AUTH_TOKEN');
   }
 
-  public authorizeByToken(metricsAuthToken: string): void {
-    if (metricsAuthToken !== this.metricsAuthToken) {
-      throw new AccessForbiddenError();
-    }
+  public isAuthorizedByToken(metricsAuthToken: string): boolean {
+    return metricsAuthToken === this.metricsAuthToken;
   }
 }
