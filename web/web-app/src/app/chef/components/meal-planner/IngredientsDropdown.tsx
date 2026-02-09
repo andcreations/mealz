@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
 import { GWFactId, GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
@@ -20,6 +21,19 @@ export interface IngredientsDropdownProps {
 export function IngredientsDropdown(props: IngredientsDropdownProps) {
   const translate = useTranslations(IngredientsDropdownTranslations);
   const settings = useService(SettingsService);
+
+  useEffect(() => {
+    const selectedElement = document.getElementById(
+      `mealz-ingredients-dropdown-entry-${props.selectedIndex}`
+    );
+    if (selectedElement) {
+      selectedElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
+  });
 
   const buildName = (ingredient: GWIngredient) => {
     let name = `${ingredient.name[INGREDIENT_LANGUAGE]}`;
@@ -51,7 +65,8 @@ export function IngredientsDropdown(props: IngredientsDropdownProps) {
     };
 
     return (
-      <div 
+      <div
+        id={`mealz-ingredients-dropdown-entry-${index}`}
         key={ingredient.id}
         className={ingredientClassNames}
         onClick={() => props.onSelect(index)}
