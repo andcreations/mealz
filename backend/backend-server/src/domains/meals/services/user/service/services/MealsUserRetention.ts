@@ -10,7 +10,7 @@ import {
 } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
 import { getStrEnv, resolveTimeZone } from '@mealz/backend-common';
-import { WithActiveSpan } from '@mealz/backend-tracing';
+import { WithJobSpan } from '@mealz/backend-tracing';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import { 
   AdminNotificationType,
@@ -70,7 +70,7 @@ export class MealsUserRetention implements OnModuleInit {
     job.start();    
   }
 
-  @WithActiveSpan('MealsUserRetention.deleteUserMeals')
+  @WithJobSpan(MealsUserRetention.JOB_NAME)
   private async deleteUserMeals(): Promise<void> {
     const context: Context = {
       correlationId: generateCorrelationId(MealsUserRetention.JOB_NAME),

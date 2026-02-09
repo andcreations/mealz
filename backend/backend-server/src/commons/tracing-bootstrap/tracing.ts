@@ -11,6 +11,7 @@ import {
   getNodeAutoInstrumentations
 } from '@opentelemetry/auto-instrumentations-node';
 import { ExpressLayerType } from '@opentelemetry/instrumentation-express';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { BOOTSTRAP_CONTEXT, SHUTDOWN_CONTEXT } from '@mealz/backend-core';
@@ -24,9 +25,15 @@ import { getLogger } from '@mealz/backend-logger';
 import { isTracingEnabled } from '@mealz/backend-tracing';
 
 import { ConsoleCompactSpanExporter } from './ConsoleCompactSpanExporter';
+import { IncomingMessage } from 'http';
 
 const EXPORTER_TYPES = ['console-compact','console', 'http'];
 const PROCESSOR_TYPES = ['simple', 'batch'];
+
+const IGNORE_PATHS = [
+  '/api/v1/health',
+  '/api/v1/metrics',
+];
 
 let sdk: NodeSDK;
 let shuttingDown = false;
@@ -95,7 +102,17 @@ function createInstrumentations(): Instrumentation[] {
         ExpressLayerType.REQUEST_HANDLER,
         ExpressLayerType.ROUTER,
       ],
-    }
+    },
+    '@opentelemetry/instrumentation-http': {
+      enabled: true,
+      ignoreIncomingRequestHook: (request: IncomingMessage): boolean => {
+        const url = request.url;
+        if (!url) {
+          return false;
+        }
+        return IGNORE_PATHS.some(path => url.startsWith(path));
+      }
+    },
   });
 }
 

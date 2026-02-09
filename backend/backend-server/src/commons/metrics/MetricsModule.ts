@@ -1,4 +1,5 @@
 import { DynamicModule, Module } from '@nestjs/common';
+import { LoggerModule } from '@mealz/backend-logger';
 
 import { 
   MetricsAuthService,
@@ -13,7 +14,9 @@ export class MetricsModule {
   public static forRoot(): DynamicModule {
     return {
       module: MetricsModule,
-      imports: [],
+      imports: [
+        LoggerModule,
+      ],
       providers: [
         MetricsService,
         MetricsAuthService,

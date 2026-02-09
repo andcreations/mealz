@@ -37,7 +37,7 @@ import { MaterialIcon } from '../../../components';
 
 enum Focus { Amount, Name };
 
-const SEARCH_LIMIT = 6;
+const SEARCH_LIMIT = 24;
 const DEFAULT_AMOUNT = '100';
 
 export interface IngredientPickerProps {
