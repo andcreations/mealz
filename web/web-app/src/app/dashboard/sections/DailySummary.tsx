@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import {
+  GWMealDailyPlanEntry,
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
@@ -57,24 +58,30 @@ export function DailySummary(props: DailySummaryProps) {
           () => mealsDailyPlanService.readEntriesByNow(),
           'Failed to read current daily plan entries',
         ),
+        Log.logAndRethrow(
+          () => mealsDailyPlanService.readCurrentDailyPlan(),
+          'Failed to read current daily plan entries',
+        ),
       ])
-      .then(([_, meals, dailyPlanEntries]) => {
-        // if there are no meals, just take the first goals of the daily plan...
-        if (meals.length > 0) {
-          // ...otherwise, remove the last entry if it doesn't have a meal, so
-          // that the user can check calories or macros of what then have
-          // eaten so far today
-          const lastEntry = dailyPlanEntries[dailyPlanEntries.length - 1];
-          if (lastEntry) {
-            const hasLastMeal = meals.some(meal => {
-              return meal.dailyPlanMealName === lastEntry.mealName;
-            });
-            if (!hasLastMeal) {
-              dailyPlanEntries.pop();
-            }
+      .then(([_, meals, _dailyPlanEntries, dailyPlan]) => {
+        const dailyPlanEntries: GWMealDailyPlanEntry[] = [];
+
+        // if there are meals, take the corresponding daily plan entries
+        meals.forEach(meal => {
+          const entry = dailyPlan?.entries.find(entry => {
+            return entry.mealName === meal.dailyPlanMealName;
+          });
+          if (entry) {
+            dailyPlanEntries.push(entry);
           }
+        });
+
+        // if there are no meals, take the first daily plan entry
+        if (dailyPlanEntries.length === 0) {
+          dailyPlanEntries.push(dailyPlan?.entries[0]);
         }
 
+        // summarize
         const summary = mealsLogService.summarizeMeals(meals);
         const goals = mealsDailyPlanService.summarizeEntries(dailyPlanEntries);
 
