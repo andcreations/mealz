@@ -1704,6 +1704,106 @@
   },
   {
     "name": {
+      "en": "Bulgur groats (cooked)",
+      "pl": "Kasza bulgur (gotowana)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 83
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 18.6
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.04
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.03
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Bulgur groats (raw)",
+      "pl": "Kasza bulgur (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 342
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 75.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 12.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.5
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Butter",
       "pl": "Masło"
     },
@@ -9777,6 +9877,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.8
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Smoked mackerel",
+      "pl": "Makrela wędzona"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 305
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 18.6
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 25.1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 5.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 10.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 7.2
       }
     ]
   },
