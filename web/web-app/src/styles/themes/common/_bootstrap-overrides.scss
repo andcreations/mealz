@@ -24,6 +24,10 @@ $input-placeholder-color: color.scale($mealz-theme-color-bg, $lightness: 16%);
 }
 
 // buttons
+.btn {
+  --bs-btn-disabled-opacity: 0.4 !important;
+}
+
 .btn-primary,
 .btn-primary:hover,
 .btn-primary:active,

@@ -6,7 +6,7 @@
   flex-shrink: 0;
   justify-content: flex-end;
   margin-right: $mealz-border-radius;
-  color: $mealz-theme-color-fg-dark;
+  color: $mealz-theme-color-active;
 
   @include mealz-breakpoint-min(md) {
     justify-content: flex-start;

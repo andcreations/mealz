@@ -1,13 +1,3 @@
-# The below is pulled from ChatGPT using .prompt.md.
-
-# Buckwheat groats
-# Barley groats
-# Millet groats
-# Rye groats
-# Quinoa   
-# Brown rice
-# White rice
-
 - name:
     en: Buckwheat groats (raw)
     pl: Kasza gryczana (surowa)
@@ -222,4 +212,40 @@
       total: 0.28
       saturated: 0.08
       monounsaturated: 0.1
+      polyunsaturated: 0.08
+
+- name:
+    en: Bulgur groats (raw)
+    pl: Kasza bulgur (surowa)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 342
+    carbs: 75.9
+    sugars: 0.4
+    fibre: 12.5
+    protein: 12.3
+    fat:
+      total: 1.3
+      saturated: 0.2
+      monounsaturated: 0.2
+      polyunsaturated: 0.5
+
+- name:
+    en: Bulgur groats (cooked)
+    pl: Kasza bulgur (gotowana)
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 83
+    carbs: 18.6
+    sugars: 0.1
+    fibre: 4.5
+    protein: 3.1
+    fat:
+      total: 0.2
+      saturated: 0.04
+      monounsaturated: 0.03
       polyunsaturated: 0.08

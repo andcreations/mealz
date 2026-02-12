@@ -5,6 +5,8 @@
 @import './font';
 @import './text';
 @import './colors';
+@import './input';
+@import './animation';
 @import './breakpoints';
 
 @import './page/components/const';
@@ -25,6 +27,8 @@
 @import './components/basic/MaterialIcon';
 @import './components/basic/LinkButton';
 @import './components/basic/ModalMenu';
+@import './components/basic/Switch';
+@import './components/basic/HourAndMinutePicker';
 @import './components/layout/Center';
 @import './components/layout/FullScreen';
 @import './components/charts/LineChart';
@@ -34,6 +38,7 @@
 @import './components/macros/MacrosSummary';
 @import './components/macros/MacrosSummaryBox';
 @import './components/modals/YesNoModal';
+@import './components/modals/HourAndMinutePickerModal';
 
 @import './camera/components/TakePhotoButton';
 
@@ -66,3 +71,10 @@
 @import './chef/components/meal-planner/MealSummary';
 @import './chef/components/meal-planner/MealNameMenuItem';
 
+@import './settings/components/Setting';
+@import './settings/components/SettingsSection';
+@import './settings/components/SettingsSeparator';
+@import './settings/components/SettingsOverview';
+@import './settings/components/SettingsMenu';
+@import './settings/components/GoToSettingsMenuItem';
+@import './settings/components/SettingsButtons';

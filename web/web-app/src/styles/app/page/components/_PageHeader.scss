@@ -6,10 +6,17 @@
 }
 
 .mealz-page-header-title {
+  position: relative;
   font-weight: bold;
   border-bottom: 1px solid rgba($mealz-theme-color-border, 0.5);
   width: 100%;
   text-align: center;
   margin-left: 2rem;
   margin-right: 2rem;
+}
+
+.mealz-page-header-back-button {
+  position: absolute;
+  left: 0.25rem;
+  color: $mealz-theme-color-active;
 }

@@ -1,0 +1,44 @@
+.mealz-hour-and-minute-picker-modal {
+  $margin: 2rem;
+  margin-left: $margin;
+  margin-right: $margin;
+  width: calc(100% - 2 * #{$margin});
+}
+
+.mealz-hour-and-minute-picker-modal-content {
+  $margin: 1rem;
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  margin: 0 $margin;
+  width: calc(100% - 2 * #{$margin});
+  height: 100%;
+}
+
+.mealz-hour-and-minute-picker-modal-title {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.mealz-hour-and-minute-picker-modal-details {
+  @include mealz-font-small();
+  text-align: center;
+  margin-top: 1rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-hour-and-minute-picker-modal-picker {
+  margin: 2rem 0;
+}
+
+.mealz-hour-and-minute-picker-modal-error {
+  @include mealz-font-small();
+  color: $mealz-theme-color-error;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.mealz-hour-and-minute-picker-modal-buttons {
+  margin-bottom: 2rem;
+}

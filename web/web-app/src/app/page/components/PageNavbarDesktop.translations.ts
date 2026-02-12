@@ -4,6 +4,6 @@ export const PageNavbarDesktopTranslations: Translations = {
   'mealz': 'Mealz',
   'dashboard': 'Dashboard',
   'chef': 'Chef',
-  'sign-out': 'Sign out',
+  'settings': 'Settings',
   'failed-to-sign-out': 'Failed to sign out',
 }

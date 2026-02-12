@@ -1,0 +1,13 @@
+.mealz-settings-buttons-container {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  @include mealz-flex-center();
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.mealz-settings-buttons {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  gap: 1rem;
+}
