@@ -15,7 +15,6 @@ export function PageNavbarMobile() {
     navigate(PathTo.signIn());
   };
 
-
   return (
     <div className='mealz-navbar-mobile-container'>
       <div className='mealz-navbar-mobile'>
@@ -30,9 +29,9 @@ export function PageNavbarMobile() {
             onClick={() => navigate(PathTo.chef())}
           />      
           <MaterialIcon 
-            icon='logout'
+            icon='settings'
             className='mealz-navbar-mobile-item'
-            onClick={() => onSignOut()}
+            onClick={() => navigate(PathTo.settings())}
           />      
       </div>
     </div>

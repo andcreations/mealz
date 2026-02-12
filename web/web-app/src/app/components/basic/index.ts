@@ -5,3 +5,5 @@ export * from './MaterialIcon';
 export * from './LinkButton';
 export * from './ModalMenu';
 export * from './FullScreenLoader';
+export * from './Switch';
+export * from './HourAndMinutePicker';

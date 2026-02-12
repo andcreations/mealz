@@ -1,0 +1,28 @@
+.mealz-hour-and-minute-picker {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+}
+
+.mealz-hour-and-minute-picker-hour {
+  .form-control, .form-control:focus {
+    width: 2.625rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    text-align: right;
+  }
+}
+
+.mealz-hour-and-minute-picker-minute {
+  .form-control, .form-control:focus {
+    width: 2.625rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.mealz-hour-and-minute-picker-separator {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}

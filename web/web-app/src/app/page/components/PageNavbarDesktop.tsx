@@ -2,11 +2,9 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Log } from '../../log';
 import { useTranslations } from '../../i18n';
 import { usePatchState, useService } from '../../hooks';
 import { PathTo } from '../../routing';
-import { NotificationsService } from '../../notifications';
 import { AuthService } from '../../auth';
 import { MaterialIcon } from '../../components';
 import { PageNavbarMenu, PageNavbarMenuItem } from './PageNavbarMenu';
@@ -19,7 +17,6 @@ interface PageNavbarDesktopState {
 }
 
 export function PageNavbarDesktop() {
-  const notificationsService = useService(NotificationsService);
   const authService = useService(AuthService);
 
   const [state, setState] = useState<PageNavbarDesktopState>({
@@ -38,10 +35,6 @@ export function PageNavbarDesktop() {
   const onMenuItemClick = () => {
     patchState({ menuHidden: true });
   }
-  const onSignOut = () => {
-    authService.signOutOrLogError();
-    navigate(PathTo.signIn());
-  };
 
   const menuItems: PageNavbarMenuItem[] = [
     {
@@ -57,8 +50,10 @@ export function PageNavbarDesktop() {
       },
     },
     {
-      label: translate('sign-out'),
-      onClick: () => { onSignOut(); },
+      label: translate('settings'),
+      onClick: () => {
+        navigate(PathTo.settings());
+      },
     },
   ];
 

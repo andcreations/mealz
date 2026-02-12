@@ -1,0 +1,51 @@
+.mealz-switch {
+  $switch-bar-height: 1.5rem;
+  $switch-handle-size: 1.3rem;
+  $switch-bar-handle-gap: calc(($switch-bar-height - $switch-handle-size) / 2);
+
+  position: relative;
+  border: 1px solid $mealz-theme-color-bg;
+  border-radius: calc($switch-bar-height / 2);
+  background-color: $mealz-theme-color-bg-dark;
+
+  .mealz-switch-bar {
+    width: 100%;
+    height: $switch-bar-height;
+    border-radius: calc($switch-bar-height / 2);
+  }
+
+  .mealz-switch-bar-off {
+    background-color: $mealz-theme-color-bg-dark;
+    transition: background-color $mealz-transition-time;
+  }
+
+  .mealz-switch-bar-on {
+    background-color: $mealz-theme-color-bg-dark;
+    transition: background-color $mealz-transition-time;
+  }
+
+  .mealz-switch-handle {
+    position: absolute;
+    width: $switch-handle-size;
+    height: $switch-handle-size;
+    top: calc(#{$switch-bar-handle-gap});
+    border-radius: $border-radius * 2;
+    left: 0;
+  }
+
+  .mealz-switch-handle-off {
+    background-color: $mealz-theme-color-inactive;
+    left: calc(#{$switch-bar-handle-gap});
+    transition: 
+      left $mealz-transition-time,
+      background-color $mealz-transition-time;
+  }
+
+  .mealz-switch-handle-on {
+    background-color: $mealz-theme-color-active;
+    left: calc(100% - #{$switch-handle-size} - #{$switch-bar-handle-gap});
+    transition: 
+      left $mealz-transition-time,
+      background-color $mealz-transition-time;
+  }
+}

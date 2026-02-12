@@ -1,0 +1,33 @@
+.mealz-settings-overview {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.mealz-settings-overview-sign-out-separator {
+  margin: 1rem 8rem;
+  min-width: 12rem;
+  width: auto;
+  height: 1px;
+  background-color: rgba($mealz-theme-color-border, 0.5);
+}
+
+.mealz-settings-overview-sign-out {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mealz-settings-overview-sign-out-icon {
+  color: $mealz-theme-color-fg;
+  font-size: 2rem;
+}
+
+.mealz-settings-overview-sign-out-label {
+  @include mealz-font-small();
+  margin-top: -0.375rem; // move closer to the icon
+}

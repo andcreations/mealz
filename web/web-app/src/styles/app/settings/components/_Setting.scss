@@ -1,0 +1,26 @@
+.mealz-setting:not(:first-child) {
+  margin-top: 2rem;
+}
+
+.mealz-setting-label-and-value {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  @include mealz-flex-center();
+}
+
+.mealz-setting-label {
+  flex-grow: 1;
+  flex-shrink: 0;
+  @include mealz-font-small();
+}
+
+.mealz-setting-value {
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+
+.mealz-setting-info-details {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+  margin-top: 0.5rem;
+}
