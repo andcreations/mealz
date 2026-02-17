@@ -15,7 +15,8 @@ import {
   LoaderByStatus, 
   LoaderSize, 
   LoaderType, 
-  HourAndMinutePickerModal, 
+  HourAndMinutePickerModal,
+  FullScreenLoader, 
 } from '../../../components';
 import { HydrationDailyPlanService } from '../../../hydration';
 import { SettingsSection } from '../SettingsSection';
@@ -31,9 +32,12 @@ import {
 const MIN_MINUTES_SINCE_LAST_WATER_INTAKE = 5;
 const MIN_PERIOD_IN_MINUTES = 5;
 
+export interface HydrationDailyPlanProps {
+  onDirtyChanged: (isDirty: boolean) => void;
+}
+
 interface HydrationDailyPlanState {
   loadStatus: LoadStatus;
-  // dailyPlan: Omit<GWHydrationDailyPlan, 'id' | 'createdAt'>;
   isDirty: boolean;
   glasses: string;
   glassesError: boolean;
@@ -48,9 +52,10 @@ interface HydrationDailyPlanState {
   periodInMinutes: string;
   showStartTimePicker: boolean;
   showEndTimePicker: boolean;
+  applying: boolean;
 }
 
-export function HydrationDailyPlan() {
+export function HydrationDailyPlan(props: HydrationDailyPlanProps) {
   const translate = useTranslations(HydrationDailyPlanTranslations);
   const notificationsService = useService(NotificationsService);
   const hydrationDailyPlanService = useService(HydrationDailyPlanService);
@@ -69,6 +74,7 @@ export function HydrationDailyPlan() {
     periodInMinutes: '20',
     showStartTimePicker: false,
     showEndTimePicker: false,
+    applying: false,
   });
   const patchState = usePatchState(setState);
 
@@ -128,9 +134,16 @@ export function HydrationDailyPlan() {
     [],
   );
 
+  // notify the parent about the dirty state
+  useEffect(
+    () => {
+      props.onDirtyChanged(state.isDirty);
+    },
+    [state.isDirty],
+  );  
+
   const glasses = {
     onChange: (value: string) => {
-      const intValue = parsePositiveInteger(value);
       setState(prevState => {
         return {
           ...prevState,
@@ -308,6 +321,7 @@ export function HydrationDailyPlan() {
 
   const settings = {
     onApply: () => {
+      patchState({ applying: true });
       const hydrationDailyPlan: GWHydrationDailyPlanForCreation = {
         goals: {
           glasses: parseInt(state.glasses),
@@ -334,13 +348,19 @@ export function HydrationDailyPlan() {
             message: translate('daily-plan-created'),
             type: NotificationType.Info,
           });
-          patchState({ isDirty: false });
+          patchState({
+            isDirty: false,
+            applying: false,
+          });
         })
         .catch((error) => {
           Log.error('Failed to create daily plan', error);
           notificationsService.pushNotification({
             message: translate('failed-to-create-daily-plan'),
             type: NotificationType.Error,
+          });
+          patchState({
+            applying: false,
           });
         });
     },
@@ -367,6 +387,9 @@ export function HydrationDailyPlan() {
         size={LoaderSize.Small}
         type={LoaderType.Info}
       />
+      { state.applying &&
+        <FullScreenLoader title={translate('taking-longer')}/>
+      }      
       <SettingsSection>
         <InputSetting
           type='number'
@@ -417,7 +440,7 @@ export function HydrationDailyPlan() {
         <SettingsButtons>
           <Button
             size='sm'
-            disabled={!state.isDirty || hasErrors}
+            disabled={!state.isDirty || hasErrors || state.applying}
             onClick={settings.onApply}
           >
             { translate('apply') }

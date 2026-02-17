@@ -2,8 +2,10 @@ import { DateTime } from 'luxon';
 import { Service } from '@andcreations/common';
 import { HTTPWebClientService } from '@andcreations/web-common';
 import {
+  CreateMealDailyPlanGWRequestV1,
   GWMealDailyPlan,
   GWMealDailyPlanEntry,
+  GWMealDailyPlanForCreation,
   GWMealDailyPlanGoals,
   MealsDailyPlanV1API,
   ReadMealDailyPlansGWResponseV1,
@@ -89,6 +91,18 @@ export class MealsDailyPlanService {
   public async readCurrentGoals(): Promise<GWMealDailyPlanGoals | undefined> {
     const entry = await this.readCurrentEntry();
     return entry?.goals;
+  }
+
+  public async createDailyPlan(
+    mealDailyPlan: GWMealDailyPlanForCreation,
+  ): Promise<void> {
+    const request: CreateMealDailyPlanGWRequestV1 = {
+      mealDailyPlan,
+    };
+    await this.http.post<CreateMealDailyPlanGWRequestV1>(
+      MealsDailyPlanV1API.url.createV1(),
+      request,
+    );
   }
 
   private minuteSinceMidnight(hour: number, minute: number): number {

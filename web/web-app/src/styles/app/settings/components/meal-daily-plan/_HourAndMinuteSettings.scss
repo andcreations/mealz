@@ -1,0 +1,31 @@
+.mealz-hour-and-minute-settings {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  @include mealz-flex-center();
+  margin: 0 2rem;
+}
+
+.mealz-hour-and-minute-settings-separator {
+  flex-grow: 1;
+  height: 1px;
+  background-color: rgba($mealz-theme-color-border, 0.5);
+}
+
+.mealz-hour-and-minute-settings-separator-colon {
+}
+
+.mealz-hour-and-minute-settings-part {
+  text-align: center;
+}
+
+.mealz-hour-and-minute-settings-hour-part {
+  margin-left: 1rem;
+}
+
+.mealz-hour-and-minute-settings-minute-part {
+  margin-right: 1rem;
+}
+
+.mealz-hour-and-minute-settings-time-editable {
+  cursor: pointer;
+}

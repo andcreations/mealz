@@ -31,7 +31,8 @@
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.2",
     "recharts": "^3.3.0",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@andcreations/web-builder": "^0.2.2",

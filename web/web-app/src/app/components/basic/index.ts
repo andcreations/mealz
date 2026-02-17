@@ -1,5 +1,6 @@
 export * from './Row';
-export * from './Loader'
+export * from './Loader';
+export * from './InlineLoader';
 export * from './LoaderByStatus';
 export * from './MaterialIcon';
 export * from './LinkButton';

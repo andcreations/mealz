@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import classNames = require('classnames');
 
+import { ifEnterKey } from '../../utils';
 import { Setting } from './Setting';
 
 export interface InputSettingProps {
@@ -13,6 +15,7 @@ export interface InputSettingProps {
   error?: boolean;
   width?: 'sm' | 'md' | 'lg';
   onChange: (value: string | number) => void;
+  onLeave?: () => void;
 }
 
 const WIDTH_MAP = {
@@ -22,6 +25,17 @@ const WIDTH_MAP = {
 };
 
 export function InputSetting(props: InputSettingProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onEnter = () => {
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
+    if (props.onLeave) {
+      props.onLeave();
+    }
+  };
+
   const inputStyle = {
     width: WIDTH_MAP[props.width ?? 'md'],
   };
@@ -37,11 +51,13 @@ export function InputSetting(props: InputSettingProps) {
       details={props.details}
     >
       <Form.Control
+        ref={inputRef}
         className={inputClassName}
         style={inputStyle}
         type={props.type}
         value={props.value}
         onChange={(event) => props.onChange(event.target.value)}
+        onKeyDown={ifEnterKey(onEnter)}
       />
     </Setting>
   );

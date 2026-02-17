@@ -1,0 +1,52 @@
+.mealz-amount-and-margin-setting {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.mealz-amount-and-margin-setting-label {
+  @include mealz-font-small();
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.mealz-amount-and-margin-setting-details {
+  color: $mealz-theme-color-fg-dark;
+  padding-left: 0.25rem;
+}
+
+.mealz-amount-and-margin-setting-inputs {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.mealz-amount-and-margin-setting-input {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+
+  input {
+    text-align: right;
+  }
+}
+
+.mealz-amount-and-margin-setting-input-label {
+  @include mealz-font-tiny();
+  text-align: center;
+  margin-top: 0.125rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-amount-and-margin-setting-error-label {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-error;
+  text-align: center;
+  margin-top: 0.125rem;
+}

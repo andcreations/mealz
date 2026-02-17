@@ -1,0 +1,14 @@
+.mealz-meal-daily-plan-entry-action-bar {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 2.5rem;
+  left: 2rem;
+  gap: 0.5rem;
+
+  i {
+    color: $mealz-theme-color-active;
+  }
+}

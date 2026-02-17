@@ -1,0 +1,41 @@
+.mealz-meal-daily-plan-entry-summary {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 1rem;
+}
+
+.mealz-meal-daily-plan-entry-summary-amount {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  @include mealz-font-small();
+}
+
+.mealz-meal-daily-plan-entry-summary-percentage {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-meal-daily-plan-entry-summary-calories {
+  color: $mealz-theme-color-calories;
+}
+
+.mealz-meal-daily-plan-entry-summary-carbs {
+  color: $mealz-theme-color-carbs;
+}
+
+.mealz-meal-daily-plan-entry-summary-protein {
+  color: $mealz-theme-color-protein;
+}
+
+.mealz-meal-daily-plan-entry-summary-fat {
+  color: $mealz-theme-color-fat;
+}
+
+.mealz-meal-daily-plan-entry-summary-separator {
+  padding: 0 0.5rem;
+}

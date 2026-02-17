@@ -1,0 +1,38 @@
+.mealz-meal-daily-plan-entry {
+  position: relative;
+}
+
+.mealz-meal-daily-plan-entry-name {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  position: relative;
+}
+
+.mealz-meal-daily-plan-entry-name-label {
+  width: 80%;
+  max-width: 16rem;
+  text-align: center;
+}
+
+.mealz-meal-daily-plan-entry-name-input {
+  width: 16rem;
+}
+
+.mealz-meal-daily-plan-entry-name-edit-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: $mealz-theme-color-active;
+}
+
+.mealz-meal-daily-plan-entry-collapse-icon {
+  position: absolute;
+  right: 2rem;
+  top: 2.5rem;
+  color: $mealz-theme-color-active;
+}

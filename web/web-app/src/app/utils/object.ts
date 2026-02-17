@@ -18,3 +18,16 @@ export function ifDefined<T>(
   })
   return result;
 }
+
+export function pickFields<T, K extends keyof T>(
+  object: T,
+  keys: K[],
+): Pick<T, K> {
+  const result = {} as Pick<T, K>;
+  keys.forEach(key => {
+    if (key !== undefined) {
+      result[key] = object[key];
+    }
+  });
+  return result;
+}

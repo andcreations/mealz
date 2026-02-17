@@ -45,11 +45,11 @@ export function SettingsOverview() {
           label={translate('daily-meal-plan')}
           onClick={onDailyMealPlanClick}
         />
-        <GoToSettingsMenuItem
+        {/* <GoToSettingsMenuItem
           icon='send'
           label={translate('telegram')}
           onClick={onTelegramSettingsClick}
-        />
+        /> */}
       </SettingsMenu>
 
       <div className='mealz-settings-overview-sign-out-separator'></div>

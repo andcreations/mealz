@@ -714,10 +714,7 @@ export function MealPlanner() {
         />
       }
       { state.fullScreenLoadStatus === LoadStatus.Loading &&
-        <FullScreenLoader
-          title={translate('taking-longer')}
-          delay={1536}
-        />
+        <FullScreenLoader title={translate('taking-longer')}/>
       }
       { state.loadStatus === LoadStatus.Loaded &&
         <div className='mealz-meal-planner'>
