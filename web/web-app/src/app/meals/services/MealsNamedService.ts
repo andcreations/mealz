@@ -177,7 +177,7 @@ export class MealsNamedService implements OnBootstrap {
       );
       const index = this.namedMeals.indexOf(namedMeal);
       this.namedMeals[index] = {
-        ...namedMeal,
+        id: namedMeal.id,
         name: mealName,
       };
     }

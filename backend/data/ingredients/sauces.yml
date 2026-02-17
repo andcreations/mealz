@@ -1,0 +1,53 @@
+- name:
+    en: Ketchup
+    pl: Ketchup
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 112
+    carbs: 27.4
+    sugars: 22.8
+    fibre: 0.3
+    protein: 1.3
+    fat:
+      total: 0.2
+      saturated: 0.0
+      monounsaturated: 0.0
+      polyunsaturated: 0.1
+
+- name:
+    en: Mayonnaise
+    pl: Majonez
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 680
+    carbs: 0.6
+    sugars: 0.6
+    fibre: 0.0
+    protein: 1.0
+    fat:
+      total: 74.9
+      saturated: 11.6
+      monounsaturated: 54.0
+      polyunsaturated: 8.9
+
+- name:
+    en: Mustard
+    pl: Musztarda
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 66
+    carbs: 5.8
+    sugars: 0.0
+    fibre: 4.0
+    protein: 4.4
+    fat:
+      total: 4.4
+      saturated: 0.2
+      monounsaturated: 2.2
+      polyunsaturated: 1.6
