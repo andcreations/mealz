@@ -10,11 +10,6 @@ export function PageNavbarMobile() {
   const authService = useService(AuthService);
   const navigate = useNavigate();
 
-  const onSignOut = () => {
-    authService.signOutOrLogError();
-    navigate(PathTo.signIn());
-  };
-
   return (
     <div className='mealz-navbar-mobile-container'>
       <div className='mealz-navbar-mobile'>

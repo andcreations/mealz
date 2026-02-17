@@ -41,4 +41,5 @@ export const HydrationDailyPlanTranslations: Translations = {
   'daily-plan-created': 'Daily plan created',
 
   'apply': 'Apply',
+  'taking-longer': 'Taking longer than usual',
 };

@@ -1,0 +1,42 @@
+.mealz-meal-daily-plan-summary {
+  $margin: 2rem;
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  @include mealz-flex-center();
+  gap: 0.5rem;
+  left: $margin;
+  right: $margin;
+  position: fixed;
+  background-color: $mealz-theme-color-bg-dark;
+  @include mealz-border();
+  padding: 0.5rem;
+  transform: translateY(0);
+  transition: transform $mealz-transition-time ease-out;
+}
+
+.mealz-meal-daily-plan-summary-for-notification {
+  transform: translateY(-3rem);
+}
+
+.mealz-meal-daily-plan-summary-top-bar {
+  @include mealz-font-small();
+  text-align: center;
+  position: relative;
+  width: 100%;
+}
+
+.mealz-meal-daily-plan-summary-top-bar-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: $mealz-theme-color-active;
+}
+
+.mealz-meal-daily-plan-summary-desktop {
+  bottom: 1rem;
+}
+
+.mealz-meal-daily-plan-summary-mobile {
+  bottom: calc(#{$mealz-navbar-height} + 1rem);
+}

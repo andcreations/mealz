@@ -28,10 +28,9 @@ export class HydrationDailyPlanService {
     const request: CreateHydrationDailyPlanGWRequestV1 = {
       hydrationDailyPlan,
     };
-    const { data } = await this.http.post<CreateHydrationDailyPlanGWRequestV1>(
+    await this.http.post<CreateHydrationDailyPlanGWRequestV1>(
       HydrationDailyPlanV1API.url.createV1(),
       request,
     );
-    return data;
   }
 }

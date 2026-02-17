@@ -29,7 +29,7 @@ interface HourAndMinutePickerState {
 }
 
 export function HourAndMinutePicker(props: HourAndMinutePickerProps) {
-  const minutesToStr = (minutes: number | string) => {
+  const digits2 = (minutes: number | string) => {
     if (typeof minutes === 'number') {
       minutes = minutes.toString();
     }
@@ -38,9 +38,9 @@ export function HourAndMinutePicker(props: HourAndMinutePickerProps) {
 
   const [state, setState] = useState<HourAndMinutePickerState>({
     focus: Focus.Hour,
-    hour: props.hour.toString(),
+    hour: digits2(props.hour),
     hourError: false,
-    minute: minutesToStr(props.minute),
+    minute: digits2(props.minute),
     minuteError: false,
   });
   const patchState = usePatchState(setState);

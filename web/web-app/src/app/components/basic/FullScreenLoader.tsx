@@ -13,7 +13,7 @@ interface FullScreenLoaderState {
   visible: boolean;
 }
 
-const LOADER_DEFAULT_DELAY = 2384;
+const LOADER_DEFAULT_DELAY = 1536;
 
 export function FullScreenLoader(props: FullScreenLoaderProps) {
   const {

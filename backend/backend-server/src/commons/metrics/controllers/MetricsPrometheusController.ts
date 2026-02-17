@@ -23,7 +23,7 @@ export class MetricsPrometheusController {
     @Req() request: any,
     @Res() response: Response,
   ): Promise<string> {
-    // we can't use GWContext here due to circular dependency
+    // we can't use GWContext here due to package circular dependency
     const context: Context = {
       correlationId: v7(),
     };
