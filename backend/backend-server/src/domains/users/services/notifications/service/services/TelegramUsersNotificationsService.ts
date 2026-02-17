@@ -28,12 +28,13 @@ export class TelegramUsersNotificationsService {
 
   private async sendTelegramMessageToUser(
     userId: string,
+    messageTypeId: string,
     message: TelegramAnonymousMessage,
     context: Context,
   ): Promise<void> {
     try {
       await this.telegramBotTransporter.sendMessageToUserV1(
-        { userId, message },
+        { userId, messageTypeId, message },
         context,
       );
     } catch (error) {
@@ -49,6 +50,7 @@ export class TelegramUsersNotificationsService {
   public async sendBasicUserNotification(
     notification: BasicUserNotification,
     userId: string,
+    messageTypeId: string,
     context: Context,
   ): Promise<void> {
     // check if the message can be sent to the user
@@ -66,7 +68,12 @@ export class TelegramUsersNotificationsService {
     );
 
     // send
-    await this.sendTelegramMessageToUser(userId, telegramMessage, context);
+    await this.sendTelegramMessageToUser(
+      userId,
+      messageTypeId,
+      telegramMessage,
+      context,
+    );
   }
 
   private buildChunkedTelegramMessage(
@@ -92,6 +99,7 @@ export class TelegramUsersNotificationsService {
   public async sendChunkedUserNotification(
     notification: ChunkedUserNotification,
     userId: string,
+    typeId: string,
     context: Context,
   ): Promise<void> {
     // check if the message can be sent to the user
@@ -107,6 +115,11 @@ export class TelegramUsersNotificationsService {
     const telegramMessage = this.buildChunkedTelegramMessage(notification);
 
     // send
-    await this.sendTelegramMessageToUser(userId, telegramMessage, context);
+    await this.sendTelegramMessageToUser(
+      userId,
+      typeId,
+      telegramMessage,
+      context,
+    );
   }
 }

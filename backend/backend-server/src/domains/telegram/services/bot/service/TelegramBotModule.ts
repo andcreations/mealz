@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { SQLiteDBModule } from '@mealz/backend-db';
 import { LoggerModule } from '@mealz/backend-logger';
+import { IdGeneratorProvider } from '@mealz/backend-common';
 import { UsersCrudAPIModule } from '@mealz/backend-users-crud-service-api';
 import {
   TelegramUsersAPIModule,
@@ -8,6 +10,10 @@ import {
   HydrationLogAPIModule,
 } from '@mealz/backend-hydration-log-service-api';
 
+import {
+  TELEGRAM_BOT_SQLITE_DB_MODULE_OPTIONS,
+  TelegramBotDBModule,
+} from './db';
 import { getTelegramBotCommandProviders } from './commands';
 import {
   TelegramBotClient,
@@ -16,6 +22,7 @@ import {
   TelegramBotUpdateService,
 } from './services';
 import { TelegramBotRequestController } from './controllers';
+import { OutgoingTelegramMessagesRepository } from './repositories';
 
 @Module({
   imports: [
@@ -23,8 +30,12 @@ import { TelegramBotRequestController } from './controllers';
     UsersCrudAPIModule.forRoot({}),
     TelegramUsersAPIModule.forRoot({}),
     HydrationLogAPIModule.forRoot({}),
+    SQLiteDBModule.forFeature(TELEGRAM_BOT_SQLITE_DB_MODULE_OPTIONS),
+    TelegramBotDBModule,
   ],
   providers: [
+    IdGeneratorProvider,
+    OutgoingTelegramMessagesRepository,
     TelegramBotClient,
     TelegramBotService,
     TelegramBotCommandProvider,

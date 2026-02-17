@@ -17,6 +17,8 @@ import {
   AdminNotificationType,
 } from '@mealz/backend-admin-notifications-service-api';
 
+import { ADMIN_NOTIFICATION_TELEGRAM_MESSAGE_TYPE_ID } from '../consts';
+
 @Injectable()
 export class TelegramAdminNotificationsService {
   private readonly telegramAdminUserIds: string[];
@@ -112,6 +114,7 @@ export class TelegramAdminNotificationsService {
     await this.telegramBotTransporter.sendMessageToUserV1(
       { 
         userId, 
+        messageTypeId: ADMIN_NOTIFICATION_TELEGRAM_MESSAGE_TYPE_ID,
         message: telegramMessage,
       },
       context,

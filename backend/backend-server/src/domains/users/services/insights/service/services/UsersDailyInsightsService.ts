@@ -41,6 +41,7 @@ import {
   UsersNotificationsTransporter,
 } from '@mealz/backend-users-notifications-service-api';
 
+import { USERS_DAILY_INSIGHTS_TELEGRAM_MESSAGE_TYPE_ID } from '../consts';
 import { 
   UserDailyInsightsAmounts, 
   UserDailyInsightsMeal, 
@@ -211,6 +212,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
       await this.usersNotificationsTransporter.sendChunkedUserNotification(
         {
           userId: user.id,
+          messageTypeId: USERS_DAILY_INSIGHTS_TELEGRAM_MESSAGE_TYPE_ID,
           notification: this.buildNutritionSummaryNotification(
             promptInput.meals,
             promptInput.overallAmounts,
@@ -244,6 +246,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
       await this.usersNotificationsTransporter.sendBasicUserNotification(
         {
           userId: user.id,
+          messageTypeId: 'daily-insights',
           notification: {
             message: insights.text,
           },

@@ -28,6 +28,7 @@ export class UsersNotificationsService {
   ): Promise<VoidTransporterResponse> {
     await this.telegramUsersNotificationsService.sendBasicUserNotification(
       request.notification,
+      request.messageTypeId,
       request.userId,
       context,
     );
@@ -41,6 +42,7 @@ export class UsersNotificationsService {
     await this.telegramUsersNotificationsService.sendChunkedUserNotification(
       request.notification,
       request.userId,
+      request.messageTypeId,
       context,
     );
     return {};

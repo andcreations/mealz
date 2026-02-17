@@ -38,6 +38,8 @@ import {
   HydrationReminderServiceTranslations,
 } from './HydrationReminderService.translations';
 
+import { HYDRATION_REMINDER_TELEGRAM_MESSAGE_TYPE_ID } from '../consts';
+
 @Injectable()
 export class HydrationReminderService implements OnModuleInit {
   private static readonly DEFAULT_CRON = '*/5 * * * *';
@@ -309,6 +311,7 @@ export class HydrationReminderService implements OnModuleInit {
     await this.usersNotificationsTransporter.sendBasicUserNotification(
       {
         userId: user.id,
+        messageTypeId: HYDRATION_REMINDER_TELEGRAM_MESSAGE_TYPE_ID,
         notification: {
           message,
         },

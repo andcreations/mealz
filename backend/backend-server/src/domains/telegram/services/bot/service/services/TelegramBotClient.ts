@@ -6,6 +6,7 @@ import {
   TelegramMessage,
   TelegramWebhook,
   TelegramWebhookInfo,
+  TelegramSendMessageResult,
 } from '@andcreations/telegram-bot';
 import { Logger } from '@mealz/backend-logger';
 import { 
@@ -24,10 +25,41 @@ import { TelegramBotCommandProvider } from './TelegramBotCommandProvider';
 export class TelegramBotClient implements OnModuleInit {
   private telegramBot: TelegramBot;
 
+  /*
+{
+  message_id: 273,
+  from: {
+    id: 8459204007,
+    is_bot: true,
+    first_name: 'AndCreationsMealzDev',
+    username: 'AndCreationsMealzDevBot'
+  },
+  chat: {
+    id: 2086813622,
+    first_name: 'Mikołaj',
+    username: 'gooceck',
+    type: 'private'
+  },
+  date: 1771352861,
+  text: 'This is a test'
+}
+
+  */
   public constructor(
     private readonly logger: Logger,
     private readonly commandProvider: TelegramBotCommandProvider,
-  ) {}
+  ) {
+    // setTimeout(async () => {
+    //   console.log('-> test');
+    //   // const r = await this.telegramBot.sendMessage({
+    //   //   chat_id: 2086813622,
+    //   //   text: 'This is a test',
+    //   // });
+    //   // console.log(r);
+    //   await this.telegramBot.deleteMessage(2086813622, 273);
+    //   console.log('<- test');
+    // }, 512)
+  }
 
   public async onModuleInit(): Promise<void> {
     if (!isTelegramEnabled()) {
@@ -116,7 +148,7 @@ export class TelegramBotClient implements OnModuleInit {
   public async sendMessage(
     message: TelegramMessage,
     _context: Context,
-  ): Promise<void> {
-    await this.telegramBot.sendMessage(message);
+  ): Promise<TelegramSendMessageResult> {
+    return this.telegramBot.sendMessage(message);
   }
 }
