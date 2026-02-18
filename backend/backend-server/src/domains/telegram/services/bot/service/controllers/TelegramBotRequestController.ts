@@ -8,15 +8,21 @@ import {
   HandleUpdateRequestV1,
   LogWebhookTokenRequestV1,
   SendMessageToUserRequestV1,
+  DeleteMessagesByUserIdAndTypeIdRequestV1,
   TelegramBotRequestTopics,
 } from '@mealz/backend-telegram-bot-service-api';
 
-import { TelegramBotService } from '../services';
+import {
+  OutgoingTelegramMessagesService,
+  TelegramBotService,
+} from '../services';
 
 @RequestController()
 export class TelegramBotRequestController {
   public constructor(
     private readonly telegramBotService: TelegramBotService,
+    private readonly outgoingTelegramMessagesService:
+      OutgoingTelegramMessagesService,
   ) {}
 
   @RequestHandler(TelegramBotRequestTopics.LogWebhookTokenV1)
@@ -41,5 +47,17 @@ export class TelegramBotRequestController {
     context: Context,
   ): Promise<VoidTransporterResponse> {
     return this.telegramBotService.sendMessageToUserV1(request, context);
+  }
+
+  @RequestHandler(TelegramBotRequestTopics.DeleteMessagesByUserIdAndTypeIdV1)
+  public async deleteMessagesByUserIdAndTypeIdV1(
+    request: DeleteMessagesByUserIdAndTypeIdRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.outgoingTelegramMessagesService.
+      deleteMessagesByUserIdAndTypeIdV1(
+        request,
+        context,
+      );
   }
 }

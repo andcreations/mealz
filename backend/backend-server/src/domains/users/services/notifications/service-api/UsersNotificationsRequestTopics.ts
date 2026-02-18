@@ -17,6 +17,10 @@ export class UsersNotificationsRequestTopics {
     'readUserNotificationsInfo',
     'v1',
   );
+  public static readonly DeleteNotificationsByUserIdAndTypeIdV1 = topic(
+    'deleteNotificationsByUserIdAndTypeId',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

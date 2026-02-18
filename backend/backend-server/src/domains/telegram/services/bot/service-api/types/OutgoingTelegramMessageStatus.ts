@@ -1,4 +1,6 @@
 export enum OutgoingTelegramMessageStatus {
-  Sent = 'Sent',
-  FailedToSend = 'FailedToSend',
+  Sent = 'sent',
+  FailedToSend = 'failed-to-send',
+  Deleted = 'deleted',
+  FailedToDelete = 'failed-to-delete',
 }

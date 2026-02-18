@@ -25,18 +25,7 @@ export class TelegramBotService {
     private readonly telegramBotUpdateService: TelegramBotUpdateService,
     private readonly outgoingTelegramMessagesRepository:
       OutgoingTelegramMessagesRepository,
-  ) {
-    // setTimeout(async () => {
-    //   console.log('-> test');
-    //   await this.sendMessageToUserV1(
-    //     { userId: '019c035d-3dc4-773a-b9e2-9fe0ab2944d9', typeId: 'test', message: { text: 'test' } },
-    //     {
-    //       correlationId: 'test',
-    //     },
-    //   );
-    //   console.log('<- test');
-    // }, 512);
-  }
+  ) {}
 
   public async logWebhookTokenV1(
     context: Context,

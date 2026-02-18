@@ -8,6 +8,10 @@ export class TelegramBotRequestTopics {
   public static readonly LogWebhookTokenV1 = topic('logWebhookToken', 'v1');
   public static readonly HandleUpdateV1 = topic('handleUpdate', 'v1');
   public static readonly SendMessageToUserV1 = topic('sendMessageToUser', 'v1');
+  public static readonly DeleteMessagesByUserIdAndTypeIdV1 = topic(
+    'deleteMessagesByUserIdAndTypeId',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

@@ -41,4 +41,10 @@ export class OutgoingTelegramMessageDBMapper {
       sentAt: entity.sent_at,
     };
   }
+
+  public fromEntities(
+    entities: OutgoingTelegramMessageDBEntity[],
+  ): OutgoingTelegramMessage[] {
+    return entities.map(entity => this.fromEntity(entity));
+  }
 }

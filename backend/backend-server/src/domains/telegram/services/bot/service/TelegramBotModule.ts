@@ -16,6 +16,7 @@ import {
 } from './db';
 import { getTelegramBotCommandProviders } from './commands';
 import {
+  OutgoingTelegramMessagesService,
   TelegramBotClient,
   TelegramBotCommandProvider,
   TelegramBotService,
@@ -36,6 +37,7 @@ import { OutgoingTelegramMessagesRepository } from './repositories';
   providers: [
     IdGeneratorProvider,
     OutgoingTelegramMessagesRepository,
+    OutgoingTelegramMessagesService,
     TelegramBotClient,
     TelegramBotService,
     TelegramBotCommandProvider,

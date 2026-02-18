@@ -16,6 +16,7 @@ import {
   ReadUserNotificationsInfoResponseV1,
   SendBasicUserNotificationRequestV1,
   SendChunkedUserNotificationRequestV1,
+  DeleteNotificationsByUserIdAndTypeIdRequestV1,
 } from './dtos';
 
 export class UsersNotificationsTransporter {
@@ -58,6 +59,19 @@ export class UsersNotificationsTransporter {
     >(
       UsersNotificationsRequestTopics.ReadUserNotificationsInfoV1,
       request, context,
+    );
+  }
+
+  public async deleteNotificationsByUserIdAndTypeIdV1(
+    request: DeleteNotificationsByUserIdAndTypeIdRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      DeleteNotificationsByUserIdAndTypeIdRequestV1, VoidTransporterResponse
+    >(
+      UsersNotificationsRequestTopics.DeleteNotificationsByUserIdAndTypeIdV1,
+      request,
+      context,
     );
   }
 }

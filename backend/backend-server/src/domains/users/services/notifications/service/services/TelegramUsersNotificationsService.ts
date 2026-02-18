@@ -99,7 +99,7 @@ export class TelegramUsersNotificationsService {
   public async sendChunkedUserNotification(
     notification: ChunkedUserNotification,
     userId: string,
-    typeId: string,
+    messageTypeId: string,
     context: Context,
   ): Promise<void> {
     // check if the message can be sent to the user
@@ -117,8 +117,19 @@ export class TelegramUsersNotificationsService {
     // send
     await this.sendTelegramMessageToUser(
       userId,
-      typeId,
+      messageTypeId,
       telegramMessage,
+      context,
+    );
+  }
+
+  public async deleteNotificationsByUserIdAndTypeIdV1(
+    userId: string,
+    typeId: string,
+    context: Context,
+  ): Promise<void> {
+    await this.telegramBotTransporter.deleteMessagesByUserIdAndTypeIdV1(
+      { userId, typeId },
       context,
     );
   }
