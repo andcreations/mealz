@@ -56,6 +56,9 @@
       ],
       "@mealz/backend-hydration-log-gateway-api": [
         "../../backend/backend-server/src/domains/hydration/services/log/gateway-api"
+      ],
+      "@mealz/backend-telegram-users-gateway-api": [
+        "../../backend/backend-server/src/domains/telegram/services/users/gateway-api"
       ]
     }
   }

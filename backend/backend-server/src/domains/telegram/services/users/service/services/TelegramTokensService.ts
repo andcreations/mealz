@@ -6,9 +6,11 @@ import {
   TelegramToken,
   TelegramTokenType,
 } from '@mealz/backend-telegram-users-common';
+import {
+  InvalidTokenError,
+} from '@mealz/backend-telegram-users-service-api';
 
 import { TelegramTokensRepository } from '../repositories';
-import { InvalidTokenError } from '../errors';
 
 
 @Injectable()

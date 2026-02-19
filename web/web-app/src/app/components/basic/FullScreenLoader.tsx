@@ -1,12 +1,17 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { Button } from 'react-bootstrap';
 
+import { useTranslations } from '../../i18n';
 import { usePatchState } from '../../hooks';
-import { Loader, LoaderProps, LoaderSize, LoaderType } from './Loader';
+import { Loader, LoaderProps } from './Loader';
+import { FullScreenLoaderTranslations } from './FullScreenLoader.translations';
 
-export interface FullScreenLoaderProps extends LoaderProps{
+export interface FullScreenLoaderProps extends LoaderProps {
   delay?: number;
+  cancelable?: boolean;
+  onCancel?: () => void;
 }
 
 interface FullScreenLoaderState {
@@ -16,9 +21,8 @@ interface FullScreenLoaderState {
 const LOADER_DEFAULT_DELAY = 1536;
 
 export function FullScreenLoader(props: FullScreenLoaderProps) {
-  const {
-    delay = LOADER_DEFAULT_DELAY,
-  } = props;  
+  const { delay = LOADER_DEFAULT_DELAY } = props;
+  const translate = useTranslations(FullScreenLoaderTranslations);
 
   const [state, setState] = useState<FullScreenLoaderState>({
     visible: !delay,
@@ -48,10 +52,20 @@ export function FullScreenLoader(props: FullScreenLoaderProps) {
 
   return (
     <div className={loaderClassNames}>
-      <Loader
-        {...props}        
-        delay={0}
-      />
+      <div className='mealz-full-screen-loader-content'>
+        <Loader
+          {...props}        
+          delay={0}
+        />
+        { props.cancelable &&
+          <Button
+            size='sm'
+            onClick={props.onCancel}
+          >
+            { translate('cancel') }
+          </Button>
+        }
+      </div>
     </div>
   );
 }

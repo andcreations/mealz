@@ -9,3 +9,4 @@ export * from './ReadTelegramUserInfoRequestV1';
 export * from './ReadTelegramUserInfoResponseV1';
 export * from './ReadTelegramUserByChatIdRequestV1';
 export * from './ReadTelegramUserByChatIdResponseV1';
+export * from './PatchTelegramUserRequestV1';

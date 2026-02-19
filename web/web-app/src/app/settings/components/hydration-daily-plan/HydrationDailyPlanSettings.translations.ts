@@ -1,6 +1,6 @@
 import { Translations } from '../../../i18n';
 
-export const HydrationDailyPlanTranslations: Translations = {
+export const HydrationDailyPlanSettingsTranslations: Translations = {
   'glasses-label': 'Number of glasses',
   'glasses-details':
     `Number of glasses of water to drink daily. ` +

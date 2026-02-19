@@ -1,1 +1,1 @@
-export * from './MealDailyPlan';
+export * from './MealDailyPlanSettings';

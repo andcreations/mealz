@@ -76,6 +76,10 @@ module.exports = {
         '@mealz/backend-hydration-log-gateway-api',
         'domains/hydration/services/log/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-telegram-users-gateway-api',
+        'domains/telegram/services/users/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser

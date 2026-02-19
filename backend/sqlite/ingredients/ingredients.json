@@ -2904,6 +2904,56 @@
   },
   {
     "name": {
+      "en": "Chicken breast (cooked)",
+      "pl": "Pierś z kurczaka (gotowana)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 165
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 31
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3.6
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.8
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Chicken breast (raw)",
       "pl": "Pierś z kurczaka (surowa)"
     },
@@ -11277,6 +11327,56 @@
         "id": 7,
         "unit": 1,
         "amount": 1.5
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Turkey breast (cooked)",
+      "pl": "Pierś z indyka (gotowana)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 147
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 30
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.4
       }
     ]
   },

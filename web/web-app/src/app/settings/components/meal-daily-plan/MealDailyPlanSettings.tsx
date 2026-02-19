@@ -33,13 +33,13 @@ import { cloneMealEntry, MealEntry, mealEntryMinute } from './MealEntry';
 import { MealDailyPlanEntry } from './MealDailyPlanEntry';
 import { MealDailyPlanSummary } from './MealDailyPlanSummary';
 import { SettingsSeparator } from '../SettingsSeparator';
-import { MealDailyPlanTranslations } from './MealDailyPlan.translations';
+import { MealDailyPlanSettingsTranslations } from './MealDailyPlanSettings.translations';
 
-export interface MealDailyPlanProps {
+export interface MealDailyPlanSettingsProps {
   onDirtyChanged: (isDirty: boolean) => void;
 }
 
-interface MealDailyPlanState {
+interface MealDailyPlanSettingsState {
   loadStatus: LoadStatus;
   meals: MealEntry[];
   deleteUndo?: {
@@ -50,12 +50,12 @@ interface MealDailyPlanState {
   isDirty: boolean;
 }
 
-export function MealDailyPlan(props: MealDailyPlanProps) {
-  const translate = useTranslations(MealDailyPlanTranslations);
+export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
+  const translate = useTranslations(MealDailyPlanSettingsTranslations);
   const notificationsService = useService(NotificationsService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
 
-  const [state, setState] = useState<MealDailyPlanState>({
+  const [state, setState] = useState<MealDailyPlanSettingsState>({
     loadStatus: LoadStatus.Loading,
     meals: [],
     summaryForNotification: false,
@@ -118,6 +118,7 @@ export function MealDailyPlan(props: MealDailyPlanProps) {
                 entry.goals.fatTo,
               ),
             },
+            collapsed: true,
           };
         });
         patchState({
@@ -429,6 +430,7 @@ export function MealDailyPlan(props: MealDailyPlanProps) {
         caloriesPercent={caloriesPercent.toString()}
         isTimeEditable={index > 0}
         invalidTime={!meal.isTimeValid(index)}
+        collapsed={true}
         onChangeName={(name: string) => {
           meal.onChangeName(index, name)
         }}
@@ -472,7 +474,7 @@ export function MealDailyPlan(props: MealDailyPlanProps) {
       <SettingsSeparator size='small'/>
       <SettingsButtons>
         <div
-          className='mealz-meal-daily-plan-add-button'
+          className='mealz-meal-daily-plan-settings-add-button'
           onClick={meal.onAdd}
         >
           <MaterialIcon
@@ -480,7 +482,7 @@ export function MealDailyPlan(props: MealDailyPlanProps) {
             icon='add_circle'
             onClick={meal.onAdd}
           />
-          <div className='mealz-meal-daily-plan-add-button-label'>
+          <div className='mealz-meal-daily-plan-settings-add-button-label'>
             { translate('add-meal') }
           </div>
         </div>
@@ -490,10 +492,10 @@ export function MealDailyPlan(props: MealDailyPlanProps) {
         minute={59}
       />
       <SettingsButtons
-        className='mealz-meal-daily-plan-buttons'
+        className='mealz-meal-daily-plan-settings-buttons'
       >
         <Button
-          className='mealz-meal-daily-plan-apply-button'
+          className='mealz-meal-daily-plan-settings-apply-button'
           disabled={state.applying || !state.isDirty}
           size='sm'
           onClick={settings.onApply}
@@ -501,7 +503,7 @@ export function MealDailyPlan(props: MealDailyPlanProps) {
           { translate('apply') }
         </Button>
       </SettingsButtons>
-      <div className='mealz-meal-daily-plan-summary-spacer'>
+      <div className='mealz-meal-daily-plan-settings-summary-spacer'>
       </div>
       <MealDailyPlanSummary
         macrosSummary={summary.calculate()}

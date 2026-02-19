@@ -7,7 +7,7 @@ import { useTranslations } from '../../i18n';
 import { PathTo } from '../../routing';
 import { YesNoModal } from '../../components';
 import { usePatchState } from '../../hooks';
-import { HydrationDailyPlan } from '../components';
+import { HydrationDailyPlanSettings } from '../components';
 import {
   HydrationDailyPlanPageTranslations,
 } from './HydrationDailyPlanPage.translations';
@@ -51,7 +51,7 @@ export function HydrationDailyPlanPage() {
         title={translate('title')}
         onGoBack={() => onGoBack()}
       >
-        <HydrationDailyPlan
+        <HydrationDailyPlanSettings
           onDirtyChanged={(isDirty) => patchState({ isDirty })}
         />
       </PageWrapper>

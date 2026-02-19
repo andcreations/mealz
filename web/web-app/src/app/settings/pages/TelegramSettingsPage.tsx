@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { PageWrapper } from '../../page';
 import { useTranslations } from '../../i18n';
 import { PathTo } from '../../routing';
+import { TelegramSettings } from '../components';
 import {
   TelegramSettingsPageTranslations,
 } from './TelegramSettingsPage.translations';
@@ -17,8 +18,7 @@ export function TelegramSettingsPage() {
       title={translate('title')}
       onGoBack={() => navigate(PathTo.settings())}
     >
-      <div>
-      </div>
+      <TelegramSettings/>
     </PageWrapper>
   );
 }
