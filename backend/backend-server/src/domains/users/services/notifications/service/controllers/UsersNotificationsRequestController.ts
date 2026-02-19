@@ -5,6 +5,7 @@ import {
 } from '@mealz/backend-transport';
 import { Context } from '@mealz/backend-core';
 import { 
+  DeleteNotificationsByUserIdAndTypeIdRequestV1,
   ReadUserNotificationsInfoRequestV1,
   ReadUserNotificationsInfoResponseV1,
   SendBasicUserNotificationRequestV1,
@@ -51,5 +52,19 @@ export class UsersNotificationsRequestController {
       request,
       context,
     );
+  }
+
+  @RequestHandler(
+    UsersNotificationsRequestTopics.DeleteNotificationsByUserIdAndTypeIdV1
+  )
+  public async deleteNotificationsByUserIdAndTypeIdV1(
+    request: DeleteNotificationsByUserIdAndTypeIdRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.usersNotificationsService.
+      deleteNotificationsByUserIdAndTypeIdV1(
+        request,
+        context,
+      );
   }
 }

@@ -38,6 +38,8 @@ import {
   HydrationReminderServiceTranslations,
 } from './HydrationReminderService.translations';
 
+import { HYDRATION_REMINDER_TELEGRAM_MESSAGE_TYPE_ID } from '../consts';
+
 @Injectable()
 export class HydrationReminderService implements OnModuleInit {
   private static readonly DEFAULT_CRON = '*/5 * * * *';
@@ -145,7 +147,7 @@ export class HydrationReminderService implements OnModuleInit {
     );
     if (!canSendMessagesTo) {
       this.logger.debug(
-        'Cannot send messages to user, skipping hydration reminders', 
+        'Cannot send messages to user. Skipping hydration reminders.', 
         {
           ...context,
           userId: user.id,
@@ -192,8 +194,11 @@ export class HydrationReminderService implements OnModuleInit {
       return;
     }
 
+    // delete previous reminders not to spam
+    await this.deletePreviousReminders(user.id, context);
+
     // send reminder
-    await this.sendReminder(user, context);
+    await this.sendReminder(user.id, context);
   }
 
   private async readUserTodaysHydrationLogs(
@@ -294,8 +299,22 @@ export class HydrationReminderService implements OnModuleInit {
     return shouldSend;
   }
 
+  private async deletePreviousReminders(
+    userId: string,
+    context: Context,
+  ): Promise<void> {
+    await this.usersNotificationsTransporter
+      .deleteNotificationsByUserIdAndTypeIdV1(
+        {
+          userId,
+          typeId: HYDRATION_REMINDER_TELEGRAM_MESSAGE_TYPE_ID,
+        },
+        context,
+      );
+  }
+
   private async sendReminder(
-    user: UserWithoutPassword,
+    userId: string,
     context: Context,
   ): Promise<void> {
     // message
@@ -308,7 +327,8 @@ export class HydrationReminderService implements OnModuleInit {
     // send
     await this.usersNotificationsTransporter.sendBasicUserNotification(
       {
-        userId: user.id,
+        userId,
+        messageTypeId: HYDRATION_REMINDER_TELEGRAM_MESSAGE_TYPE_ID,
         notification: {
           message,
         },

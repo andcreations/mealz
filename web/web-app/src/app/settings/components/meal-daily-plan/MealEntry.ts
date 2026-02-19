@@ -36,6 +36,6 @@ export function cloneMealEntry(entry: MealEntry): MealEntry {
       carbsMargin: entry.goals.carbsMargin,
       fat: entry.goals.fat,
       fatMargin: entry.goals.fatMargin,
-    }
+    },
   };
 }

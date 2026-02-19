@@ -40,7 +40,7 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
   const mealsNamedService = useService(MealsNamedService);
 
   const namedMealsToDropdown = (namedMeals: NamedMeal[]) => {
-    return namedMeals.map(meal => meal.name);
+    return namedMeals.map(meal => meal.name).sort();
   }
   
   const [state, setState] = useState<NamedMealPickerState>({

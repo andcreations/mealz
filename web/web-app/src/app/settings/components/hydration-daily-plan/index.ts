@@ -1,1 +1,1 @@
-export * from './HydrationDailyPlan';
+export * from './HydrationDailyPlanSettings';

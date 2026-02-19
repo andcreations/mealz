@@ -10,6 +10,7 @@ import { TelegramBotRequestTopics } from './TelegramBotRequestTopics';
 import { 
   HandleUpdateRequestV1, 
   LogWebhookTokenRequestV1, 
+  DeleteMessagesByUserIdAndTypeIdRequestV1,
   SendMessageToUserRequestV1,
 } from './dtos';
 
@@ -53,6 +54,19 @@ export class TelegramBotTransporter {
       SendMessageToUserRequestV1, VoidTransporterResponse
     >(
       TelegramBotRequestTopics.SendMessageToUserV1,
+      request,
+      context,
+    );
+  }
+
+  public async deleteMessagesByUserIdAndTypeIdV1(
+    request: DeleteMessagesByUserIdAndTypeIdRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      DeleteMessagesByUserIdAndTypeIdRequestV1, VoidTransporterResponse
+    >(
+      TelegramBotRequestTopics.DeleteMessagesByUserIdAndTypeIdV1,
       request,
       context,
     );

@@ -4,6 +4,8 @@ import { requireStrEnv } from '@mealz/backend-common';
 import { VoidTransporterResponse } from '@mealz/backend-transport';
 import { isTelegramEnabled } from '@mealz/backend-telegram-common';
 import {
+  InvalidTokenError,
+  TelegramUserNotFoundError,
   TelegramUser,
   GenerateStartLinkRequestV1,
   GenerateStartLinkResponseV1,
@@ -16,9 +18,9 @@ import {
   ReadTelegramUserInfoRequestV1,
   ReadTelegramUserByChatIdResponseV1,
   ReadTelegramUserByChatIdRequestV1,
+  PatchTelegramUserRequestV1,
 } from '@mealz/backend-telegram-users-service-api';
 
-import { InvalidTokenError, TelegramUserNotFoundError } from '../errors';
 import { TelegramTokensService } from './TelegramTokensService';
 import { TelegramUsersService } from './TelegramUsersService';
 
@@ -132,5 +134,17 @@ export class TelegramUsersRequestService {
         context,
       );
     return { telegramUser };
+  }
+
+  public async patchTelegramUserV1(
+    request: PatchTelegramUserRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    await this.telegramUsersService.patchTelegramUser(
+      request.userId,
+      request.isEnabled,
+      context,
+    );
+    return {};
   }
 }

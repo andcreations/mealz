@@ -1,7 +1,4 @@
-.mealz-meal-daily-plan {
-}
-
-.mealz-meal-daily-plan-add-button {
+.mealz-meal-daily-plan-settings-add-button {
   @include mealz-flex-container();
   @include mealz-flex-vertical();
   align-items: center;
@@ -9,15 +6,15 @@
   margin-bottom: 2rem;
 }
 
-.mealz-meal-daily-plan-add-button-label {
+.mealz-meal-daily-plan-settings-add-button-label {
   @include mealz-font-tiny();
   color: $mealz-theme-color-active;
 }
 
-.mealz-meal-daily-plan-buttons {
+.mealz-meal-daily-plan-settings-buttons {
   margin-top: 2rem;
 }
 
-.mealz-meal-daily-plan-summary-spacer {
+.mealz-meal-daily-plan-settings-summary-spacer {
   height: 12rem;
 }

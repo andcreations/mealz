@@ -26,17 +26,17 @@ import { SwitchSetting } from '../SwitchSetting';
 import { LabelSetting } from '../StringSetting';
 import { SettingsButtons } from '../SettingsButtons';
 import { 
-  HydrationDailyPlanTranslations,
-} from './HydrationDailyPlan.translations';
+  HydrationDailyPlanSettingsTranslations,
+} from './HydrationDailyPlanSettings.translations';
 
 const MIN_MINUTES_SINCE_LAST_WATER_INTAKE = 5;
 const MIN_PERIOD_IN_MINUTES = 5;
 
-export interface HydrationDailyPlanProps {
+export interface HydrationDailyPlanSettingsProps {
   onDirtyChanged: (isDirty: boolean) => void;
 }
 
-interface HydrationDailyPlanState {
+interface HydrationDailyPlanSettingsState {
   loadStatus: LoadStatus;
   isDirty: boolean;
   glasses: string;
@@ -55,12 +55,14 @@ interface HydrationDailyPlanState {
   applying: boolean;
 }
 
-export function HydrationDailyPlan(props: HydrationDailyPlanProps) {
-  const translate = useTranslations(HydrationDailyPlanTranslations);
+export function HydrationDailyPlanSettings(
+  props: HydrationDailyPlanSettingsProps,
+) {
+  const translate = useTranslations(HydrationDailyPlanSettingsTranslations);
   const notificationsService = useService(NotificationsService);
   const hydrationDailyPlanService = useService(HydrationDailyPlanService);
 
-  const [state, setState] = useState<HydrationDailyPlanState>({
+  const [state, setState] = useState<HydrationDailyPlanSettingsState>({
     loadStatus: LoadStatus.Loading,
     isDirty: false,
     glasses: '8',
@@ -87,7 +89,7 @@ export function HydrationDailyPlan(props: HydrationDailyPlanProps) {
       ).then((dailyPlan) => {
         let dailyPlanState:
           undefined | 
-          Pick<HydrationDailyPlanState,
+          Pick<HydrationDailyPlanSettingsState,
             | 'glasses'
             | 'remindersEnabled'
             | 'startHour'

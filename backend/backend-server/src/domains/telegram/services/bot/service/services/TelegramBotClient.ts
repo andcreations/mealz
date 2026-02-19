@@ -6,6 +6,7 @@ import {
   TelegramMessage,
   TelegramWebhook,
   TelegramWebhookInfo,
+  TelegramSendMessageResult,
 } from '@andcreations/telegram-bot';
 import { Logger } from '@mealz/backend-logger';
 import { 
@@ -116,7 +117,15 @@ export class TelegramBotClient implements OnModuleInit {
   public async sendMessage(
     message: TelegramMessage,
     _context: Context,
+  ): Promise<TelegramSendMessageResult> {
+    return this.telegramBot.sendMessage(message);
+  }
+
+  public async deleteMessage(
+    chatId: number,
+    messageId: number,
+    context: Context,
   ): Promise<void> {
-    await this.telegramBot.sendMessage(message);
+    await this.telegramBot.deleteMessage(chatId, messageId);
   }
 }

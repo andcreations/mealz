@@ -5,6 +5,7 @@ import {
   TelegramUsersTransporter,
 } from '@mealz/backend-telegram-users-service-api';
 import {
+  DeleteNotificationsByUserIdAndTypeIdRequestV1,
   ReadUserNotificationsInfoRequestV1,
   ReadUserNotificationsInfoResponseV1,
   SendBasicUserNotificationRequestV1,
@@ -29,6 +30,7 @@ export class UsersNotificationsService {
     await this.telegramUsersNotificationsService.sendBasicUserNotification(
       request.notification,
       request.userId,
+      request.messageTypeId,
       context,
     );
     return {};
@@ -41,6 +43,7 @@ export class UsersNotificationsService {
     await this.telegramUsersNotificationsService.sendChunkedUserNotification(
       request.notification,
       request.userId,
+      request.messageTypeId,
       context,
     );
     return {};
@@ -60,5 +63,18 @@ export class UsersNotificationsService {
     return {
       canSendMessagesTo,
     }
+  }
+
+  public async deleteNotificationsByUserIdAndTypeIdV1(
+    request: DeleteNotificationsByUserIdAndTypeIdRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    await this.telegramUsersNotificationsService.
+      deleteNotificationsByUserIdAndTypeIdV1(
+        request.userId,
+        request.typeId,
+        context,
+      );
+    return {};
   }
 }

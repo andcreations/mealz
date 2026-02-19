@@ -18,6 +18,7 @@ import {
   VerifyStartTokenResponseV1,
   ReadTelegramUserByChatIdRequestV1,
   ReadTelegramUserByChatIdResponseV1,
+  PatchTelegramUserRequestV1,
 } from './dtos';
 import { TelegramUsersRequestTopics } from './TelegramUsersRequestTopics';
 
@@ -101,6 +102,19 @@ export class TelegramUsersTransporter {
       ReadTelegramUserByChatIdRequestV1, ReadTelegramUserByChatIdResponseV1
     >(
       TelegramUsersRequestTopics.ReadTelegramUserByChatIdV1,
+      request,
+      context,
+    );
+  }
+
+  public async patchTelegramUserV1(
+    request: PatchTelegramUserRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      PatchTelegramUserRequestV1, VoidTransporterResponse
+    >(
+      TelegramUsersRequestTopics.PatchTelegramUserV1,
       request,
       context,
     );

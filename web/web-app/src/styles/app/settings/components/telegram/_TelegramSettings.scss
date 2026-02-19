@@ -1,0 +1,23 @@
+.mealz-telegram-settings-user {
+  @include mealz-font-small();
+}
+
+.mealz-telegram-settings-start-link {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  @include mealz-flex-center();
+  gap: 1rem;
+}
+
+.mealz-telegram-settings-start-link-text {
+  @include mealz-font-small();
+  color: $mealz-theme-color-fg-dark;
+  text-align: center;
+}
+
+.mealz-telegram-settings-start-link-refresh-info {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+  text-align: center;
+  margin-top: 1rem;
+}

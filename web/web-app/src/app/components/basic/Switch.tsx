@@ -4,6 +4,7 @@ import classNames from 'classnames';
 export interface SwitchProps {
   checked: boolean;
   width?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
   onChange: (checked: boolean) => void;
 }
 
@@ -18,6 +19,10 @@ export function Switch(props: SwitchProps) {
     width: WIDTH_MAP[props.width ?? 'sm'],
   };
 
+  const switchClasses = classNames(
+    'mealz-switch',
+    { 'mealz-switch-disabled': props.disabled },
+  );
   const switchBarClasses = classNames(
     'mealz-switch-bar',
     { 'mealz-switch-bar-off': !props.checked },

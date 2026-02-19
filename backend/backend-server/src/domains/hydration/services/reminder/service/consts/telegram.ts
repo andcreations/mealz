@@ -1,0 +1,1 @@
+export const HYDRATION_REMINDER_TELEGRAM_MESSAGE_TYPE_ID = 'hydration-reminder';

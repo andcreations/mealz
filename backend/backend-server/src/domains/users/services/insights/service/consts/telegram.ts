@@ -1,0 +1,1 @@
+export const USERS_DAILY_INSIGHTS_TELEGRAM_MESSAGE_TYPE_ID = 'daily-insights';

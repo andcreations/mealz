@@ -6,7 +6,7 @@ import { PageWrapper } from '../../page';
 import { useTranslations } from '../../i18n';
 import { PathTo } from '../../routing';
 import { YesNoModal } from '../../components';
-import { MealDailyPlan } from '../components';
+import { MealDailyPlanSettings } from '../components';
 import { usePatchState } from '../../hooks';
 import {
   DailyMealPlanPageTranslations,
@@ -51,7 +51,9 @@ export function DailyMealPlanPage() {
         title={translate('title')}
         onGoBack={() => onGoBack()}
       >
-        <MealDailyPlan onDirtyChanged={(isDirty) => patchState({ isDirty })}/>
+        <MealDailyPlanSettings
+          onDirtyChanged={(isDirty) => patchState({ isDirty })}
+        />
       </PageWrapper>
       { state.showConfirmationModal &&
         <YesNoModal

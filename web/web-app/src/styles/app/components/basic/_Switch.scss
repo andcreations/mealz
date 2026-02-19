@@ -8,6 +8,11 @@
   border-radius: calc($switch-bar-height / 2);
   background-color: $mealz-theme-color-bg-dark;
 
+  &.mealz-switch-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   .mealz-switch-bar {
     width: 100%;
     height: $switch-bar-height;

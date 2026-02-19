@@ -21,6 +21,7 @@ interface MealDailyPlanEntryProps {
   caloriesPercent: string; // of all the meals
   isTimeEditable: boolean;
   invalidTime: boolean;
+  collapsed: boolean;
   onChangeName: (name: string) => void;
   onChangeTime: (hour: number, minute: number) => void;
   onCaloriesChange: (amount: number, margin: number) => void;
@@ -67,7 +68,7 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
     },
     isNameEditing: false,
     invalidName: false,
-    collapsed: false,
+    collapsed: props.collapsed,
   });
   const patchState = usePatchState(setState);
 

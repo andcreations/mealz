@@ -8,11 +8,13 @@ import {
 } from '@mealz/backend-telegram-users-service-api';
 import {
   HandleUpdateRequestV1,
+  OutgoingTelegramMessageStatus,
   SendMessageToUserRequestV1,
 } from '@mealz/backend-telegram-bot-service-api';
 
 import { TelegramBotClient } from './TelegramBotClient';
 import { TelegramBotUpdateService } from './TelegramBotUpdateService';
+import { OutgoingTelegramMessagesRepository } from '../repositories';
 
 @Injectable()
 export class TelegramBotService {
@@ -21,6 +23,8 @@ export class TelegramBotService {
     private readonly telegramUsersTransporter: TelegramUsersTransporter,
     private readonly telegramBotClient: TelegramBotClient,
     private readonly telegramBotUpdateService: TelegramBotUpdateService,
+    private readonly outgoingTelegramMessagesRepository:
+      OutgoingTelegramMessagesRepository,
   ) {}
 
   public async logWebhookTokenV1(
@@ -57,19 +61,61 @@ export class TelegramBotService {
     if (!isTelegramEnabled()) {
       return {};
     }
+
+    // read telegram user
     const {
       telegramUser,
     } = await this.telegramUsersTransporter.readTelegramUserV1(
       { userId: request.userId },
       context,
     );
-    await this.telegramBotClient.sendMessage(
-      {
-        ...request.message,
-        chat_id: telegramUser.telegramChatId,
-      },
-      context,
-    );
+
+    // insert outgoing telegram message
+    const insertOutgoingTelegramMessage = async (
+      status: OutgoingTelegramMessageStatus,
+      telegramMessageId: number,
+    ) => {
+      try {
+        await this.outgoingTelegramMessagesRepository.create(
+          {
+            userId: request.userId,
+            typeId: request.messageTypeId,
+            telegramChatId: telegramUser.telegramChatId,
+            telegramMessageId,
+            content: request.message,
+            status,
+          },
+          context,
+        );
+      } catch (error) {
+        this.logger.error(
+          'Failed to insert outgoing telegram message',
+          context,
+          error,
+        );
+      }
+    };
+
+    // send message
+    try {
+      const result = await this.telegramBotClient.sendMessage(
+        {
+          ...request.message,
+          chat_id: telegramUser.telegramChatId,
+        },
+        context,
+      );
+      await insertOutgoingTelegramMessage(
+        OutgoingTelegramMessageStatus.Sent,
+        result.message_id,
+      );
+    } catch (error) {
+      await insertOutgoingTelegramMessage(
+        OutgoingTelegramMessageStatus.FailedToSend,
+        0,
+      );
+      throw error;
+    }
     return {};
   }
 }

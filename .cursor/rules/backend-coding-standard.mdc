@@ -1,0 +1,69 @@
+---
+globs: backend/**
+alwaysApply: false
+---
+// Backend Coding Standard
+
+// 1. Language and Style
+// - Use modern TypeScript (strict mode enabled) and Node.js (ES2022+) features consistently.
+// - Use `let` and `const` instead of `var`.
+// - Prefer `const` for variables that are never reassigned.
+// - Use 2 spaces for indentation.
+// - Single quotes for strings (except where template strings are needed).
+// - End all statements with semicolons.
+
+// 2. Modules and Imports
+// - Use ES6 module syntax (`import`/`export`) wherever possible.
+// - Put all imports at the top of the file.
+// - Group imports by external modules, then internal modules, then types/interfaces.
+// - Do not use wildcard imports (`import * as ...`).
+
+// 3. Typing
+// - Always annotate function arguments, return types, and exported variables/types explicitly.
+// - Prefer specific types—avoid using `any` or overly broad types.
+// - Use interfaces for object shapes, and types for unions or primitives.
+
+// 4. Functions and Methods
+// - Use arrow functions for callbacks and short functions; use `function` declarations for methods or named functions.
+// - Functions should be pure whenever possible, unless side-effects are required (e.g., controller actions).
+// - If a function returns a promise, its return type must be explicitly documented as `Promise<T>`.
+
+// 5. Error Handling
+// - Always handle promise rejections (`try/catch` or `.catch()`).
+// - Use custom error classes where appropriate.
+// - Do not suppress errors (never use empty `catch` blocks).
+
+// 6. File and Directory Naming
+// - Use kebab-case folder names (e.g., `named-meals`).
+// - Use pascal-case for files exporting classes (e.g. `NamedMealsService.tsx`)
+// - Place types and interfaces in a `types` folder where shared, or adjacent to their usage if specific.
+// - Place utility files in a `utils` folder where shared, or adjacent to their usage if specific.
+
+// 7. Comments and Documentation
+// - Use JSDoc for function/method/module documentation.
+// - Add comments for complex business logic.
+// - Prefer self-explanatory names, but comment where intent/side effect isn’t clear.
+
+// 8. Testing
+// - Write tests for all exported modules and public-facing APIs.
+// - Use descriptive test names and organize tests to mirror the backend’s directory structure.
+
+// 9. Linting & Formatting
+// - All code should pass ESLint and Prettier checks (see repository config for rules).
+// - No unused variables, parameters, or imports.
+
+// 10. Security & Data Validation
+// - Validate and sanitize all incoming data at endpoints (controllers, services).
+// - Never trust user input; use schema validation (e.g., `zod`, `joi`, or similar).
+// - Avoid exposing sensitive data in error responses or logs.
+
+// 11. API Design
+// - Use RESTful (or documented equivalent) conventions for routes and controllers.
+// - For endpoints, always define input and output types explicitly.
+// - Version public routes (e.g., `/v1/`).
+
+// 12. Dependency Management
+// - Prefer small, well-supported dependencies; avoid unmaintained or unnecessary packages.
+// - Declare all dependencies in `package.json`.
+
+

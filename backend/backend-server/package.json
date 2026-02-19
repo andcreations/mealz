@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@andcreations/common": "^0.1.13",
-    "@andcreations/telegram-bot": "^0.8.0",
+    "@andcreations/telegram-bot": "^0.9.0",
     "@logtail/node": "^0.5.6",
     "@msgpack/msgpack": "^3.1.2",
     "@nestjs/common": "^11.1.2",
