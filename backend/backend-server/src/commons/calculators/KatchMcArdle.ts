@@ -1,6 +1,7 @@
 import { Sex } from './types';
 
 export class KatchMcArdle {
+  // calculate BMR (basal metabolic rate)
   public static calculateBMR(
     leanBodyMassInKg: number,
   ): number {

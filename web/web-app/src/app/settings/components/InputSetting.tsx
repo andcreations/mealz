@@ -10,12 +10,14 @@ export interface InputSettingProps {
   className?: string;
   type: 'text' | 'number';
   label: string;
+  labelSuffix?: string;
   details?: string;
-  value: string | number;
+  value: string | number | undefined;
   error?: boolean;
   width?: 'sm' | 'md' | 'lg';
   onChange: (value: string | number) => void;
   onLeave?: () => void;
+  onBlur?: () => void;
 }
 
 const WIDTH_MAP = {
@@ -48,6 +50,7 @@ export function InputSetting(props: InputSettingProps) {
   return (
     <Setting
       label={props.label}
+      labelSuffix={props.labelSuffix}
       details={props.details}
     >
       <Form.Control
@@ -58,6 +61,7 @@ export function InputSetting(props: InputSettingProps) {
         value={props.value}
         onChange={(event) => props.onChange(event.target.value)}
         onKeyDown={ifEnterKey(onEnter)}
+        onBlur={props.onBlur}
       />
     </Setting>
   );

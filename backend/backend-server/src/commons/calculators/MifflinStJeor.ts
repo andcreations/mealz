@@ -1,4 +1,4 @@
-import { ActivityLevel, ActivityLevelFactor, Sex } from './types';
+import { Sex } from './types';
 
 export class MifflinStJeor {
   // calculate BMR (basal metabolic rate)

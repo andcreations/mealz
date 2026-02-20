@@ -21,6 +21,10 @@ module.exports = {
         'api',
       ),
       ...backendAlias(
+        '@mealz/backend-calculators',
+        'commons/calculators',
+      ),
+      ...backendAlias(
         '@mealz/backend-shared',
         'shared',
       ),

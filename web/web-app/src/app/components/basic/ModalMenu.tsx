@@ -1,8 +1,6 @@
 import * as React from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-import { nameToKey } from '../../utils';
-
 export interface ModalMenuItem {
   key: string;
   content: string | React.ReactNode;

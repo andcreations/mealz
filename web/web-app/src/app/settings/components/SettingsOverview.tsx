@@ -27,6 +27,10 @@ export function SettingsOverview() {
     navigate(PathTo.telegramSettings());
   };
 
+  const onCalculatorSettingsClick = () => {
+    navigate(PathTo.calculatorSettings());
+  };
+
   const onSignOut = () => {
     authService.signOutOrLogError();
     navigate(PathTo.signIn());
@@ -49,6 +53,11 @@ export function SettingsOverview() {
           icon='send'
           label={translate('telegram')}
           onClick={onTelegramSettingsClick}
+        />
+        <GoToSettingsMenuItem
+          icon='calculate'
+          label={translate('calculator')}
+          onClick={onCalculatorSettingsClick}
         />
       </SettingsMenu>
 
