@@ -347,7 +347,7 @@ export function HydrationDailyPlanSettings(
       hydrationDailyPlanService.createDailyPlan(hydrationDailyPlan)
         .then(() => {
           notificationsService.pushNotification({
-            message: translate('daily-plan-created'),
+            message: translate('daily-plan-applied'),
             type: NotificationType.Info,
           });
           patchState({
@@ -356,9 +356,9 @@ export function HydrationDailyPlanSettings(
           });
         })
         .catch((error) => {
-          Log.error('Failed to create daily plan', error);
+          Log.error('Failed to apply daily plan', error);
           notificationsService.pushNotification({
-            message: translate('failed-to-create-daily-plan'),
+            message: translate('failed-to-apply-daily-plan'),
             type: NotificationType.Error,
           });
           patchState({

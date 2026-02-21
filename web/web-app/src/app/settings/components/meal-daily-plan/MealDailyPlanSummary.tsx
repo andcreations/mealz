@@ -2,6 +2,9 @@ import * as React from 'react';
 import { useState } from 'react';
 import classNames from 'classnames';
 import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
+import { 
+  GWMealDailyPlanGoals,
+} from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
@@ -13,6 +16,7 @@ import {
 
 export interface MealDailyPlanSummaryProps {
   macrosSummary: GWMacros;
+  goals?: GWMacros;
   forNotification?: boolean;
 }
 
@@ -51,6 +55,24 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
     },
   }
 
+  const goal = {
+    forSummary: (): GWMealDailyPlanGoals | undefined => {
+      if (!props.goals) {
+        return undefined;
+      }
+      return {
+        caloriesFrom: props.goals.calories,
+        caloriesTo: props.goals.calories,
+        proteinFrom: props.goals.protein,
+        proteinTo: props.goals.protein,
+        carbsFrom: props.goals.carbs,
+        carbsTo: props.goals.carbs,
+        fatFrom: props.goals.fat,
+        fatTo: props.goals.fat,
+      };
+    },
+  }
+
   return (
     <div className={summaryClassName}>
       <div
@@ -65,7 +87,10 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
       </div>
       { state.isOpen &&
         <div className='mealz-meal-daily-plan-summary-content'>
-          <MacrosSummary macrosSummary={props.macrosSummary}/>
+          <MacrosSummary
+            macrosSummary={props.macrosSummary}
+            goals={goal.forSummary()}
+          />
         </div>
       }
     </div>

@@ -1,20 +1,35 @@
 import * as React from 'react';
+import { useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 import classNames from 'classnames';
 import { truncateNumber } from '@mealz/backend-shared';
-import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import { 
   Sex, 
   ActivityLevel, 
   Goal, 
-  MifflinStJeor, 
-  TotalDailyEnergyExpenditure,
-  Macros,
 } from '@mealz/backend-calculators';
 
+import { Log } from '../../../log';
+import { LoadStatus } from '../../../common';
 import { useTranslations } from '../../../i18n';
 import { parsePositiveInteger } from '../../../utils';
-import { usePatchState } from '../../../hooks';
-import { MacrosSummary, ModalMenu, ModalMenuItem } from '../../../components';
+import { usePatchState, useService } from '../../../hooks';
+import { 
+  FullScreenLoader,
+  LoaderByStatus, 
+  LoaderSize, 
+  LoaderType, 
+  MacrosSummary, 
+  ModalMenu, 
+  ModalMenuItem,
+} from '../../../components';
+import { 
+  CalculatorSettings, 
+  CalculatorSettingsService,
+  CalculatorService,
+  CalculatorResult,
+} from '../../../calculator';
+import { NotificationsService } from '../../../notifications';
 import { SettingsSection } from '../SettingsSection';
 import { InputSetting } from '../InputSetting';
 import { LabelSetting } from '../LabelSetting';
@@ -30,7 +45,13 @@ const VALID_MAX_HEIGHT = 230;
 const VALID_MIN_WEIGHT = 40;
 const VALID_MAX_WEIGHT = 250;
 
+export interface CalculatorProps {
+  onDirtyChanged: (isDirty: boolean) => void;
+}
+
 interface CalculatorState {
+  loadStatus: LoadStatus;
+  isDirty: boolean;
   sex: Sex | null;
   age: string;
   ageError?: boolean;
@@ -43,12 +64,18 @@ interface CalculatorState {
   showSexPicker: boolean;
   showActivityLevelPicker: boolean;
   showGoalPicker: boolean;
+  saving: boolean;
 }
 
-export function Calculator() {
+export function Calculator(props: CalculatorProps) {
   const translate = useTranslations(CalculatorTranslations);
+  const notificationsService = useService(NotificationsService);
+  const calculatorService = useService(CalculatorService);
+  const calculatorSettingsService = useService(CalculatorSettingsService);
 
   const [state, setState] = React.useState<CalculatorState>({
+    loadStatus: LoadStatus.Loading,
+    isDirty: false,
     sex: null,
     age: '',
     height: '',
@@ -58,8 +85,48 @@ export function Calculator() {
     showSexPicker: false,
     showActivityLevelPicker: false,
     showGoalPicker: false,
+    saving: false,
   });
   const patchState = usePatchState(setState);
+
+  // initial read
+  useEffect(
+    () => {
+      Log.logAndRethrow(
+        () => calculatorSettingsService.read(),
+        'Failed to read calculator settings',
+      ).then(settings => {
+        if (!settings) {
+          patchState({ loadStatus: LoadStatus.Loaded });
+          return;
+        }
+        patchState({
+          loadStatus: LoadStatus.Loaded,
+          sex: settings.sex,
+          age: settings.age.toString(),
+          height: settings.height.toString(),
+          weight: settings.weight.toString(),
+          activityLevel: settings.activityLevel,
+          goal: settings.goal,
+        });
+      })
+      .catch(error => {
+        Log.error('Failed to read calculator settings', error);
+        patchState({
+          loadStatus: LoadStatus.FailedToLoad,
+        });
+      });
+    },
+    [],
+  );
+
+  // notify the parent about the dirty state
+  useEffect(
+    () => {
+      props.onDirtyChanged(state.isDirty);
+    },
+    [state.isDirty],
+  );
 
   const sex = {
     onClick: () => {
@@ -83,6 +150,7 @@ export function Calculator() {
 
     onMenuItemClick: (sex: Sex) => {
       patchState({
+        isDirty: true,
         sex,
         showSexPicker: false,
       });
@@ -111,6 +179,7 @@ export function Calculator() {
   const age = {
     onChange: (value: string) => {
       patchState({
+        isDirty: true,
         age: value,
         ageError: age.hasError(value),
       });
@@ -134,6 +203,7 @@ export function Calculator() {
   const height = {
     onChange: (value: string) => {
       patchState({
+        isDirty: true,
         height: value,
         heightError: height.hasError(value),
       });
@@ -151,6 +221,7 @@ export function Calculator() {
   const weight = {
     onChange: (value: string) => {
       patchState({
+        isDirty: true,
         weight: value,
         weightError: weight.hasError(value),
       });
@@ -195,6 +266,7 @@ export function Calculator() {
 
     onMenuItemClick: (activityLevel: ActivityLevel) => {
       patchState({
+        isDirty: true,
         activityLevel,
         showActivityLevelPicker: false,
       });
@@ -255,7 +327,11 @@ export function Calculator() {
     },
 
     onMenuItemClick: (goal: Goal) => {
-      patchState({ goal, showGoalPicker: false });
+      patchState({
+        isDirty: true,
+        goal,
+        showGoalPicker: false,
+      });
     },
 
     menuItemContent: (goalItem: Goal) => {
@@ -320,31 +396,63 @@ export function Calculator() {
       }
     },
 
-    calculate: (): { bmr: number, macros: GWMacros } => {
-      const bmr = MifflinStJeor.calculateBMR(
-        state.sex,
-        parseInt(state.age),
-        parseInt(state.height),
-        parseInt(state.weight),
-      );
-      const tdee = TotalDailyEnergyExpenditure.calculateTDEE(
-        bmr,
-        state.activityLevel,
-      );
-      const macros = Macros.calculate(
-        tdee,
-        state.goal,
-      );
-      return {
-        bmr,
-        macros: {
-          calories: macros.calories,
-          carbs: macros.carbsInGrams,
-          protein: macros.proteinInGrams,
-          fat: macros.fatInGrams,
-        },
-      };
-    }
+    calculate: (): CalculatorResult => {
+      return calculatorService.calculate({
+        sex: state.sex,
+        age: parseInt(state.age),
+        height: parseInt(state.height),
+        weight: parseInt(state.weight),
+        activityLevel: state.activityLevel,
+        goal: state.goal,
+      });
+    },
+
+    saveEnabled: () => {
+      return !state.saving && !calculator.hasIssues() && state.isDirty;
+    },
+
+    save: () => {
+      const settings: CalculatorSettings = {
+        sex: state.sex,
+        age: parseInt(state.age),
+        height: parseInt(state.height),
+        weight: parseInt(state.weight),
+        activityLevel: state.activityLevel,
+        goal: state.goal,
+      }
+      Log.logAndRethrow(
+        () => calculatorSettingsService.upsert(
+          undefined,
+          settings,
+        ),
+        'Failed to save calculator settings',
+      )
+      .then(() => {
+        notificationsService.info(translate('saved'));
+        patchState({
+          isDirty: false,
+          saving: false,
+        });
+      })
+      .catch(error => {
+        Log.error('Failed to save calculator settings', error);
+        notificationsService.error(translate('failed-to-save'));
+        patchState({ saving: false });
+      });
+    },
+  }
+
+  const loader = {
+    type: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? LoaderType.Error
+        : LoaderType.Info;
+    },
+    subTitle: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? translate('failed-to-load')
+        : undefined;
+    },
   }
 
   const activityLevelClassName = classNames(
@@ -358,121 +466,145 @@ export function Calculator() {
 
   return (
     <>
-      <SettingsSection
-        title={translate('personal-and-body-data-title')}
-      >
-        <LabelSetting
-          label={translate('sex-label')}
-          value={sex.label()}
-          valueClassName={sex.valueClassName()}
-          onValueClick={sex.onClick}
-        />
-        <InputSetting
-          type='number'
-          label={translate('age-label')}
-          labelSuffix={translate('age-label-suffix')}
-          value={state.age}
-          error={state.ageError}
-          onChange={age.onChange}
-          onBlur={age.onBlur}
-        />
-        <InputSetting
-          type='number'
-          label={translate('height-label')}
-          labelSuffix={translate('height-label-suffix')}
-          value={state.height}
-          error={state.heightError}
-          onChange={height.onChange}
-        />
-        <InputSetting
-          type='number'
-          label={translate('weight-label')}
-          labelSuffix={translate('weight-label-suffix')}
-          value={state.weight}
-          error={state.weightError}
-          onChange={weight.onChange}
-        />
-        <SettingsSeparator/>
-      </SettingsSection>
-
-      <SettingsSection
-        title={translate('activity-level-title')}
-      >
-        <div
-          className={activityLevelClassName}
-          onClick={activityLevel.onClick}
+      <LoaderByStatus
+        loadStatus={state.loadStatus}
+        size={LoaderSize.Small}
+        type={loader.type()}
+        subTitle={loader.subTitle()}
+      />
+      { state.saving &&
+        <FullScreenLoader title={translate('taking-longer')}/>
+      } 
+      { state.loadStatus === LoadStatus.Loaded &&
+        <>
+        <SettingsSection
+          title={translate('personal-and-body-data-title')}
         >
-          { activityLevel.value() }
-        </div>
-        <SettingsSeparator/>
-      </SettingsSection>
+          <LabelSetting
+            label={translate('sex-label')}
+            value={sex.label()}
+            valueClassName={sex.valueClassName()}
+            onValueClick={sex.onClick}
+          />
+          <InputSetting
+            type='number'
+            label={translate('age-label')}
+            labelSuffix={translate('age-label-suffix')}
+            value={state.age}
+            error={state.ageError}
+            onChange={age.onChange}
+            onBlur={age.onBlur}
+          />
+          <InputSetting
+            type='number'
+            label={translate('height-label')}
+            labelSuffix={translate('height-label-suffix')}
+            value={state.height}
+            error={state.heightError}
+            onChange={height.onChange}
+          />
+          <InputSetting
+            type='number'
+            label={translate('weight-label')}
+            labelSuffix={translate('weight-label-suffix')}
+            value={state.weight}
+            error={state.weightError}
+            onChange={weight.onChange}
+          />
+          <SettingsSeparator/>
+        </SettingsSection>
 
-      <SettingsSection
-        title={translate('goal-title')}
-      >
-        <div
-          className={goalClassName}
-          onClick={goal.onClick}
+        <SettingsSection
+          title={translate('activity-level-title')}
         >
-          { goal.value() }
-        </div>
-        <SettingsSeparator/>
-      </SettingsSection>
-
-      <SettingsSection
-        className='mealz-calculator-summary-section'
-        title={translate('summary-title')}
-      >
-        { calculator.hasIssues() &&
-          <div className='mealz-calculator-summary-issues'>
-            { calculator.issues() }
+          <div
+            className={activityLevelClassName}
+            onClick={activityLevel.onClick}
+          >
+            { activityLevel.value() }
           </div>
-        }
-        { !calculator.hasIssues() &&
-          <>
-            <div className='mealz-calculator-summary-bmr'>
-              <span>{ translate('summary-bmr-info') }</span>
-              <span className='mealz-calculator-summary-bmr-value'>
-                { truncateNumber(calculator.calculate().bmr) }
-              </span>
-              <span className='mealz-calculator-summary-bmr-unit'>
-                { translate('kcal') }
-              </span>
-            </div>
-            <MacrosSummary
-              macrosSummary={calculator.calculate().macros}
-            />
-          </>
-        }
-      </SettingsSection>
+          <SettingsSeparator/>
+        </SettingsSection>
 
-      { state.showSexPicker &&
-        <ModalMenu
-          show={state.showSexPicker}
-          items={sex.getMenuItems()}
-          onClose={() => {
-            patchState({ showSexPicker: false });
-          }}
-        />
-      }
-      { state.showActivityLevelPicker &&
-        <ModalMenu
-          show={state.showActivityLevelPicker}
-          items={activityLevel.getMenuItems()}
-          onClose={() => {
-            patchState({ showActivityLevelPicker: false });
-          }}
-        />
-      }
-      { state.showGoalPicker &&
-        <ModalMenu
-          show={state.showGoalPicker}
-          items={goal.getMenuItems()}
-          onClose={() => {
-            patchState({ showGoalPicker: false });
-          }}
-        />
+        <SettingsSection
+          title={translate('goal-title')}
+        >
+          <div
+            className={goalClassName}
+            onClick={goal.onClick}
+          >
+            { goal.value() }
+          </div>
+          <SettingsSeparator/>
+        </SettingsSection>
+
+        <SettingsSection title={translate('summary-title')}>
+          { calculator.hasIssues() &&
+            <div className='mealz-calculator-summary-issues'>
+              { calculator.issues() }
+            </div>
+          }
+          { !calculator.hasIssues() &&
+            <>
+              <div className='mealz-calculator-summary-bmr'>
+                <span>{ translate('summary-bmr-info') }</span>
+                <span className='mealz-calculator-summary-bmr-value'>
+                  { truncateNumber(calculator.calculate().bmr) }
+                </span>
+                <span className='mealz-calculator-summary-bmr-unit'>
+                  { translate('kcal') }
+                </span>
+              </div>
+              <MacrosSummary
+                macrosSummary={calculator.calculate().macros}
+              />
+            </>
+          }
+          <SettingsSeparator/>
+        </SettingsSection>
+
+        <div className='mealz-calculator-save-container'>
+          <div className='mealz-calculator-save-label'>
+            { translate('save-label') }
+          </div>
+          <Button
+            size='sm'
+            disabled={!calculator.saveEnabled()}
+            onClick={() => calculator.save()}
+          >
+            { translate('save') }
+          </Button>
+        </div>
+
+        { state.showSexPicker &&
+          <ModalMenu
+            show={state.showSexPicker}
+            items={sex.getMenuItems()}
+            onClose={() => {
+              patchState({ showSexPicker: false });
+            }}
+          />
+        }
+        { state.showActivityLevelPicker &&
+          <ModalMenu
+            show={state.showActivityLevelPicker}
+            items={activityLevel.getMenuItems()}
+            onClose={() => {
+              patchState({ showActivityLevelPicker: false });
+            }}
+          />
+        }
+        { state.showGoalPicker &&
+          <ModalMenu
+            show={state.showGoalPicker}
+            items={goal.getMenuItems()}
+            onClose={() => {
+              patchState({ showGoalPicker: false });
+            }}
+          />
+        }
+        </>
       }
     </>
-    );
+  );
 }

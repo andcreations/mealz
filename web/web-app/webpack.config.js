@@ -84,6 +84,10 @@ module.exports = {
         '@mealz/backend-telegram-users-gateway-api',
         'domains/telegram/services/users/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-users-properties-gateway-api',
+        'domains/users/services/properties/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser

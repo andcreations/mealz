@@ -1,6 +1,7 @@
 import { Translations } from '../../../i18n';
 
 export const CalculatorTranslations: Translations = {
+  'failed-to-load': 'Something went wrong',
   'personal-and-body-data-title': 'Personal & body data',
   
   'sex-label': 'Sex',
@@ -48,4 +49,10 @@ export const CalculatorTranslations: Translations = {
     'Please fill in all fields to see your nutrition summary',
   'summary-issues-errors':
     'Please fix errors to see your nutrition summary',
+
+  'save-label': 'Save your summary to use in the daily meal plan',
+  'save': 'Save',
+  'taking-longer': 'Taking longer than usual',
+  'saved': 'Calculator settings saved',
+  'failed-to-save': 'Failed to save calculator settings',
 };

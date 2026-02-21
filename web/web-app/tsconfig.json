@@ -62,6 +62,9 @@
       ],
       "@mealz/backend-telegram-users-gateway-api": [
         "../../backend/backend-server/src/domains/telegram/services/users/gateway-api"
+      ],
+      "@mealz/backend-users-properties-gateway-api": [
+        "../../backend/backend-server/src/domains/users/services/properties/gateway-api"
       ]
     }
   }

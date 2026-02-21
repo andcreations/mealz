@@ -304,6 +304,7 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
           proteinPercent={summary.macros().proteinPercent.toString()}
           fat={meal.goals.fat}
           fatPercent={summary.macros().fatPercent.toString()}
+          onClick={() => patchState({ collapsed: false })}
         />
       }
       { !state.collapsed &&

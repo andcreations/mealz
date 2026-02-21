@@ -38,6 +38,13 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
     goalError = true;
   }
 
+  const goalStr = () => {
+    if (goalFrom === goalTo) {
+      return goalFrom.toString();
+    }
+    return `${goalFrom.toString()}-${goalTo.toString()}`;
+  }
+
   const isType = (expectedType: MacrosSummaryBoxType) => {
     return type === expectedType;
   }
@@ -91,7 +98,7 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
           </div>
           <div className='mealz-macros-summary-box-goal-container'>
             <span className='mealz-macros-summary-box-goal'>
-              { goalFrom.toString() }-{ goalTo.toString() }
+              { goalStr() }
             </span>
             <span className='mealz-macros-summary-box-unit'>
               { unit }

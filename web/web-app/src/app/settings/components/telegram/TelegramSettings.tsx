@@ -87,6 +87,7 @@ export function TelegramSettings() {
         'Failed to patch Telegram user',
       )
       .then(() => {
+        notificationsService.info(translate('notifications-enabled'));
         setState(prevState => ({
           ...prevState,
           updatingNotificationsEnabled: false,
@@ -94,11 +95,12 @@ export function TelegramSettings() {
             ...prevState.telegramUser,
             isEnabled: enabled,
           },
-        }))
+        }));
       })
       .catch(error => {
         Log.error('Failed to patch Telegram user', error);
         notificationsService.error('failed-to-enable-notifications');
+        patchState({ updatingNotificationsEnabled: false });
       });
     },
   };
