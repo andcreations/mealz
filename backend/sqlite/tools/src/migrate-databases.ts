@@ -54,6 +54,7 @@ async function run(): Promise<void> {
   await migrateDB('hydration-log');
   await migrateDB('telegram-users');
   await migrateDB('telegram-bot');
+  await migrateDB('users-properties');
 }
 
 run().catch(error => {
