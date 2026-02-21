@@ -27,13 +27,19 @@ import {
   NotificationsTopics,
   NotificationType,
 } from '../../../notifications';
+import { 
+  CalculatorService, 
+  CalculatorSettingsService,
+} from '../../../calculator';
 import { HourAndMinuteSettings } from './HourAndMinuteSettings';
 import { SettingsButtons } from '../SettingsButtons';
 import { cloneMealEntry, MealEntry, mealEntryMinute } from './MealEntry';
 import { MealDailyPlanEntry } from './MealDailyPlanEntry';
 import { MealDailyPlanSummary } from './MealDailyPlanSummary';
 import { SettingsSeparator } from '../SettingsSeparator';
-import { MealDailyPlanSettingsTranslations } from './MealDailyPlanSettings.translations';
+import { 
+  MealDailyPlanSettingsTranslations,
+} from './MealDailyPlanSettings.translations';
 
 export interface MealDailyPlanSettingsProps {
   onDirtyChanged: (isDirty: boolean) => void;
@@ -42,6 +48,7 @@ export interface MealDailyPlanSettingsProps {
 interface MealDailyPlanSettingsState {
   loadStatus: LoadStatus;
   meals: MealEntry[];
+  goals?: GWMacros;
   deleteUndo?: {
     meals: MealEntry[];
   };
@@ -53,6 +60,8 @@ interface MealDailyPlanSettingsState {
 export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
   const translate = useTranslations(MealDailyPlanSettingsTranslations);
   const notificationsService = useService(NotificationsService);
+  const calculatorService = useService(CalculatorService);
+  const calculatorSettingsService = useService(CalculatorSettingsService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
 
   const [state, setState] = useState<MealDailyPlanSettingsState>({
@@ -67,10 +76,16 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
   // initial read
   useEffect(
     () => {
-      Log.logAndRethrow(
-        () => mealsDailyPlanService.readCurrentDailyPlan(),
-        'Failed to read current daily plan',
-      ).then((dailyPlan) => {
+      Promise.all([
+        Log.logAndRethrow(
+          () => mealsDailyPlanService.readCurrentDailyPlan(),
+          'Failed to read current daily plan',
+        ),
+        Log.logAndRethrow(
+          () => calculatorSettingsService.read(),
+          'Failed to read calculator settings',
+        ),
+      ]).then(([dailyPlan, calculatorSettings]) => {
         const amount = (from: number, to: number) => {
           return from + Math.round((to - from) / 2);
         }
@@ -79,7 +94,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         }
 
         // convert
-        const meals = dailyPlan?.entries.map<MealEntry>((entry) => {
+        const meals = (dailyPlan?.entries ?? []).map<MealEntry>((entry) => {
           return {
             id: v7(),
             startHour: entry.startHour,
@@ -121,9 +136,21 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
             collapsed: true,
           };
         });
+        const { macros } = calculatorService.calculate(calculatorSettings);
         patchState({
           loadStatus: LoadStatus.Loaded,
           meals,
+          ...(calculatorSettings
+              ? { 
+                goals: {
+                  calories: macros.calories,
+                  protein: macros.protein,
+                  carbs: macros.carbs,
+                  fat: macros.fat,
+                }
+              }
+              : {}
+          ),
         });
       });
     },
@@ -390,7 +417,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
       mealsDailyPlanService.createDailyPlan(dailyPlan)
         .then(() => {
           notificationsService.pushNotification({
-            message: translate('daily-plan-created'),
+            message: translate('daily-plan-applied'),
             type: NotificationType.Info,
           });
           patchState({
@@ -399,9 +426,9 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
           });
         })
         .catch((error) => {
-          Log.error('Failed to create daily plan', error);
+          Log.error('Failed to apply daily plan', error);
           notificationsService.pushNotification({
-            message: translate('failed-to-create-daily-plan'),
+            message: translate('failed-to-apply-daily-plan'),
             type: NotificationType.Error,
           });
           patchState({ applying: false });
@@ -507,6 +534,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
       </div>
       <MealDailyPlanSummary
         macrosSummary={summary.calculate()}
+        goals={state.goals}
         forNotification={state.summaryForNotification}
       />
     </div>

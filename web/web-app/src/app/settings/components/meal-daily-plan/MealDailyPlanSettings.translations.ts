@@ -5,7 +5,7 @@ export const MealDailyPlanSettingsTranslations: Translations = {
   'add-meal': 'Add meal',
   'meal-deleted': 'Meal deleted',
   'apply': 'Apply',
-  'daily-plan-created': 'Daily plan created',
-  'failed-to-create-daily-plan': 'Failed to create daily plan',
+  'daily-plan-applied': 'Daily plan applied',
+  'failed-to-apply-daily-plan': 'Failed to apply daily plan',
   'taking-longer': 'Taking longer than usual',
 }

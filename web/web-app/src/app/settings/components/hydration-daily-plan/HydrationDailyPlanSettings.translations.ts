@@ -37,8 +37,8 @@ export const HydrationDailyPlanSettingsTranslations: Translations = {
     'Default settings applied. ' +
     'Change them accordingly.',
     
-  'failed-to-create-daily-plan': 'Failed to create daily plan',
-  'daily-plan-created': 'Daily plan created',
+  'failed-to-apply-daily-plan': 'Failed to apply daily plan',
+  'daily-plan-applied': 'Daily plan applied',
 
   'apply': 'Apply',
   'taking-longer': 'Taking longer than usual',

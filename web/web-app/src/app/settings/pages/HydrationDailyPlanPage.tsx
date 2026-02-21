@@ -21,7 +21,6 @@ export function HydrationDailyPlanPage() {
   const translate = useTranslations(HydrationDailyPlanPageTranslations);
   const navigate = useNavigate();
 
-
   const [state, setState] = useState<HydrationDailyPlanPageState>({
     isDirty: false,
     showConfirmationModal: false,
@@ -45,6 +44,7 @@ export function HydrationDailyPlanPage() {
       navigate(PathTo.settings());
     },
   }
+
   return (
     <>
       <PageWrapper

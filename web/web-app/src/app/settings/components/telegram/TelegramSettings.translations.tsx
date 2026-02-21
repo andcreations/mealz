@@ -15,6 +15,7 @@ export const TelegramSettingsTranslations: Translations = {
   'taking-longer': 'Taking longer than usual',
   'refreshing': 'Waiting to link account...',
   'failed-to-load': 'Something went wrong',
+  'notifications-enabled': 'Notifications updated',
   'failed-to-enable-notifications': 'Failed to update notifications',
   'failed-to-refresh': 'Failed to refresh',
   'account-not-linked-after-refresh': 'Account not yet linked',

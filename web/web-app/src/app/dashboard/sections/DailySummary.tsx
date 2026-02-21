@@ -77,8 +77,9 @@ export function DailySummary(props: DailySummaryProps) {
         });
 
         // if there are no meals, take the first daily plan entry
-        if (dailyPlanEntries.length === 0) {
-          dailyPlanEntries.push(dailyPlan?.entries[0]);
+        const dailyPlanEntry0 = dailyPlan?.entries[0];
+        if (dailyPlanEntries.length === 0 && dailyPlanEntry0) {
+          dailyPlanEntries.push(dailyPlanEntry0);
         }
 
         // summarize

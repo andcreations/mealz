@@ -14,6 +14,9 @@ import { ErrorsInterceptor } from '../errors';
 export class GatewayBootstrap {
   private useValidationPipe(app: INestApplication): void {
     const options: ValidationPipeOptions = {
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
       exceptionFactory: (errors: ValidationError[]): HttpException => {
         return new HttpException(
           {

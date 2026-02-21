@@ -9,13 +9,17 @@ export interface MealDailyPlanEntrySummaryProps {
   proteinPercent: string;
   fat: number;
   fatPercent: string;
+  onClick: () => void;
 }
 
 export function MealDailyPlanEntrySummary(
   props: MealDailyPlanEntrySummaryProps,
 ) {
   return (
-    <div className='mealz-meal-daily-plan-entry-summary'>
+    <div
+      className='mealz-meal-daily-plan-entry-summary'
+      onClick={() => props.onClick()}
+    >
       <div
         className='
           mealz-meal-daily-plan-entry-summary-amount

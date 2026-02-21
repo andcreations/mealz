@@ -1,0 +1,1 @@
+export const CALCULATOR_SETTINGS_PROPERTY_ID = 'calculator-settings';
