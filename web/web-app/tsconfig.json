@@ -15,6 +15,9 @@
       "@mealz/backend-api": [
         "../../backend/backend-server/src/api"
       ],
+      "@mealz/backend-calculators": [
+        "../../backend/backend-server/src/commons/calculators"
+      ],
       "@mealz/backend-gateway-api": [
         "../../backend/backend-server/src/gateway/api"
       ],

@@ -3,16 +3,16 @@ export enum ActivityLevel {
   Sedentary = 'sedentary',
 
   // light exercise 1-3 days/week
-  LightlyActive = 'lightly_active',
+  LightlyActive = 'lightly-active',
 
   // light to moderate exercise 3-4 days/week
-  ModeratelyActive = 'moderately_active',
+  ModeratelyActive = 'moderately-active',
 
   // moderate exercise 6-7 days/week or intensive exercise 3-4 days/week
-  VeryActive = 'very_active',
+  VeryActive = 'very-active',
 
   // intense exercise 6-7 times/week, sports training or physical job
-  SuperActive = 'super_active',
+  SuperActive = 'super-active',
 }
 
 export const ActivityLevelFactor: Record<ActivityLevel, number> = {

@@ -10,6 +10,7 @@ import {
   HydrationDailyPlanPage,
   DailyMealPlanPage,
   TelegramSettingsPage,
+  CalculatorPage,
 } from '../../settings/pages';
 import { Private } from './Private';
 import { ScrollToTop } from './ScrollToTop';
@@ -34,6 +35,10 @@ export function AppRouter() {
         <Route
           path='/settings/telegram'
           element={<Private><TelegramSettingsPage/></Private>}
+        />
+        <Route
+          path='/settings/calculator'
+          element={<Private><CalculatorPage/></Private>}
         />
         <Route path='*' element={<NotFoundPage/>}/>
       </Routes>

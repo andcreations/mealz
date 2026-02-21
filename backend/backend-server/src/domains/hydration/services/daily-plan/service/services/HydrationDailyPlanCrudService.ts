@@ -25,7 +25,7 @@ export class HydrationDailyPlanCrudService {
     request: ReadCurrentHydrationDailyPlanRequestV1,
     context: Context,
   ): Promise<ReadCurrentHydrationDailyPlanResponseV1> {
-    const hydrationDailyPlan = await this.crudRepository.findByUserId(
+    const hydrationDailyPlan = await this.crudRepository.findMostRecentByUserId(
       request.userId,
       context,
     );

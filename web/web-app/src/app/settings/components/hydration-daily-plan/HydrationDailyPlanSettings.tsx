@@ -23,7 +23,7 @@ import { SettingsSection } from '../SettingsSection';
 import { SettingsSeparator } from '../SettingsSeparator';
 import { InputSetting } from '../InputSetting';
 import { SwitchSetting } from '../SwitchSetting';
-import { LabelSetting } from '../StringSetting';
+import { LabelSetting } from '../LabelSetting';
 import { SettingsButtons } from '../SettingsButtons';
 import { 
   HydrationDailyPlanSettingsTranslations,
@@ -412,14 +412,14 @@ export function HydrationDailyPlanSettings(
           label={translate('start-time-label')}
           details={translate('start-time-details')}
           value={timeStr(state.startHour, state.startMinute)}
-          error={startTime.error()?.length > 0}
+          valueError={startTime.error()?.length > 0}
           onValueClick={startTime.onClick}
         />
         <LabelSetting
           label={translate('end-time-label')}
           details={translate('end-time-details')}
           value={timeStr(state.endHour, state.endMinute)}
-          error={endTime.error()?.length > 0}
+          valueError={endTime.error()?.length > 0}
           onValueClick={endTime.onClick}
         />
         <InputSetting

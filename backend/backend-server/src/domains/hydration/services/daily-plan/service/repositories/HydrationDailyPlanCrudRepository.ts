@@ -33,7 +33,7 @@ export class HydrationDailyPlanCrudRepository {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  public async findByUserId(
+  public async findMostRecentByUserId(
     userId: string,
     context: Context,
   ): Promise<HydrationDailyPlan | undefined> {
@@ -43,7 +43,11 @@ export class HydrationDailyPlanCrudRepository {
     const entity = await this.repository.findOne(
       this.opName('findByUserId'),
       query,
-      {},
+      {
+        sort: [
+          { created_at: 'desc' },
+        ],
+      },
       context,
     );
     return this.mapper.fromEntity(entity);

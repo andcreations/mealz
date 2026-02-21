@@ -1,0 +1,48 @@
+.mealz-calculator-activity-level-value {
+  text-align: right;
+}
+
+.mealz-calculator-activity-level-details {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-calculator-activity-level-menu-item {
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+}
+
+.mealz-calculator-activity-level-menu-item-details {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-calculator-goal-value {
+  text-align: right;
+}
+
+.mealz-calculator-summary-section {
+  padding-bottom: 2rem;
+}
+
+.mealz-calculator-summary-issues {
+  @include mealz-font-small();
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-calculator-summary-bmr {
+  @include mealz-font-tiny();
+  text-align: center;
+  color: $mealz-theme-color-fg-dark;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mealz-calculator-summary-bmr-value {
+  color: $mealz-theme-color-calories;
+  padding-left: 0.25rem;
+}
+  
+.mealz-calculator-summary-bmr-unit {
+  padding-left: 0.25rem;
+}

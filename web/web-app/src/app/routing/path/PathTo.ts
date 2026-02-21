@@ -27,6 +27,10 @@ export const PathTo: { [key: string]: Function } = {
     return '/settings/telegram';
   },
 
+  calculatorSettings: () => {
+    return '/settings/calculator';
+  },
+
   signIn: (to?: string) => {
     const toParam = to ? `?to=${to}`: '';
     return `/sign-in${toParam}`;
