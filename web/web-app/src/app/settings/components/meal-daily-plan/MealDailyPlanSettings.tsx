@@ -136,22 +136,25 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
             collapsed: true,
           };
         });
-        const { macros } = calculatorService.calculate(calculatorSettings);
+        let goals: GWMacros | undefined;
+        if (calculatorSettings) {
+          const { macros } = calculatorService.calculate(calculatorSettings);
+          goals = {
+            calories: macros.calories,
+            protein: macros.protein,
+            carbs: macros.carbs,
+            fat: macros.fat,
+          };
+        }
         patchState({
           loadStatus: LoadStatus.Loaded,
           meals,
-          ...(calculatorSettings
-              ? { 
-                goals: {
-                  calories: macros.calories,
-                  protein: macros.protein,
-                  carbs: macros.carbs,
-                  fat: macros.fat,
-                }
-              }
-              : {}
-          ),
+          goals: goals,
         });
+      })
+      .catch(error => {
+        Log.error('Failed to read meal daily plan settings', error);
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],
@@ -481,62 +484,80 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
     });
   }
 
+  const loader = {
+    type: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? LoaderType.Error
+        : LoaderType.Info;
+    },
+    subTitle: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? translate('failed-to-load')
+        : undefined;
+    },
+  }
+
   return (
     <div>
       <LoaderByStatus
         loadStatus={state.loadStatus}
         size={LoaderSize.Small}
-        type={LoaderType.Info}
+        type={loader.type()}
+        subTitle={loader.subTitle()}
       />
-      { state.applying &&
-        <FullScreenLoader title={translate('taking-longer')}/>
-      }
-      { state.meals.length === 0 &&
-        <HourAndMinuteSettings
-          hour={0}
-          minute={0}
-        />
-      }
-      { renderEntries() }
-      <SettingsSeparator size='small'/>
-      <SettingsButtons>
-        <div
-          className='mealz-meal-daily-plan-settings-add-button'
-          onClick={meal.onAdd}
-        >
-          <MaterialIcon
-            className='mealz-color-active'
-            icon='add_circle'
-            onClick={meal.onAdd}
+      { state.loadStatus === LoadStatus.Loaded &&
+        <>
+          { state.applying &&
+            <FullScreenLoader title={translate('taking-longer')}/>
+          }
+          { state.meals.length === 0 &&
+            <HourAndMinuteSettings
+              hour={0}
+              minute={0}
+            />
+          }
+          { renderEntries() }
+          <SettingsSeparator size='small'/>
+          <SettingsButtons>
+            <div
+              className='mealz-meal-daily-plan-settings-add-button'
+              onClick={meal.onAdd}
+            >
+              <MaterialIcon
+                className='mealz-color-active'
+                icon='add_circle'
+                onClick={meal.onAdd}
+              />
+              <div className='mealz-meal-daily-plan-settings-add-button-label'>
+                { translate('add-meal') }
+              </div>
+            </div>
+          </SettingsButtons>
+          <HourAndMinuteSettings
+            hour={23}
+            minute={59}
           />
-          <div className='mealz-meal-daily-plan-settings-add-button-label'>
-            { translate('add-meal') }
+          <SettingsButtons
+            className='mealz-meal-daily-plan-settings-buttons'
+          >
+            <Button
+              className='mealz-meal-daily-plan-settings-apply-button'
+              disabled={state.applying || !state.isDirty}
+              size='sm'
+              onClick={settings.onApply}
+            >
+              { translate('apply') }
+            </Button>
+          </SettingsButtons>
+          <div className='mealz-meal-daily-plan-settings-summary-spacer'>
           </div>
-        </div>
-      </SettingsButtons>
-      <HourAndMinuteSettings
-        hour={23}
-        minute={59}
-      />
-      <SettingsButtons
-        className='mealz-meal-daily-plan-settings-buttons'
-      >
-        <Button
-          className='mealz-meal-daily-plan-settings-apply-button'
-          disabled={state.applying || !state.isDirty}
-          size='sm'
-          onClick={settings.onApply}
-        >
-          { translate('apply') }
-        </Button>
-      </SettingsButtons>
-      <div className='mealz-meal-daily-plan-settings-summary-spacer'>
-      </div>
-      <MealDailyPlanSummary
-        macrosSummary={summary.calculate()}
-        goals={state.goals}
-        forNotification={state.summaryForNotification}
-      />
+          <MealDailyPlanSummary
+            macrosSummary={summary.calculate()}
+            goals={state.goals}
+            forNotification={state.summaryForNotification}
+          />
+        </>
+      }
     </div>
   );
 }

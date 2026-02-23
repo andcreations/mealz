@@ -5,7 +5,6 @@ import { Log } from '../../log';
 import { LoadStatus } from '../../common';
 import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
 import { usePatchState, useService } from '../../hooks';
-import { NotificationsService } from '../../notifications';
 import { useTranslations } from '../../i18n';
 import { GWMacrosWithDayOfWeek, MealsLogService } from '../../meals';
 import { MacrosSummaryChart, MacrosSummaryChartData } from '../components';
@@ -18,7 +17,6 @@ interface WeeklySummaryState {
 }
 
 export function WeeklySummary() {
-  const notificationsService = useService(NotificationsService);
   const mealsLogService = useService(MealsLogService);
   const translate = useTranslations(WeeklySummaryTranslations);
 
@@ -38,12 +36,7 @@ export function WeeklySummary() {
         })
         .catch(error => {
           Log.error('Failed to fetch weekly summary', error);
-          notificationsService.error(
-            translate('failed-to-fetch-weekly-summary')
-          );
-          patchState({
-            loadStatus: LoadStatus.FailedToLoad,
-          });
+          patchState({ loadStatus: LoadStatus.FailedToLoad });
         });
     },
     [],

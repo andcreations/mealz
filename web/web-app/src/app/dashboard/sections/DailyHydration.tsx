@@ -64,9 +64,7 @@ export function DailyHydration(props: DailyHydrationProps) {
       })
       .catch(error => {
         Log.error('Failed to read hydration summary', error);
-        patchState({
-          loadStatus: LoadStatus.FailedToLoad,
-        });
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],

@@ -30,9 +30,9 @@ export interface MealSummaryProps {
 }
 
 interface MealSummaryState {
+  loadStatus: LoadStatus;
   status: string | null;
   summary?: MealSummaryResult;
-  loadStatus: LoadStatus;
 }
 
 export function MealSummary(props: MealSummaryProps) {
@@ -41,9 +41,9 @@ export function MealSummary(props: MealSummaryProps) {
   const ingredientsService = useService(IngredientsCrudService);
   
   const [state, setState] = useState<MealSummaryState>({
+    loadStatus: LoadStatus.Loading,
     status: null,
     summary: null,
-    loadStatus: LoadStatus.Loading,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealSummaryTranslations);
@@ -58,14 +58,10 @@ export function MealSummary(props: MealSummaryProps) {
         ),
       ])
       .then(([_]) => {
-        patchState({
-          loadStatus: LoadStatus.Loaded,
-        });
+        patchState({ loadStatus: LoadStatus.Loaded });
       })
       .catch(() => {
-        patchState({
-          loadStatus: LoadStatus.FailedToLoad,
-        });
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],

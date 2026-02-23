@@ -112,9 +112,7 @@ export function Calculator(props: CalculatorProps) {
       })
       .catch(error => {
         Log.error('Failed to read calculator settings', error);
-        patchState({
-          loadStatus: LoadStatus.FailedToLoad,
-        });
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],

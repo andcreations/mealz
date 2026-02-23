@@ -643,7 +643,7 @@ export function MealPlanner() {
         .then((loadedMeal) => {
           markDirty();
           meal.recalculate(
-            loadedMeal.calories?.toString() ?? '',
+            loadedMeal.calories?.toString() ?? state.calories,
             mealMapper.toMealPlannerIngredients(loadedMeal.ingredients),
             {
               showLoadMealPicker: false

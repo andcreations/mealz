@@ -128,9 +128,7 @@ export function HydrationDailyPlanSettings(
         });
       }).catch((error) => {
         Log.error('Failed to read current daily plan', error);
-        patchState({
-          loadStatus: LoadStatus.FailedToLoad,
-        });
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],
@@ -368,6 +366,19 @@ export function HydrationDailyPlanSettings(
     },
   }
 
+  const loader = {
+    type: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? LoaderType.Error
+        : LoaderType.Info;
+    },
+    subTitle: () => {
+      return state.loadStatus === LoadStatus.FailedToLoad
+        ? translate('failed-to-load')
+        : undefined;
+    },
+  }
+
   const timeStr = (hour: number, minute: number) => {
     return (
       `${hour.toString().padStart(2, '0')}:` +
@@ -387,89 +398,94 @@ export function HydrationDailyPlanSettings(
       <LoaderByStatus
         loadStatus={state.loadStatus}
         size={LoaderSize.Small}
-        type={LoaderType.Info}
+        type={loader.type()}
+        subTitle={loader.subTitle()}
       />
-      { state.applying &&
-        <FullScreenLoader title={translate('taking-longer')}/>
-      }      
-      <SettingsSection>
-        <InputSetting
-          type='number'
-          label={translate('glasses-label')}
-          details={translate('glasses-details')}
-          value={state.glasses}
-          error={glasses.error()}
-          onChange={glasses.onChange}
-        />
-        <SettingsSeparator/>
-        <SwitchSetting
-          label={translate('reminders-label')}
-          details={translate('reminders-details')}
-          checked={state.remindersEnabled}
-          onChange={reminders.onRemindersEnabledChange}
-        />
-        <LabelSetting
-          label={translate('start-time-label')}
-          details={translate('start-time-details')}
-          value={timeStr(state.startHour, state.startMinute)}
-          valueError={startTime.error()?.length > 0}
-          onValueClick={startTime.onClick}
-        />
-        <LabelSetting
-          label={translate('end-time-label')}
-          details={translate('end-time-details')}
-          value={timeStr(state.endHour, state.endMinute)}
-          valueError={endTime.error()?.length > 0}
-          onValueClick={endTime.onClick}
-        />
-        <InputSetting
-          type='number'
-          label={translate('minutes-since-last-water-intake-label')}
-          details={translate('minutes-since-last-water-intake-details')}
-          value={state.minutesSinceLastWaterIntake}
-          error={minutesSinceLastWaterIntake.error()}
-          onChange={minutesSinceLastWaterIntake.onChange}
-        />
-        <InputSetting
-          type='number'
-          label={translate('period-in-minutes-label')}
-          details={translate('period-in-minutes-details')}
-          value={state.periodInMinutes}
-          error={periodInMinutes.error()}
-          onChange={periodInMinutes.onChange}
-        />
-        <SettingsSeparator/>
-        <SettingsButtons>
-          <Button
-            size='sm'
-            disabled={!state.isDirty || hasErrors || state.applying}
-            onClick={settings.onApply}
-          >
-            { translate('apply') }
-          </Button>
-        </SettingsButtons>
-      </SettingsSection>
-      { state.showStartTimePicker &&
-        <HourAndMinutePickerModal
-          show={state.showStartTimePicker}
-          details={translate('start-time-modal-details')}
-          error={state.startTimeError}
-          hour={state.startHour}
-          minute={state.startMinute}
-          onEnter={startTime.onEnter}
-          onClose={startTime.onClosePicker}
-        />
-      }
-      { state.showEndTimePicker &&
-        <HourAndMinutePickerModal
-          show={state.showEndTimePicker}
-          details={translate('end-time-modal-details')}
-          error={state.endTimeError}
-          hour={state.endHour}
-          minute={state.endMinute}
-          onEnter={endTime.onEntry}
-          onClose={endTime.onClosePicker}
-        />
+      { state.loadStatus === LoadStatus.Loaded &&
+        <>
+          { state.applying &&
+            <FullScreenLoader title={translate('taking-longer')}/>
+          }      
+          <SettingsSection>
+            <InputSetting
+              type='number'
+              label={translate('glasses-label')}
+              details={translate('glasses-details')}
+              value={state.glasses}
+              error={glasses.error()}
+              onChange={glasses.onChange}
+            />
+            <SettingsSeparator/>
+            <SwitchSetting
+              label={translate('reminders-label')}
+              details={translate('reminders-details')}
+              checked={state.remindersEnabled}
+              onChange={reminders.onRemindersEnabledChange}
+            />
+            <LabelSetting
+              label={translate('start-time-label')}
+              details={translate('start-time-details')}
+              value={timeStr(state.startHour, state.startMinute)}
+              valueError={startTime.error()?.length > 0}
+              onValueClick={startTime.onClick}
+            />
+            <LabelSetting
+              label={translate('end-time-label')}
+              details={translate('end-time-details')}
+              value={timeStr(state.endHour, state.endMinute)}
+              valueError={endTime.error()?.length > 0}
+              onValueClick={endTime.onClick}
+            />
+            <InputSetting
+              type='number'
+              label={translate('minutes-since-last-water-intake-label')}
+              details={translate('minutes-since-last-water-intake-details')}
+              value={state.minutesSinceLastWaterIntake}
+              error={minutesSinceLastWaterIntake.error()}
+              onChange={minutesSinceLastWaterIntake.onChange}
+            />
+            <InputSetting
+              type='number'
+              label={translate('period-in-minutes-label')}
+              details={translate('period-in-minutes-details')}
+              value={state.periodInMinutes}
+              error={periodInMinutes.error()}
+              onChange={periodInMinutes.onChange}
+            />
+            <SettingsSeparator/>
+            <SettingsButtons>
+              <Button
+                size='sm'
+                disabled={!state.isDirty || hasErrors || state.applying}
+                onClick={settings.onApply}
+              >
+                { translate('apply') }
+              </Button>
+            </SettingsButtons>
+          </SettingsSection>
+          { state.showStartTimePicker &&
+            <HourAndMinutePickerModal
+              show={state.showStartTimePicker}
+              details={translate('start-time-modal-details')}
+              error={state.startTimeError}
+              hour={state.startHour}
+              minute={state.startMinute}
+              onEnter={startTime.onEnter}
+              onClose={startTime.onClosePicker}
+            />
+          }
+          { state.showEndTimePicker &&
+            <HourAndMinutePickerModal
+              show={state.showEndTimePicker}
+              details={translate('end-time-modal-details')}
+              error={state.endTimeError}
+              hour={state.endHour}
+              minute={state.endMinute}
+              onEnter={endTime.onEntry}
+              onClose={endTime.onClosePicker}
+            />
+          }
+        </>
       }
     </div>
   );
