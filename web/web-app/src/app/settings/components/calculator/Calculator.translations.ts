@@ -41,7 +41,11 @@ export const CalculatorTranslations: Translations = {
   'goal-build-body-name': 'Build body',
 
   'summary-title': 'Your daily nutrition summary',
-  'summary-bmr-info': 'Your basal metabolic rate is',
+  'summary-bmr': 'BMR:',
+  'summary-tdee': 'TDEE:',
+  'summary-deficit': 'Deficit:',
+  'summary-surplus': 'Surplus:',
+  'summary-maintenance': 'Maintenance',
   'kcal': 'kcal',
   'summary-issues-errors-and-empty-fields':
     'Please fill in all fields and fix errors to see your nutrition summary',

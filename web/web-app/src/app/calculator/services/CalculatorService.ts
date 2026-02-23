@@ -26,6 +26,7 @@ export class CalculatorService {
     );
     return {
       bmr,
+      tdee,
       macros: {
         calories: macros.calories,
         carbs: macros.carbsInGrams,

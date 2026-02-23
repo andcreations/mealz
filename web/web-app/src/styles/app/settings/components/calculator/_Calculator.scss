@@ -26,6 +26,33 @@
   color: $mealz-theme-color-fg-dark;
 }
 
+.mealz-calculator-summary {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.mealz-calculator-summary-entry {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+  @include mealz-font-tiny();
+}
+
+.mealz-calculator-summary-entry-amount {
+  padding-left: 0.25rem;
+  color: $mealz-theme-color-calories;
+}
+
+.mealz-calculator-summary-entry-unit {
+  padding-left: 0.25rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
 .mealz-calculator-summary-bmr {
   @include mealz-font-tiny();
   text-align: center;
