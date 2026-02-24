@@ -242,15 +242,15 @@ export function MealPlanner() {
         dateFingerprint,
         gwMeal
       )
-        .then(() => {
-          clearDirty();
-        })
-        .catch(error => {
-          notificationsService.error(
-            translate('failed-to-upsert-user-draft-meal')
-          );
-          Log.error('Failed to save your draft meal', error);
-        });
+      .then(() => {
+        clearDirty();
+      })
+      .catch(error => {
+        notificationsService.error(
+          translate('failed-to-upsert-user-draft-meal')
+        );
+        Log.error('Failed to save your draft meal', error);
+      });
     },
   };
 
@@ -369,11 +369,11 @@ export function MealPlanner() {
       if (mealName === state.mealName) {
         return;
       }
-      patchState({ fullScreenLoadStatus: LoadStatus.Loading });
       const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
         dailyMealPlan.current,
         mealName,
       );
+      patchState({ fullScreenLoadStatus: LoadStatus.Loading });
       userMealDraft.read(mealName)
         .then((userMeal) => {
           const ingredients = mealMapper.toMealPlannerIngredients(
@@ -387,14 +387,15 @@ export function MealPlanner() {
               goals: dailyPlanEntry?.goals,  
             }
           );
-          patchState({ fullScreenLoadStatus: LoadStatus.Loaded });
         })
         .catch((error) => {
           Log.error('Failed to read meal', error);
-          patchState({ fullScreenLoadStatus: LoadStatus.FailedToLoad });
           notificationsService.error(
             translate('failed-to-read-user-draft-meal')
           );
+        })
+        .finally(() => {
+          patchState({ fullScreenLoadStatus: null });
         });
     },
   };
@@ -431,15 +432,6 @@ export function MealPlanner() {
       return result;
     },
 
-    read: (mealName: string) => {
-      userMealDraft.read(mealName)
-        .then((userMeal) => {
-        })
-        .catch((error) => {
-          Log.error('Failed to read meal', error);
-        });
-    },
-
     onLog: (force?: boolean) => {
       if (state.calculateAmountsError) {
         notificationsService.error(
@@ -465,6 +457,7 @@ export function MealPlanner() {
         calories.get(),
         state.ingredients,
       );
+      patchState({ fullScreenLoadStatus: LoadStatus.Loading });
       mealsLogService.logMeal(gwMeal, meal.name())
         .then((response) => {
           Log.debug(`Meal logged (${response.id})`);
@@ -477,6 +470,9 @@ export function MealPlanner() {
             translate('failed-to-log-meal')
           );
           Log.error('Failed to log meal', error);
+        })
+        .finally(() => {
+          patchState({ fullScreenLoadStatus: null });
         });
     },
 

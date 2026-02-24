@@ -40,3 +40,10 @@
 .mealz-meal-daily-plan-summary-mobile {
   bottom: calc(#{$mealz-navbar-height} + 1rem);
 }
+
+.mealz-meal-daily-plan-summary-no-goals {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+  text-align: center;
+  margin: 0.5rem 0;
+}

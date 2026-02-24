@@ -10,6 +10,7 @@ import { LoadStatus } from '../../common';
 import { Log } from '../../log';
 import { usePatchState, useService } from '../../hooks';
 import { 
+  htmlToReact,
   LoaderByStatus,
   LoaderSize,
   LoaderType,
@@ -19,6 +20,7 @@ import { useTranslations } from '../../i18n';
 import { IngredientsCrudService } from '../../ingredients';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
 import { DailySummaryTranslations } from './DailySummary.translations';
+import { PathTo } from '../../routing';
 
 export interface DailySummaryProps {
   fromDate: number;
@@ -26,9 +28,10 @@ export interface DailySummaryProps {
 }
 
 interface DailySummaryState {
+  loadStatus: LoadStatus;
   summary?: GWMacros;
   goals?: GWMealDailyPlanGoals;
-  loadStatus: LoadStatus;
+  hasDailyPlan: boolean;
 }
 
 export function DailySummary(props: DailySummaryProps) {
@@ -39,6 +42,7 @@ export function DailySummary(props: DailySummaryProps) {
 
   const [state, setState] = useState<DailySummaryState>({
     loadStatus: LoadStatus.Loading,
+    hasDailyPlan: false,
   });
   const patchState = usePatchState(setState);
   
@@ -87,9 +91,10 @@ export function DailySummary(props: DailySummaryProps) {
         const goals = mealsDailyPlanService.summarizeEntries(dailyPlanEntries);
 
         patchState({
+          loadStatus: LoadStatus.Loaded,
           summary,
           goals,
-          loadStatus: LoadStatus.Loaded,
+          hasDailyPlan: !!dailyPlan,
         });
       })
       .catch(error => {
@@ -128,6 +133,17 @@ export function DailySummary(props: DailySummaryProps) {
           macrosSummary={state.summary}
           goals={state.goals}
         />
+      }
+      { !state.hasDailyPlan &&
+        <div className='mealz-daily-summary-no-daily-plan'>
+          { htmlToReact(
+              translate(
+                'no-daily-plan',
+                PathTo.href(PathTo.dailyMealPlan())
+              )
+            )
+          }
+        </div>
       }
     </div>
   );

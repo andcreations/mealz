@@ -21,7 +21,7 @@
   @include mealz-font-small();
   @include mealz-border();
   width: 32rem;
-  max-width: 80%;
+  max-width: 90%;
   position: relative;
   transition:
     transform 0.3s ease-out,
@@ -47,7 +47,6 @@
 
 .mealz-notifications-notification-content {
   flex-grow: 1;
-  flex-shrink: 0;
   padding: 0.25rem 0.75rem 0.25rem 0.75rem;
   border-radius: $mealz-border-radius;
   background-color: $mealz-theme-color-bg-dark;

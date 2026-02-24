@@ -1,2 +1,6 @@
-.mealz-daily-summary {
+.mealz-daily-summary-no-daily-plan {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+  text-align: center;
+  margin-top: 2rem;
 }

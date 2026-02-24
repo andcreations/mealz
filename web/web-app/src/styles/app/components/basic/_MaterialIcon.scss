@@ -7,4 +7,18 @@
 
 .mealz-material-icon-disabled {
   opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mealz-material-icon-clicked {
+  animation: mealz-material-icon-click-animation 0.3s ease-in-out;
+}
+
+@keyframes mealz-material-icon-click-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
 }

@@ -9,10 +9,11 @@ import {
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { SystemService } from '../../../system';
-import { MacrosSummary, MaterialIcon } from '../../../components';
+import { htmlToReact, MacrosSummary, MaterialIcon } from '../../../components';
 import {
   MealDailyPlanSummaryTranslations,
 } from './MealDailyPlanSummary.translations';
+import { PathTo } from '../../../routing';
 
 export interface MealDailyPlanSummaryProps {
   macrosSummary: GWMacros;
@@ -55,9 +56,13 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
     },
   }
 
-  const goal = {
+  const goals = {
+    has: () => {
+      return props.goals !== undefined;
+    },
+
     forSummary: (): GWMealDailyPlanGoals | undefined => {
-      if (!props.goals) {
+      if (!goals.has()) {
         return undefined;
       }
       return {
@@ -86,12 +91,25 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
         />
       </div>
       { state.isOpen &&
-        <div className='mealz-meal-daily-plan-summary-content'>
-          <MacrosSummary
-            macrosSummary={props.macrosSummary}
-            goals={goal.forSummary()}
-          />
-        </div>
+        <>
+          <div className='mealz-meal-daily-plan-summary-content'>
+            <MacrosSummary
+              macrosSummary={props.macrosSummary}
+              goals={goals.forSummary()}
+            />
+          </div>
+          { !goals.has() &&
+            <div className='mealz-meal-daily-plan-summary-no-goals'>
+              { htmlToReact(
+                  translate(
+                    'no-goals',
+                    PathTo.href(PathTo.calculatorSettings())
+                  )
+                )
+              }
+            </div>
+          }
+        </>
       }
     </div>
   );

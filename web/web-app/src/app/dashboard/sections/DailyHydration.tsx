@@ -6,7 +6,12 @@ import { LoadStatus } from '../../common';
 import { Log } from '../../log';
 import { useTranslations } from '../../i18n';
 import { usePatchState, useService } from '../../hooks';
-import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
+import { 
+  htmlToReact,
+  LoaderByStatus,
+  LoaderSize,
+  LoaderType,
+} from '../../components';
 import { NotificationsService } from '../../notifications';
 import { 
   HydrationDailyPlanService,
@@ -14,6 +19,7 @@ import {
 } from '../../hydration';
 import { ProgressBar } from '../components';
 import { DailyHydrationTranslations } from './DailyHydration.translations';
+import { PathTo } from '../../routing';
 
 export interface DailyHydrationProps {
   fromDate: number;
@@ -153,7 +159,13 @@ export function DailyHydration(props: DailyHydrationProps) {
       }
       { state.loadStatus === LoadStatus.Loaded && !hasData() &&
         <div className='mealz-daily-hydration-empty'>
-          { translate('no-hydration-plan') }
+          { htmlToReact(
+              translate(
+                'no-hydration-plan',
+                PathTo.href(PathTo.hydrationDailyPlan())
+              )
+            )
+          }
         </div>
       }
     </div>

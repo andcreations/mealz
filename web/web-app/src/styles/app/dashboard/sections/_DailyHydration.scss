@@ -1,6 +1,6 @@
 .mealz-daily-hydration-empty {
-  @include mealz-font-small();
-  color: $mealz-theme-color-bg;
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
   text-align: center;
 }
 
