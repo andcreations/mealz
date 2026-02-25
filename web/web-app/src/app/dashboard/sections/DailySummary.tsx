@@ -129,21 +129,23 @@ export function DailySummary(props: DailySummaryProps) {
         subTitle={loader.subTitle()}
       />
       { state.loadStatus === LoadStatus.Loaded &&
-        <MacrosSummary
-          macrosSummary={state.summary}
-          goals={state.goals}
-        />
-      }
-      { !state.hasDailyPlan &&
-        <div className='mealz-daily-summary-no-daily-plan'>
-          { htmlToReact(
-              translate(
-                'no-daily-plan',
-                PathTo.href(PathTo.dailyMealPlan())
-              )
-            )
+        <>
+          <MacrosSummary
+            macrosSummary={state.summary}
+            goals={state.goals}
+          />
+          { !state.hasDailyPlan &&
+            <div className='mealz-daily-summary-no-daily-plan'>
+              { htmlToReact(
+                  translate(
+                    'no-daily-plan',
+                    PathTo.href(PathTo.dailyMealPlan())
+                  )
+                )
+              }
+            </div>
           }
-        </div>
+        </>
       }
     </div>
   );
