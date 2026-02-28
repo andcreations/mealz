@@ -14,8 +14,9 @@ import {
 } from '@mealz/backend-meals-log-gateway-api';
 
 import { DateService, SystemService } from '../../system';
-import { Log } from '../../log';
+import { Log, logDebugEvent } from '../../log';
 import { GWMacrosWithDayOfWeek } from '../types';
+import { eventType } from '../event-log';
 import { GWMealCalculator } from './GWMealCalculator';
 
 @Service()
@@ -66,11 +67,15 @@ export class MealsLogService {
   
   public async fetchTodaySummary(): Promise<GWMacros> {
     const { fromDate, toDate } = this.dateService.getTodayFromToDate();
-    Log.debug(
-      `Summarizing today's meal log from ` +
-      `${new Date(fromDate).toISOString()} to ` +
-      `${new Date(toDate).toISOString()}`
-    );
+    // Log.debug(
+    //   `Summarizing today's meal log from ` +
+    //   `${new Date(fromDate).toISOString()} to ` +
+    //   `${new Date(toDate).toISOString()}`
+    // );
+    logDebugEvent(eventType('summarizing-today-meal-log'), {
+      fromDate,
+      toDate,
+    });
 
     return this.summarize(fromDate, toDate);
   }

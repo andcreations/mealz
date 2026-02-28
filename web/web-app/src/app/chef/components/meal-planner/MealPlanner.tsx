@@ -10,7 +10,7 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../../common';
-import { Log } from '../../../log';
+import { Log, logDebugEvent } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   AIMealScanIngredient,
@@ -48,13 +48,14 @@ import {
 import { useTranslations } from '../../../i18n';
 import { DateService } from '../../../system';
 import { MealCalculator, MealMapper } from '../../services';
+import { eventType } from '../../event-log';
+import { AIMealScannerModal } from '../ai-meal-scanner';
 import { MealPlannerActionBar } from './MealPlannerActionBar';
 import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
 import { MealPortion } from './MealPortion';
-import { AIMealScannerModal } from '../ai-meal-scanner';
 import { MealNameMenuItem } from './MealNameMenuItem';
 
 enum Focus { Calories };
@@ -460,7 +461,10 @@ export function MealPlanner() {
       patchState({ fullScreenLoadStatus: LoadStatus.Loading });
       mealsLogService.logMeal(gwMeal, meal.name())
         .then((response) => {
-          Log.debug(`Meal logged (${response.id})`);
+          // Log.debug(`Meal logged (${response.id})`);
+          logDebugEvent(eventType('meal-logged'), {
+            id: response.id,
+          });
           notificationsService.info(
             translate(`meal-logged-${response.status}`)
           );
@@ -727,13 +731,16 @@ export function MealPlanner() {
               </div>
               <div className='mealz-meal-planner-calories-value'>
                 <Form.Control
-                  type='number'
+                  type='text'
+                  inputMode='numeric'
+                  pattern='[0-9]*'
                   placeholder=''
                   ref={calories.ref}
                   value={state.calories}
                   onChange={calories.onChange}
                   onKeyDown={ifEnterKey(calories.onEnter)}
                   onBlur={calories.onBlur}
+                  enterKeyHint='done'
                 />
               </div>
             </div>

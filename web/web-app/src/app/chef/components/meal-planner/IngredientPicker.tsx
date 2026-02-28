@@ -483,13 +483,16 @@ export function IngredientPicker(props: IngredientPickerProps) {
             <div className='mealz-ingredient-picker-amount'>
               <div className='mealz-ingredient-picker-amount-value'>
                 <Form.Control
-                  type='number'
+                  type='text'
+                  inputMode='numeric'
+                  pattern='[0-9]*'
                   placeholder='…'
                   ref={amount.ref}
                   value={state.amount ?? ''}
                   onFocus={amount.onFocus}
                   onChange={amount.onChange}
                   onKeyDown={ifEnterKey(amount.onEnter)}
+                  enterKeyHint='done'
                 />
               </div>
               <div className='mealz-ingredient-picker-amount-unit'>

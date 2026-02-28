@@ -4,16 +4,16 @@ import {
   OnBootstrap,
   Service,
 } from '@andcreations/common';
-
-import { Log } from '../../log';
-import { INGREDIENT_LANGUAGE } from '../../common';
-import { IngredientsTopics } from '../bus';
 import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
+import { logDebugEvent } from '../../log';
+import { INGREDIENT_LANGUAGE } from '../../common';
+import { stripDiacritics } from '../../utils';
+import { IngredientsTopics } from '../bus';
 import { SearchDocument, SearchIndex } from '../search';
 import { SettingsService } from '../../settings';
 import { IngredientsCrudService } from './IngredientsCrudService';
-import { stripDiacritics } from '../../utils';
+import { eventType } from '../event-log';
 
 interface IngredientDocument extends SearchDocument {
   id: string;
@@ -70,10 +70,14 @@ export class IngredientsSearch implements OnBootstrap {
       ),
       });
     });
-    Log.debug(
-      `Indexed ${ingredients.length} ingredients for search ` +
-      `in ${Date.now() - startTime}ms`,
-    );
+    // Log.debug(
+    //   `Indexed ${ingredients.length} ingredients for search ` +
+    //   `in ${Date.now() - startTime}ms`,
+    // );
+    logDebugEvent(eventType('ingredients-indexed'), {
+      total: ingredients.length,
+      time: Date.now() - startTime,
+    });
   }
 
   public search(pattern: string, limit: number): GWIngredient[] {

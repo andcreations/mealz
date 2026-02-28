@@ -2,12 +2,13 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
-import { Log } from '../../../log';
+import { Log, logDebugEvent } from '../../../log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { Loader, LoaderSize, LoaderType } from '../../../components';
 import { NotificationsService } from '../../../notifications';
 import { TakePhotoButton, useCamera } from '../../../camera';
+import { eventType } from '../../event-log';
 import { 
   AIMealScannerCameraTranslations,
 } from './AIMealScannerCamera.translations';
@@ -40,7 +41,8 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
   } = useCamera({
     facingMode: 'environment',
     onReady: () => {
-      Log.debug('Camera is ready');
+      // Log.debug('Camera is ready');
+      logDebugEvent(eventType('camera-ready'));
       patchState({ isReady: true });
     },
   });
