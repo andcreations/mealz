@@ -475,6 +475,18 @@ export function IngredientPicker(props: IngredientPickerProps) {
     },
   };
 
+  const onClear = () => {
+    patchState({
+      focus: Focus.Name,
+      amount: DEFAULT_AMOUNT,
+      name: '',
+      ingredientId: undefined,
+      dropdownVisible: false,
+      dropdownIndex: 0,
+      dropdownIngredients: [],
+    });
+  };
+
   return (
     <>
       <div className='mealz-ingredient-picker'>
@@ -538,11 +550,23 @@ export function IngredientPicker(props: IngredientPickerProps) {
           }
         </div>
 
-        <div className='mealz-ingredient-picker-delete'>
+        <div className='mealz-ingredient-picker-icons'>
           <MaterialIcon
-            className='mealz-ingredient-picker-delete-icon'
+            className='mealz-ingredient-picker-icon'
             icon='delete'
             onClick={props.onDeleteIngredient}
+          />
+          <div className='mealz-ingredient-picker-icon-separator'>·</div>
+          <MaterialIcon
+            className='mealz-ingredient-picker-icon'
+            icon='close'
+            onClick={onClear}
+          />
+          <div className='mealz-ingredient-picker-icon-separator'>·</div>
+          <MaterialIcon
+            className='mealz-ingredient-picker-icon'
+            icon='check'
+            onClick={amount.onEnter}
           />
         </div>
       </div>

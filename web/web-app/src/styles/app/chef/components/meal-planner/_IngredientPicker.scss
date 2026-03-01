@@ -6,7 +6,7 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
   @include mealz-border();
   background-color: $mealz-theme-color-bg-dark;
   display: grid;
-  grid-template-columns: 4rem auto 2rem;
+  grid-template-columns: 4rem auto 6rem;
   grid-template-rows: auto auto;
   padding-bottom: $mealz-ingredient-picker-padding-bottom;
 }
@@ -69,7 +69,7 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
   }
 }
 
-.mealz-ingredient-picker-delete {
+.mealz-ingredient-picker-icons {
   @include mealz-flex-container();
   align-items: center;
   justify-content: center;
@@ -79,8 +79,13 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
   cursor: pointer;
 }
 
-.mealz-ingredient-picker-delete-icon {
-  transform: translateY(calc($mealz-ingredient-picker-padding-bottom / 2));
+.mealz-ingredient-picker-icon {
+  padding-top: calc($mealz-ingredient-picker-padding-bottom / 2);
+}
+
+.mealz-ingredient-picker-icon-separator {
+  padding: 0 0.25rem;
+  color: $mealz-theme-color-bg;
 }
 
 .mealz-ingredient-picker-ingredient-details {
