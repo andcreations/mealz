@@ -3,25 +3,28 @@ import classNames from 'classnames';
 
 export interface SwitchProps {
   checked: boolean;
-  width?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md';
+  width?: 'xs' | 'sm' | 'md' | 'lg';
   disabled?: boolean;
   onChange: (checked: boolean) => void;
 }
 
 const WIDTH_MAP = {
+  xs: '2rem',
   sm: '3rem',
   md: '5rem',
   lg: '7rem',
 };
 
 export function Switch(props: SwitchProps) {
+  const { size = 'md' } = props;
   const switchStyle = {
     width: WIDTH_MAP[props.width ?? 'sm'],
   };
 
   const switchClasses = classNames(
-    'mealz-switch',
-    { 'mealz-switch-disabled': props.disabled },
+    { 'mealz-switch-sm': size === 'sm' },
+    { 'mealz-switch-md': size === 'md' },
   );
   const switchBarClasses = classNames(
     'mealz-switch-bar',
@@ -36,7 +39,7 @@ export function Switch(props: SwitchProps) {
 
   return (
     <div
-      className='mealz-switch'
+      className={switchClasses}
       style={switchStyle}
       onClick={() => props.onChange(!props.checked)}
     >

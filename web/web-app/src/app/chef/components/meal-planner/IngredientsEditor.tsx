@@ -75,7 +75,9 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
     props.onIngredientsChange(ingredients);
   };
 
-  const onIngredientChange = (update: Partial<MealPlannerIngredient>): void => {
+  const onIngredientChange = (
+    update: Partial<MealPlannerIngredient>,
+  ): void => {
     const ingredients = patchAtIndex(
       state.ingredients,
       state.pickIngredientIndex,

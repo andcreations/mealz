@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import classNames = require('classnames');
 import {
   calculateFact,
@@ -33,7 +34,7 @@ import {
 } from '../../../ingredients';
 import { IngredientsDropdown } from './IngredientsDropdown';
 import { IngredientPickerTranslations } from './IngredientPicker.translations';
-import { MaterialIcon } from '../../../components';
+import { MaterialIcon, Switch } from '../../../components';
 
 enum Focus { Amount, Name };
 
@@ -42,8 +43,14 @@ const DEFAULT_AMOUNT = '100';
 
 export interface IngredientPickerProps {
   ingredient?: MealPlannerIngredient;
-  onPickIngredient: (ingredient: GWIngredient, amount: string) => void;
-  onPickAdHocIngredient: (ingredient: AdHocIngredient, amount: string) => void;
+  onPickIngredient: (
+    ingredient: GWIngredient,
+    amount: string,
+  ) => void;
+  onPickAdHocIngredient: (
+    ingredient: AdHocIngredient,
+    amount: string,
+  ) => void;
   onDeleteIngredient: () => void;
   onCancel: () => void;
 }
@@ -69,6 +76,9 @@ interface IngredientPickerState {
   dropdownVisible: boolean;
   dropdownIndex: number;
   dropdownIngredients: GWIngredient[];
+
+  // Indicates if to add more ingredients
+  addMoreCheck: boolean;
 }
 
 export function IngredientPicker(props: IngredientPickerProps) {
@@ -108,6 +118,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
     dropdownVisible: false,
     dropdownIndex: 0,
     dropdownIngredients: [],
+    addMoreCheck: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(IngredientPickerTranslations);
@@ -287,10 +298,16 @@ export function IngredientPicker(props: IngredientPickerProps) {
         return;
       }
       if (ingredient.adHoc()) {
-        props.onPickAdHocIngredient(ingredient.adHoc(), state.amount);
+        props.onPickAdHocIngredient(
+          ingredient.adHoc(),
+          state.amount,
+        );
       }
       else {
-        props.onPickIngredient(ingredient.full(), state.amount);
+        props.onPickIngredient(
+          ingredient.full(),
+          state.amount,
+        );
       }
     },
   };
@@ -552,6 +569,20 @@ export function IngredientPicker(props: IngredientPickerProps) {
 
         <div className='mealz-ingredient-separator'/>
 
+        {/* <div className='mealz-ingredient-picker-add-more'>
+          <Switch
+            size='sm'
+            width='xs'
+            checked={state.addMoreCheck}
+            onChange={(checked) => {
+              patchState({ addMoreCheck: checked });
+            }}
+          />
+          <div className='mealz-ingredient-picker-add-more-label'>
+            { translate('add-more') }
+          </div>
+        </div> */}
+
         <div className='mealz-ingredient-picker-icons'>
           <MaterialIcon
             className='mealz-ingredient-picker-icon'
@@ -565,11 +596,12 @@ export function IngredientPicker(props: IngredientPickerProps) {
             onClick={onClear}
           />
           <div className='mealz-ingredient-picker-icon-separator'>·</div>
-          <MaterialIcon
-            className='mealz-ingredient-picker-icon'
-            icon='check'
+          <div
+            className='mealz-ingredient-picker-accept'
             onClick={amount.onEnter}
-          />
+          >
+            { translate('accept') }
+          </div>
         </div>
       </div>
       <div

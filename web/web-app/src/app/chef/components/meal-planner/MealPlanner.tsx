@@ -80,7 +80,7 @@ interface MealPlannerState {
 
   // goals for the current meal
   goals?: GWMealDailyPlanGoals;
-    
+
   showMealNamePicker: boolean;
   showSaveMealPicker: boolean;
   showLoadMealPicker: boolean;
@@ -255,7 +255,9 @@ export function MealPlanner() {
     },
   };
 
-  const onIngredientsChange = (ingredients: MealPlannerIngredient[]) => {
+  const onIngredientsChange = (
+    ingredients: MealPlannerIngredient[],
+  ) => {
     markDirty();
     meal.recalculate(state.calories, ingredients);
   };

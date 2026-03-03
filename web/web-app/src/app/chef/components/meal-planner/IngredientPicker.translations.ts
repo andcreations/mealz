@@ -7,4 +7,6 @@ export const IngredientPickerTranslations: Translations = {
   'ad-hoc': 'Ad-hoc: ',
   'full-ingredient-details': '{0} kcal',
   'blank-amount-to-calculate': 'Leave the amount blank to calculate',
+  'accept': 'Accept',
+  'add-more': 'Add more',
 };
