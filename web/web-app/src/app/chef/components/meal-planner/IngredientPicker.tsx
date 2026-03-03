@@ -550,6 +550,8 @@ export function IngredientPicker(props: IngredientPickerProps) {
           }
         </div>
 
+        <div className='mealz-ingredient-separator'/>
+
         <div className='mealz-ingredient-picker-icons'>
           <MaterialIcon
             className='mealz-ingredient-picker-icon'
