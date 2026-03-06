@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { FactId, getFactAmount } from '@mealz/backend-ingredients-common';
 import { calculateFact } from '@mealz/backend-ingredients-shared';
-import { MealCalculator } from '@mealz/backend-meals-common';
+import {
+  MealCalculator,
+  removeEmptyIngredients,
+} from '@mealz/backend-meals-common';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import {
   MacrosSummary,
@@ -65,7 +68,7 @@ export class MealsLogHistoryService {
         meal: mealWithAmounts,
         ingredients,
       } = await this.mealCalculator.calculateAmounts(
-        meal,
+        removeEmptyIngredients(meal),
         context,
       );
       mealWithAmounts.ingredients.forEach(mealIngredient => {

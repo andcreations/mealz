@@ -93,7 +93,7 @@ export class MealCalculator {
     const { reason, canCalculate } = this.canCalculateAmounts(meal);
     if (!canCalculate) {
       throw new InternalError(
-        `Cannot calculate amounts for the meal: ${reason}; ` +
+        `Cannot calculate amounts for meal: ${reason}; ` +
         `meal: ${JSON.stringify(meal)}`
       );
     }
