@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { Form } from 'react-bootstrap';
 import classNames from 'classnames';
 
 import { Log, logDebugEvent } from '../../../log';
@@ -14,13 +15,14 @@ import {
 } from './AIMealScannerCamera.translations';
 
 export interface AIMealScannerCameraProps {
-  onPhotoTaken: (photo: File) => void;
+  onPhotoTaken: (photo: File, hints: string) => void;
 }
 
 const MAX_WIDTH = 1280;
 
 interface AIMealScannerCameraState {
   isReady: boolean;
+  hints: string;
 }
 
 export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
@@ -29,6 +31,7 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
 
   const [state, setState] = useState<AIMealScannerCameraState>({
     isReady: false,
+    hints: '',
   });
   const patchState = usePatchState(setState);
 
@@ -47,10 +50,16 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
     },
   });
 
+  const hints = {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+      patchState({ hints: event.target.value });
+    },
+  }
+
   const onTakePhoto = () => {
     takePhoto({ maxWidth: MAX_WIDTH })
       .then((photo) => {        
-        props.onPhotoTaken(photo);
+        props.onPhotoTaken(photo, state.hints);
       })
       .catch((error) => {
         Log.error('Failed to take photo', error);
@@ -116,10 +125,23 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
         />
       </div>
       { canTakePhoto &&
-        <TakePhotoButton
-          className='mealz-ai-meal-scanner-camera-button'
-          onClick={onTakePhoto}
-        />
+        <>
+          <div className='mealz-ai-meal-scanner-camera-hints-label'>
+            {translate('hints-label')}
+          </div>
+          <div className='mealz-ai-meal-scanner-camera-hints-input'>
+            <Form.Control
+              type='text'
+              placeholder={translate('hints-placeholder')}
+              value={state.hints}
+              onChange={hints.onChange}
+            />
+          </div>
+          <TakePhotoButton
+            className='mealz-ai-meal-scanner-camera-button'
+            onClick={onTakePhoto}
+          />
+        </>
       }
     </div>
   );

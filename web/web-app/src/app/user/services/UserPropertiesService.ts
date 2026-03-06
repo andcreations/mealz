@@ -15,7 +15,9 @@ export class UserPropertiesService {
   public async readByPropertyId(
     propertyId: string,
   ): Promise<GWUserProperties | undefined> {
-    const { data } = await this.http.get<ReadUserPropertiesByPropertyIdGWResponseV1>(
+    const { data } = await this.http.get<
+      ReadUserPropertiesByPropertyIdGWResponseV1
+    >(
       UsersPropertiesV1API.url.readByPropertyIdV1(propertyId),
     );
     return data.userProperties;

@@ -15,11 +15,12 @@ export class MealsAIScanService {
 
   public async scanPhotoV1(
     request: ScanPhotoRequestV1,
-    context: Context,
+    _context: Context,
   ): Promise<ScanPhotoResponseV1> {
     const photoScan = await this.mealPhotoScanner.scanPhoto(
       request.photoBase64,
       request.mimeType,
+      request.hintsFromUser,
     );
     return { photoScan };
   }

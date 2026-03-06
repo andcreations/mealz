@@ -65,6 +65,9 @@
       ],
       "@mealz/backend-users-properties-gateway-api": [
         "../../backend/backend-server/src/domains/users/services/properties/gateway-api"
+      ],
+      "@mealz/backend-users-crud-gateway-api": [
+        "../../backend/backend-server/src/domains/users/services/crud/gateway-api"
       ]
     }
   }

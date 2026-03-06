@@ -1,7 +1,10 @@
+import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
 import { AIProvider } from '@mealz/backend-ai';
 import { getStrEnv } from '@mealz/backend-common';
-import { PhotoScan } from '@mealz/backend-meals-ai-scan-service-api';
+import { PhotoScan, PhotoScanMeal } from '@mealz/backend-meals-ai-scan-service-api';
+
+import { PhotoScanPrompt } from '../prompts';
 
 @Injectable()
 export class MealPhotoScanner {
@@ -10,19 +13,22 @@ export class MealPhotoScanner {
   public constructor(private readonly aiProvider: AIProvider) {
     this.modelName = getStrEnv(
       'MEALZ_MEALS_AI_SCAN_MODEL_NAME',
-      'gpt-4o',
+      'gpt-5.2',
     );
   }
 
   public async scanPhoto(
     photoBase64: string,
     mimeType: string,
+    hintsFromUser?: string,
   ): Promise<PhotoScan> {
     const imageUrl = `data:${mimeType};base64,${photoBase64}`;
+    const instructions = PhotoScanPrompt.generate(hintsFromUser);
+
     const response = await this.aiProvider.createResponse({
       modelName: this.modelName,
       temperature: 0.1,
-      instructions: 'Scan the photo and return the meals',
+      instructions,
       input: [
         { 
           type: 'image', 
@@ -132,7 +138,11 @@ export class MealPhotoScanner {
       },
     });
     const scanPhotoResponse = JSON.parse(response.text) as ScanPhotoResponse;
-    return this.convertResponseToPhotoScan(scanPhotoResponse);
+    const photoScan = this.convertResponseToPhotoScan(scanPhotoResponse);
+    return {
+      ...photoScan,
+      meals: this.removeDuplicateMeals(photoScan.meals),
+    }
   }
 
   private convertResponseToPhotoScan(
@@ -156,6 +166,13 @@ export class MealPhotoScanner {
         })),
       })),
     };
+  }
+
+  private removeDuplicateMeals(meals: PhotoScanMeal[]): PhotoScanMeal[] {
+    // AI sometimes hallucinates duplicate meals, so we need to remove them
+    return meals.filter((meal, index, self) =>
+      index === self.findIndex(itr => itr.name === meal.name),
+    );
   }
 }
 

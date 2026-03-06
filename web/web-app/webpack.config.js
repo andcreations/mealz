@@ -88,6 +88,10 @@ module.exports = {
         '@mealz/backend-users-properties-gateway-api',
         'domains/users/services/properties/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-users-crud-gateway-api',
+        'domains/users/services/crud/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser

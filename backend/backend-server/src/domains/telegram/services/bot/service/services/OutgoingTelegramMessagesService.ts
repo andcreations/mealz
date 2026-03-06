@@ -52,6 +52,7 @@ export class OutgoingTelegramMessagesService {
         .readByUserIdAndTypeIdFromLast(
           request.userId,
           request.typeId,
+          OutgoingTelegramMessageStatus.Sent,
           lastId,
           limit,
           context,
