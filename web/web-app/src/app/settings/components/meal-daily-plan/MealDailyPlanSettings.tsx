@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { v7 } from 'uuid';
 import { truncateNumber } from '@mealz/backend-shared';
+import { Goal } from '@mealz/backend-calculators';
 import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import {
   GWMealDailyPlanForCreation,
@@ -14,9 +15,9 @@ import { useTranslations } from '../../../i18n';
 import { useBusEventListener } from '../../../bus';
 import { MealsDailyPlanService } from '../../../meals';
 import { usePatchState, useService } from '../../../hooks';
+import { calculateMacrosPercents, MacrosPercents } from '../../../utils';
 import {
   FullScreenLoader,
-  InlineLoader,
   LoaderByStatus,
   LoaderSize,
   LoaderType,
@@ -31,15 +32,16 @@ import {
   CalculatorService, 
   CalculatorSettingsService,
 } from '../../../calculator';
+import { cloneMealEntry, MealEntry, mealEntryMinute } from '../../types';
 import { HourAndMinuteSettings } from './HourAndMinuteSettings';
 import { SettingsButtons } from '../SettingsButtons';
-import { cloneMealEntry, MealEntry, mealEntryMinute } from './MealEntry';
 import { MealDailyPlanEntry } from './MealDailyPlanEntry';
 import { MealDailyPlanSummary } from './MealDailyPlanSummary';
 import { SettingsSeparator } from '../SettingsSeparator';
 import { 
   MealDailyPlanSettingsTranslations,
 } from './MealDailyPlanSettings.translations';
+import { MealEntryCalculator } from '../../utils';
 
 export interface MealDailyPlanSettingsProps {
   onDirtyChanged: (isDirty: boolean) => void;
@@ -48,6 +50,7 @@ export interface MealDailyPlanSettingsProps {
 interface MealDailyPlanSettingsState {
   loadStatus: LoadStatus;
   meals: MealEntry[];
+  goal?: Goal;
   goals?: GWMacros;
   deleteUndo?: {
     meals: MealEntry[];
@@ -86,6 +89,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
           'Failed to read calculator settings',
         ),
       ]).then(([dailyPlan, calculatorSettings]) => {
+        console.log('calculatorSettings', calculatorSettings);
         const amount = (from: number, to: number) => {
           return from + Math.round((to - from) / 2);
         }
@@ -149,7 +153,8 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         patchState({
           loadStatus: LoadStatus.Loaded,
           meals,
-          goals: goals,
+          goal: calculatorSettings?.goal,
+          goals,
         });
       })
       .catch(error => {
@@ -313,6 +318,27 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
       });
     },
 
+    onAutoCalculate: (index: number) => {
+      const mealEntry = state.meals[index];
+      const macros = MealEntryCalculator.calculateMacrosByGoal(
+        mealEntry,
+        state.goal,
+      );
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            ...macros,
+            ...MealEntryCalculator.calculateMargins({
+              calories: previousMeal.goals.calories,
+              ...macros,
+            }),
+          },
+        };
+      });
+    },
+
     onDelete: (index: number) => {
       setState(prevState => {
         // need to clone not to mutate the undo state
@@ -362,6 +388,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
 
   const summary = {
     calculate: (): GWMacros => {
+    console.log('state.meals', state.meals);
       const macros = {
         calories: 0,
         carbs: 0,
@@ -369,6 +396,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         fat: 0,
       };
       state.meals.forEach(meal => {
+        console.log('meal', meal);
         macros.calories += meal.goals.calories;
         macros.carbs += meal.goals.carbs;
         macros.protein += meal.goals.protein;
@@ -461,6 +489,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         isTimeEditable={index > 0}
         invalidTime={!meal.isTimeValid(index)}
         collapsed={true}
+        autoCalculateMacrosEnabled={!!state.goal}
         onChangeName={(name: string) => {
           meal.onChangeName(index, name)
         }}
@@ -478,6 +507,9 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         }}
         onFatChange={(amount: number, margin: number) => {
           meal.onFatChange(index, amount, margin);
+        }}
+        onAutoCalculate={() => {
+          meal.onAutoCalculate(index);
         }}
         onDelete={() => meal.onDelete(index)}
       />;

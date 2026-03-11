@@ -20,10 +20,11 @@ export interface MacrosSummaryBoxProps {
   goalFrom?: number;
   goalTo?: number;
   unit: string;
+  details?: string;
 }
 
 export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
-  const { type, unit } = props;
+  const { type, unit, details } = props;
   const translate = useTranslations(MacrosSummaryBoxTranslations);
 
   const amount = truncateNumber(props.amount);
@@ -72,6 +73,7 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
   );
 
   const hasGoal = !!goalFrom && !!goalTo;
+  const hasDetails = !!details;
   const goalLabelClassName = classNames(
     'mealz-macros-summary-box-goal-label',
     { 'mealz-macros-summary-box-goal-label-error': goalError }
@@ -105,6 +107,11 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
             </span>
           </div>
         </>
+      }
+      { hasDetails &&
+        <div className='mealz-macros-summary-box-details'>
+          { details }
+        </div>
       }
     </div>
   );

@@ -4,7 +4,7 @@ $mealz-macros-summary-box-bg-opacity: 1.0;
   @include mealz-flex-container();
   @include mealz-flex-vertical();
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   border-radius: $mealz-border-radius;
   padding: 0 0.5rem;
 }
@@ -72,4 +72,9 @@ $mealz-macros-summary-box-bg-opacity: 1.0;
 
 .mealz-macros-summary-box-goal-label-error {
   color: $mealz-theme-color-error;
+}
+
+.mealz-macros-summary-box-details {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
 }

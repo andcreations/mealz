@@ -28,9 +28,9 @@ enum Focus { Amount, Margin };
 
 interface AmountAndMarginSettingState {
   focus?: Focus;
-  amount: string;
+  // amount: string;
   amountError: boolean;
-  margin: string;
+  // margin: string;
   marginError: boolean;
   error?: string;
 }
@@ -41,9 +41,9 @@ export function AmountAndMarginSetting(
   const translate = useTranslations(AmountAndMarginSettingTranslations);
 
   const [state, setState] = useState<AmountAndMarginSettingState>({
-    amount: props.amount.toString(),
+    // amount: props.amount.toString(),
     amountError: false,
-    margin: props.margin.toString(),
+    // margin: props.margin.toString(),
     marginError: false,
   });
   const patchState = usePatchState(setState);
@@ -63,15 +63,15 @@ export function AmountAndMarginSetting(
     [state.focus],
   );
 
-  const notifyChange = () => {
-    if (state.amountError || state.marginError) {
-      return;
-    }
-    props.onChange(
-      parseInt(state.amount),
-      parseInt(state.margin),
-    );
-  }
+  // const notifyChange = () => {
+  //   if (state.amountError || state.marginError) {
+  //     return;
+  //   }
+  //   props.onChange(
+  //     parseInt(state.amount),
+  //     parseInt(state.margin),
+  //   );
+  // }
 
   const amount = {
     ref: useRef<HTMLInputElement>(null),
@@ -80,12 +80,12 @@ export function AmountAndMarginSetting(
       if (amount.checkError(valueStr)) {
         return;
       }
-      patchState({
-        amount: valueStr,
-        amountError: false,
-        error: undefined,
-      });
-      notifyChange();
+      // patchState({
+      //   amount: valueStr,
+      //   amountError: false,
+      //   error: undefined,
+      // });
+      // notifyChange();
     },
 
     onFocus: () => {
@@ -98,21 +98,21 @@ export function AmountAndMarginSetting(
       patchState({
         focus: undefined,
       });
-      notifyChange();
+      // notifyChange();
     },
 
     onEnter: () => {
       patchState({
         focus: Focus.Margin,
       });
-      notifyChange();
+      // notifyChange();
     },
 
     checkError: (valueStr: string): boolean => {
       const amount = parsePositiveInteger(valueStr);
       if (isNaN(amount) || amount <= 0 || state.marginError === true) {
         patchState({
-          amount: valueStr,
+          // amount: valueStr,
           amountError: true,
           error: undefined,
         });

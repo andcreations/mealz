@@ -12,7 +12,7 @@ import {
 import { Log } from '../../../log';
 import { LoadStatus } from '../../../common';
 import { useTranslations } from '../../../i18n';
-import { parsePositiveInteger } from '../../../utils';
+import { macrosToSummaryDetails, parsePositiveInteger } from '../../../utils';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   FullScreenLoader,
@@ -412,14 +412,26 @@ export function Calculator(props: CalculatorProps) {
     bmr: () => {
       return truncateNumber(calculator.calculate().bmr);
     },
+
     tdee: () => {
       return truncateNumber(calculator.calculate().tdee);
     },
+  
     caloriesDiff: () => {
       return truncateNumber(calculator.calculate().caloriesDiff);
     },
+  
     caloriesDiffAbs: () => {
       return Math.abs(calculator.caloriesDiff());
+    },
+
+    summaryDetails: () => {
+      const macros = calculator.calculate().macros;
+      return macrosToSummaryDetails({
+        carbs: macros.carbs,
+        protein: macros.protein,
+        fat: macros.fat,
+      })
     },
 
     saveEnabled: () => {
@@ -612,6 +624,7 @@ export function Calculator(props: CalculatorProps) {
               </div>
               <MacrosSummary
                 macrosSummary={calculator.calculate().macros}
+                details={calculator.summaryDetails()}
               />
             </>
           }

@@ -1,10 +1,10 @@
 export interface MealGoals {
   calories: number;
   caloriesMargin: number;
-  protein: number;
-  proteinMargin: number;
   carbs: number;
   carbsMargin: number;
+  protein: number;
+  proteinMargin: number;
   fat: number;
   fatMargin: number;
 }
@@ -30,10 +30,10 @@ export function cloneMealEntry(entry: MealEntry): MealEntry {
     goals: {
       calories: entry.goals.calories,
       caloriesMargin: entry.goals.caloriesMargin,
-      protein: entry.goals.protein,
-      proteinMargin: entry.goals.proteinMargin,
       carbs: entry.goals.carbs,
       carbsMargin: entry.goals.carbsMargin,
+      protein: entry.goals.protein,
+      proteinMargin: entry.goals.proteinMargin,
       fat: entry.goals.fat,
       fatMargin: entry.goals.fatMargin,
     },

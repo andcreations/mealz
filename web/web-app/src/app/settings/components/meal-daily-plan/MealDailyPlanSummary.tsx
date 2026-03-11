@@ -9,11 +9,17 @@ import {
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { SystemService } from '../../../system';
-import { htmlToReact, MacrosSummary, MaterialIcon } from '../../../components';
+import { 
+  htmlToReact,
+  MacrosSummary,
+  MacrosSummaryDetails,
+  MaterialIcon,
+} from '../../../components';
 import {
   MealDailyPlanSummaryTranslations,
 } from './MealDailyPlanSummary.translations';
 import { PathTo } from '../../../routing';
+import { macrosToSummaryDetails } from '../../../utils';
 
 export interface MealDailyPlanSummaryProps {
   macrosSummary: GWMacros;
@@ -78,6 +84,18 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
     },
   }
 
+  const details = {
+    forSummary: (): MacrosSummaryDetails => {
+      return macrosToSummaryDetails(
+        {
+          carbs: props.goals.carbs,
+          protein: props.goals.protein,
+          fat: props.goals.fat,
+        }
+      );
+    }
+  }
+
   return (
     <div className={summaryClassName}>
       <div
@@ -96,6 +114,7 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
             <MacrosSummary
               macrosSummary={props.macrosSummary}
               goals={goals.forSummary()}
+              details={details.forSummary()}
             />
           </div>
           { !goals.has() &&

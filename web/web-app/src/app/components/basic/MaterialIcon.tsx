@@ -44,7 +44,9 @@ export function MaterialIcon(props: MaterialIconProps) {
       return;
     }
     patchState({ isClicked: true });
-    props.onClick(event);
+    if (props.onClick) {
+      props.onClick(event);
+    }
   };
 
   const iconClassNames = classNames([

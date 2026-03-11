@@ -7,43 +7,57 @@ import {
 
 import { MacrosSummaryBox, MacrosSummaryBoxType } from './MacrosSummaryBox';
 
+export interface MacrosSummaryDetails {
+  calories?: string;
+  carbs?: string;
+  protein?: string;
+  fat?: string;
+}
+
 export interface MacrosSummaryProps {
   className?: string;
   macrosSummary: GWMacros;
   goals?: GWMealDailyPlanGoals;
+  details?: MacrosSummaryDetails;
 }
 
 export function MacrosSummary(props: MacrosSummaryProps) {
+  const { macrosSummary, goals, details } = props;
+
   const className = classNames('mealz-macros-summary', props.className);
   return (
     <div className={className}>
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Calories}
-        amount={props.macrosSummary.calories}
-        goalFrom={props.goals?.caloriesFrom}
-        goalTo={props.goals?.caloriesTo}
+        amount={macrosSummary.calories}
+        goalFrom={goals?.caloriesFrom}
+        goalTo={goals?.caloriesTo}
         unit='kcal'
+        details={details?.calories}
       />
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Carbs}
-        amount={props.macrosSummary.carbs}
-        goalFrom={props.goals?.carbsFrom}
-        goalTo={props.goals?.carbsTo}
+        amount={macrosSummary.carbs}
+        goalFrom={goals?.carbsFrom}
+        goalTo={goals?.carbsTo}
         unit='g'
+        details={details?.carbs}
       />
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Protein}
-        amount={props.macrosSummary.protein}
-        goalFrom={props.goals?.proteinFrom}
-        goalTo={props.goals?.proteinTo}
+        amount={macrosSummary.protein}
+        goalFrom={goals?.proteinFrom}
+        goalTo={goals?.proteinTo}
         unit='g'
+        details={details?.protein}
       />
       <MacrosSummaryBox
         type={MacrosSummaryBoxType.Fat}
-        amount={props.macrosSummary.fat}
-        goalFrom={props.goals?.fatFrom}
-        goalTo={props.goals?.fatTo}
+        amount={macrosSummary.fat}
+        goalFrom={goals?.fatFrom}
+        goalTo={goals?.fatTo}
         unit='g'
+        details={details?.fat}
       />
     </div>
   );

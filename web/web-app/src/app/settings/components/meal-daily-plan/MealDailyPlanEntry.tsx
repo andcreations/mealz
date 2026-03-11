@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
+import { truncateNumber } from '@mealz/backend-shared';
 
-import { ifEnterKey } from '../../../utils';
+import { 
+  calculateMacrosFromTotalCalories,
+  ifEnterKey,
+  MacrosPercents,
+} from '../../../utils';
 import { usePatchState } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
-import { MealEntry } from './MealEntry';
+import { MealEntry, MealGoals } from '../../types';
 import { HourAndMinuteSettings } from './HourAndMinuteSettings';
 import { AmountAndMarginSetting } from './AmountAndMarginSetting';
 import {
@@ -14,20 +19,22 @@ import {
 import { MealDailyPlanEntryActionBar } from './MealDailyPlanEntryActionBar';
 import { MealDailyPlanEntrySummary } from './MealDailyPlanEntrySummary';
 import { MaterialIcon } from '../../../components';
-import { truncateNumber } from '@mealz/backend-shared';
+import { marginForAmount } from '../../consts';
 
-interface MealDailyPlanEntryProps {
+export interface MealDailyPlanEntryProps {
   meal: Omit<MealEntry, 'id' | 'hasErrors'>;
   caloriesPercent: string; // of all the meals
   isTimeEditable: boolean;
   invalidTime: boolean;
   collapsed: boolean;
+  autoCalculateMacrosEnabled: boolean;
   onChangeName: (name: string) => void;
   onChangeTime: (hour: number, minute: number) => void;
   onCaloriesChange: (amount: number, margin: number) => void;
   onCarbsChange: (amount: number, margin: number) => void;
   onProteinChange: (amount: number, margin: number) => void;
   onFatChange: (amount: number, margin: number) => void;
+  onAutoCalculate: () => void;
   onDelete: () => void;
 }
 
@@ -45,6 +52,7 @@ interface MealDailyPlanEntryState {
   invalidName: boolean;
   oldName?: string;
   collapsed: boolean;
+  autoCalculateMacros: boolean;
 }
 
 export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
@@ -69,6 +77,7 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
     isNameEditing: false,
     invalidName: false,
     collapsed: props.collapsed,
+    autoCalculateMacros: false,
   });
   const patchState = usePatchState(setState);
 
@@ -168,6 +177,8 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
           }
         }
       }));
+
+      // notify
       props.onCaloriesChange(amount, margin);
     },
   };
@@ -342,7 +353,9 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
             onChange={fat.onChange}
           />
           <MealDailyPlanEntryActionBar
+            autoCalculateMacrosEnabled={props.autoCalculateMacrosEnabled}
             onEdit={name.onEdit}
+            onAutoCalculate={props.onAutoCalculate}
             onDelete={props.onDelete}
           />
         </>
