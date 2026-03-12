@@ -8,9 +8,10 @@ import { ScanPhotoResult } from '../types';
 
 @Service()
 export class AIMealScanService {
-  public async scanPhoto(photo: File): Promise<ScanPhotoResult> {
+  public async scanPhoto(photo: File, hints: string): Promise<ScanPhotoResult> {
     const formData = new FormData();
     formData.append('photo', photo);
+    formData.append('hintsFromUser', hints);
 
     // using fetch() as HTTPWebClientService is not capable of sending forms
     const response = await fetch(MealsAIScanV1API.url.scanV1(), {

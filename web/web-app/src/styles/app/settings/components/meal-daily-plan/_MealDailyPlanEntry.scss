@@ -36,3 +36,10 @@
   top: 2.5rem;
   color: $mealz-theme-color-active;
 }
+
+.mealz-meal-daily-plan-entry-summary-error {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-error;
+  text-align: center;
+  margin: 1rem 0;
+}

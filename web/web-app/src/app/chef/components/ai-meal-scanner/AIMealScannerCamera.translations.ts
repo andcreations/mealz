@@ -3,4 +3,6 @@ export const AIMealScannerCameraTranslations = {
   'details': 'Take a photo of your meal to get calories and macros',
   'error': `We couldn't start the camera`,
   'failed-to-take-photo': `We couldn't take the photo`,
+  'hints-label': 'Add hints for better accuracy',
+  'hints-placeholder': 'e.g. "tofu, read beans, carrots"',
 };

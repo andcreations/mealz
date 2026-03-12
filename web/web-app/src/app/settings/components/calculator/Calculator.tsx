@@ -12,7 +12,7 @@ import {
 import { Log } from '../../../log';
 import { LoadStatus } from '../../../common';
 import { useTranslations } from '../../../i18n';
-import { parsePositiveInteger } from '../../../utils';
+import { macrosToSummaryDetails, parsePositiveInteger } from '../../../utils';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   FullScreenLoader,
@@ -112,9 +112,7 @@ export function Calculator(props: CalculatorProps) {
       })
       .catch(error => {
         Log.error('Failed to read calculator settings', error);
-        patchState({
-          loadStatus: LoadStatus.FailedToLoad,
-        });
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],
@@ -396,8 +394,8 @@ export function Calculator(props: CalculatorProps) {
       }
     },
 
-    calculate: (): CalculatorResult => {
-      return calculatorService.calculate({
+    calculate: (): CalculatorResult & { caloriesDiff: number}=> {
+      const result = calculatorService.calculate({
         sex: state.sex,
         age: parseInt(state.age),
         height: parseInt(state.height),
@@ -405,6 +403,35 @@ export function Calculator(props: CalculatorProps) {
         activityLevel: state.activityLevel,
         goal: state.goal,
       });
+      return {
+        ...result,
+        caloriesDiff: result.macros.calories - result.tdee,
+      }
+    },
+
+    bmr: () => {
+      return truncateNumber(calculator.calculate().bmr);
+    },
+
+    tdee: () => {
+      return truncateNumber(calculator.calculate().tdee);
+    },
+  
+    caloriesDiff: () => {
+      return truncateNumber(calculator.calculate().caloriesDiff);
+    },
+  
+    caloriesDiffAbs: () => {
+      return Math.abs(calculator.caloriesDiff());
+    },
+
+    summaryDetails: () => {
+      const macros = calculator.calculate().macros;
+      return macrosToSummaryDetails({
+        carbs: macros.carbs,
+        protein: macros.protein,
+        fat: macros.fat,
+      })
     },
 
     saveEnabled: () => {
@@ -452,6 +479,36 @@ export function Calculator(props: CalculatorProps) {
       return state.loadStatus === LoadStatus.FailedToLoad
         ? translate('failed-to-load')
         : undefined;
+    },
+  }
+
+  const summary = {
+    renderEntry: (label: string, calories?: number) => {
+      return (
+        <div className='mealz-calculator-summary-entry'>
+          { label }
+          { !!calories &&
+            <>
+              <span className='mealz-calculator-summary-entry-amount'>
+                { calories }
+              </span>
+              <span className='mealz-calculator-summary-entry-unit'>
+                { translate('kcal') }
+              </span>
+            </>
+          }
+        </div>
+      )
+    },
+
+    diffTranslateKey: (diff: number) => {
+      if (diff > 0) {
+        return 'summary-surplus';
+      }
+      if (diff < 0) {
+        return 'summary-deficit';
+      }
+      return 'summary-maintenance';
     },
   }
 
@@ -546,17 +603,28 @@ export function Calculator(props: CalculatorProps) {
           }
           { !calculator.hasIssues() &&
             <>
-              <div className='mealz-calculator-summary-bmr'>
-                <span>{ translate('summary-bmr-info') }</span>
-                <span className='mealz-calculator-summary-bmr-value'>
-                  { truncateNumber(calculator.calculate().bmr) }
-                </span>
-                <span className='mealz-calculator-summary-bmr-unit'>
-                  { translate('kcal') }
-                </span>
+              <div className='mealz-calculator-summary'>
+                { summary.renderEntry(
+                    translate('summary-bmr'),
+                    truncateNumber(calculator.bmr()),
+                  )
+                }
+                <div>·</div>
+                { summary.renderEntry(
+                    translate('summary-tdee'),
+                    truncateNumber(calculator.tdee()),
+                  )
+                }
+                <div>·</div>
+                { summary.renderEntry(
+                    translate(summary.diffTranslateKey(calculator.caloriesDiff())),
+                    truncateNumber(calculator.caloriesDiffAbs()),
+                  )
+                }
               </div>
               <MacrosSummary
                 macrosSummary={calculator.calculate().macros}
+                details={calculator.summaryDetails()}
               />
             </>
           }

@@ -5,6 +5,7 @@ import {
   UsersCrudTransporter,
 } from '@mealz/backend-users-crud-service-api';
 import { CreateUserGWRequestV1 } from '@mealz/backend-users-crud-gateway-api';
+import { ReadCurrentUserGWResponseV1Impl } from '../dtos/ReadCurrentUserGWResponseV1Impl';
 
 @Injectable()
 export class UsersCrudGWService {
@@ -25,5 +26,22 @@ export class UsersCrudGWService {
       },
     };
     await this.usersCrudTransporter.createUserV1(request, context);
+  }
+
+  public async readCurrentUserV1(
+    userId: string,
+    context: Context,
+  ): Promise<ReadCurrentUserGWResponseV1Impl> {
+    const { user } = await this.usersCrudTransporter.readUserByIdV1(
+      { id: userId },
+      context,
+    );
+    return {
+      userInfo: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      },
+    };
   }
 }

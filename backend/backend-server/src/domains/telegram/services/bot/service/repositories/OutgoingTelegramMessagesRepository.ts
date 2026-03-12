@@ -51,6 +51,7 @@ export class OutgoingTelegramMessagesRepository {
   public async readByUserIdAndTypeIdFromLast(
     userId: string,
     typeId: string,
+    status: OutgoingTelegramMessageStatus | undefined,
     lastId: string | undefined,
     limit: number,
     context: Context,
@@ -59,6 +60,9 @@ export class OutgoingTelegramMessagesRepository {
       user_id: { $eq: userId },
       type_id: { $eq: typeId },
     };
+    if (status) {
+      query.status = { $eq: status };
+    }
     if (lastId) {
       query.id = { $gt: lastId };
     }

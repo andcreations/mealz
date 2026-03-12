@@ -14,16 +14,18 @@ export interface AIMealScannerProps {
 
 interface AIMealScannerState {
   photo: File | null;
+  hints: string;
 }
 
 export function AIMealScanner(props: AIMealScannerProps) {
   const [state, setState] = useState<AIMealScannerState>({
     photo: null,
+    hints: '',
   });
   const patchState = usePatchState(setState);
 
-  const onPhotoTaken = (photo: File) => {
-    patchState({ photo });
+  const onPhotoTaken = (photo: File, hints: string) => {
+    patchState({ photo, hints });
   };
 
   const onAccept = (result: AIMealScanResult) => {
@@ -45,6 +47,7 @@ export function AIMealScanner(props: AIMealScannerProps) {
       { canAnalyze &&
         <AIMealScannerAnalyze 
           photo={state.photo}
+          hints={state.hints}
           onAccept={onAccept}
           onClose={onClose}
         />

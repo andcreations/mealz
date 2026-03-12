@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import classNames from 'classnames';
+import { truncateNumber } from '@mealz/backend-shared';
 import { GWMacros } from '@mealz/backend-meals-log-gateway-api';
 import { 
   GWMealDailyPlanGoals,
@@ -9,14 +10,22 @@ import {
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { SystemService } from '../../../system';
-import { MacrosSummary, MaterialIcon } from '../../../components';
+import { 
+  htmlToReact,
+  MacrosSummary,
+  MacrosSummaryDetails,
+  MaterialIcon,
+} from '../../../components';
+import { PathTo } from '../../../routing';
+import { macrosToSummaryDetails } from '../../../utils';
 import {
   MealDailyPlanSummaryTranslations,
 } from './MealDailyPlanSummary.translations';
 
 export interface MealDailyPlanSummaryProps {
-  macrosSummary: GWMacros;
+  macrosSummary?: GWMacros;
   goals?: GWMacros;
+  error?: boolean;
   forNotification?: boolean;
 }
 
@@ -55,9 +64,13 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
     },
   }
 
-  const goal = {
+  const goals = {
+    has: () => {
+      return props.goals !== undefined;
+    },
+
     forSummary: (): GWMealDailyPlanGoals | undefined => {
-      if (!props.goals) {
+      if (!goals.has()) {
         return undefined;
       }
       return {
@@ -73,6 +86,37 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
     },
   }
 
+  const details = {
+    forSummary: (): MacrosSummaryDetails => {
+      if (!goals.has()) {
+        return {};
+      }
+
+      const caloriesDiff =
+        truncateNumber(props.goals.calories) -
+        truncateNumber(props.macrosSummary.calories);
+      let calories: string | undefined;
+      if (Math.abs(caloriesDiff) > 0) {
+        calories = '';
+        if (caloriesDiff > 0) {
+          calories += `+`;
+        }
+        calories += `${caloriesDiff} kcal`;
+      }
+
+      return {
+        calories,
+        ...macrosToSummaryDetails(
+          {
+            carbs: props.goals.carbs,
+            protein: props.goals.protein,
+            fat: props.goals.fat,
+          }
+        ),
+      };
+    }
+  }
+
   return (
     <div className={summaryClassName}>
       <div
@@ -85,12 +129,31 @@ export function MealDailyPlanSummary(props: MealDailyPlanSummaryProps) {
           icon={topBar.icon()}
         />
       </div>
-      { state.isOpen &&
-        <div className='mealz-meal-daily-plan-summary-content'>
-          <MacrosSummary
-            macrosSummary={props.macrosSummary}
-            goals={goal.forSummary()}
-          />
+      { (state.isOpen && !props.error) &&
+        <>
+          <div className='mealz-meal-daily-plan-summary-content'>
+            <MacrosSummary
+              macrosSummary={props.macrosSummary}
+              goals={goals.forSummary()}
+              details={details.forSummary()}
+            />
+          </div>
+          { !goals.has() &&
+            <div className='mealz-meal-daily-plan-summary-no-goals'>
+              { htmlToReact(
+                  translate(
+                    'no-goals',
+                    PathTo.href(PathTo.calculatorSettings())
+                  )
+                )
+              }
+            </div>
+          }
+        </>
+      }
+      { (state.isOpen && props.error) &&
+        <div className='mealz-meal-daily-plan-summary-error'>
+          { translate('fix-errors') }
         </div>
       }
     </div>

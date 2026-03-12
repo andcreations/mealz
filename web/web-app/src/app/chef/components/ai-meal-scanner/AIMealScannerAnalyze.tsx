@@ -29,6 +29,7 @@ import {
 
 export interface AIMealScannerAnalyzeProps {
   photo: File;
+  hints: string;
   onAccept: (result: AIMealScanResult) => void;
   onClose: () => void;
 }
@@ -53,7 +54,7 @@ export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
   useEffect(() => {
     Promise.all([
       Log.logAndRethrow(
-        () => aiMealScanService.scanPhoto(props.photo),
+        () => aiMealScanService.scanPhoto(props.photo, props.hints),
         'Failed to scan photo',
       ),
       Log.logAndRethrow(
@@ -74,7 +75,7 @@ export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
         error: true,
       });
     });
-  }, [props.photo]);
+  }, [props.photo, props.hints]);
 
   const onAccept = () => {
     const photoScanResult = state.result;

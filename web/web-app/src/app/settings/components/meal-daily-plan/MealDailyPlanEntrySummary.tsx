@@ -2,13 +2,13 @@ import * as React from 'react';
 
 export interface MealDailyPlanEntrySummaryProps {
   calories: number;
-  caloriesPercent: string;
+  caloriesDetails: string;
   carbs: number;
-  carbsPercent: string;
+  carbsDetails: string;
   protein: number;
-  proteinPercent: string;
+  proteinDetails: string;
   fat: number;
-  fatPercent: string;
+  fatDetails: string;
   onClick: () => void;
 }
 
@@ -27,7 +27,7 @@ export function MealDailyPlanEntrySummary(
       >
         <div>{ props.calories } kcal</div>
         <div className='mealz-meal-daily-plan-entry-summary-percentage'>
-          { props.caloriesPercent }%
+          { props.caloriesDetails }
         </div>
       </div>
       <div className='mealz-meal-daily-plan-entry-summary-separator'>·</div>
@@ -38,7 +38,7 @@ export function MealDailyPlanEntrySummary(
       >
         <div>{ props.carbs } g</div>
         <div className='mealz-meal-daily-plan-entry-summary-percentage'>
-          { props.carbsPercent }%
+          { props.carbsDetails }
         </div>
       </div>
       <div className='mealz-meal-daily-plan-entry-summary-separator'>·</div>
@@ -49,7 +49,7 @@ export function MealDailyPlanEntrySummary(
       >
         <div>{ props.protein } g</div>
         <div className='mealz-meal-daily-plan-entry-summary-percentage'>
-          { props.proteinPercent }%
+          { props.proteinDetails }
         </div>
       </div>
       <div className='mealz-meal-daily-plan-entry-summary-separator'>·</div>
@@ -60,7 +60,7 @@ export function MealDailyPlanEntrySummary(
       >
         <div>{ props.fat } g</div>
         <div className='mealz-meal-daily-plan-entry-summary-percentage'>
-          { props.fatPercent }%
+          { props.fatDetails }
         </div>
       </div>
     </div>

@@ -7,7 +7,6 @@ import {
   blurRef,
   focusRef, 
   ifEnterKey, 
-  parsePositiveInteger, 
 } from '../../../utils';
 import { usePatchState } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
@@ -19,20 +18,19 @@ export interface AmountAndMarginSettingProps {
   label: string;
   labelClassName: string;
   details: string;
-  amount: number;
-  margin: number;
-  onChange: (amount: number, margin: number) => void;
+  amount: string;
+  invalidAmount: boolean;
+  margin: string;
+  invalidMargin: boolean;
+  error?: string;
+  onAmountChange: (amount: string) => void;
+  onMarginChange: (margin: string) => void;
 }
 
 enum Focus { Amount, Margin };
 
 interface AmountAndMarginSettingState {
   focus?: Focus;
-  amount: string;
-  amountError: boolean;
-  margin: string;
-  marginError: boolean;
-  error?: string;
 }
 
 export function AmountAndMarginSetting(
@@ -40,12 +38,7 @@ export function AmountAndMarginSetting(
 ) {
   const translate = useTranslations(AmountAndMarginSettingTranslations);
 
-  const [state, setState] = useState<AmountAndMarginSettingState>({
-    amount: props.amount.toString(),
-    amountError: false,
-    margin: props.margin.toString(),
-    marginError: false,
-  });
+  const [state, setState] = useState<AmountAndMarginSettingState>({});
   const patchState = usePatchState(setState);
 
   // set the focus
@@ -63,29 +56,11 @@ export function AmountAndMarginSetting(
     [state.focus],
   );
 
-  const notifyChange = () => {
-    if (state.amountError || state.marginError) {
-      return;
-    }
-    props.onChange(
-      parseInt(state.amount),
-      parseInt(state.margin),
-    );
-  }
-
   const amount = {
     ref: useRef<HTMLInputElement>(null),
 
-    onChange: (valueStr: string) => {
-      if (amount.checkError(valueStr)) {
-        return;
-      }
-      patchState({
-        amount: valueStr,
-        amountError: false,
-        error: undefined,
-      });
-      notifyChange();
+    onChange: (value: string) => {
+      props.onAmountChange(value);
     },
 
     onFocus: () => {
@@ -98,51 +73,20 @@ export function AmountAndMarginSetting(
       patchState({
         focus: undefined,
       });
-      notifyChange();
     },
 
     onEnter: () => {
       patchState({
         focus: Focus.Margin,
       });
-      notifyChange();
     },
-
-    checkError: (valueStr: string): boolean => {
-      const amount = parsePositiveInteger(valueStr);
-      if (isNaN(amount) || amount <= 0 || state.marginError === true) {
-        patchState({
-          amount: valueStr,
-          amountError: true,
-          error: undefined,
-        });
-        return true;
-      }
-      const margin = parseInt(state.margin);
-      if (amount - margin <= 0) {
-        patchState({
-          amount: valueStr,
-          amountError: true,
-          error: translate('margin-must-be-less-than-amount'),
-        });
-        return true;
-      }
-      return false;
-    }
   }
 
   const margin = {
     ref: useRef<HTMLInputElement>(null),
 
-    onChange: (valueStr: string) => {
-      if (margin.checkError(valueStr)) {
-        return;
-      }
-      patchState({
-        margin: valueStr,
-        marginError: false,
-      });
-      notifyChange();
+    onChange: (value: string) => {
+      props.onMarginChange(value);
     },
 
     onFocus: () => {
@@ -155,35 +99,11 @@ export function AmountAndMarginSetting(
       patchState({
         focus: undefined,
       });
-      notifyChange();
     },
 
     onEnter: () => {
       blurRef(margin.ref);
-      notifyChange();
     },
-
-    checkError: (valueStr: string): boolean => {
-      const margin = parsePositiveInteger(valueStr);
-      if (isNaN(margin) || margin < 0 || state.amountError === true) {
-        patchState({
-          margin: valueStr,
-          marginError: true,
-          error: undefined,
-        });
-        return true;
-      }
-      const amount = parseInt(state.amount);
-      if (amount - margin <= 0) {
-        patchState({
-          margin: valueStr,
-          marginError: true,
-          error: translate('margin-must-be-less-than-amount'),
-        });
-        return true;
-      }
-      return false;
-    }
   }
 
   const labelClassName = classNames(
@@ -204,12 +124,12 @@ export function AmountAndMarginSetting(
           <Form.Control
             ref={amount.ref}
             type='number'
-            value={state.amount}
+            value={props.amount}
             onChange={(event) => amount.onChange(event.target.value)}
             onFocus={amount.onFocus}
             onBlur={amount.onBlur}
             onKeyDown={ifEnterKey(amount.onEnter)}
-            isInvalid={state.amountError}
+            isInvalid={props.invalidAmount}
           />
           <div className='mealz-amount-and-margin-setting-input-label'>
             { translate('amount') }
@@ -219,21 +139,21 @@ export function AmountAndMarginSetting(
           <Form.Control
             ref={margin.ref}
             type='number'
-            value={state.margin}
+            value={props.margin}
             onChange={(event) => margin.onChange(event.target.value)}
             onFocus={margin.onFocus}
             onBlur={margin.onBlur}
             onKeyDown={ifEnterKey(margin.onEnter)}
-            isInvalid={state.marginError}
+            isInvalid={props.invalidMargin}
           />
           <div className='mealz-amount-and-margin-setting-input-label'>
             { translate('margin') }
           </div>
         </div>
       </div>
-      { state.error &&
+      { props.error &&
         <div className='mealz-amount-and-margin-setting-error-label'>
-          { state.error }
+          { props.error }
         </div>
       }
     </div>

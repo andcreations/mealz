@@ -65,9 +65,7 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
       })
       .catch(error => {
         Log.error('Failed to summarize daily meal log', error);
-        patchState({
-          loadStatus: LoadStatus.FailedToLoad,
-        });
+        patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
     [],

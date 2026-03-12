@@ -35,4 +35,8 @@ export const PathTo: { [key: string]: Function } = {
     const toParam = to ? `?to=${to}`: '';
     return `/sign-in${toParam}`;
   },
+
+  href: (path: string) => {
+    return `/#${path}`;
+  },
 }

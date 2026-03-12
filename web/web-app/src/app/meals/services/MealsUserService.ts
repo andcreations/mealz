@@ -14,6 +14,7 @@ import { AuthService } from '../../auth';
 @Service()
 export class MealsUserService {
   private static readonly DRAFT_TYPE_ID = 'draft';
+  private static readonly DRAFT_MEAL_NAMES = ['draft'];
 
   public constructor(
     private readonly http: HTTPWebClientService,
@@ -24,7 +25,15 @@ export class MealsUserService {
     mealName: string,
     dateFingerprint: string,
   ): string {
-    return `${MealsUserService.DRAFT_TYPE_ID}-${mealName}-${dateFingerprint}`;
+    // The draft meal is without the date fingerprint, so that there is always
+    // only one draft meal. That is, the user can start drafting a meal and
+    // continue it on another day.
+    const isDraftMeal = MealsUserService.DRAFT_MEAL_NAMES.includes(
+      mealName.toLowerCase(),
+    );
+    const suffix = !isDraftMeal ? `-${dateFingerprint}` : '';
+
+    return `${MealsUserService.DRAFT_TYPE_ID}-${mealName}${suffix}`;
   }
 
   public async readUserDraftMeal(

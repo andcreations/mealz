@@ -41,6 +41,7 @@ export class StartBotCommandExecutor extends TelegramBotCommandExecutor {
     context: Context,
   ): Promise<void> {
     const token = command.args[0];
+    const { update } = command
 
     // no token
     if (!token) {
@@ -75,14 +76,22 @@ export class StartBotCommandExecutor extends TelegramBotCommandExecutor {
       return;
     }
 
+    // resolve user name
+    let telegramUsername = 'Unknown';
+    if (update.message.from.username) {
+      telegramUsername = update.message.from.username;
+    }
+    if (update.message.from.first_name) {
+      telegramUsername = update.message.from.first_name;
+    }
+
     // upsert Telegram user
-    const { update } = command
     await this.telegramUsersTransporter.upsertTelegramUserV1(
       { 
         userId: response.userId,
         telegramChatId: update.message.chat.id,
         telegramUserId: update.message.from.id,
-        telegramUsername: update.message.from.username,
+        telegramUsername,
       },
       context,
     );

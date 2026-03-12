@@ -5,6 +5,7 @@ import { LocationService } from '@andcreations/web-common';
 
 import { AuthService } from './auth';
 import { SystemService } from './system';
+import { EventLog } from './log';
 import { AppRouter, PathTo, RoutingService } from './routing';
 import { IngredientsCrudService, IngredientsSearch } from './ingredients';
 import { MealsNamedService } from './meals';
@@ -16,6 +17,7 @@ function failedToRunApp(error: any): void {
 
 async function bootstrapServices(): Promise<void> {
   IoC.resolve(SystemService);
+  IoC.resolve(EventLog);
   IoC.resolve(RoutingService);
   IoC.resolve(IngredientsCrudService);
   IoC.resolve(IngredientsSearch);

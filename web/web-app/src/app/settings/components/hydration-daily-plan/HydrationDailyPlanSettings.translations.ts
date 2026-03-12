@@ -1,6 +1,7 @@
 import { Translations } from '../../../i18n';
 
 export const HydrationDailyPlanSettingsTranslations: Translations = {
+  'failed-to-load': 'Something went wrong',
   'glasses-label': 'Number of glasses',
   'glasses-details':
     `Number of glasses of water to drink daily. ` +

@@ -8,7 +8,11 @@ import {
   Saga,
   SagaService,
 } from '@mealz/backend-common';
-import { Meal, MealWithoutId } from '@mealz/backend-meals-common';
+import { 
+  Meal,
+  MealWithoutId,
+  removeEmptyIngredients,
+} from '@mealz/backend-meals-common';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import {
   MealLog,
@@ -211,12 +215,10 @@ export class MealsLogCrudService {
     context: Context,
   ): Promise<LogMealResponseV1> {
     const now = Date.now();
+    const meal = removeEmptyIngredients(request.meal);
 
     // notify about ad-hoc ingredients
-    void this.adHocIngredientsNotificationService.notify(
-      request.meal,
-      context,
-    );
+    void this.adHocIngredientsNotificationService.notify(meal, context);
 
     let update = false;
     let updateMealLogId: string | undefined;
@@ -239,14 +241,14 @@ export class MealsLogCrudService {
       this.logger.debug(`Updating meal log`, {
         ...context,
         userId: request.userId,
-        meal: request.meal,
+        meal,
         mealLogId: updateMealLogId,
       });
       await this.upsertMealLog(
         updateMealLogId,
         request.userId,
         now,
-        request.meal,
+        meal,
         request.dailyPlanMealName,
         context,
       );
@@ -260,11 +262,11 @@ export class MealsLogCrudService {
     this.logger.debug(`Creating meal log`, {
       ...context,
       userId: request.userId,
-      meal: request.meal,
+      meal,
     });
     const { id } = await this.createMealLog(
       request.userId,
-      request.meal,
+      meal,
       now,
       request.dailyPlanMealName,
       context,
@@ -288,23 +290,5 @@ export class MealsLogCrudService {
       context,
     );
     return logs;
-  }
-
-  private notifyAdHocIngredients(
-    meal: MealWithoutId,
-    context: Context,
-  ): Promise<void> {
-    const adHocIngredients = meal.ingredients.filter(ingredient => {
-      return ingredient.adHocIngredient;
-    });
-    if (adHocIngredients.length === 0) {
-      return;
-    }
-
-    const adHocIngredientsNames = adHocIngredients.map(ingredient => ingredient.adHocIngredient.name);
-    const adHocIngredientsNamesString = adHocIngredientsNames.join(', ');
-    this.logger.info(`Ad-hoc ingredients: ${adHocIngredientsNamesString}`, {
-      ...context,
-    });
   }
 }

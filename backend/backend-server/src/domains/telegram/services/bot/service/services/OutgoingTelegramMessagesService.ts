@@ -52,6 +52,7 @@ export class OutgoingTelegramMessagesService {
         .readByUserIdAndTypeIdFromLast(
           request.userId,
           request.typeId,
+          OutgoingTelegramMessageStatus.Sent,
           lastId,
           limit,
           context,
@@ -62,6 +63,10 @@ export class OutgoingTelegramMessagesService {
 
       // delete messages
       for (const message of messages) {
+        this.logger.debug('Deleting Telegram message', {
+          ...context,
+          message: message.id
+        });
         try {
           await this.telegramBotClient.deleteMessage(
             message.telegramChatId,
@@ -70,7 +75,20 @@ export class OutgoingTelegramMessagesService {
           );
           await updateStatus(message, OutgoingTelegramMessageStatus.Deleted);
         } catch (error) {
-          this.logger.error('Failed to delete Telegram message', context, error);
+          const messageForLog = {
+            telegramChatId: message.telegramChatId,
+            telegramMessageId: message.telegramMessageId,
+            status: message.status,
+            sentAt: new Date(message.sentAt),
+          };
+          this.logger.error(
+            'Failed to delete Telegram message',
+            {
+              ...context,
+              message: JSON.stringify(messageForLog),
+            },
+            error,
+          );
           await updateStatus(
             message,
             OutgoingTelegramMessageStatus.FailedToDelete,

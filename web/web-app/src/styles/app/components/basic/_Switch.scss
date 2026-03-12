@@ -1,6 +1,4 @@
-.mealz-switch {
-  $switch-bar-height: 1.5rem;
-  $switch-handle-size: 1.3rem;
+@mixin mealz-switch($switch-bar-height, $switch-handle-size) {
   $switch-bar-handle-gap: calc(($switch-bar-height - $switch-handle-size) / 2);
 
   position: relative;
@@ -53,4 +51,12 @@
       left $mealz-transition-time,
       background-color $mealz-transition-time;
   }
+}
+
+.mealz-switch-sm {
+  @include mealz-switch(1rem, 0.875rem);
+}
+
+.mealz-switch-md {
+  @include mealz-switch(1.5rem, 1.3rem);
 }

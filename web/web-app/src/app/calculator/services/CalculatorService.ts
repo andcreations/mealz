@@ -20,12 +20,13 @@ export class CalculatorService {
       bmr,
       settings.activityLevel,
     );
-    const macros = Macros.calculate(
+    const macros = Macros.calculateForTDEE(
       tdee,
       settings.goal,
     );
     return {
       bmr,
+      tdee,
       macros: {
         calories: macros.calories,
         carbs: macros.carbsInGrams,

@@ -159,13 +159,16 @@ export function HourAndMinutePicker(props: HourAndMinutePickerProps) {
           <Form.Control
             className={hourInputClassNames}
             ref={hour.ref}
-            type='number'
+            type='text'
+            inputMode='numeric'
+            pattern='[0-9]*'
             min='0'
             max='23'
             value={state.hour}
             onFocus={hour.onFocus}
             onChange={hour.onChange}
             onKeyDown={ifEnterKey(hour.onEnter)}
+            enterKeyHint='done'
           />
         </div>
       </div>
@@ -177,13 +180,16 @@ export function HourAndMinutePicker(props: HourAndMinutePickerProps) {
           <Form.Control
             className={minuteInputClassNames}
             ref={minute.ref}
-            type='number'
+            type='text'
+            inputMode='numeric'
+            pattern='[0-9]*'
             min='0'
             max='59'
             value={state.minute}
             onFocus={minute.onFocus}
             onChange={minute.onChange}
             onKeyDown={ifEnterKey(minute.onEnter)}
+            enterKeyHint='done'
           />
         </div>
       </div>
