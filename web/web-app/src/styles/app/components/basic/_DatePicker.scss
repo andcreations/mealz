@@ -1,0 +1,36 @@
+.mealz-date-picker {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  justify-content: center;
+}
+
+.mealz-date-picker-day {
+  .form-control, .form-control:focus {
+    width: 2.625rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    text-align: right;
+  }
+}
+
+.mealz-date-picker-month {
+  .form-control, .form-control:focus {
+    width: 2.625rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.mealz-date-picker-year {
+  .form-control, .form-control:focus {
+    width: 4rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.mealz-date-picker-separator {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}

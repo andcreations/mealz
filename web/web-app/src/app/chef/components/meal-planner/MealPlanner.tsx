@@ -30,6 +30,7 @@ import {
   ModalMenuItem,
   ModalMenu,
   YesNoModal,
+  DatePickerModal,
   htmlToReact,
   FullScreenLoader,
 } from '../../../components';
@@ -88,6 +89,7 @@ interface MealPlannerState {
   showMealPortion: boolean;
   showAIMealScannerModal: boolean;
   showMealLogConfirmationModal: boolean;
+  showDatePickerModal: boolean;
 }
 
 export function MealPlanner() {
@@ -115,6 +117,7 @@ export function MealPlanner() {
     showMealPortion: false,
     showAIMealScannerModal: false,
     showMealLogConfirmationModal: false,
+    showDatePickerModal: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -699,6 +702,20 @@ export function MealPlanner() {
     },
   };
 
+  const day = {
+    onShow: () => {
+      patchState({ showDatePickerModal: true });
+    },
+
+    onClose: () => {
+      patchState({ showDatePickerModal: false });
+    },
+
+    onEnter: (day: number, month: number, year: number) => {
+      patchState({ showDatePickerModal: false });
+    },
+  };
+
   return (
     <>
       { state.loadStatus === LoadStatus.Loading &&
@@ -754,6 +771,7 @@ export function MealPlanner() {
               onLoadMeal={namedMeal.onShowLoad}
               onDeleteMeal={namedMeal.onShowDelete}
               onPortionMeal={meal.onShowPortion}
+              onPickADay={day.onShow}
             />
           </div>
           <div className='mealz-meal-planner-ingredients'>
@@ -836,6 +854,16 @@ export function MealPlanner() {
           show={state.showAIMealScannerModal}
           onAccept={meal.onAcceptAIMealScan}
           onClose={meal.onCloseAIMealScanner}
+        />
+      }
+      { state.showDatePickerModal &&
+        <DatePickerModal
+          show={state.showDatePickerModal}
+          day={new Date().getDate()}
+          month={new Date().getMonth() + 1}
+          year={new Date().getFullYear()}
+          onEnter={day.onEnter}
+          onClose={day.onClose}
         />
       }
       { state.showMealLogConfirmationModal &&

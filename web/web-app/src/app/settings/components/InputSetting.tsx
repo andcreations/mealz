@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
-import classNames = require('classnames');
+import classNames from 'classnames';
 
 import { ifEnterKey } from '../../utils';
 import { Setting } from './Setting';

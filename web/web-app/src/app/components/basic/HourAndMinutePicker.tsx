@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
-import classNames = require('classnames');
+import classNames from 'classnames';
 
 import { usePatchState } from '../../hooks';
 import { blurRef, focusRef, ifEnterKey } from '../../utils';
