@@ -5,4 +5,5 @@ export const MealDailyPlanEntryTranslations: Translations = {
   'carbs': 'Carbs',
   'protein': 'Protein',
   'fat': 'Fat',
+  'fix-errors': 'Fix errors to see the summary',
 };

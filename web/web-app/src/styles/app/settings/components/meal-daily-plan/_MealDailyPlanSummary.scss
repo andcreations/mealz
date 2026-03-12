@@ -47,3 +47,10 @@
   text-align: center;
   margin: 0.5rem 0;
 }
+
+.mealz-meal-daily-plan-summary-error {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-error;
+  text-align: center;
+  margin: 0.5rem 0;
+}

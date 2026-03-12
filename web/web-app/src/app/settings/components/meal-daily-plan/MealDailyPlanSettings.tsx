@@ -15,7 +15,7 @@ import { useTranslations } from '../../../i18n';
 import { useBusEventListener } from '../../../bus';
 import { MealsDailyPlanService } from '../../../meals';
 import { usePatchState, useService } from '../../../hooks';
-import { calculateMacrosPercents, MacrosPercents } from '../../../utils';
+import { parsePositiveInteger } from '../../../utils';
 import {
   FullScreenLoader,
   LoaderByStatus,
@@ -32,7 +32,7 @@ import {
   CalculatorService, 
   CalculatorSettingsService,
 } from '../../../calculator';
-import { cloneMealEntry, MealEntry, mealEntryMinute } from '../../types';
+import { cloneMealEntry, MealEntry, mealEntryMinute, mealEntryToNumbers } from '../../types';
 import { HourAndMinuteSettings } from './HourAndMinuteSettings';
 import { SettingsButtons } from '../SettingsButtons';
 import { MealDailyPlanEntry } from './MealDailyPlanEntry';
@@ -49,11 +49,11 @@ export interface MealDailyPlanSettingsProps {
 
 interface MealDailyPlanSettingsState {
   loadStatus: LoadStatus;
-  meals: MealEntry[];
+  meals: MealEntry<string>[];
   goal?: Goal;
   goals?: GWMacros;
   deleteUndo?: {
-    meals: MealEntry[];
+    meals: MealEntry<string>[];
   };
   summaryForNotification: boolean;
   applying: boolean;
@@ -89,50 +89,52 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
           'Failed to read calculator settings',
         ),
       ]).then(([dailyPlan, calculatorSettings]) => {
-        console.log('calculatorSettings', calculatorSettings);
         const amount = (from: number, to: number) => {
           return from + Math.round((to - from) / 2);
         }
-        const margin = (from: number, to: number) => {
-          return amount(from, to) - from;
+        const amountStr = (from: number, to: number) => {
+          return amount(from, to).toString();
+        }
+        const marginStr = (from: number, to: number) => {
+          return (amount(from, to) - from).toString();
         }
 
         // convert
-        const meals = (dailyPlan?.entries ?? []).map<MealEntry>((entry) => {
+        const meals = (dailyPlan?.entries ?? []).map<MealEntry<string>>((entry) => {
           return {
             id: v7(),
             startHour: entry.startHour,
             startMinute: entry.startMinute,
             mealName: entry.mealName,
             goals: {
-              calories: amount(
+              calories: amountStr(
                 entry.goals.caloriesFrom,
                 entry.goals.caloriesTo,
               ),
-              caloriesMargin: margin(
+              caloriesMargin: marginStr(
                 entry.goals.caloriesFrom,
                 entry.goals.caloriesTo,
               ),
-              protein: amount(
+              protein: amountStr(
                 entry.goals.proteinFrom,
                 entry.goals.proteinTo,
               ),
-              proteinMargin: margin(
+              proteinMargin: marginStr(
                 entry.goals.proteinFrom,
                 entry.goals.proteinTo,
               ),
-              carbs: amount(
+              carbs: amountStr(
                 entry.goals.carbsFrom,
                 entry.goals.carbsTo,
               ),
-              carbsMargin: margin(
+              carbsMargin: marginStr(
                 entry.goals.carbsFrom,
                 entry.goals.carbsTo),
-              fat: amount(
+              fat: amountStr(
                 entry.goals.fatFrom,
                 entry.goals.fatTo,
               ),
-              fatMargin: margin(
+              fatMargin: marginStr(
                 entry.goals.fatFrom,
                 entry.goals.fatTo,
               ),
@@ -187,8 +189,16 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
     }
   );
 
-  const meal = {
-    isTimeValid: (index: number): boolean => {
+  const isValidValue = (valueStr: string): boolean => {
+    const value = parsePositiveInteger(valueStr);
+    if (isNaN(value) || value < 0) {
+      return false;
+    }
+    return true;
+  }
+  
+  const time = {
+    isValid: (index: number): boolean => {
       const previousMeal = state.meals[index - 1];
       const nextMeal = state.meals[index + 1];
 
@@ -206,23 +216,195 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
       return true;
     },
 
+    onChange: (index: number, hour: number, minute: number) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          startHour: hour,
+          startMinute: minute,
+        };
+      }); 
+    },
+  }
+
+  const name = {
+    isValid: (name: string): boolean => {
+      return name.length > 0;
+    },
+
+    onName: (index: number, name: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          mealName: name,
+        };
+      });
+    },
+  }
+
+  const calories = {
+    onAmountChange: (index: number, amount: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            calories: amount,
+          },
+        };
+      });
+    },
+    
+    onMarginChange: (index: number, margin: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            caloriesMargin: margin,
+          },
+        };
+      });
+    },
+
+    isValid: (entry: MealEntry<string>): boolean => {
+      return isValidValue(entry.goals.calories);
+    },
+
+    error: (entry: MealEntry<string>): string | undefined => {
+      return;
+    }
+  }
+
+  const carbs = {
+    onAmountChange: (index: number, amount: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            carbs: amount,
+          },
+        };
+      });
+    },
+
+    onMarginChange: (index: number, margin: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            carbsMargin: margin,
+          },
+        };
+      });
+    },
+
+    isValid: (entry: MealEntry<string>): boolean => {
+      return (
+        isValidValue(entry.goals.carbs) &&
+        isValidValue(entry.goals.carbsMargin)
+      );
+    },
+    
+    error: (entry: MealEntry<string>): string | undefined => {
+      return;
+    }
+  }
+
+  const protein = {
+    onAmountChange: (index: number, amount: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            protein: amount,
+          },
+        };
+      });
+    },
+
+    onMarginChange: (index: number, margin: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            proteinMargin: margin,
+          },
+        };
+      });
+    },
+
+    isValid: (entry: MealEntry<string>): boolean => {
+      return (
+        isValidValue(entry.goals.protein) &&
+        isValidValue(entry.goals.proteinMargin)
+      );
+    },
+
+    error: (entry: MealEntry<string>): string | undefined => {
+      return;
+    }
+  }
+
+  const fat = {
+    onAmountChange: (index: number, amount: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            fat: amount,
+          },
+        };
+      });
+    },
+
+    onMarginChange: (index: number, margin: string) => {
+      meal.replace(index, (previousMeal) => {
+        return {
+          ...previousMeal,
+          goals: {
+            ...previousMeal.goals,
+            fatMargin: margin,
+          },
+        };
+      });
+    },
+
+    isValid: (entry: MealEntry<string>): boolean => {
+      return (
+        isValidValue(entry.goals.fat) &&
+        isValidValue(entry.goals.fatMargin)
+      );
+    },
+
+    error: (entry: MealEntry<string>): string | undefined => {
+      return;
+    }
+  }
+
+  const meal = {
     onAdd: () => {
       const lastEntry = state.meals[state.meals.length - 1];
       const lastGoals = lastEntry?.goals;
-      const newMeal: MealEntry = {
+      const newMeal: MealEntry<string> = {
         id: v7(),
         startHour: lastEntry?.startHour ?? 0,
         startMinute: lastEntry?.startMinute ?? 0,
         mealName: translate('default-meal-name'),
         goals: {
-          calories: lastGoals?.calories ?? 500,
-          caloriesMargin: lastGoals?.caloriesMargin ?? 20,
-          protein: lastGoals?.protein ?? 40,
-          proteinMargin: lastGoals?.proteinMargin ?? 5,
-          carbs: lastGoals?.carbs ?? 50,
-          carbsMargin: lastGoals?.carbsMargin ?? 5,
-          fat: lastGoals?.fat ?? 20,
-          fatMargin: lastGoals?.fatMargin ?? 5,
+          calories: lastGoals?.calories ?? '500',
+          caloriesMargin: lastGoals?.caloriesMargin ?? '20',
+          protein: lastGoals?.protein ?? '40',
+          proteinMargin: lastGoals?.proteinMargin ?? '5',
+          carbs: lastGoals?.carbs ?? '50',
+          carbsMargin: lastGoals?.carbsMargin ?? '5',
+          fat: lastGoals?.fat ?? '20',
+          fatMargin: lastGoals?.fatMargin ?? '5',
         },
       };
       patchState({
@@ -233,10 +415,10 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
 
     replace: (
       index: number,
-      buildMeal: (previousMeal: MealEntry) => MealEntry,
+      buildMeal: (previousMeal: MealEntry<string>) => MealEntry<string>,
     ) => {
       setState(prevState => {
-        const meals = [...prevState.meals];
+        const meals = [...(prevState.meals as MealEntry<string>[])];
         meals[index] = buildMeal(meals[index]);
         return {
           ...prevState,
@@ -246,94 +428,72 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
       });
     },
 
-    onChangeName: (index: number, name: string) => {
-      meal.replace(index, (previousMeal) => {
-        return {
-          ...previousMeal,
-          mealName: name,
-        };
-      });
-    },
-
-    onChangeTime: (index: number, hour: number, minute: number) => {
-      meal.replace(index, (previousMeal) => {
-        return {
-          ...previousMeal,
-          startHour: hour,
-          startMinute: minute,
-        };
-      }); 
-    },
-
-    onCaloriesChange: (index: number, amount: number, margin: number) => {
-      meal.replace(index, (previousMeal) => {
-        return {
-          ...previousMeal,
-          goals: {
-            ...previousMeal.goals,
-            calories: amount,
-            caloriesMargin: margin,
-          },
-        };
-      });
-    },
-    
-
-    onCarbsChange: (index: number, amount: number, margin: number) => {
-      meal.replace(index, (previousMeal) => {
-        return {
-          ...previousMeal,
-          goals: {
-            ...previousMeal.goals,
-            carbs: amount,
-            carbsMargin: margin,
-          },
-        };
-      });
-    },
-
-    onProteinChange: (index: number, amount: number, margin: number) => {
-      meal.replace(index, (previousMeal) => {
-        return {
-          ...previousMeal,
-          goals: {
-            ...previousMeal.goals,
-            protein: amount,
-            proteinMargin: margin,
-          },
-        };
-      });
-    },
-
-    onFatChange: (index: number, amount: number, margin: number) => {
-      meal.replace(index, (previousMeal) => {
-        return {
-          ...previousMeal,
-          goals: {
-            ...previousMeal.goals,
-            fat: amount,
-            fatMargin: margin,
-          },
-        };
-      });
+    canAutoCalculate: (index: number): boolean => {
+      return !!state.goal && !meal.hasMealErrors(index);
     },
 
     onAutoCalculate: (index: number) => {
       const mealEntry = state.meals[index];
+      const mealEntryNumbers = mealEntryToNumbers(mealEntry);
+
+      // calculate the macros
       const macros = MealEntryCalculator.calculateMacrosByGoal(
-        mealEntry,
+        mealEntryNumbers,
         state.goal,
       );
+
+      // if the difference between the total and the goal is small,
+      // then adjust the macros to the goal
+      if (state.goals) {
+        const totals: Pick<GWMacros, 'carbs' | 'protein' | 'fat'> = {
+          carbs: macros.carbs,
+          protein: macros.protein,
+          fat: macros.fat,
+        };
+        for (let itrIndex = 0; itrIndex < state.meals.length; itrIndex++) {
+          if (itrIndex === index) {
+            continue;
+          }
+          const mealEntryNumbers = mealEntryToNumbers(state.meals[itrIndex]);
+          totals.carbs += truncateNumber(mealEntryNumbers.goals.carbs);
+          totals.protein += truncateNumber(mealEntryNumbers.goals.protein);
+          totals.fat += truncateNumber(mealEntryNumbers.goals.fat);
+        }
+
+        // goal 10, total 9, diff -1
+        const carbsDiff = totals.carbs - truncateNumber(state.goals.carbs);
+        const proteinDiff = totals.protein - truncateNumber(state.goals.protein);
+        const fatDiff = totals.fat - truncateNumber(state.goals.fat);
+
+        const MAX_DIFF = 5;
+        if (Math.abs(carbsDiff) <= MAX_DIFF) {
+          macros.carbs -= carbsDiff;
+        }
+        if (Math.abs(proteinDiff) <= MAX_DIFF) {
+          macros.protein -= proteinDiff;
+        }
+        if (Math.abs(fatDiff) <= MAX_DIFF) {
+          macros.fat -= fatDiff;
+        }
+      }
+
+      // calculate the margins and update the meal entry
       meal.replace(index, (previousMeal) => {
+        const margins = MealEntryCalculator.calculateMargins({
+          calories: parsePositiveInteger(previousMeal.goals.calories),
+          ...macros,
+        });
         return {
           ...previousMeal,
           goals: {
             ...previousMeal.goals,
-            ...macros,
-            ...MealEntryCalculator.calculateMargins({
-              calories: previousMeal.goals.calories,
-              ...macros,
-            }),
+            carbs: macros.carbs.toString(),
+            protein: macros.protein.toString(),
+            fat: macros.fat.toString(),
+            caloriesMargin: margins.caloriesMargin.toString(),
+            carbsMargin: margins.carbsMargin.toString(),
+            proteinMargin: margins.proteinMargin.toString(),
+            fatMargin: margins.fatMargin.toString(),
           },
         };
       });
@@ -384,11 +544,48 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         },
       });
     },
+
+    hasMealGoalErrors: (mealEntry: MealEntry<string>): boolean => {
+      return (
+        !calories.isValid(mealEntry) ||
+        !carbs.isValid(mealEntry) ||
+        !protein.isValid(mealEntry) ||
+        !fat.isValid(mealEntry)
+      );
+    },
+
+    hasMealErrors: (index: number) => {
+      const mealEntry = state.meals[index];
+      return (
+        !name.isValid(mealEntry.mealName) ||
+        !time.isValid(index) ||
+        meal.hasMealGoalErrors(mealEntry)
+      );
+    },
+
+    hasGoalErrors: () => {
+      return state.meals.some(mealEntry => {
+        return meal.hasMealGoalErrors(mealEntry);
+      });
+    },
+
+    hasErrors: () => {
+      const nameErrors = state.meals.some(meal => {
+        return !name.isValid(meal.mealName);
+      });
+      const timeErrors = state.meals.some((_meal, index) => {
+        return !time.isValid(index);
+      });
+      return nameErrors || timeErrors || meal.hasGoalErrors();
+    },
   }
 
   const summary = {
-    calculate: (): GWMacros => {
-    console.log('state.meals', state.meals);
+    calculate: (): GWMacros | undefined => {
+      if (meal.hasGoalErrors()) {
+        return undefined;
+      }
+
       const macros = {
         calories: 0,
         carbs: 0,
@@ -396,17 +593,20 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         fat: 0,
       };
       state.meals.forEach(meal => {
-        console.log('meal', meal);
-        macros.calories += meal.goals.calories;
-        macros.carbs += meal.goals.carbs;
-        macros.protein += meal.goals.protein;
-        macros.fat += meal.goals.fat;
+        macros.calories += parsePositiveInteger(meal.goals.calories);
+        macros.carbs += parsePositiveInteger(meal.goals.carbs);
+        macros.protein += parsePositiveInteger(meal.goals.protein);
+        macros.fat += parsePositiveInteger(meal.goals.fat);
       });
       return macros;
     },
   }
 
   const settings = {
+    isApplyDisabled: () => {
+      return state.applying || !state.isDirty || meal.hasErrors();
+    },
+
     onApply: () => {
       const dailyPlan: GWMealDailyPlanForCreation = {
         entries: state.meals.map((meal, index) => {
@@ -417,11 +617,11 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
           const endHour = isLast ? 0 : next.startHour;
           const endMinute = isLast ? 0 : next.startMinute;
           
-          const from = (amount: number, margin: number) => {
-            return amount - margin;
+          const from = (amount: string, margin: string) => {
+            return parsePositiveInteger(amount) - parsePositiveInteger(margin);
           }
-          const to = (amount: number, margin: number) => {
-            return amount + margin;
+          const to = (amount: string, margin: string) => {
+            return parsePositiveInteger(amount) + parsePositiveInteger(margin);
           }
 
           return {
@@ -468,7 +668,9 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
   }
 
   const renderEntries = () => {
-    const totalCalories = truncateNumber(summary.calculate().calories);
+    const totalCalories = !meal.hasGoalErrors()
+      ? truncateNumber(summary.calculate().calories)
+      : 0;
     let remainingCaloriesPercent = 100;
 
     // for each meal
@@ -476,37 +678,66 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
       const isLast = index === state.meals.length - 1;
 
       // use the remaining calories percent for last meal so that total is 100%
-      const caloriesPercent = !isLast
-        ? truncateNumber(mealEntry.goals.calories / totalCalories * 100)
-        : remainingCaloriesPercent;
-      remainingCaloriesPercent -= caloriesPercent;
+      let caloriesPercent: number | undefined;
+      if (!meal.hasGoalErrors()) {
+        const calories = parsePositiveInteger(mealEntry.goals.calories);
+        caloriesPercent = !isLast
+          ? truncateNumber(calories / totalCalories * 100)
+          : remainingCaloriesPercent;
+        remainingCaloriesPercent -= caloriesPercent;
+      }
 
       // render the meal entry
       return <MealDailyPlanEntry
         key={mealEntry.id}
         meal={{...mealEntry}}
-        caloriesPercent={caloriesPercent.toString()}
+        caloriesPercent={caloriesPercent}
         isTimeEditable={index > 0}
-        invalidTime={!meal.isTimeValid(index)}
+        invalidTime={!time.isValid(index)}
+        invalidName={!name.isValid(mealEntry.mealName)}
+        invalidCaloriesAmount={!calories.isValid(mealEntry)}
+        invalidCaloriesMargin={!calories.isValid(mealEntry)}
+        invalidCarbsAmount={!carbs.isValid(mealEntry)}
+        invalidCarbsMargin={!carbs.isValid(mealEntry)}
+        invalidProteinAmount={!protein.isValid(mealEntry)}
+        invalidProteinMargin={!protein.isValid(mealEntry)}
+        invalidFatAmount={!fat.isValid(mealEntry)}
+        invalidFatMargin={!fat.isValid(mealEntry)}
+        caloriesError={calories.error(mealEntry)}
+        carbsError={carbs.error(mealEntry)}
+        proteinError={protein.error(mealEntry)}
+        fatError={fat.error(mealEntry)}
         collapsed={true}
-        autoCalculateMacrosEnabled={!!state.goal}
-        onChangeName={(name: string) => {
-          meal.onChangeName(index, name)
+        autoCalculateMacrosEnabled={meal.canAutoCalculate(index)}
+        onChangeName={(newName: string) => {
+          name.onName(index, newName)
         }}
         onChangeTime={(hour: number, minute: number) => {
-          meal.onChangeTime(index, hour, minute)
+          time.onChange(index, hour, minute)
         }}
-        onCaloriesChange={(amount: number, margin: number) => {
-          meal.onCaloriesChange(index, amount, margin);
+        onCaloriesAmountChange={(amount: string) => {
+          calories.onAmountChange(index, amount);
         }}
-        onCarbsChange={(amount: number, margin: number) => {
-          meal.onCarbsChange(index, amount, margin);
+        onCaloriesMarginChange={(margin: string) => {
+          calories.onMarginChange(index, margin);
         }}
-        onProteinChange={(amount: number, margin: number) => {
-          meal.onProteinChange(index, amount, margin);
+        onCarbsAmountChange={(amount: string) => {
+          carbs.onAmountChange(index, amount);
         }}
-        onFatChange={(amount: number, margin: number) => {
-          meal.onFatChange(index, amount, margin);
+        onCarbsMarginChange={(margin: string) => {
+          carbs.onMarginChange(index, margin);
+        }}
+        onProteinAmountChange={(amount: string) => {
+          protein.onAmountChange(index, amount);
+        }}
+        onProteinMarginChange={(margin: string) => {
+          protein.onMarginChange(index, margin);
+        }}
+        onFatAmountChange={(amount: string) => {
+          fat.onAmountChange(index, amount);
+        }}
+        onFatMarginChange={(margin: string) => {
+          fat.onMarginChange(index, margin);
         }}
         onAutoCalculate={() => {
           meal.onAutoCalculate(index);
@@ -574,7 +805,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
           >
             <Button
               className='mealz-meal-daily-plan-settings-apply-button'
-              disabled={state.applying || !state.isDirty}
+              disabled={settings.isApplyDisabled()}
               size='sm'
               onClick={settings.onApply}
             >
@@ -586,6 +817,7 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
           <MealDailyPlanSummary
             macrosSummary={summary.calculate()}
             goals={state.goals}
+            error={meal.hasGoalErrors()}
             forNotification={state.summaryForNotification}
           />
         </>

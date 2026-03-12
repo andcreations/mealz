@@ -4,4 +4,5 @@ export const MealDailyPlanSummaryTranslations: Translations = {
   'title': 'Calories & macros totals',
   'no-goals':
     'Go to <a href="{0}">Calculator</a> to set your daily goals',
+  'fix-errors': 'Fix errors to see the summary',
 };

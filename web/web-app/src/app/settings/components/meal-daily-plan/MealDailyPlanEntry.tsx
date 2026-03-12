@@ -1,39 +1,51 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { truncateNumber } from '@mealz/backend-shared';
 
-import { 
-  calculateMacrosFromTotalCalories,
-  ifEnterKey,
-  MacrosPercents,
-} from '../../../utils';
+import { ifEnterKey, parsePositiveInteger } from '../../../utils';
 import { usePatchState } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
-import { MealEntry, MealGoals } from '../../types';
+import { MealEntry } from '../../types';
+import { MaterialIcon } from '../../../components';
 import { HourAndMinuteSettings } from './HourAndMinuteSettings';
 import { AmountAndMarginSetting } from './AmountAndMarginSetting';
+import { MealDailyPlanEntryActionBar } from './MealDailyPlanEntryActionBar';
+import { MealDailyPlanEntrySummary } from './MealDailyPlanEntrySummary';
 import {
   MealDailyPlanEntryTranslations,
 } from './MealDailyPlanEntry.translations';
-import { MealDailyPlanEntryActionBar } from './MealDailyPlanEntryActionBar';
-import { MealDailyPlanEntrySummary } from './MealDailyPlanEntrySummary';
-import { MaterialIcon } from '../../../components';
-import { marginForAmount } from '../../consts';
 
 export interface MealDailyPlanEntryProps {
-  meal: Omit<MealEntry, 'id' | 'hasErrors'>;
-  caloriesPercent: string; // of all the meals
+  meal: Omit<MealEntry<string>, 'id' | 'hasErrors'>;
+  caloriesPercent?: number; // of all the meals
   isTimeEditable: boolean;
   invalidTime: boolean;
+  invalidName: boolean;
+  invalidCaloriesAmount: boolean;
+  invalidCaloriesMargin: boolean;
+  invalidCarbsAmount: boolean;
+  invalidCarbsMargin: boolean;
+  invalidProteinAmount: boolean;
+  invalidProteinMargin: boolean;
+  invalidFatAmount: boolean;
+  invalidFatMargin: boolean;
+  caloriesError?: string;
+  carbsError?: string;
+  proteinError?: string;
+  fatError?: string;
   collapsed: boolean;
   autoCalculateMacrosEnabled: boolean;
   onChangeName: (name: string) => void;
   onChangeTime: (hour: number, minute: number) => void;
-  onCaloriesChange: (amount: number, margin: number) => void;
-  onCarbsChange: (amount: number, margin: number) => void;
-  onProteinChange: (amount: number, margin: number) => void;
-  onFatChange: (amount: number, margin: number) => void;
+  onCaloriesAmountChange: (amount: string) => void;
+  onCaloriesMarginChange: (margin: string) => void;
+  onCarbsAmountChange: (amount: string) => void;
+  onCarbsMarginChange: (margin: string) => void;
+  onProteinAmountChange: (amount: string) => void;
+  onProteinMarginChange: (margin: string) => void;
+  onFatAmountChange: (amount: string) => void;
+  onFatMarginChange: (margin: string) => void;
   onAutoCalculate: () => void;
   onDelete: () => void;
 }
@@ -47,92 +59,47 @@ enum Focus {
 
 interface MealDailyPlanEntryState {
   focus?: Focus;
-  meal: Omit<MealEntry, 'id' | 'hasErrors'>;
   isNameEditing: boolean;
-  invalidName: boolean;
-  oldName?: string;
   collapsed: boolean;
-  autoCalculateMacros: boolean;
 }
 
 export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
   const translate = useTranslations(MealDailyPlanEntryTranslations);
 
   const [state, setState] = useState<MealDailyPlanEntryState>({
-    meal: {
-      startHour: props.meal.startHour,
-      startMinute: props.meal.startMinute,
-      mealName: props.meal.mealName,
-      goals: {
-        calories: props.meal.goals.calories,
-        caloriesMargin: props.meal.goals.caloriesMargin,
-        protein: props.meal.goals.protein,
-        proteinMargin: props.meal.goals.proteinMargin,
-        carbs: props.meal.goals.carbs,
-        carbsMargin: props.meal.goals.carbsMargin,
-        fat: props.meal.goals.fat,
-        fatMargin: props.meal.goals.fatMargin,
-      }
-    },
     isNameEditing: false,
-    invalidName: false,
     collapsed: props.collapsed,
-    autoCalculateMacros: false,
   });
   const patchState = usePatchState(setState);
 
-  // update the state when the properties change
-  useEffect(() => {
-    setState(prevState => ({
-      ...prevState,
-      meal: props.meal,
-    }));
-  }, [props.meal]);
+  const hasInvalidAmount = () => {
+    return (
+      props.invalidCaloriesAmount ||
+      props.invalidCarbsAmount ||
+      props.invalidProteinAmount ||
+      props.invalidFatAmount
+    );
+  }
 
   const time = {
     onChange: (hour: number, minute: number) => {
-      setState(prevState => ({
-        ...prevState,
-        meal: {
-          ...prevState.meal,
-          startHour: hour,
-          startMinute: minute,
-        }
-      }));
       props.onChangeTime(hour, minute);
     },
   };
 
   const name = {
     onEdit: () => {
-      setState(prevState => ({
-        ...prevState,
-        isNameEditing: true,
-        oldName: prevState.meal.mealName,
-      }));
-    },
-
-    isValid: (value: string): boolean => {
-      return value.length > 0;
+      patchState({ isNameEditing: true });
     },
 
     onChange: (value: string) => {
-      setState(prevState => ({
-        ...prevState,
-        meal: {
-          ...prevState.meal,
-          mealName: value,
-        },
-        invalidName: !name.isValid(value),
-      }));
+      props.onChangeName(value);
     },
 
     stopEditing: () => {
-      if (state.invalidName) {
+      if (props.invalidName) {
         return;
       }
-
-      props.onChangeName(state.meal.mealName);
       patchState({ isNameEditing: false });
     },
 
@@ -147,10 +114,21 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
 
   const summary = {
     macros: () => {
-      const goals = state.meal.goals;
-      const total = goals.carbs + goals.protein + goals.fat;
-      const carbsPercent = truncateNumber(goals.carbs / total * 100);
-      const proteinPercent = truncateNumber(goals.protein / total * 100);
+      if (hasInvalidAmount()) {
+        return;
+      }
+      const goals = props.meal.goals;
+
+      // convert to numbers
+      const carbs = parsePositiveInteger(goals.carbs);
+      const protein = parsePositiveInteger(goals.protein);
+      const fat = parsePositiveInteger(goals.fat);
+      
+      // calculate the percentages
+      const total = carbs + protein + fat;
+      const carbsPercent = truncateNumber(carbs / total * 100);
+      const proteinPercent = truncateNumber(protein / total * 100);
+
       return {
         carbsPercent,
         proteinPercent,
@@ -162,90 +140,99 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
   
   const calories = {
     details: () => {
-      return `kcal (${props.caloriesPercent}%)`;
+      if (!props.caloriesPercent) {
+        return '-';
+      }
+      return `kcal (${props.caloriesPercent.toString()}%)`;
     },
 
-    onChange: (amount: number, margin: number) => {
-      setState(prevState => ({
-        ...prevState,
-        meal: {
-          ...prevState.meal,
-          goals: {
-            ...prevState.meal.goals,
-            calories: amount,
-            caloriesMargin: margin,
-          }
-        }
-      }));
+    summaryDetails: () => {
+      if (!props.caloriesPercent) {
+        return '-';
+      }
+      return `${props.caloriesPercent.toString()}%`;
+    },
 
-      // notify
-      props.onCaloriesChange(amount, margin);
+    onAmountChange: (amount: string) => {
+      props.onCaloriesAmountChange(amount);
+    },
+
+    onMarginChange: (margin: string) => {
+      props.onCaloriesMarginChange(margin);
     },
   };
 
   const carbs = {
     details: () => {
-      const carbsPercent = summary.macros().carbsPercent;
+      const macros = summary.macros();
+      if (!macros) {
+        return '-';
+      }
+      const carbsPercent = macros.carbsPercent;
       return `g (${carbsPercent}%)`;
     },
 
-    onChange: (amount: number, margin: number) => {
-      setState(prevState => ({
-        ...prevState,
-        meal: {
-          ...prevState.meal,
-          goals: {
-            ...prevState.meal.goals,
-            carbs: amount,
-            carbsMargin: margin,
-          }
-        }
-      }));
-      props.onCarbsChange(amount, margin);
+    summaryDetails: () => {
+      const carbsPercent = summary.macros().carbsPercent;
+      return `${carbsPercent.toString()}%`;
+    },
+
+    onAmountChange: (amount: string) => {
+      props.onCarbsAmountChange(amount);
+    },
+
+    onMarginChange: (margin: string) => {
+      props.onCarbsMarginChange(margin);
     },
   };
 
   const protein = {
     details: () => {
-      const proteinPercent = summary.macros().proteinPercent;
+      const macros = summary.macros();
+      if (!macros) {
+        return '-';
+      }
+      const proteinPercent = macros.proteinPercent;
       return `g (${proteinPercent}%)`;
     },
 
-    onChange: (amount: number, margin: number) => {
-      setState(prevState => ({
-        ...prevState,
-        meal: {
-          ...prevState.meal,
-          goals: {
-            ...prevState.meal.goals,
-            protein: amount,
-            proteinMargin: margin,
-          }
-        }
-      }));
-      props.onProteinChange(amount, margin);
+    summaryDetails: () => {
+      const proteinPercent = summary.macros().proteinPercent;
+      return `${proteinPercent.toString()}%`;
     },
+
+    onAmountChange: (amount: string) => {
+      props.onProteinAmountChange(amount);
+    },
+
+    onMarginChange: (margin: string) => {
+      props.onProteinMarginChange(margin);
+    },
+
+
   };
 
   const fat = {
     details: () => {
-      const fatPercent = summary.macros().fatPercent;
+      const macros = summary.macros();
+      if (!macros) {
+        return '-';
+      }
+      const fatPercent = macros.fatPercent;
       return `g (${fatPercent}%)`;
     },
 
-    onChange: (amount: number, margin: number) => {
-      setState(prevState => ({
-        ...prevState,
-        meal: {
-          ...prevState.meal,
-          goals: {
-            ...prevState.meal.goals,
-            fat: amount,
-            fatMargin: margin,
-          }
-        }
-      }));
-      props.onFatChange(amount, margin);
+    summaryDetails: () => {
+      const fatPercent = summary.macros().fatPercent;
+      return `${fatPercent.toString()}%`;
+    },
+
+    onAmountChange: (amount: string) => {
+      props.onFatAmountChange(amount);
+    },
+
+    onMarginChange: (margin: string) => {
+      props.onFatMarginChange(margin);
     },
   };
 
@@ -262,7 +249,7 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
     },
   }
 
-  const { meal } = state;
+  const { meal } = props;
   return (
     <div className='mealz-meal-daily-plan-entry'>
       { !props.isTimeEditable &&
@@ -296,27 +283,32 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
           <Form.Control
             className='mealz-meal-daily-plan-entry-name-input'
             type='text'
-            value={meal.mealName}
+            value={props.meal.mealName}
             onChange={(event) => name.onChange(event.target.value)}
             onBlur={name.onBlur}
             onKeyDown={ifEnterKey(name.onEnter)}
             autoFocus={true}
-            isInvalid={state.invalidName}
+            isInvalid={props.invalidName}
           />
         }
       </div>
-      { state.collapsed &&
+      { (state.collapsed && !hasInvalidAmount()) &&
         <MealDailyPlanEntrySummary
-          calories={meal.goals.calories}
-          caloriesPercent={props.caloriesPercent}
-          carbs={meal.goals.carbs}
-          carbsPercent={summary.macros().carbsPercent.toString()}
-          protein={meal.goals.protein}
-          proteinPercent={summary.macros().proteinPercent.toString()}
-          fat={meal.goals.fat}
-          fatPercent={summary.macros().fatPercent.toString()}
+          calories={parsePositiveInteger(meal.goals.calories)}
+          caloriesDetails={calories.summaryDetails()}
+          carbs={parsePositiveInteger(meal.goals.carbs)}
+          carbsDetails={carbs.summaryDetails()}
+          protein={parsePositiveInteger(meal.goals.protein)}
+          proteinDetails={protein.summaryDetails()}
+          fat={parsePositiveInteger(meal.goals.fat)}
+          fatDetails={fat.summaryDetails()}
           onClick={() => patchState({ collapsed: false })}
         />
+      }
+      { (state.collapsed && hasInvalidAmount()) &&
+        <div className='mealz-meal-daily-plan-entry-summary-error'>
+          { translate('fix-errors') }
+        </div>
       }
       { !state.collapsed &&
         <>
@@ -325,32 +317,48 @@ export function MealDailyPlanEntry(props: MealDailyPlanEntryProps) {
             labelClassName='mealz-color-calories'
             details={calories.details()}
             amount={meal.goals.calories}
+            invalidAmount={props.invalidCaloriesAmount}
             margin={meal.goals.caloriesMargin}
-            onChange={calories.onChange}
+            invalidMargin={props.invalidCaloriesMargin}
+            error={props.caloriesError}
+            onAmountChange={calories.onAmountChange}
+            onMarginChange={calories.onMarginChange}
           />
           <AmountAndMarginSetting
             label={translate('carbs')}
             labelClassName='mealz-color-carbs'
             details={carbs.details()}
             amount={meal.goals.carbs}
+            invalidAmount={props.invalidCarbsAmount}
             margin={meal.goals.carbsMargin}
-            onChange={carbs.onChange}
+            invalidMargin={props.invalidCarbsMargin}
+            error={props.carbsError}
+            onAmountChange={carbs.onAmountChange}
+            onMarginChange={carbs.onMarginChange}
           />
           <AmountAndMarginSetting
             label={translate('protein')}
             labelClassName='mealz-color-protein'
             details={protein.details()}
             amount={meal.goals.protein}
+            invalidAmount={props.invalidProteinAmount}
             margin={meal.goals.proteinMargin}
-            onChange={protein.onChange}
+            invalidMargin={props.invalidProteinMargin}
+            error={props.proteinError}
+            onAmountChange={protein.onAmountChange}
+            onMarginChange={protein.onMarginChange}
           />
           <AmountAndMarginSetting
             label={translate('fat')}
             labelClassName='mealz-color-fat'
             details={fat.details()}
             amount={meal.goals.fat}
+            invalidAmount={props.invalidFatAmount}
             margin={meal.goals.fatMargin}
-            onChange={fat.onChange}
+            invalidMargin={props.invalidFatMargin}
+            error={props.fatError}
+            onAmountChange={fat.onAmountChange}
+            onMarginChange={fat.onMarginChange}
           />
           <MealDailyPlanEntryActionBar
             autoCalculateMacrosEnabled={props.autoCalculateMacrosEnabled}
