@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { DateTime } from 'luxon';
 
 import { useTranslations } from '../../i18n';
-import { usePatchState } from '../../hooks';
-import { DatePicker } from '../basic';
+import { usePatchState, useService } from '../../hooks';
+import { DateService, SystemService } from '../../system';
+import { DatePicker, LinkButton } from '../basic';
 import { DatePickerModalTranslations } from './DatePickerModal.translations';
 
 export interface DatePickerModalProps {
@@ -15,21 +17,27 @@ export interface DatePickerModalProps {
   day: number;
   month: number;
   year: number;
+  onChange?: (day: number, month: number, year: number) => void;
   onEnter: (day: number, month: number, year: number) => void;
   onClose: () => void;
 }
 
 interface DatePickerModalState {
-  day?: number;
-  month?: number;
-  year?: number;
+  day: number;
+  month: number;
+  year: number;
   valid: boolean;
 }
 
 export function DatePickerModal(props: DatePickerModalProps) {
+  const systemService = useService(SystemService);
+  const dateService = useService(DateService);
   const translate = useTranslations(DatePickerModalTranslations);
 
   const [state, setState] = useState<DatePickerModalState>({
+    day: props.day,
+    month: props.month,
+    year: props.year,
     valid: true,
   });
   const patchState = usePatchState(setState);
@@ -47,6 +55,10 @@ export function DatePickerModal(props: DatePickerModalProps) {
         year,
         valid,
       });
+
+      if (valid && props.onChange !== undefined) {
+        props.onChange(day, month, year);
+      }
     },
 
     onEnter: () => {
@@ -55,13 +67,31 @@ export function DatePickerModal(props: DatePickerModalProps) {
       }
       props.onEnter(state.day, state.month, state.year);
     },
+
+    onToday: () => {
+      const today = dateService.getToday();
+      patchState({
+        day: today.day,
+        month: today.month,
+        year: today.year,
+      });
+    },
+
+    onTomorrow: () => {
+      const tomorrow = dateService.getTomorrow();
+      patchState({
+        day: tomorrow.day,
+        month: tomorrow.month,
+        year: tomorrow.year,
+      });
+    },
   }
 
   return (
     <Modal
       className='mealz-date-picker-modal'
       show={props.show}
-      centered={true}
+      centered={!systemService.isMobile()}
       backdrop={true}
       onHide={props.onClose}
       onEscapeKeyDown={props.onClose}      
@@ -79,9 +109,9 @@ export function DatePickerModal(props: DatePickerModalProps) {
         }
         <DatePicker
           className='mealz-date-picker-modal-picker'
-          day={props.day}
-          month={props.month}
-          year={props.year}
+          day={state.day}
+          month={state.month}
+          year={state.year}
           onChange={date.onChange}
           onEnter={date.onEnter}
         />
@@ -98,6 +128,16 @@ export function DatePickerModal(props: DatePickerModalProps) {
           >
             { translate('ok') }
           </Button>
+        </div>
+        <div className='mealz-date-picker-modal-quick-buttons'>
+          <LinkButton
+            label={translate('today')}
+            onClick={date.onToday}
+          />
+          <LinkButton
+            label={translate('tomorrow')}
+            onClick={date.onTomorrow}
+          />
         </div>
       </div>
     </Modal>

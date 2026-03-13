@@ -47,4 +47,12 @@ export const MealPlannerTranslations: Translations = {
 
   // meal log confirmation
   'meal-log-confirmation-message': `Are you sure you want to log <b>{0}</b>? It's <b>{1}</b> time.`,
+
+  // day
+  'today': 'today',
+  'tomorrow': 'tomorrow',
+  'planning-meal-for': 'Planning meal for',
+  'in-days': ' in {0} days',
+  'days-ago': ' {0} days ago',
+  'day-label': '{0}',
 };

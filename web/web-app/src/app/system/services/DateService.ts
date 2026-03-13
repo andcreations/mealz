@@ -5,9 +5,21 @@ import { SystemService } from './SystemService';
 
 @Service()
 export class DateService {
+  private static readonly FINGERPRINT_FORMAT = 'yyyyLLdd';
+
   public constructor(
     private readonly systemService: SystemService,
   ) {}
+
+  public getToday(): DateTime {
+    const timeZone = this.systemService.getTimeZone();
+    return DateTime.now().setZone(timeZone);
+  }
+
+  public getTomorrow(): DateTime {
+    const timeZone = this.systemService.getTimeZone();
+    return DateTime.now().setZone(timeZone).plus({ days: 1 });
+  }
 
   public getTodayFromToDate(): { fromDate: number, toDate: number } {
     const timeZone = this.systemService.getTimeZone();
@@ -23,5 +35,24 @@ export class DateService {
     const timeZone = this.systemService.getTimeZone();
     const now = DateTime.now().setZone(timeZone);
     return now.toFormat('yyyyLLdd');
+  }
+
+  public toFingerprint(day: number, month: number, year: number): string {
+    return DateTime
+      .local(year, month, day)
+      .toFormat(DateService.FINGERPRINT_FORMAT);
+  }
+
+  public fingerprintToDate(
+    fingerprint: string,
+  ): DateTime {
+    const date = DateTime.fromFormat(
+      fingerprint, DateService.FINGERPRINT_FORMAT
+    );
+    return date;
+  }
+
+  public differenceInDaysFromNow(date: DateTime): number {
+    return Math.round(date.diff(DateTime.now(), 'days').days);
   }
 }

@@ -90,6 +90,7 @@ interface MealPlannerState {
   showAIMealScannerModal: boolean;
   showMealLogConfirmationModal: boolean;
   showDatePickerModal: boolean;
+  dayFingerprint: string;
 }
 
 export function MealPlanner() {
@@ -118,6 +119,7 @@ export function MealPlanner() {
     showAIMealScannerModal: false,
     showMealLogConfirmationModal: false,
     showDatePickerModal: false,
+    dayFingerprint: dateService.getTodayFingerprint(),
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -221,10 +223,42 @@ export function MealPlanner() {
   )
 
   const userMealDraft = {
-    read: (mealName: string) => {
-      const dateFingerprint = dateService.getTodayFingerprint();
+    read: (mealName: string, dayFingerprint?: string) => {
       const mealNameKey = nameToKey(mealName);
-      return mealsUserService.readUserDraftMeal(mealNameKey, dateFingerprint);
+      return mealsUserService.readUserDraftMeal(
+        mealNameKey,
+        dayFingerprint ?? state.dayFingerprint,
+      );
+    },
+
+    readAndRecalculate: (mealName: string, dayFingerprint?: string) => {
+      userMealDraft.read(mealName, dayFingerprint)
+        .then((userMeal) => {
+          const ingredients = mealMapper.toMealPlannerIngredients(
+            userMeal?.meal.ingredients ?? [],
+          );
+          const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
+            dailyMealPlan.current,
+            mealName,
+          );    
+          meal.recalculate(
+            calories.resolve(dailyPlanEntry?.goals, userMeal),
+            ingredients,
+            {
+              mealName,
+              goals: dailyPlanEntry?.goals,  
+            }
+          );
+        })
+        .catch((error) => {
+          Log.error('Failed to read meal', error);
+          notificationsService.error(
+            translate('failed-to-read-user-draft-meal')
+          );
+        })
+        .finally(() => {
+          patchState({ fullScreenLoadStatus: null });
+        });
     },
 
     tryUpsert: () => {
@@ -239,11 +273,10 @@ export function MealPlanner() {
       ingredients: MealPlannerIngredient[],
     ) => {
       const mealNameKey = nameToKey(state.mealName);
-      const dateFingerprint = dateService.getTodayFingerprint();
       const gwMeal = mealMapper.toGWMeal(calories, ingredients);
       mealsUserService.upsertUserDraftMeal(
         mealNameKey,
-        dateFingerprint,
+        state.dayFingerprint,
         gwMeal
       )
       .then(() => {
@@ -375,34 +408,8 @@ export function MealPlanner() {
       if (mealName === state.mealName) {
         return;
       }
-      const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
-        dailyMealPlan.current,
-        mealName,
-      );
       patchState({ fullScreenLoadStatus: LoadStatus.Loading });
-      userMealDraft.read(mealName)
-        .then((userMeal) => {
-          const ingredients = mealMapper.toMealPlannerIngredients(
-            userMeal?.meal.ingredients ?? [],
-          );
-          meal.recalculate(
-            calories.resolve(dailyPlanEntry?.goals, userMeal),
-            ingredients,
-            {
-              mealName,
-              goals: dailyPlanEntry?.goals,  
-            }
-          );
-        })
-        .catch((error) => {
-          Log.error('Failed to read meal', error);
-          notificationsService.error(
-            translate('failed-to-read-user-draft-meal')
-          );
-        })
-        .finally(() => {
-          patchState({ fullScreenLoadStatus: null });
-        });
+      userMealDraft.readAndRecalculate(mealName);
     },
   };
 
@@ -712,7 +719,45 @@ export function MealPlanner() {
     },
 
     onEnter: (day: number, month: number, year: number) => {
-      patchState({ showDatePickerModal: false });
+      const dayFingerprint = dateService.toFingerprint(day, month, year);
+      patchState({
+        showDatePickerModal: false,
+        dayFingerprint,
+        fullScreenLoadStatus: LoadStatus.Loading,
+      });
+      userMealDraft.readAndRecalculate(state.mealName, dayFingerprint);
+    },
+
+    isToday: (): boolean => {
+      return state.dayFingerprint === dateService.getTodayFingerprint();
+    },
+
+    date: () => {
+      return dateService.fingerprintToDate(state.dayFingerprint);
+    },
+
+    valueForLabel: () => {
+      const date = dateService.fingerprintToDate(state.dayFingerprint);
+      const differenceInDays = dateService.differenceInDaysFromNow(date);
+
+      let value: string;
+      if (differenceInDays === 0) {
+        value = translate('today');
+      }
+      else if (differenceInDays === 1) {
+        value = translate('tomorrow');
+      }
+      else {
+        const dayOfWeek = date.toFormat('EEEE');
+        value = dayOfWeek;
+        if (differenceInDays > 1) {
+          value += translate('in-days', differenceInDays.toString());
+        }
+        else if (differenceInDays < 0) {
+          value += translate('days-ago', (-differenceInDays).toString());
+        }
+      }
+      return value;
     },
   };
 
@@ -764,6 +809,7 @@ export function MealPlanner() {
               </div>
             </div>
             <MealPlannerActionBar
+              logDisabled={!day.isToday()}
               onLogMeal={() => meal.onLog()}
               onTakePhoto={meal.onTakePhoto}
               onClearMeal={meal.onClear}
@@ -774,6 +820,17 @@ export function MealPlanner() {
               onPickADay={day.onShow}
             />
           </div>
+          { !day.isToday() &&
+            <div className='mealz-meal-planner-day-label'>
+              <div className='mealz-meal-planner-day-label-label'>
+                { translate('planning-meal-for') }
+              </div>
+              &nbsp;
+              <div className='mealz-meal-planner-day-label-value'>
+                { day.valueForLabel() }
+              </div>
+            </div>
+          }
           <div className='mealz-meal-planner-ingredients'>
             <IngredientsEditor
               className='mealz-meal-planner-editor'
@@ -859,9 +916,9 @@ export function MealPlanner() {
       { state.showDatePickerModal &&
         <DatePickerModal
           show={state.showDatePickerModal}
-          day={new Date().getDate()}
-          month={new Date().getMonth() + 1}
-          year={new Date().getFullYear()}
+          day={day.date().day}
+          month={day.date().month}
+          year={day.date().year}
           onEnter={day.onEnter}
           onClose={day.onClose}
         />

@@ -42,3 +42,15 @@
 .mealz-date-picker-modal-buttons {
   margin-bottom: 2rem;
 }
+
+.mealz-date-picker-modal-quick-buttons {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  .mealz-link-button {
+    @include mealz-font-small();
+  }
+}

@@ -9,6 +9,7 @@ import {
 } from './MealPlannerActionBar.translations';
 
 export interface MealPlannerActionBarProps {
+  logDisabled: boolean;
   onLogMeal: () => void;
   onTakePhoto: () => void;
   onClearMeal: () => void;
@@ -90,6 +91,7 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
         <MaterialIcon
           className='mealz-meal-planner-action-bar-icon'
           icon='note_add'
+          disabled={props.logDisabled}
           onClick={props.onLogMeal}
         />
         <Separator/>

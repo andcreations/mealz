@@ -1,16 +1,21 @@
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Form from 'react-bootstrap/Form';
 import classNames from 'classnames';
+import { DateTime } from 'luxon';
 
-import { usePatchState } from '../../hooks';
+import { usePatchState, useService } from '../../hooks';
 import { blurRef, focusRef, ifEnterKey } from '../../utils';
+import { useTranslations } from '../../i18n';
+import { DateService } from '../../system';
+import { DatePickerTranslations } from './DatePicker.translations';
 
 export interface DatePickerProps {
   className?: string;
-  day: number;
-  month: number;
-  year: number;
+  day: number | undefined;
+  month: number | undefined;
+  year: number | undefined;
+  error?: string;
   onChange: (
     day: number | undefined,
     month: number | undefined,
@@ -24,29 +29,29 @@ enum Focus { Day, Month, Year };
 
 interface DatePickerState {
   focus: Focus;
-  day: string;
   dayError: boolean;
-  month: string;
   monthError: boolean;
-  year: string;
   yearError: boolean;
 }
 
 export function DatePicker(props: DatePickerProps) {
-  const digits2 = (value: number | string) => {
+  const dateService = useService(DateService);
+  const translate = useTranslations(DatePickerTranslations);
+
+  const digits = (value: number | string | undefined, count: number) => {
+    if (value === undefined) {
+      return '';
+    }
     if (typeof value === 'number') {
       value = value.toString();
     }
-    return value.padStart(2, '0');
+    return value;
   };
 
   const [state, setState] = useState<DatePickerState>({
     focus: Focus.Day,
-    day: digits2(props.day),
     dayError: false,
-    month: digits2(props.month),
     monthError: false,
-    year: props.year.toString(),
     yearError: false,
   });
   const patchState = usePatchState(setState);
@@ -73,33 +78,20 @@ export function DatePicker(props: DatePickerProps) {
     [],
   );
 
-  // notify
+  // update the error state
   useEffect(
     () => {
-      if (state.dayError || state.monthError || state.yearError) {
-        props.onChange(undefined, undefined, undefined, false);
-        return;
-      }
-      props.onChange(
-        parseInt(state.day),
-        parseInt(state.month),
-        parseInt(state.year),
-        true,
-      );
-    },
-    [
-      state.day,
-      state.month,
-      state.year,
-      state.dayError,
-      state.monthError,
-      state.yearError,
-    ],
-  );
+      const dayError = !day.isValid(props.day.toString());
+      const monthError = !month.isValid(props.month.toString());
+      const yearError = !year.isValid(props.year.toString());
+      patchState({ dayError, monthError, yearError });
 
-  const pickerClassNames = classNames(
-    'mealz-date-picker',
-    props.className,
+      if (props.onChange !== undefined) {
+        const isValid = !dayError && !monthError && !yearError;
+        props.onChange(props.day, props.month, props.year, isValid);
+      }
+    },
+    [props.day, props.month, props.year],
   );
 
   const day = {
@@ -111,10 +103,9 @@ export function DatePicker(props: DatePickerProps) {
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
-      patchState({
-        day: value,
-        dayError: !day.isValid(value),
-      });
+      const isValid = day.isValid(value);
+      patchState({ dayError: !isValid });
+      props.onChange(parseInt(value), props.month, props.year, isValid);
     },
 
     onEnter: () => {
@@ -143,10 +134,9 @@ export function DatePicker(props: DatePickerProps) {
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
-      patchState({
-        month: value,
-        monthError: !month.isValid(value),
-      });
+      const isValid = month.isValid(value);
+      patchState({ monthError: !isValid });
+      props.onChange(props.day, parseInt(value), props.year, isValid);
     },
 
     onEnter: () => {
@@ -175,10 +165,9 @@ export function DatePicker(props: DatePickerProps) {
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
-      patchState({
-        year: value,
-        yearError: !year.isValid(value),
-      });
+      const isValid = year.isValid(value);
+      patchState({ yearError: !isValid });
+      props.onChange(props.day, props.month, parseInt(value), isValid);
     },
 
     onEnter: () => {
@@ -198,6 +187,52 @@ export function DatePicker(props: DatePickerProps) {
     },
   };
 
+  const dateSummary = useMemo(
+    () => {
+      if (state.dayError || state.monthError || state.yearError) {
+        return undefined;
+      }
+      const day = props.day;
+      const month = props.month;
+      const year = props.year;
+      const date = DateTime.local(year, month, day);
+      if (!date.isValid) {
+        return undefined;
+      }
+
+      const dayOfWeek = date.toFormat('EEEE');
+      const differenceInDays = dateService.differenceInDaysFromNow(date);
+
+      let relative: string;
+      if (differenceInDays === 0) {
+        relative = translate('today');
+      }
+      else if (differenceInDays === 1) {
+        relative = translate('tomorrow');
+      }
+      else if (differenceInDays > 1) {
+        relative = translate('in-days', differenceInDays.toString());
+      }
+      else if (differenceInDays < 0) {
+        relative = translate('days-ago', (-differenceInDays).toString());
+      }
+
+      return translate('summary', dayOfWeek, relative);
+    },
+    [
+      props.day,
+      props.month,
+      props.year,
+      state.dayError,
+      state.monthError,
+      state.yearError,
+    ],
+  );
+
+  const pickerClassNames = classNames(
+    'mealz-date-picker',
+    props.className,
+  );
   const dayInputClassNames = classNames(
     { 'mealz-input-error': state.dayError },
   );
@@ -210,64 +245,79 @@ export function DatePicker(props: DatePickerProps) {
 
   return (
     <div className={pickerClassNames}>
-      <div className='mealz-date-picker-day'>
-        <div className='mealz-date-picker-day-value'>
-          <Form.Control
-            className={dayInputClassNames}
-            ref={day.ref}
-            type='text'
-            inputMode='numeric'
-            pattern='[0-9]*'
-            min='1'
-            max='31'
-            value={state.day}
-            onFocus={day.onFocus}
-            onChange={day.onChange}
-            onKeyDown={ifEnterKey(day.onEnter)}
-            enterKeyHint='done'
-          />
+      <div className='mealz-date-picker-inputs'>
+        <div className='mealz-date-picker-day'>
+          <div className='mealz-date-picker-day-value'>
+            <Form.Control
+              className={dayInputClassNames}
+              ref={day.ref}
+              type='text'
+              inputMode='numeric'
+              pattern='[0-9]*'
+              min='1'
+              max='31'
+              value={digits(props.day, 2)}
+              onFocus={day.onFocus}
+              onChange={day.onChange}
+              onKeyDown={ifEnterKey(day.onEnter)}
+              enterKeyHint='done'
+            />
+          </div>
+          <div className='mealz-date-picker-label'>{ translate('day') }</div>
+        </div>
+        <div className='mealz-date-picker-separator'>
+        </div>
+        <div className='mealz-date-picker-month'>
+          <div className='mealz-date-picker-month-value'>
+            <Form.Control
+              className={monthInputClassNames}
+              ref={month.ref}
+              type='text'
+              inputMode='numeric'
+              pattern='[0-9]*'
+              min='1'
+              max='12'
+              value={digits(props.month, 2)}
+              onFocus={month.onFocus}
+              onChange={month.onChange}
+              onKeyDown={ifEnterKey(month.onEnter)}
+              enterKeyHint='done'
+            />
+          </div>
+          <div className='mealz-date-picker-label'>{ translate('month') }</div>
+        </div>
+        <div className='mealz-date-picker-separator'>
+        </div>
+        <div className='mealz-date-picker-year'>
+          <div className='mealz-date-picker-year-value'>
+            <Form.Control
+              className={yearInputClassNames}
+              ref={year.ref}
+              type='text'
+              inputMode='numeric'
+              pattern='[0-9]*'
+              min='1900'
+              max='9999'
+              value={digits(props.year, 4)}
+              onFocus={year.onFocus}
+              onChange={year.onChange}
+              onKeyDown={ifEnterKey(year.onEnter)}
+              enterKeyHint='done'
+            />
+          </div>
+          <div className='mealz-date-picker-label'>{ translate('year') }</div>
         </div>
       </div>
-      <div className='mealz-date-picker-separator'>
-      </div>
-      <div className='mealz-date-picker-month'>
-        <div className='mealz-date-picker-month-value'>
-          <Form.Control
-            className={monthInputClassNames}
-            ref={month.ref}
-            type='text'
-            inputMode='numeric'
-            pattern='[0-9]*'
-            min='1'
-            max='12'
-            value={state.month}
-            onFocus={month.onFocus}
-            onChange={month.onChange}
-            onKeyDown={ifEnterKey(month.onEnter)}
-            enterKeyHint='done'
-          />
+      { props.error !== undefined &&
+        <div className='mealz-date-picker-error'>
+          { props.error }
         </div>
-      </div>
-      <div className='mealz-date-picker-separator'>
-      </div>
-      <div className='mealz-date-picker-year'>
-        <div className='mealz-date-picker-year-value'>
-          <Form.Control
-            className={yearInputClassNames}
-            ref={year.ref}
-            type='text'
-            inputMode='numeric'
-            pattern='[0-9]*'
-            min='1900'
-            max='9999'
-            value={state.year}
-            onFocus={year.onFocus}
-            onChange={year.onChange}
-            onKeyDown={ifEnterKey(year.onEnter)}
-            enterKeyHint='done'
-          />
+      }
+      { (props.error === undefined && !!dateSummary) &&
+        <div className='mealz-date-picker-summary'>
+          { dateSummary }
         </div>
-      </div>
+      }
     </div>
   );
 }
