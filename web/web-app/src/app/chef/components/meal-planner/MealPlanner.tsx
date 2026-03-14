@@ -445,6 +445,10 @@ export function MealPlanner() {
       return result;
     },
 
+    isLogEnabled: (): boolean => {
+      return day.isToday() && !mealsUserService.isDraftMeal(state.mealName);
+    },
+
     onLog: (force?: boolean) => {
       if (state.calculateAmountsError) {
         notificationsService.error(
@@ -809,7 +813,7 @@ export function MealPlanner() {
               </div>
             </div>
             <MealPlannerActionBar
-              logDisabled={!day.isToday()}
+              logDisabled={!meal.isLogEnabled()}
               onLogMeal={() => meal.onLog()}
               onTakePhoto={meal.onTakePhoto}
               onClearMeal={meal.onClear}
