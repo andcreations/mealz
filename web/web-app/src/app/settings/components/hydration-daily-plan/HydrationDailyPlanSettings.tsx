@@ -85,7 +85,7 @@ export function HydrationDailyPlanSettings(
     () => {
       Log.logAndRethrow(
         () => hydrationDailyPlanService.readCurrentDailyPlan(),
-        'Failed to read current daily plan',
+        'hydration-daily-plan-read-in-hydration-daily-plan-settings',
       ).then((dailyPlan) => {
         let dailyPlanState:
           undefined | 

@@ -94,7 +94,7 @@ export function Calculator(props: CalculatorProps) {
     () => {
       Log.logAndRethrow(
         () => calculatorSettingsService.read(),
-        'Failed to read calculator settings',
+        'calculator-settings-read-in-calculator',
       ).then(settings => {
         if (!settings) {
           patchState({ loadStatus: LoadStatus.Loaded });

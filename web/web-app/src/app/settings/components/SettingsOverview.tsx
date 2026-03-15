@@ -31,7 +31,7 @@ export function SettingsOverview() {
   useEffect(() => {
     Log.logAndRethrow(
       () => userService.readCurrentUserV1(),
-      'Failed to check if signed in',
+      'user-read-in-settings-overview',
     ).then(({ userInfo }) => {
       patchState({ userInfo });
     }).catch((error) => {
