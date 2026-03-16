@@ -32,7 +32,7 @@ export function ChefPage() {
       Promise.all([
         Log.logAndRethrow(
           () => ingredientsCrudService.loadAll(),
-          'Failed to load ingredients',
+          'ingredients-read-in-chef-page',
         ),
       ])
       .then(([ingredients]) => {

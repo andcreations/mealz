@@ -52,19 +52,19 @@ export function DailySummary(props: DailySummaryProps) {
       Promise.all([
         Log.logAndRethrow(
           () => ingredientsCrudService.waitForIngredientsToLoad(),
-          'Failed to wait for ingredients to load',
+          'wait-for-ingredients-in-daily-summary',
         ),
         Log.logAndRethrow(
           () => mealsLogService.readByDateRange(props.fromDate, props.toDate),
-          'Failed to read daily meal log',
+          'meal-log-read-in-daily-summary',
         ),
         Log.logAndRethrow(
           () => mealsDailyPlanService.readEntriesByNow(),
-          'Failed to read current daily plan entries',
+          'daily-plan-entries-by-now-read-in-daily-summary',
         ),
         Log.logAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily plan entries',
+          'daily-plan-read-in-daily-summary',
         ),
       ])
       .then(([_, meals, _dailyPlanEntries, dailyPlan]) => {

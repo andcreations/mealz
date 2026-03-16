@@ -54,7 +54,7 @@ export function MealSummary(props: MealSummaryProps) {
       Promise.all([
         Log.logAndRethrow(
           () => ingredientsService.waitForIngredientsToLoad(),
-          'Failed to wait for ingredients to load',
+          'wait-for-ingredients-in-meal-summary',
         ),
       ])
       .then(([_]) => {

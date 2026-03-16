@@ -21,6 +21,12 @@ export class MealsUserService {
     private readonly authService: AuthService,
   ) {}
 
+  public isDraftMeal(mealName: string): boolean {
+    return MealsUserService.DRAFT_MEAL_NAMES.includes(
+      mealName.toLowerCase(),
+    );
+  }
+
   private buildDraftMealTypeId(
     mealName: string,
     dateFingerprint: string,

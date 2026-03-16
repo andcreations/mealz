@@ -82,11 +82,11 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
       Promise.all([
         Log.logAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily plan',
+          'meal-daily-plan-read-in-meal-daily-plan-settings',
         ),
         Log.logAndRethrow(
           () => calculatorSettingsService.read(),
-          'Failed to read calculator settings',
+          'calculator-settings-read-in-meal-daily-plan-settings',
         ),
       ]).then(([dailyPlan, calculatorSettings]) => {
         const amount = (from: number, to: number) => {

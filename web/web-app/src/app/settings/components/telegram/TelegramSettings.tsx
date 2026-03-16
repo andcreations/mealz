@@ -46,7 +46,7 @@ export function TelegramSettings() {
     () => {
       Log.logAndRethrow(
         () => telegramService.readTelegramUser(),
-        'Failed to read Telegram user',
+        'telegram-user-read-in-telegram-settings',
       ).then(telegramUser => {
         // if user's account is already linked...
         if (telegramUser) {
@@ -60,7 +60,7 @@ export function TelegramSettings() {
         // ...otherwise generate start link
         Log.logAndRethrow(
           () => telegramService.generateStartLink(),
-          'Failed to generate start link',
+          'telegram-start-link-generate-in-telegram-settings',
         ).then(startLink => {
           patchState({
             loadStatus: LoadStatus.Loaded,

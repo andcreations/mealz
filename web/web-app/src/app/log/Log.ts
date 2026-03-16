@@ -30,12 +30,13 @@ export class Log {
 
   public static async logAndRethrow<T>(
     func: () => Promise<T>,
-    errorMsg?: string,
+    eventType: string,
+    eventData?: object,
   ): Promise<T> {
     try {
       return await func();
     } catch (error) {
-      this.error(errorMsg ?? 'Caught error during async function call', error);
+      this.error('Caught error during async function call', error);
       throw error;
     }
   }

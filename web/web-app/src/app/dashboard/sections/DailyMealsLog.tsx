@@ -45,15 +45,15 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
       Promise.all([
         Log.logAndRethrow(
           () => mealsLogService.readByDateRange(props.fromDate, props.toDate),
-          'Failed to summarize daily meal log',
+          'meal-log-read-in-daily-meals-log',
         ),
         Log.logAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily plan',
+          'daily-plan-read-in-daily-meals-log',
         ),
         Log.logAndRethrow(
           () => ingredientsService.waitForIngredientsToLoad(),
-          'Failed to wait for ingredients to load',
+          'wait-for-ingredients-in-daily-meals-log',
         ),
       ])
       .then(([meals, mealDailyPlan, _]) => {

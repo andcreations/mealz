@@ -144,11 +144,11 @@ export function MealPlanner() {
       Promise.all([
         Log.logAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily plan',
+          'daily-plan-read-in-meal-planner',
         ),
         Log.logAndRethrow(
           () => mealsNamedService.loadAll(),
-          'Failed to load named meals',
+          'named-meals-read-in-meal-planner',
         ),
       ])
       .then(([currentDailyMealPlan, loadedNamedMeals]) => {
@@ -443,6 +443,10 @@ export function MealPlanner() {
         ...extraState,
       });
       return result;
+    },
+
+    isLogEnabled: (): boolean => {
+      return day.isToday() && !mealsUserService.isDraftMeal(state.mealName);
     },
 
     onLog: (force?: boolean) => {
@@ -809,7 +813,7 @@ export function MealPlanner() {
               </div>
             </div>
             <MealPlannerActionBar
-              logDisabled={!day.isToday()}
+              logDisabled={!meal.isLogEnabled()}
               onLogMeal={() => meal.onLog()}
               onTakePhoto={meal.onTakePhoto}
               onClearMeal={meal.onClear}

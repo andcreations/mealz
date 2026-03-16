@@ -51,14 +51,14 @@ export function DailyHydration(props: DailyHydrationProps) {
       Promise.all([
         Log.logAndRethrow(
           () => hydrationDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily hydration plan',
+          'daily-plan-read-in-daily-hydration',
         ),
         Log.logAndRethrow(
           () => hydrationLogService.readByDateRange(
             props.fromDate,
             props.toDate,
           ),
-          'Failed to read hydration logs',
+          'hydration-log-read-in-daily-hydration',
         ),
       ])
       .then(([dailyPlan, logs]) => {

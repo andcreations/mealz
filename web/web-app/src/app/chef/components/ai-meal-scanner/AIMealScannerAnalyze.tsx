@@ -55,11 +55,11 @@ export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
     Promise.all([
       Log.logAndRethrow(
         () => aiMealScanService.scanPhoto(props.photo, props.hints),
-        'Failed to scan photo',
+        'scan-photo-in-ai-meal-scanner-analyze',
       ),
       Log.logAndRethrow(
         () => mealsDailyPlanService.readCurrentEntry(),
-        'Failed to read current goals',
+        'daily-plan-read-in-ai-meal-scanner-analyze',
       ),
     ])
     .then(([result, currentGoalsEntry]) => {
