@@ -53,6 +53,7 @@ export class DateService {
   }
 
   public differenceInDaysFromNow(date: DateTime): number {
-    return Math.round(date.diff(DateTime.now(), 'days').days);
+    const now = DateTime.now();
+    return date.startOf('day').diff(now.startOf('day'), 'days').days;
   }
 }

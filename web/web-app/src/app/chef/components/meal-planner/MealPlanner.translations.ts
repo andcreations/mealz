@@ -53,6 +53,6 @@ export const MealPlannerTranslations: Translations = {
   'tomorrow': 'tomorrow',
   'planning-meal-for': 'Planning meal for',
   'in-days': ' in {0} days',
+  'yesterday': ' yesterday',
   'days-ago': ' {0} days ago',
-  'day-label': '{0}',
 };

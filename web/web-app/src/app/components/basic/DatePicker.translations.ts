@@ -4,9 +4,10 @@ export const DatePickerTranslations: Translations = {
   'day': 'Day',
   'month': 'Month',
   'year': 'Year',
-  'today': 'Today',
-  'tomorrow': 'Tomorrow',
+  'today': 'today',
+  'tomorrow': 'tomorrow',
   'in-days': ' in {0} days',
+  'yesterday': ' yesterday',
   'days-ago': ' {0} days ago',
-  'summary': '{0} {1}',
+  'summary': '{0}, {1}',
 };

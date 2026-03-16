@@ -753,12 +753,15 @@ export function MealPlanner() {
       }
       else {
         const dayOfWeek = date.toFormat('EEEE');
-        value = dayOfWeek;
+        value = `${dayOfWeek}, `;
         if (differenceInDays > 1) {
           value += translate('in-days', differenceInDays.toString());
         }
         else if (differenceInDays < 0) {
-          value += translate('days-ago', (-differenceInDays).toString());
+          const daysAgo = -differenceInDays;
+          value += daysAgo === 1
+            ? translate('yesterday')
+            : translate('days-ago', daysAgo.toString());
         }
       }
       return value;

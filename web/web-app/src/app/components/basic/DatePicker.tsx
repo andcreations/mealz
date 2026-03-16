@@ -214,7 +214,10 @@ export function DatePicker(props: DatePickerProps) {
         relative = translate('in-days', differenceInDays.toString());
       }
       else if (differenceInDays < 0) {
-        relative = translate('days-ago', (-differenceInDays).toString());
+        const daysAgo = -differenceInDays;
+        relative = daysAgo === 1
+          ? translate('yesterday')
+          : translate('days-ago', daysAgo.toString());
       }
 
       return translate('summary', dayOfWeek, relative);
