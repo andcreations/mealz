@@ -742,29 +742,29 @@ export function MealPlanner() {
 
     valueForLabel: () => {
       const date = dateService.fingerprintToDate(state.dayFingerprint);
+      const dayOfWeek = date.toFormat('EEEE');
       const differenceInDays = dateService.differenceInDaysFromNow(date);
 
-      let value: string;
+      let relative = '';
       if (differenceInDays === 0) {
-        value = translate('today');
+        return translate('today');
       }
       else if (differenceInDays === 1) {
-        value = translate('tomorrow');
+        return translate('tomorrow');
       }
       else {
-        const dayOfWeek = date.toFormat('EEEE');
-        value = `${dayOfWeek}, `;
         if (differenceInDays > 1) {
-          value += translate('in-days', differenceInDays.toString());
+          relative = translate('in-days', differenceInDays.toString());
         }
         else if (differenceInDays < 0) {
           const daysAgo = -differenceInDays;
-          value += daysAgo === 1
-            ? translate('yesterday')
-            : translate('days-ago', daysAgo.toString());
+          if (daysAgo === 1) {
+            return translate('yesterday');
+          }
+          relative = translate('days-ago', daysAgo.toString());
         }
       }
-      return value;
+      return translate('summary', dayOfWeek, relative);
     },
   };
 

@@ -55,4 +55,5 @@ export const MealPlannerTranslations: Translations = {
   'in-days': ' in {0} days',
   'yesterday': ' yesterday',
   'days-ago': ' {0} days ago',
+  'summary': '{0} {1}',
 };

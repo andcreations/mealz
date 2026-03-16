@@ -48,6 +48,20 @@ export function DatePicker(props: DatePickerProps) {
     return value;
   };
 
+  const parseIntOrUndefined = (
+    value: string,
+  ): number | undefined => {
+    console.log(`value '${value}'`);
+    if (value.trim().length === 0) {
+      return undefined;
+    }
+    const intValue = parseInt(value);
+    if (isNaN(intValue)) {
+      return undefined;
+    }
+    return intValue;
+  };
+
   const [state, setState] = useState<DatePickerState>({
     focus: Focus.Day,
     dayError: false,
@@ -81,9 +95,9 @@ export function DatePicker(props: DatePickerProps) {
   // update the error state
   useEffect(
     () => {
-      const dayError = !day.isValid(props.day.toString());
-      const monthError = !month.isValid(props.month.toString());
-      const yearError = !year.isValid(props.year.toString());
+      const dayError = !day.isValid(props.day?.toString());
+      const monthError = !month.isValid(props.month?.toString());
+      const yearError = !year.isValid(props.year?.toString());
       patchState({ dayError, monthError, yearError });
 
       if (props.onChange !== undefined) {
@@ -105,7 +119,12 @@ export function DatePicker(props: DatePickerProps) {
       const value = event.target.value;
       const isValid = day.isValid(value);
       patchState({ dayError: !isValid });
-      props.onChange(parseInt(value), props.month, props.year, isValid);
+      props.onChange(
+        parseIntOrUndefined(value),
+        props.month,
+        props.year,
+        isValid,
+      );
     },
 
     onEnter: () => {
@@ -119,7 +138,10 @@ export function DatePicker(props: DatePickerProps) {
       });
     },
 
-    isValid: (value: string) => {
+    isValid: (value: string | undefined) => {
+      if (value === undefined) {
+        return false;
+      }
       const day = parseInt(value);
       return day >= 1 && day <= 31;
     },
@@ -150,7 +172,10 @@ export function DatePicker(props: DatePickerProps) {
       });
     },
 
-    isValid: (value: string) => {
+    isValid: (value: string | undefined) => {
+      if (value === undefined) {
+        return false;
+      }
       const month = parseInt(value);
       return month >= 1 && month <= 12;
     },
@@ -181,7 +206,10 @@ export function DatePicker(props: DatePickerProps) {
       }
     },
 
-    isValid: (value: string) => {
+    isValid: (value: string | undefined) => {
+      if (value === undefined) {
+        return false;
+      }
       const year = parseInt(value);
       return year >= 1900 && year <= 9999;
     },
@@ -205,19 +233,20 @@ export function DatePicker(props: DatePickerProps) {
 
       let relative: string;
       if (differenceInDays === 0) {
-        relative = translate('today');
+        return translate('today');
       }
       else if (differenceInDays === 1) {
-        relative = translate('tomorrow');
+        return translate('tomorrow');
       }
       else if (differenceInDays > 1) {
         relative = translate('in-days', differenceInDays.toString());
       }
       else if (differenceInDays < 0) {
         const daysAgo = -differenceInDays;
-        relative = daysAgo === 1
-          ? translate('yesterday')
-          : translate('days-ago', daysAgo.toString());
+        if (daysAgo === 1) {
+          return translate('yesterday');
+        }
+        relative = translate('days-ago', daysAgo.toString())
       }
 
       return translate('summary', dayOfWeek, relative);
