@@ -1,4 +1,4 @@
-$mealz-ingredient-picker-padding-bottom: 0.375rem;
+$mealz-ingredient-picker-padding-vertical: 0.375rem;
 
 .mealz-ingredient-picker {
   position: relative;
@@ -8,12 +8,13 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
   display: grid;
   grid-template-columns: 4rem auto 8.5rem;
   grid-template-rows: auto auto auto auto;
-  padding-bottom: $mealz-ingredient-picker-padding-bottom;
+  padding-bottom: 0.675rem;
+  padding-top: 0.375rem;
 }
 
 .mealz-ingredient-picker-amount {
   grid-column: 1;
-  grid-row: 1;
+  grid-row: 3; // 1
   @include mealz-flex-container();
   @include mealz-flex-horizontal();
   align-items: baseline;
@@ -41,7 +42,7 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
 
 .mealz-ingredient-picker-amount-details {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 4; // 2
   @include mealz-font-tiny();
   text-align: right;
   @include mealz-flex-container();
@@ -57,7 +58,7 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
 
 .mealz-ingredient-picker-name {
   grid-column: 2 / span 2;
-  grid-row: 1;
+  grid-row: 3; // 1
   @include mealz-flex-container();
   @include mealz-flex-vertical();
 
@@ -71,16 +72,16 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
 
 .mealz-ingredient-separator {
   grid-column: 1 / span 3;
-  grid-row: 3;
+  grid-row: 2; // 3
   background-color: $mealz-theme-color-bg;
   height: 1px;
-  margin: 0.5rem 1rem;
+  margin: 0.5rem 1rem 0.125rem 1rem;
   opacity: 0.5;
 }
 
 .mealz-ingredient-picker-add-more {
   grid-column: 1 / span 3;
-  grid-row: 4;
+  grid-row: 1; // 4
   @include mealz-flex-container();
   @include mealz-flex-horizontal();
   align-items: center;
@@ -100,19 +101,19 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
   justify-content: center;
   color: $mealz-theme-color-active;
   grid-column: 3;
-  grid-row: 4;
+  grid-row: 1; // 4
   cursor: pointer;
 }
 
 .mealz-ingredient-picker-icon {
-  padding-top: calc($mealz-ingredient-picker-padding-bottom / 2);
+  padding-top: calc($mealz-ingredient-picker-padding-vertical / 2);
 }
 
 .mealz-ingredient-picker-accept {
   @include mealz-font-small();
   color: $mealz-theme-color-active;
   cursor: pointer;
-  padding-top: calc($mealz-ingredient-picker-padding-bottom / 4);
+  padding-top: calc($mealz-ingredient-picker-padding-vertical / 4);
 }
 
 .mealz-ingredient-picker-icon-separator {
@@ -122,7 +123,7 @@ $mealz-ingredient-picker-padding-bottom: 0.375rem;
 
 .mealz-ingredient-picker-ingredient-details {
   grid-column: 2 / span 2;
-  grid-row: 2;
+  grid-row: 4; // 2
   position: relative; // for the ingredients dropdown
 }
 
