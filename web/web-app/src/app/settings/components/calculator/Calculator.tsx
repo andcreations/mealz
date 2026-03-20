@@ -12,7 +12,11 @@ import {
 import { logEventAndRethrow, logErrorEvent } from '../../../event-log';
 import { LoadStatus } from '../../../common';
 import { useTranslations } from '../../../i18n';
-import { macrosToSummaryDetails, parsePositiveInteger } from '../../../utils';
+import { 
+  macrosToSummaryDetails, 
+  parseInteger, 
+  parsePositiveInteger,
+} from '../../../utils';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   FullScreenLoader,
@@ -46,6 +50,9 @@ const VALID_MAX_HEIGHT = 230;
 const VALID_MIN_WEIGHT = 40;
 const VALID_MAX_WEIGHT = 250;
 
+const VALID_MIN_CALORIE_ADJUSTMENT = -2000;
+const VALID_MAX_CALORIE_ADJUSTMENT = 2000;
+
 export interface CalculatorProps {
   onDirtyChanged: (isDirty: boolean) => void;
 }
@@ -62,6 +69,8 @@ interface CalculatorState {
   weightError?: boolean;
   activityLevel: ActivityLevel | null;
   goal: Goal | null;
+  calorieAdjustment: string;
+  calorieAdjustmentError?: boolean;
   showSexPicker: boolean;
   showActivityLevelPicker: boolean;
   showGoalPicker: boolean;
@@ -83,6 +92,8 @@ export function Calculator(props: CalculatorProps) {
     weight: '',
     activityLevel: null,
     goal: null,
+    calorieAdjustment: '',
+    calorieAdjustmentError: false,
     showSexPicker: false,
     showActivityLevelPicker: false,
     showGoalPicker: false,
@@ -109,6 +120,7 @@ export function Calculator(props: CalculatorProps) {
           weight: settings.weight.toString(),
           activityLevel: settings.activityLevel,
           goal: settings.goal,
+          calorieAdjustment: (settings.calorieAdjustment ?? 0).toString(),
         });
       })
       .catch(error => {
@@ -363,6 +375,24 @@ export function Calculator(props: CalculatorProps) {
     }
   }
 
+  const calorieAdjustment = {
+    onChange: (value: string) => {
+      patchState({
+        isDirty: true,
+        calorieAdjustment: value,
+        calorieAdjustmentError: calorieAdjustment.hasError(value),
+      });
+    },
+
+    hasError: (valueStr: string) => {
+      const value = parseInteger(valueStr);
+      if (isNaN(value)) {
+        return true;
+      }
+      return value < VALID_MIN_CALORIE_ADJUSTMENT || value > VALID_MAX_CALORIE_ADJUSTMENT;
+    },
+  };
+
   const calculator = {
     hasEmptyFields: () => {
       return (
@@ -371,7 +401,8 @@ export function Calculator(props: CalculatorProps) {
         state.height === '' ||
         state.weight === '' ||
         state.activityLevel === null ||
-        state.goal === null
+        state.goal === null ||
+        state.calorieAdjustment === ''
       );
     },
 
@@ -379,7 +410,8 @@ export function Calculator(props: CalculatorProps) {
       return (
         state.ageError ||
         state.heightError ||
-        state.weightError
+        state.weightError ||
+        state.calorieAdjustmentError
       );
     },
 
@@ -407,6 +439,7 @@ export function Calculator(props: CalculatorProps) {
         weight: parseInt(state.weight),
         activityLevel: state.activityLevel,
         goal: state.goal,
+        calorieAdjustment: parseInt(state.calorieAdjustment),
       });
       return {
         ...result,
@@ -451,6 +484,7 @@ export function Calculator(props: CalculatorProps) {
         weight: parseInt(state.weight),
         activityLevel: state.activityLevel,
         goal: state.goal,
+        calorieAdjustment: parseInt(state.calorieAdjustment),
       }
       logEventAndRethrow(
         () => calculatorSettingsService.upsert(
@@ -603,6 +637,21 @@ export function Calculator(props: CalculatorProps) {
           </div>
           <SettingsSeparator/>
         </SettingsSection>
+
+        <SettingsSection
+          title={translate('calorie-adjustment-title')}
+        >
+          <InputSetting
+            type='number'
+            label={translate('calorie-adjustment-label')}
+            labelSuffix={translate('calorie-adjustment-label-suffix')}
+            details={translate('calorie-adjustment-details')}
+            value={state.calorieAdjustment}
+            error={state.calorieAdjustmentError}
+            onChange={calorieAdjustment.onChange}
+          />
+          <SettingsSeparator/>
+        </SettingsSection>        
 
         <SettingsSection title={translate('summary-title')}>
           { calculator.hasIssues() &&
