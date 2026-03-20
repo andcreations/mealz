@@ -8,3 +8,4 @@ export * from './ModalMenu';
 export * from './FullScreenLoader';
 export * from './Switch';
 export * from './HourAndMinutePicker';
+export * from './DatePicker';

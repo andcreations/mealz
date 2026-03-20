@@ -18,8 +18,9 @@ import {
 
 import { LoadStatus } from '../../common';
 import { isStringSimilar, stripDiacritics } from '../../utils';
-import { Log } from '../../log';
-import { AuthService, AuthTopics } from '../../auth';
+import { logErrorEvent, logInfoEvent } from '../../event-log';
+import { AuthUserService, AuthTopics } from '../../auth';
+import { eventType } from '../event-log';
 import { NamedMeal } from '../types';
 
 @Service()
@@ -31,20 +32,20 @@ export class MealsNamedService implements OnBootstrap {
 
   public constructor(
     private readonly http: HTTPWebClientService,
-    private readonly authService: AuthService,
+    private readonly authUserService: AuthUserService,
   ) {}
 
   public async onBootstrap(): Promise<void> {
   // read all the ingredients in the background
-    if (this.authService.isSignedIn()) {
-      Log.info('Reading all named meals on bootstrap');
+    if (this.authUserService.isSignedIn()) {
+      logInfoEvent(eventType('reading-all-named-meals-on-bootstrap'));
       this.readNamedMeals();
     }    
   }
 
   @BusEvent(AuthTopics.UserSignedIn)
   public userSignedIn(): void {
-    Log.info('Reading all named meals on user sign-in');
+    logInfoEvent(eventType('reading-all-named-meals-on-user-sign-in'));
     this.readNamedMeals();
   }
 
@@ -57,7 +58,7 @@ export class MealsNamedService implements OnBootstrap {
       });
     } catch (error) {
       this.changeLoadStatus(LoadStatus.FailedToLoad);
-      Log.error('Failed to read all named meals', error);
+      logErrorEvent(eventType('failed-to-read-all-named-meals'), {}, error);
       this.pendingLoads.forEach(pendingLoad => {
         pendingLoad.reject(error);
       });
@@ -86,10 +87,10 @@ export class MealsNamedService implements OnBootstrap {
       }
       lastId = namedMeals[namedMeals.length - 1].id;
     }
-    Log.info(
-      `Read ${readNamedMeals.length} named meals ` +
-      `in ${Date.now() - startTime}ms`
-    );
+    logInfoEvent(eventType('read-named-meals'), {
+      count: readNamedMeals.length,
+      time: Date.now() - startTime,
+    });
 
     // keep
     this.namedMeals = readNamedMeals;
@@ -130,7 +131,7 @@ export class MealsNamedService implements OnBootstrap {
 
   public search(query: string, limit?: number): NamedMeal[] {
     if (!this.isLoaded()) {
-      Log.error('Named meals not loaded');
+      logErrorEvent(eventType('named-meals-not-loaded'), {});
       return [];
     }
 

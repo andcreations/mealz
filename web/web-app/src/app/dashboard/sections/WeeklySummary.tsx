@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { Log } from '../../log';
+import { logErrorEvent } from '../../event-log';
 import { LoadStatus } from '../../common';
 import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
 import { usePatchState, useService } from '../../hooks';
 import { useTranslations } from '../../i18n';
 import { GWMacrosWithDayOfWeek, MealsLogService } from '../../meals';
+import { eventType } from '../event-log';
 import { MacrosSummaryChart, MacrosSummaryChartData } from '../components';
 import { WeeklySummaryTranslations } from './WeeklySummary.translations';
-
 
 interface WeeklySummaryState {
   summaries?: GWMacrosWithDayOfWeek[];
@@ -35,7 +35,11 @@ export function WeeklySummary() {
           });
         })
         .catch(error => {
-          Log.error('Failed to fetch weekly summary', error);
+          logErrorEvent(
+            eventType('failed-to-initialize-weekly-summary'),
+            {},
+            error,
+          );
           patchState({ loadStatus: LoadStatus.FailedToLoad });
         });
     },

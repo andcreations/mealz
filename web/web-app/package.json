@@ -13,7 +13,7 @@
     "build": "npm run build-tools && node dist/tools/build all",
     "clean": "rm -rf dist && rm -rf node_modules",
     "watch": "node dist/tools/watch",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests --detectOpenHandles"
   },
   "author": "Mikolaj Gucki",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "react-router-dom": "^7.6.2",
     "recharts": "^3.3.0",
     "reflect-metadata": "^0.1.13",
-    "uuid": "^13.0.0"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@andcreations/web-builder": "^0.2.2",

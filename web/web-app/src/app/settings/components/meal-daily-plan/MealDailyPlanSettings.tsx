@@ -9,7 +9,7 @@ import {
   GWMealDailyPlanForCreation,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
-import { Log } from '../../../log';
+import { logEventAndRethrow, logErrorEvent } from '../../../event-log';
 import { LoadStatus } from '../../../common';
 import { useTranslations } from '../../../i18n';
 import { useBusEventListener } from '../../../bus';
@@ -32,7 +32,12 @@ import {
   CalculatorService, 
   CalculatorSettingsService,
 } from '../../../calculator';
-import { cloneMealEntry, MealEntry, mealEntryMinute, mealEntryToNumbers } from '../../types';
+import { 
+  cloneMealEntry, 
+  MealEntry, 
+  mealEntryMinute, 
+  mealEntryToNumbers,
+} from '../../types';
 import { HourAndMinuteSettings } from './HourAndMinuteSettings';
 import { SettingsButtons } from '../SettingsButtons';
 import { MealDailyPlanEntry } from './MealDailyPlanEntry';
@@ -42,6 +47,7 @@ import {
   MealDailyPlanSettingsTranslations,
 } from './MealDailyPlanSettings.translations';
 import { MealEntryCalculator } from '../../utils';
+import { eventType } from '../../event-log';
 
 export interface MealDailyPlanSettingsProps {
   onDirtyChanged: (isDirty: boolean) => void;
@@ -80,13 +86,13 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
   useEffect(
     () => {
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily plan',
+          eventType('daily-plan-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => calculatorSettingsService.read(),
-          'Failed to read calculator settings',
+          eventType('calculator-settings-read'),
         ),
       ]).then(([dailyPlan, calculatorSettings]) => {
         const amount = (from: number, to: number) => {
@@ -160,7 +166,11 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
         });
       })
       .catch(error => {
-        Log.error('Failed to read meal daily plan settings', error);
+        logErrorEvent(
+          eventType('failed-to-read-meal-daily-plan-settings'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -657,7 +667,11 @@ export function MealDailyPlanSettings(props: MealDailyPlanSettingsProps) {
           });
         })
         .catch((error) => {
-          Log.error('Failed to apply daily plan', error);
+          logErrorEvent(
+            eventType('failed-to-apply-meal-daily-plan-settings'),
+            {},
+            error,
+          );
           notificationsService.pushNotification({
             message: translate('failed-to-apply-daily-plan'),
             type: NotificationType.Error,

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { LoadStatus } from '../../common';
-import { Log } from '../../log';
+import { logEventAndRethrow, logErrorEvent } from '../../event-log';
 import { useTranslations } from '../../i18n';
 import { usePatchState, useService } from '../../hooks';
 import { 
@@ -17,9 +17,10 @@ import {
   HydrationDailyPlanService,
   HydrationLogService,
 } from '../../hydration';
+import { PathTo } from '../../routing';
+import { eventType } from '../event-log';
 import { ProgressBar } from '../components';
 import { DailyHydrationTranslations } from './DailyHydration.translations';
-import { PathTo } from '../../routing';
 
 export interface DailyHydrationProps {
   fromDate: number;
@@ -49,16 +50,16 @@ export function DailyHydration(props: DailyHydrationProps) {
   useEffect(
     () => {
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => hydrationDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily hydration plan',
+          eventType('daily-plan-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => hydrationLogService.readByDateRange(
             props.fromDate,
             props.toDate,
           ),
-          'Failed to read hydration logs',
+          eventType('hydration-log-read'),
         ),
       ])
       .then(([dailyPlan, logs]) => {
@@ -69,7 +70,11 @@ export function DailyHydration(props: DailyHydrationProps) {
         });
       })
       .catch(error => {
-        Log.error('Failed to read hydration summary', error);
+        logErrorEvent(
+          eventType('failed-to-initialize-daily-hydration'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -94,7 +99,7 @@ export function DailyHydration(props: DailyHydrationProps) {
         }, 1024);
       })
       .catch(error => {
-        Log.error('Failed to log full glass', error);
+        logErrorEvent(eventType('failed-to-log-full-glass'), {}, error);
         notificationsService.error(translate('failed-to-log-full-glass'));
       });
   }

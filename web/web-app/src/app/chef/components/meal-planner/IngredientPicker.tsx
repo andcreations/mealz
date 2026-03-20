@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import classNames = require('classnames');
+import classNames from 'classnames';
 import {
   calculateFact,
   AdHocIngredient,
@@ -20,7 +19,7 @@ import {
   focusRef,
   stopBubble,
 } from '../../../utils';
-import { Log } from '../../../log';
+import { logErrorEvent } from '../../../event-log';
 import { useTranslations } from '../../../i18n';
 import { usePatchState, useService } from '../../../hooks';
 import { MealPlannerIngredient } from '../../types';
@@ -35,6 +34,7 @@ import {
 import { IngredientsDropdown } from './IngredientsDropdown';
 import { IngredientPickerTranslations } from './IngredientPicker.translations';
 import { MaterialIcon, Switch } from '../../../components';
+import { eventType } from '../../event-log';
 
 enum Focus { Amount, Name };
 
@@ -156,7 +156,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
   const selectIngredientByIndex = (index: number) => {
     const ingredient = state.dropdownIngredients[index];
     if (!ingredient) {
-      Log.error('Ingredient not found when selecting by index');
+      logErrorEvent(eventType('ingredient-not-found-when-selecting-by-index'));
       return;
     }
 
@@ -377,6 +377,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
       'mealz-ingredient-picker-ingredient-details-label',
       { 'mealz-error': !ingredient.has() || !amount.isValid() },
     ),
+
     adHocLabel: (): React.ReactNode | undefined => {
       const adHoc = ingredient.adHoc();
       if (!adHoc) {
@@ -429,6 +430,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
         </div>
       );
     },
+    
     label: (): string | React.ReactNode => {
       const isAdHoc = !!ingredient.adHoc();
       if (state.focus === Focus.Name) {

@@ -5,5 +5,6 @@ export const SettingsOverviewTranslations: Translations = {
   'daily-meal-plan': 'Daily meal plan',
   'telegram': 'Telegram',
   'calculator': 'Calculator',
+  'failed-to-load': 'Failed to load',
   'sign-out': 'Sign out',
 };  

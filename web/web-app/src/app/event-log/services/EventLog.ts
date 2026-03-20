@@ -1,25 +1,25 @@
 import { Service } from '@andcreations/common';
-import { v7 } from 'uuid';
+import * as uuid from 'uuid';
 
-import { EventLogCollector } from './EventLogCollector';
 import { LogEvent, LogEventLevel } from '../types';
+import { EventLogCollector } from './EventLogCollector';
 
 @Service()
 export class EventLog {
-  public constructor(private readonly collector: EventLogCollector) {
-  }
+  public constructor(
+    private readonly collector: EventLogCollector,
+  ) { }
   
   public log(
     level: LogEventLevel,
     eventType: string,
     eventData?: object,
   ): void {
-    const event: LogEvent = {
-      id: v7(),
+    const event: Omit<LogEvent, 'loggedAt' | 'unknownUser'> = {
+      id: uuid.v7(),
       type: eventType,
       level,
       data: eventData ?? {},
-      createdAt: Date.now(),
     };
     this.collector.addEvent(event);
   }

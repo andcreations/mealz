@@ -6,7 +6,7 @@ import {
 } from '@andcreations/common';
 import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
-import { logDebugEvent } from '../../log';
+import { logDebugEvent } from '../../event-log';
 import { INGREDIENT_LANGUAGE } from '../../common';
 import { stripDiacritics } from '../../utils';
 import { IngredientsTopics } from '../bus';
@@ -70,10 +70,6 @@ export class IngredientsSearch implements OnBootstrap {
       ),
       });
     });
-    // Log.debug(
-    //   `Indexed ${ingredients.length} ingredients for search ` +
-    //   `in ${Date.now() - startTime}ms`,
-    // );
     logDebugEvent(eventType('ingredients-indexed'), {
       total: ingredients.length,
       time: Date.now() - startTime,

@@ -21,6 +21,7 @@ import {
   TelegramDomainModule,
   AdminDomainModule,
   HealthDomainModule,
+  EventLogDomainModule,
 } from './domains';
 import { getServeStaticModule } from './web-app';
 
@@ -32,6 +33,7 @@ const DOMAIN_MODULES = [
   TelegramDomainModule,
   AdminDomainModule,
   HealthDomainModule,
+  EventLogDomainModule,
 ]
 
 @Module({

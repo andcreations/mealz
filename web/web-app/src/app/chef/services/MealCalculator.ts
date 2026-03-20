@@ -5,14 +5,14 @@ import {
 } from '@mealz/backend-ingredients-shared';
 
 import { I18nService } from '../../i18n';
+import { IngredientFacts } from '../../ingredients/types';
 import {
-  IngredientFacts,
   getCaloriesPer100,
   getCarbsPer100,
   getProteinPer100,
   getFatPer100,
   getFacts,
-} from '../../ingredients';
+} from '../../ingredients/utils';
 import { INVALID_AMOUNT } from '../const';
 import {
   CalculateAmountsResult,

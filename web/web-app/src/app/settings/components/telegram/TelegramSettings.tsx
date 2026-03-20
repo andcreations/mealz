@@ -3,13 +3,12 @@ import { useState, useEffect, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import { GWTelegramUser } from '@mealz/backend-telegram-users-gateway-api';
 
-import { Log } from '../../../log';
+import { logErrorEvent, logEventAndRethrow } from '../../../event-log';
 import { LoadStatus } from '../../../common';
 import { useTranslations } from '../../../i18n';
 import { 
   FullScreenLoader,
   htmlToReact,
-  LinkButton,
   LoaderByStatus,
   LoaderSize,
   LoaderType,
@@ -17,9 +16,10 @@ import {
 import { usePatchState, useService } from '../../../hooks';
 import { TelegramService } from '../../../telegram';
 import { NotificationsService } from '../../../notifications';
+import { eventType } from '../../event-log';
+import { SettingsSection } from '../SettingsSection';
 import { SwitchSetting } from '../SwitchSetting';
 import { TelegramSettingsTranslations } from './TelegramSettings.translations';
-import { SettingsSection } from '../SettingsSection';
 
 interface TelegramSettingsState {
   loadStatus: LoadStatus;
@@ -44,9 +44,9 @@ export function TelegramSettings() {
   // initial read
   useEffect(
     () => {
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => telegramService.readTelegramUser(),
-        'Failed to read Telegram user',
+        eventType('telegram-user-read'),
       ).then(telegramUser => {
         // if user's account is already linked...
         if (telegramUser) {
@@ -58,9 +58,9 @@ export function TelegramSettings() {
         }
         
         // ...otherwise generate start link
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => telegramService.generateStartLink(),
-          'Failed to generate start link',
+          eventType('telegram-start-link-generate'),
         ).then(startLink => {
           patchState({
             loadStatus: LoadStatus.Loaded,
@@ -69,7 +69,7 @@ export function TelegramSettings() {
         });
       })
       .catch(error => {
-        Log.error('Failed to read Telegram user', error);
+        logErrorEvent(eventType('failed-to-read-telegram-user'), {}, error);
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -82,9 +82,9 @@ export function TelegramSettings() {
         return;
       }
       patchState({ updatingNotificationsEnabled: true });
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => telegramService.patchTelegramUser({ isEnabled: enabled }),
-        'Failed to patch Telegram user',
+        eventType('telegram-user-patch'),
       )
       .then(() => {
         notificationsService.info(translate('notifications-enabled'));
@@ -98,7 +98,7 @@ export function TelegramSettings() {
         }));
       })
       .catch(error => {
-        Log.error('Failed to patch Telegram user', error);
+        logErrorEvent(eventType('failed-to-patch-telegram-user'), {}, error);
         notificationsService.error('failed-to-enable-notifications');
         patchState({ updatingNotificationsEnabled: false });
       });
@@ -112,9 +112,9 @@ export function TelegramSettings() {
 
     onRefresh: () => {
       patchState({ refreshing: true });
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => telegramService.readTelegramUser(),
-        'Failed to read Telegram user',
+        eventType('telegram-user-read'),
       ).then(telegramUser => {
         if (telegramUser) {
           patchState({
@@ -130,7 +130,7 @@ export function TelegramSettings() {
         );
       })
       .catch(error => {
-        Log.error('Failed to read Telegram user', error);
+        logErrorEvent(eventType('failed-to-read-telegram-user'), {}, error);
         patchState({ refreshing: false });
         notificationsService.error(translate('failed-to-refresh'));
       })

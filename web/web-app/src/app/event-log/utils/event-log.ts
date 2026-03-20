@@ -1,5 +1,5 @@
 import { IoC } from '@andcreations/common';
-import { EventLog } from '../services';
+import { EventLog } from '../services/EventLog';
 
 const eventLogService = IoC.resolve(EventLog);
 
@@ -13,7 +13,7 @@ export function logInfoEvent(eventType: string, eventData?: object): void {
 
 export function logErrorEvent(
   eventType: string,
-  eventData: object | undefined,
+  eventData?: object,
   error?: any,
 ): void {
   if (eventData instanceof Error) {
@@ -35,4 +35,17 @@ export function logErrorEvent(
   }
 
   eventLogService.log('error', eventType, eventData);
+}
+
+export async function logEventAndRethrow<T>(
+  func: () => Promise<T>,
+  eventType: string,
+  eventData?: object,
+): Promise<T> {
+  try {
+    return await func();
+  } catch (error) {
+    logErrorEvent(eventType, eventData ?? {}, error);
+    throw error;
+  }
 }

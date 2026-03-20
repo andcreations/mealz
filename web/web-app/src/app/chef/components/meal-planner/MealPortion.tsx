@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import classNames = require('classnames');
+import classNames from 'classnames';
 
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';

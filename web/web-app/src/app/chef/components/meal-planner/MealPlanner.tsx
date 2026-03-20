@@ -10,7 +10,7 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../../common';
-import { Log, logDebugEvent } from '../../../log';
+import { logDebugEvent, logErrorEvent, logEventAndRethrow } from '../../../event-log';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   AIMealScanIngredient,
@@ -30,6 +30,7 @@ import {
   ModalMenuItem,
   ModalMenu,
   YesNoModal,
+  DatePickerModal,
   htmlToReact,
   FullScreenLoader,
 } from '../../../components';
@@ -88,6 +89,8 @@ interface MealPlannerState {
   showMealPortion: boolean;
   showAIMealScannerModal: boolean;
   showMealLogConfirmationModal: boolean;
+  showDatePickerModal: boolean;
+  dayFingerprint: string;
 }
 
 export function MealPlanner() {
@@ -115,6 +118,8 @@ export function MealPlanner() {
     showMealPortion: false,
     showAIMealScannerModal: false,
     showMealLogConfirmationModal: false,
+    showDatePickerModal: false,
+    dayFingerprint: dateService.getTodayFingerprint(),
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(MealPlannerTranslations);
@@ -137,13 +142,13 @@ export function MealPlanner() {
       let mealName: string | undefined;
       let dailyPlanEntry: GWMealDailyPlanEntry | undefined;
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'Failed to read current daily plan',
+          eventType('daily-plan-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsNamedService.loadAll(),
-          'Failed to load named meals',
+          eventType('named-meals-read'),
         ),
       ])
       .then(([currentDailyMealPlan, loadedNamedMeals]) => {
@@ -175,7 +180,11 @@ export function MealPlanner() {
         );
       })
       .catch((error) => {
-        Log.error('Failed to load meal planner', error);
+        logErrorEvent(
+          eventType('failed-to-initialize-meal-planner'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -218,10 +227,42 @@ export function MealPlanner() {
   )
 
   const userMealDraft = {
-    read: (mealName: string) => {
-      const dateFingerprint = dateService.getTodayFingerprint();
+    read: (mealName: string, dayFingerprint?: string) => {
       const mealNameKey = nameToKey(mealName);
-      return mealsUserService.readUserDraftMeal(mealNameKey, dateFingerprint);
+      return mealsUserService.readUserDraftMeal(
+        mealNameKey,
+        dayFingerprint ?? state.dayFingerprint,
+      );
+    },
+
+    readAndRecalculate: (mealName: string, dayFingerprint?: string) => {
+      userMealDraft.read(mealName, dayFingerprint)
+        .then((userMeal) => {
+          const ingredients = mealMapper.toMealPlannerIngredients(
+            userMeal?.meal.ingredients ?? [],
+          );
+          const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
+            dailyMealPlan.current,
+            mealName,
+          );    
+          meal.recalculate(
+            calories.resolve(dailyPlanEntry?.goals, userMeal),
+            ingredients,
+            {
+              mealName,
+              goals: dailyPlanEntry?.goals,  
+            }
+          );
+        })
+        .catch((error) => {
+          logErrorEvent(eventType('failed-to-read-meal'), {}, error);
+          notificationsService.error(
+            translate('failed-to-read-user-draft-meal')
+          );
+        })
+        .finally(() => {
+          patchState({ fullScreenLoadStatus: null });
+        });
     },
 
     tryUpsert: () => {
@@ -236,11 +277,10 @@ export function MealPlanner() {
       ingredients: MealPlannerIngredient[],
     ) => {
       const mealNameKey = nameToKey(state.mealName);
-      const dateFingerprint = dateService.getTodayFingerprint();
       const gwMeal = mealMapper.toGWMeal(calories, ingredients);
       mealsUserService.upsertUserDraftMeal(
         mealNameKey,
-        dateFingerprint,
+        state.dayFingerprint,
         gwMeal
       )
       .then(() => {
@@ -250,7 +290,7 @@ export function MealPlanner() {
         notificationsService.error(
           translate('failed-to-upsert-user-draft-meal')
         );
-        Log.error('Failed to save your draft meal', error);
+        logErrorEvent(eventType('failed-to-save-user-draft-meal'), {}, error);
       });
     },
   };
@@ -372,34 +412,8 @@ export function MealPlanner() {
       if (mealName === state.mealName) {
         return;
       }
-      const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
-        dailyMealPlan.current,
-        mealName,
-      );
       patchState({ fullScreenLoadStatus: LoadStatus.Loading });
-      userMealDraft.read(mealName)
-        .then((userMeal) => {
-          const ingredients = mealMapper.toMealPlannerIngredients(
-            userMeal?.meal.ingredients ?? [],
-          );
-          meal.recalculate(
-            calories.resolve(dailyPlanEntry?.goals, userMeal),
-            ingredients,
-            {
-              mealName,
-              goals: dailyPlanEntry?.goals,  
-            }
-          );
-        })
-        .catch((error) => {
-          Log.error('Failed to read meal', error);
-          notificationsService.error(
-            translate('failed-to-read-user-draft-meal')
-          );
-        })
-        .finally(() => {
-          patchState({ fullScreenLoadStatus: null });
-        });
+      userMealDraft.readAndRecalculate(mealName);
     },
   };
 
@@ -435,6 +449,10 @@ export function MealPlanner() {
       return result;
     },
 
+    isLogEnabled: (): boolean => {
+      return day.isToday() && !mealsUserService.isDraftMeal(state.mealName);
+    },
+
     onLog: (force?: boolean) => {
       if (state.calculateAmountsError) {
         notificationsService.error(
@@ -463,7 +481,6 @@ export function MealPlanner() {
       patchState({ fullScreenLoadStatus: LoadStatus.Loading });
       mealsLogService.logMeal(gwMeal, meal.name())
         .then((response) => {
-          // Log.debug(`Meal logged (${response.id})`);
           logDebugEvent(eventType('meal-logged'), {
             id: response.id,
           });
@@ -475,7 +492,7 @@ export function MealPlanner() {
           notificationsService.error(
             translate('failed-to-log-meal')
           );
-          Log.error('Failed to log meal', error);
+          logErrorEvent(eventType('failed-to-log-meal'), {}, error);
         })
         .finally(() => {
           patchState({ fullScreenLoadStatus: null });
@@ -657,7 +674,7 @@ export function MealPlanner() {
             translate('failed-to-load-meal')
           );
           patchState({ showLoadMealPicker: false });
-          Log.error('Failed to load meal', error);
+          logErrorEvent(eventType('failed-to-load-meal'), {}, error);
         });
     },
 
@@ -677,7 +694,7 @@ export function MealPlanner() {
           notificationsService.error(
             translate('failed-to-save-meal')
           );
-          Log.error('Failed to save meal', error);
+          logErrorEvent(eventType('failed-to-save-meal'), {}, error);
         });
       patchState({ showSaveMealPicker: false });
     },
@@ -693,9 +710,64 @@ export function MealPlanner() {
           notificationsService.error(
             translate('failed-to-delete-meal')
           );
-          Log.error('Failed to delete meal', error);
+          logErrorEvent(eventType('failed-to-delete-meal'), {}, error);
         });
       patchState({ showDeleteMealPicker: false });
+    },
+  };
+
+  const day = {
+    onShow: () => {
+      patchState({ showDatePickerModal: true });
+    },
+
+    onClose: () => {
+      patchState({ showDatePickerModal: false });
+    },
+
+    onEnter: (day: number, month: number, year: number) => {
+      const dayFingerprint = dateService.toFingerprint(day, month, year);
+      patchState({
+        showDatePickerModal: false,
+        dayFingerprint,
+        fullScreenLoadStatus: LoadStatus.Loading,
+      });
+      userMealDraft.readAndRecalculate(state.mealName, dayFingerprint);
+    },
+
+    isToday: (): boolean => {
+      return state.dayFingerprint === dateService.getTodayFingerprint();
+    },
+
+    date: () => {
+      return dateService.fingerprintToDate(state.dayFingerprint);
+    },
+
+    valueForLabel: () => {
+      const date = dateService.fingerprintToDate(state.dayFingerprint);
+      const dayOfWeek = date.toFormat('EEEE');
+      const differenceInDays = dateService.differenceInDaysFromNow(date);
+
+      let relative = '';
+      if (differenceInDays === 0) {
+        return translate('today');
+      }
+      else if (differenceInDays === 1) {
+        return translate('tomorrow');
+      }
+      else {
+        if (differenceInDays > 1) {
+          relative = translate('in-days', differenceInDays.toString());
+        }
+        else if (differenceInDays < 0) {
+          const daysAgo = -differenceInDays;
+          if (daysAgo === 1) {
+            return translate('yesterday');
+          }
+          relative = translate('days-ago', daysAgo.toString());
+        }
+      }
+      return translate('summary', dayOfWeek, relative);
     },
   };
 
@@ -747,6 +819,7 @@ export function MealPlanner() {
               </div>
             </div>
             <MealPlannerActionBar
+              logDisabled={!meal.isLogEnabled()}
               onLogMeal={() => meal.onLog()}
               onTakePhoto={meal.onTakePhoto}
               onClearMeal={meal.onClear}
@@ -754,8 +827,20 @@ export function MealPlanner() {
               onLoadMeal={namedMeal.onShowLoad}
               onDeleteMeal={namedMeal.onShowDelete}
               onPortionMeal={meal.onShowPortion}
+              onPickADay={day.onShow}
             />
           </div>
+          { !day.isToday() &&
+            <div className='mealz-meal-planner-day-label'>
+              <div className='mealz-meal-planner-day-label-label'>
+                { translate('planning-meal-for') }
+              </div>
+              &nbsp;
+              <div className='mealz-meal-planner-day-label-value'>
+                { day.valueForLabel() }
+              </div>
+            </div>
+          }
           <div className='mealz-meal-planner-ingredients'>
             <IngredientsEditor
               className='mealz-meal-planner-editor'
@@ -836,6 +921,16 @@ export function MealPlanner() {
           show={state.showAIMealScannerModal}
           onAccept={meal.onAcceptAIMealScan}
           onClose={meal.onCloseAIMealScanner}
+        />
+      }
+      { state.showDatePickerModal &&
+        <DatePickerModal
+          show={state.showDatePickerModal}
+          day={day.date().day}
+          month={day.date().month}
+          year={day.date().year}
+          onEnter={day.onEnter}
+          onClose={day.onClose}
         />
       }
       { state.showMealLogConfirmationModal &&

@@ -5,7 +5,7 @@ import {
   GWHydrationDailyPlanForCreation,
 } from '@mealz/backend-hydration-daily-plan-gateway-api';
 
-import { Log } from '../../../log';
+import { logEventAndRethrow, logErrorEvent } from '../../../event-log';
 import { LoadStatus } from '../../../common';
 import { parsePositiveInteger } from '../../../utils';
 import { useTranslations } from '../../../i18n';
@@ -28,6 +28,7 @@ import { SettingsButtons } from '../SettingsButtons';
 import { 
   HydrationDailyPlanSettingsTranslations,
 } from './HydrationDailyPlanSettings.translations';
+import { eventType } from '../../event-log';
 
 const MIN_MINUTES_SINCE_LAST_WATER_INTAKE = 5;
 const MIN_PERIOD_IN_MINUTES = 5;
@@ -83,9 +84,9 @@ export function HydrationDailyPlanSettings(
   // initial read
   useEffect(
     () => {
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => hydrationDailyPlanService.readCurrentDailyPlan(),
-        'Failed to read current daily plan',
+        eventType('daily-plan-read'),
       ).then((dailyPlan) => {
         let dailyPlanState:
           undefined | 
@@ -127,7 +128,11 @@ export function HydrationDailyPlanSettings(
           ...(dailyPlanState ?? {}),
         });
       }).catch((error) => {
-        Log.error('Failed to read current daily plan', error);
+        logErrorEvent(
+          eventType('failed-to-read-current-daily-plan'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -354,7 +359,11 @@ export function HydrationDailyPlanSettings(
           });
         })
         .catch((error) => {
-          Log.error('Failed to apply daily plan', error);
+          logErrorEvent(
+            eventType('failed-to-apply-hydration-daily-plan-settings'),
+            {},
+            error,
+          );
           notificationsService.pushNotification({
             message: translate('failed-to-apply-daily-plan'),
             type: NotificationType.Error,

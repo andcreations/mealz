@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Log } from '../../log';
+
+import { logErrorEvent } from '../../event-log';
+import { eventType } from '../event-log';
 
 export type FacingMode = 'user' | 'environment';
 
@@ -80,7 +82,7 @@ export function useCamera(options: UseCameraOptions = {}) {
         // notify that the video is ready
         options.onReady?.();
       } catch (error: any) {
-        Log.error('Failed to start camera', error);
+        logErrorEvent(eventType('failed-to-start-camera'), {}, error);
         setIsActive(false);
         setError(error?.message ?? 'Failed to start camera');
       }

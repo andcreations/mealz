@@ -9,6 +9,7 @@ import {
 } from './MealPlannerActionBar.translations';
 
 export interface MealPlannerActionBarProps {
+  logDisabled: boolean;
   onLogMeal: () => void;
   onTakePhoto: () => void;
   onClearMeal: () => void;
@@ -16,6 +17,7 @@ export interface MealPlannerActionBarProps {
   onSaveMeal: () => void;
   onDeleteMeal: () => void;
   onPortionMeal: () => void;
+  onPickADay: () => void;
 }
 
 interface MealPlannerActionBarState {
@@ -75,7 +77,12 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
       key: 'take-photo',
       content: translate('take-photo'),
       onClick: props.onTakePhoto,
-    }
+    },
+    {
+      key: 'pick-a-day',
+      content: translate('pick-a-day'),
+      onClick: props.onPickADay,
+    },
   ];
 
   return (
@@ -84,6 +91,7 @@ export function MealPlannerActionBar(props: MealPlannerActionBarProps) {
         <MaterialIcon
           className='mealz-meal-planner-action-bar-icon'
           icon='note_add'
+          disabled={props.logDisabled}
           onClick={props.onLogMeal}
         />
         <Separator/>

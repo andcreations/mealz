@@ -6,7 +6,7 @@
   gap: 1rem;
 }
 
-.mealz-settings-overview-sign-out-separator {
+.mealz-settings-overview-separator {
   margin: 1rem 8rem;
   min-width: 12rem;
   width: auto;
@@ -30,4 +30,32 @@
 .mealz-settings-overview-sign-out-label {
   @include mealz-font-small();
   margin-top: -0.375rem; // move closer to the icon
+}
+
+.mealz-settings-overview-user-info {
+  $horizontal-margin: 2rem;
+  @include mealz-flex-container();
+  @include mealz-flex-vertical();
+  align-items: center;
+  justify-content: center;
+  @include mealz-font-tiny();
+  // @include mealz-border();
+  margin: 0 $horizontal-margin;
+  width: calc(100% - 2 * #{$horizontal-margin});
+  // padding: 0.5rem 0 1rem 0;
+  padding-bottom: 1rem;
+}
+
+.mealz-settings-overview-user-info-icon {
+  font-size: 2rem;
+}
+
+.mealz-settings-overview-user-info-name {
+  font-weight: bold;
+  @include mealz-font-big()
+}
+
+.mealz-settings-overview-user-info-email {
+  @include mealz-font-small();
+  color: $mealz-theme-color-fg-dark;
 }

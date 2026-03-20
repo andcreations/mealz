@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 import { useTranslations } from '../../i18n';
-import { usePatchState } from '../../hooks';
+import { usePatchState, useService } from '../../hooks';
+import { SystemService } from '../../system';
 import { HourAndMinutePicker } from '../basic';
 import {
   HourAndMinutePickerModalTranslations,
@@ -27,6 +28,7 @@ interface HourAndMinutePickerModalState {
 }
 
 export function HourAndMinutePickerModal(props: HourAndMinutePickerModalProps) {
+  const systemService = useService(SystemService);
   const translate = useTranslations(HourAndMinutePickerModalTranslations);
 
   const [state, setState] = useState<HourAndMinutePickerModalState>({
@@ -59,7 +61,7 @@ export function HourAndMinutePickerModal(props: HourAndMinutePickerModalProps) {
     <Modal
       className='mealz-hour-and-minute-picker-modal'
       show={props.show}
-      centered={true}
+      centered={!systemService.isMobile()}
       backdrop={true}
       onHide={props.onClose}
       onEscapeKeyDown={props.onClose}      
