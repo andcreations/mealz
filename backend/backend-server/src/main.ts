@@ -50,21 +50,19 @@ function readCertificateAndKey(): CertificateAndKey | undefined {
 
 async function bootstrap() {
   getLogger(); // initialize logger
-  let app: INestApplication;
-
   getLogger().info('Creating express application', BOOTSTRAP_CONTEXT);
-  app = await NestFactory
+
+  const adapter = new ExpressAdapter();
+  adapter.set('trust proxy', true);
+
+  const app = await NestFactory
     .create<NestExpressApplication>(
       AppModule,
-      new ExpressAdapter(),
+      adapter,
       { httpsOptions: readCertificateAndKey() },
     );  
   app.use(cookieParser());
   app.use(express.urlencoded({ extended: true }));
-
-  if (!app) {
-    throw new InternalError('Invalid web application type');
-  }
 
   // configure
   app.enableShutdownHooks();

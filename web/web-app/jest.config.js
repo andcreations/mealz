@@ -7,6 +7,9 @@ module.exports = {
     '@mealz/backend-users-auth-gateway-api': '<rootDir>/../../backend/backend-server/src/domains/users/services/auth/gateway-api',
     '@mealz/backend-ingredients-shared': '<rootDir>/../../backend/backend-server/src/domains/ingredients/shared',
     '@mealz/backend-ingredients-gateway-api': '<rootDir>/../../backend/backend-server/src/domains/ingredients/gateway-api',
-    '@mealz/backend-ingredients-crud-gateway-api': '<rootDir>/../../backend/backend-server/src/domains/ingredients/services/crud/gateway-api'
+    '@mealz/backend-ingredients-crud-gateway-api': '<rootDir>/../../backend/backend-server/src/domains/ingredients/services/crud/gateway-api',
+    '@mealz/backend-event-log-gateway-api': '<rootDir>/../../backend/backend-server/src/domains/event-log/services/log/gateway-api',
+    '@mealz/backend-shared': '<rootDir>/../../backend/backend-server/src/shared',
+    '@mealz/backend-calculators': '<rootDir>/../../backend/backend-server/src/commons/calculators',
   }
 }

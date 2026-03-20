@@ -8,12 +8,13 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../common';
-import { Log } from '../../log';
+import { logErrorEvent, logEventAndRethrow } from '../../event-log';
 import { usePatchState, useService } from '../../hooks';
 import { useTranslations } from '../../i18n';
 import { LoaderByStatus, LoaderSize, LoaderType } from '../../components';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
 import { IngredientsCrudService } from '../../ingredients';
+import { eventType } from '../event-log';
 import { MealLog } from '../components';
 import { DailyMealsLogTranslations } from './DailyMealsLog.translations';
 
@@ -43,17 +44,17 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
   useEffect(
     () => {
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsLogService.readByDateRange(props.fromDate, props.toDate),
-          'meal-log-read-in-daily-meals-log',
+          eventType('meal-log-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'daily-plan-read-in-daily-meals-log',
+          eventType('daily-plan-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => ingredientsService.waitForIngredientsToLoad(),
-          'wait-for-ingredients-in-daily-meals-log',
+          eventType('wait-for-ingredients'),
         ),
       ])
       .then(([meals, mealDailyPlan, _]) => {
@@ -64,7 +65,11 @@ export function DailyMealsLog(props: DailyMealsLogProps) {
         });
       })
       .catch(error => {
-        Log.error('Failed to summarize daily meal log', error);
+        logErrorEvent(
+          eventType('failed-to-initialize-daily-meals-log'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },

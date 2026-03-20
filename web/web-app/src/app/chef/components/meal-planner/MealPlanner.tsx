@@ -10,7 +10,7 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../../common';
-import { Log, logDebugEvent } from '../../../log';
+import { logDebugEvent, logErrorEvent, logEventAndRethrow } from '../../../event-log';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   AIMealScanIngredient,
@@ -142,13 +142,13 @@ export function MealPlanner() {
       let mealName: string | undefined;
       let dailyPlanEntry: GWMealDailyPlanEntry | undefined;
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'daily-plan-read-in-meal-planner',
+          eventType('daily-plan-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsNamedService.loadAll(),
-          'named-meals-read-in-meal-planner',
+          eventType('named-meals-read'),
         ),
       ])
       .then(([currentDailyMealPlan, loadedNamedMeals]) => {
@@ -180,7 +180,11 @@ export function MealPlanner() {
         );
       })
       .catch((error) => {
-        Log.error('Failed to load meal planner', error);
+        logErrorEvent(
+          eventType('failed-to-initialize-meal-planner'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -251,7 +255,7 @@ export function MealPlanner() {
           );
         })
         .catch((error) => {
-          Log.error('Failed to read meal', error);
+          logErrorEvent(eventType('failed-to-read-meal'), {}, error);
           notificationsService.error(
             translate('failed-to-read-user-draft-meal')
           );
@@ -286,7 +290,7 @@ export function MealPlanner() {
         notificationsService.error(
           translate('failed-to-upsert-user-draft-meal')
         );
-        Log.error('Failed to save your draft meal', error);
+        logErrorEvent(eventType('failed-to-save-user-draft-meal'), {}, error);
       });
     },
   };
@@ -477,7 +481,6 @@ export function MealPlanner() {
       patchState({ fullScreenLoadStatus: LoadStatus.Loading });
       mealsLogService.logMeal(gwMeal, meal.name())
         .then((response) => {
-          // Log.debug(`Meal logged (${response.id})`);
           logDebugEvent(eventType('meal-logged'), {
             id: response.id,
           });
@@ -489,7 +492,7 @@ export function MealPlanner() {
           notificationsService.error(
             translate('failed-to-log-meal')
           );
-          Log.error('Failed to log meal', error);
+          logErrorEvent(eventType('failed-to-log-meal'), {}, error);
         })
         .finally(() => {
           patchState({ fullScreenLoadStatus: null });
@@ -671,7 +674,7 @@ export function MealPlanner() {
             translate('failed-to-load-meal')
           );
           patchState({ showLoadMealPicker: false });
-          Log.error('Failed to load meal', error);
+          logErrorEvent(eventType('failed-to-load-meal'), {}, error);
         });
     },
 
@@ -691,7 +694,7 @@ export function MealPlanner() {
           notificationsService.error(
             translate('failed-to-save-meal')
           );
-          Log.error('Failed to save meal', error);
+          logErrorEvent(eventType('failed-to-save-meal'), {}, error);
         });
       patchState({ showSaveMealPicker: false });
     },
@@ -707,7 +710,7 @@ export function MealPlanner() {
           notificationsService.error(
             translate('failed-to-delete-meal')
           );
-          Log.error('Failed to delete meal', error);
+          logErrorEvent(eventType('failed-to-delete-meal'), {}, error);
         });
       patchState({ showDeleteMealPicker: false });
     },

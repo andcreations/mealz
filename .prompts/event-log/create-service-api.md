@@ -1,0 +1,1 @@
+In `backend/backend-server/src/domain/event-log/services/log/service-api` create a service API as in `backend/backend-server/src/domain/users/services/crud/service-api`, but for service `log`. No topics, no methods in the transporter, no DTOs.

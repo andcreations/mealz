@@ -1,10 +1,14 @@
 import { OnBootstrap, Service } from '@andcreations/common';
-import { Log } from '../../log';
+
+import { logInfoEvent } from '../../event-log';
+import { eventType } from '../event-log';
 
 @Service()
 export class SystemService implements OnBootstrap {
   public async onBootstrap(): Promise<void> {
-    Log.info(`Time zone is ${this.getTimeZone()}`);
+    logInfoEvent(eventType('time-zone'), {
+      timeZone: this.getTimeZone(),
+    });
   }
 
   public getTimeZone(): string {

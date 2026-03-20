@@ -8,7 +8,7 @@ import {
   GWMealDailyPlanGoals,
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
-import { Log } from '../../../log';
+import { logErrorEvent, logEventAndRethrow } from '../../../event-log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { 
@@ -23,6 +23,7 @@ import {
   ScanPhotoResult,
 } from '../../../meals';
 import { AIMealScanResult, AIMealScanIngredient } from '../../types';
+import { eventType } from '../../event-log';
 import { 
   AIMealScannerAnalyzeTranslations,
 } from './AIMealScannerAnalyze.translations';
@@ -53,13 +54,13 @@ export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
 
   useEffect(() => {
     Promise.all([
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => aiMealScanService.scanPhoto(props.photo, props.hints),
-        'scan-photo-in-ai-meal-scanner-analyze',
+        eventType('scan-photo'),
       ),
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => mealsDailyPlanService.readCurrentEntry(),
-        'daily-plan-read-in-ai-meal-scanner-analyze',
+        eventType('daily-plan-read'),
       ),
     ])
     .then(([result, currentGoalsEntry]) => {
@@ -69,7 +70,8 @@ export function AIMealScannerAnalyze(props: AIMealScannerAnalyzeProps) {
         goals: currentGoalsEntry?.goals,
       });
     })
-    .catch(() => {
+    .catch(error => {
+      logErrorEvent(eventType('failed-to-analyze-meal'), {}, error);
       patchState({
         isAnalyzing: false,
         error: true,

@@ -92,6 +92,10 @@ module.exports = {
         '@mealz/backend-users-crud-gateway-api',
         'domains/users/services/crud/gateway-api',
       ),
+      ...backendAlias(
+        '@mealz/backend-event-log-gateway-api',
+        'domains/event-log/services/log/gateway-api',
+      ),
     },
     fallback: {
       crypto: false, // provided by browser

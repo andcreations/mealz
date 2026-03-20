@@ -82,6 +82,9 @@
       "@mealz/backend-telegram-users-gateway-api": ["src/domains/telegram/services/users/gateway-api"],
 
       "@mealz/backend-admin-notifications-service-api": ["src/domains/admin/services/notifications/service-api"],
+
+      "@mealz/backend-event-log-service-api": ["src/domains/event-log/services/log/service-api"],
+      "@mealz/backend-event-log-gateway-api": ["src/domains/event-log/services/log/gateway-api"],
     }
   },
   "exclude": ["node_modules", "dist"]

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import { Log, logDebugEvent } from '../../../log';
+import { logDebugEvent, logErrorEvent } from '../../../event-log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { Loader, LoaderSize, LoaderType } from '../../../components';
@@ -44,7 +44,6 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
   } = useCamera({
     facingMode: 'environment',
     onReady: () => {
-      // Log.debug('Camera is ready');
       logDebugEvent(eventType('camera-ready'));
       patchState({ isReady: true });
     },
@@ -62,7 +61,7 @@ export function AIMealScannerCamera(props: AIMealScannerCameraProps) {
         props.onPhotoTaken(photo, state.hints);
       })
       .catch((error) => {
-        Log.error('Failed to take photo', error);
+        logErrorEvent(eventType('failed-to-take-photo'), {}, error);
         notificationsService.error(translate('failed-to-take-photo'));
       });
   };

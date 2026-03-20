@@ -5,7 +5,7 @@ import { LocationService } from '@andcreations/web-common';
 
 import { AuthService } from './auth';
 import { SystemService } from './system';
-import { EventLog } from './log';
+import { EventLog } from './event-log';
 import { AppRouter, PathTo, RoutingService } from './routing';
 import { IngredientsCrudService, IngredientsSearch } from './ingredients';
 import { MealsNamedService } from './meals';

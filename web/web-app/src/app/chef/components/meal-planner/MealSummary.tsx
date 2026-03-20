@@ -7,7 +7,7 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../../common';
-import { Log } from '../../../log';
+import { logEventAndRethrow, logErrorEvent } from '../../../event-log';
 import { usePatchState, useService } from '../../../hooks';
 import { useTranslations } from '../../../i18n';
 import { UserSettingsService } from '../../../user';
@@ -17,6 +17,7 @@ import { MealPlannerIngredient, MealSummaryResult } from '../../types';
 import { MealSummaryTranslations } from './MealSummary.translations';
 import { LoaderByStatus, LoaderSize } from '../../../components';
 import { IngredientsCrudService } from '../../../ingredients';
+import { eventType } from '../../event-log';
 
 const MAX_CALORIES_DIFFERENCE = 20;
 const SHOW_FAT_DETAILS = false;
@@ -52,15 +53,20 @@ export function MealSummary(props: MealSummaryProps) {
   useEffect(
     () => {
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => ingredientsService.waitForIngredientsToLoad(),
-          'wait-for-ingredients-in-meal-summary',
+          eventType('wait-for-ingredients'),
         ),
       ])
       .then(([_]) => {
         patchState({ loadStatus: LoadStatus.Loaded });
       })
-      .catch(() => {
+      .catch(error => {
+        logErrorEvent(
+          eventType('failed-to-initialize-meal-summary'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },

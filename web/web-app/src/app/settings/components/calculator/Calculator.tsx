@@ -9,7 +9,7 @@ import {
   Goal, 
 } from '@mealz/backend-calculators';
 
-import { Log } from '../../../log';
+import { logEventAndRethrow, logErrorEvent } from '../../../event-log';
 import { LoadStatus } from '../../../common';
 import { useTranslations } from '../../../i18n';
 import { macrosToSummaryDetails, parsePositiveInteger } from '../../../utils';
@@ -30,6 +30,7 @@ import {
   CalculatorResult,
 } from '../../../calculator';
 import { NotificationsService } from '../../../notifications';
+import { eventType } from '../../event-log';
 import { SettingsSection } from '../SettingsSection';
 import { InputSetting } from '../InputSetting';
 import { LabelSetting } from '../LabelSetting';
@@ -92,9 +93,9 @@ export function Calculator(props: CalculatorProps) {
   // initial read
   useEffect(
     () => {
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => calculatorSettingsService.read(),
-        'calculator-settings-read-in-calculator',
+        eventType('calculator-settings-read'),
       ).then(settings => {
         if (!settings) {
           patchState({ loadStatus: LoadStatus.Loaded });
@@ -111,7 +112,11 @@ export function Calculator(props: CalculatorProps) {
         });
       })
       .catch(error => {
-        Log.error('Failed to read calculator settings', error);
+        logErrorEvent(
+          eventType('failed-to-initialize-calculator-settings'),
+          {},
+          error,
+        );
         patchState({ loadStatus: LoadStatus.FailedToLoad });
       });
     },
@@ -447,12 +452,12 @@ export function Calculator(props: CalculatorProps) {
         activityLevel: state.activityLevel,
         goal: state.goal,
       }
-      Log.logAndRethrow(
+      logEventAndRethrow(
         () => calculatorSettingsService.upsert(
           undefined,
           settings,
         ),
-        'Failed to save calculator settings',
+        eventType('calculator-settings-upsert'),
       )
       .then(() => {
         notificationsService.info(translate('saved'));
@@ -462,7 +467,11 @@ export function Calculator(props: CalculatorProps) {
         });
       })
       .catch(error => {
-        Log.error('Failed to save calculator settings', error);
+        logErrorEvent(
+          eventType('failed-to-save-calculator-settings'),
+          {},
+          error,
+        );
         notificationsService.error(translate('failed-to-save'));
         patchState({ saving: false });
       });

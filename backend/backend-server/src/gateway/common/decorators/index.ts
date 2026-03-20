@@ -3,3 +3,5 @@ export * from './AuthSystemAdmin';
 export * from './GWUser';
 export * from './GWContext';
 export * from './Roles';
+export * from './ClientIp';
+export * from './UserAgent';

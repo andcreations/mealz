@@ -11,11 +11,12 @@ import {
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
-import { Log } from '../../log';
+import { logErrorEvent, logInfoEvent } from '../../event-log';
 import { LoadStatus } from '../../common';
 import { BusService } from '../../bus';
-import { AuthService } from '../../auth';
+import { AuthUserService } from '../../auth';
 import { AuthTopics } from '../../auth';
+import { eventType } from '../event-log';
 import { IngredientsLoadStatusChangedEvent, IngredientsTopics } from '../bus';
 
 @Service()
@@ -29,20 +30,20 @@ export class IngredientsCrudService implements OnBootstrap {
   public constructor(
     private readonly http: HTTPWebClientService,
     private readonly bus: BusService,
-    private readonly authService: AuthService,
+    private readonly authUserService: AuthUserService,
   ) {}
 
   public async onBootstrap(): Promise<void> {
   // read all the ingredients in the background
-    if (this.authService.isSignedIn()) {
-      Log.info('Reading all ingredients on bootstrap');
+    if (this.authUserService.isSignedIn()) {
+      logInfoEvent(eventType('reading-all-ingredients-on-bootstrap'));
       this.readAllIngredients();
     }
   }
 
   @BusEvent(AuthTopics.UserSignedIn)
   public userSignedIn(): void {
-    Log.info('Reading all ingredients on user sign-in');
+    logInfoEvent(eventType('reading-all-ingredients-on-user-sign-in'));
     this.readAllIngredients();
   }
 
@@ -55,7 +56,7 @@ export class IngredientsCrudService implements OnBootstrap {
       });
     } catch (error) {
       this.changeLoadStatus(LoadStatus.FailedToLoad);
-      Log.error('Failed to read all ingredients', error);
+      logErrorEvent(eventType('failed-to-read-all-ingredients'), {}, error);
       this.pendingLoads.forEach(pendingLoad => {
         pendingLoad.reject(error);
       });
@@ -84,10 +85,10 @@ export class IngredientsCrudService implements OnBootstrap {
       }
       lastId = ingredients[ingredients.length - 1].id;
     }
-    Log.info(
-      `Read ${readIngredients.length} ingredients ` +
-      `in ${Date.now() - startTime}ms`
-    );
+    logInfoEvent(eventType('read-ingredients'), {
+      count: readIngredients.length,
+      time: Date.now() - startTime,
+    });
 
     // reset
     this.ingredientsById = {};

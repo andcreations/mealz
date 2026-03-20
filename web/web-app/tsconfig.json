@@ -68,6 +68,9 @@
       ],
       "@mealz/backend-users-crud-gateway-api": [
         "../../backend/backend-server/src/domains/users/services/crud/gateway-api"
+      ],
+      "@mealz/backend-event-log-gateway-api": [
+        "../../backend/backend-server/src/domains/event-log/services/log/gateway-api"
       ]
     }
   }

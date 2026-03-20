@@ -7,7 +7,7 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../common';
-import { Log } from '../../log';
+import { logErrorEvent, logEventAndRethrow } from '../../event-log';
 import { usePatchState, useService } from '../../hooks';
 import { 
   htmlToReact,
@@ -21,6 +21,7 @@ import { IngredientsCrudService } from '../../ingredients';
 import { MealsDailyPlanService, MealsLogService } from '../../meals';
 import { DailySummaryTranslations } from './DailySummary.translations';
 import { PathTo } from '../../routing';
+import { eventType } from '../event-log';
 
 export interface DailySummaryProps {
   fromDate: number;
@@ -50,21 +51,21 @@ export function DailySummary(props: DailySummaryProps) {
   useEffect(
     () => {
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => ingredientsCrudService.waitForIngredientsToLoad(),
-          'wait-for-ingredients-in-daily-summary',
+          eventType('wait-for-ingredients'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsLogService.readByDateRange(props.fromDate, props.toDate),
-          'meal-log-read-in-daily-summary',
+          eventType('meal-log-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsDailyPlanService.readEntriesByNow(),
-          'daily-plan-entries-by-now-read-in-daily-summary',
+          eventType('daily-plan-entries-by-now-read'),
         ),
-        Log.logAndRethrow(
+        logEventAndRethrow(
           () => mealsDailyPlanService.readCurrentDailyPlan(),
-          'daily-plan-read-in-daily-summary',
+          eventType('daily-plan-read'),
         ),
       ])
       .then(([_, meals, _dailyPlanEntries, dailyPlan]) => {
@@ -98,7 +99,11 @@ export function DailySummary(props: DailySummaryProps) {
         });
       })
       .catch(error => {
-        Log.error('Failed to summarize daily meal log', error);
+        logErrorEvent(
+          eventType('failed-to-initialize-daily-summary'),
+          {},
+          error,
+        );
         patchState({
           loadStatus: LoadStatus.FailedToLoad,
         });

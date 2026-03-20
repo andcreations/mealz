@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 
 import { LoadStatus } from '../../common';
-import { Log } from '../../log';
+import { logErrorEvent, logEventAndRethrow } from '../../event-log';
 import { useTranslations } from '../../i18n';
 import { usePatchState, useService } from '../../hooks';
 import { LoaderType } from '../../components';
 import { PageLoader, PageWrapper } from '../../page';
 import { IngredientsCrudService } from '../../ingredients';
+import { eventType } from '../event-log';
 import { MealPlanner } from '../components';
 import { ChefPageTranslations } from './ChefPage.translations';
 
@@ -30,9 +31,9 @@ export function ChefPage() {
   useEffect(
     () => {
       Promise.all([
-        Log.logAndRethrow(
+        logEventAndRethrow( 
           () => ingredientsCrudService.loadAll(),
-          'ingredients-read-in-chef-page',
+          eventType('ingredients-read'),
         ),
       ])
       .then(([ingredients]) => {
@@ -41,7 +42,12 @@ export function ChefPage() {
           ingredients,
         });
       })
-      .catch(() => {
+      .catch(error => {
+        logErrorEvent(
+          eventType('failed-to-load-ingredients-in-chef-page'),
+          {},
+          error,
+        );
         patchState({
           loadStatus: LoadStatus.FailedToLoad,
         });

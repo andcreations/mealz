@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GWUserInfo } from '@mealz/backend-users-crud-gateway-api';
 
-import { Log } from '../../log';
+import { logEventAndRethrow, logErrorEvent } from '../../event-log';
 import { LoadStatus } from '../../common';
 import { PathTo } from '../../routing';
 import { usePatchState, useService } from '../../hooks';
@@ -11,12 +11,12 @@ import { AuthService } from '../../auth';
 import { UserService } from '../../user';
 import { useTranslations } from '../../i18n';
 import { 
-  htmlToReact,
   LoaderByStatus, 
   LoaderSize, 
   LoaderType, 
   MaterialIcon,
 } from '../../components';
+import { eventType } from '../event-log';
 import { SettingsOverviewTranslations } from './SettingsOverview.translations';
 import { SettingsMenu } from './SettingsMenu';
 import { GoToSettingsMenuItem } from './GoToSettingsMenuItem';
@@ -39,13 +39,13 @@ export function SettingsOverview() {
 
   // initial read
   useEffect(() => {
-    Log.logAndRethrow(
+    logEventAndRethrow(
       () => userService.readCurrentUserV1(),
-      'user-read-in-settings-overview',
+      eventType('user-read'),
     ).then(({ userInfo }) => {
       patchState({ loadStatus: LoadStatus.Loaded, userInfo });
     }).catch((error) => {
-      Log.error('Failed to read current user', error);
+      logErrorEvent(eventType('failed-to-read-current-user'), {}, error);
       patchState({ loadStatus: LoadStatus.FailedToLoad });
     });
   }, []);

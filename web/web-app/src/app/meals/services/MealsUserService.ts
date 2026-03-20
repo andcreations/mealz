@@ -9,7 +9,7 @@ import {
   UpsertUserMealGWResponseV1,
 } from '@mealz/backend-meals-user-gateway-api';
 
-import { AuthService } from '../../auth';
+import { AuthUserService } from '../../auth';
 
 @Service()
 export class MealsUserService {
@@ -18,7 +18,7 @@ export class MealsUserService {
 
   public constructor(
     private readonly http: HTTPWebClientService,
-    private readonly authService: AuthService,
+    private readonly authUserService: AuthUserService,
   ) {}
 
   public isDraftMeal(mealName: string): boolean {
@@ -48,7 +48,7 @@ export class MealsUserService {
   ): Promise<
     GWUserMeal<void> | undefined
   > {
-    if (!this.authService.isSignedIn()) {
+    if (!this.authUserService.isSignedIn()) {
       return undefined;
     }
 

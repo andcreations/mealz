@@ -5,5 +5,6 @@ export interface LogEvent {
   type: string;
   level: LogEventLevel;
   data: object;
-  createdAt: number;
+  loggedAt: number;
+  unknownUser: boolean;
 }
