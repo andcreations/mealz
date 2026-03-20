@@ -3054,6 +3054,56 @@
   },
   {
     "name": {
+      "en": "Chicken liver",
+      "pl": "Wątróbka z kurczaka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 119
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0.73
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 16.92
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 4.83
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.56
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1.25
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.82
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Chickpea flour",
       "pl": "Mąka z ciecierzycy"
     },
@@ -3863,6 +3913,106 @@
   },
   {
     "name": {
+      "en": "Couscous (cooked)",
+      "pl": "Kuskus (gotowany)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 112
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 23.2
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.8
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.04
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.02
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Couscous (raw)",
+      "pl": "Kuskus (surowy)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 112
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 23
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.8
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.04
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.02
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Cucumber",
       "pl": "Ogórek"
     },
@@ -4414,6 +4564,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.6
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Fish sauce",
+      "pl": "sos rybny"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 35
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.6
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 5.6
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0
       }
     ]
   },
@@ -5670,7 +5870,7 @@
   {
     "name": {
       "en": "Ketchup",
-      "pl": "Ketchup"
+      "pl": "ketchup"
     },
     "type": 0,
     "unitPer100": 0,
@@ -5683,12 +5883,12 @@
       {
         "id": 1,
         "unit": 1,
-        "amount": 27.4
+        "amount": 27
       },
       {
         "id": 2,
         "unit": 1,
-        "amount": 22.8
+        "amount": 22
       },
       {
         "id": 3,
@@ -5703,17 +5903,17 @@
       {
         "id": 5,
         "unit": 1,
-        "amount": 0
+        "amount": 0.03
       },
       {
         "id": 6,
         "unit": 1,
-        "amount": 0
+        "amount": 0.05
       },
       {
         "id": 7,
         "unit": 1,
-        "amount": 0.1
+        "amount": 0.07
       }
     ]
   },
@@ -7265,6 +7465,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.13
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Oat drink",
+      "pl": "Napój owsiany"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 43
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3.2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.5
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.7
       }
     ]
   },
@@ -9582,6 +9832,56 @@
   },
   {
     "name": {
+      "en": "Rice cakes",
+      "pl": "Wafle ryżowe"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 387
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 81
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.9
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 7.5
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.2
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Rice flakes",
       "pl": "Płatki ryżowe"
     },
@@ -10427,6 +10727,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.8
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Soy drink",
+      "pl": "Napój sojowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 33
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 3.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.4
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1
       }
     ]
   },
@@ -11427,6 +11777,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.5
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Turkey liver",
+      "pl": "Wątróbka z indyka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 128
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 18.26
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 5.5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.5
       }
     ]
   },

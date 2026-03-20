@@ -339,3 +339,21 @@
       saturated: 2.3
       monounsaturated: 2.2
       polyunsaturated: 2.7
+
+- name:
+    en: Rice cakes
+    pl: Wafle ryżowe
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 387
+    carbs: 81.0
+    sugars: 0.9
+    fibre: 3.0
+    protein: 7.5
+    fat:
+      total: 3.0
+      saturated: 0.6
+      monounsaturated: 1.0
+      polyunsaturated: 1.2
