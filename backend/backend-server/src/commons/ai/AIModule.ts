@@ -4,7 +4,7 @@ import { MetricsModule } from '@mealz/backend-metrics';
 
 import { AI_FOR_SERVICE_OPTIONS } from './consts';
 import { AIModuleForServiceOptions, AIProvider } from './types';
-import { OpenAIProvider } from './providers';
+import { AISDKProvider } from './providers';
 
 @Module({})
 export class AIModule {
@@ -20,11 +20,14 @@ export class AIModule {
       providers: [
         {
           provide: AI_FOR_SERVICE_OPTIONS,
-          useValue: options,
+          useValue: {
+            ...options,
+            defaultModelName: options.defaultModelName ?? 'gpt-4o-mini',
+          },
         },
         {
           provide: AIProvider,
-          useClass: OpenAIProvider,
+          useClass: AISDKProvider,
         }
       ],
       exports: [

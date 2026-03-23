@@ -1,0 +1,1 @@
+In `backend/backend-server/src/domain/ai/services/tools/service` create a service API as in `backend/backend-server/src/domain/users/services/crud/service`. Create service with no methods, controller with no methods. Create NestJS module.

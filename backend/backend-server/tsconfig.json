@@ -10,6 +10,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "esModuleInterop": true,
     "paths": {
       "@mealz/backend-core": ["src/core"],
       "@mealz/backend-common": ["src/commons/common"],

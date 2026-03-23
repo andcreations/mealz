@@ -1,0 +1,1 @@
+In `backend/backend-server/src/domain/ai/services/tools/service-api` create a service API as in `backend/backend-server/src/domain/users/services/crud/service-api`. No topics, no methods in the transporter, no DTOs.

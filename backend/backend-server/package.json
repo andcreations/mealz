@@ -11,6 +11,7 @@
     "start:dev": "nest start --watch"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.41",
     "@andcreations/common": "^0.1.13",
     "@andcreations/telegram-bot": "^0.9.0",
     "@logtail/node": "^0.5.6",
@@ -30,6 +31,7 @@
     "@opentelemetry/sdk-node": "^0.210.0",
     "@opentelemetry/sdk-trace-base": "^2.4.0",
     "@types/better-sqlite3": "^7.6.13",
+    "ai": "^6.0.116",
     "ansi-colors": "^4.1.3",
     "bcryptjs": "^3.0.2",
     "better-sqlite3": "^12.5.0",

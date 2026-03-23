@@ -6,3 +6,4 @@ export * from './telegram';
 export * from './admin';
 export * from './health';
 export * from './event-log';
+export * from './ai';
