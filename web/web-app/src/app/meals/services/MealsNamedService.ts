@@ -18,7 +18,7 @@ import {
 
 import { LoadStatus } from '../../common';
 import { isStringSimilar, stripDiacritics } from '../../utils';
-import { logErrorEvent, logInfoEvent } from '../../event-log';
+import { logDebugEvent, logErrorEvent, logInfoEvent } from '../../event-log';
 import { AuthUserService, AuthTopics } from '../../auth';
 import { eventType } from '../event-log';
 import { NamedMeal } from '../types';
@@ -152,6 +152,7 @@ export class MealsNamedService implements OnBootstrap {
   public async loadByName(name: string): Promise<GWMealWithoutId> {
     const namedMeal = this.getByName(name);
     if (!namedMeal) {
+      logErrorEvent(eventType('named-meal-not-found'), { name });
       throw new Error('Named meal not found');
     }
     const response = await this.http.get<ReadNamedMealByIdGWResponseV1>(
@@ -166,6 +167,10 @@ export class MealsNamedService implements OnBootstrap {
   ): Promise<void> {
     const namedMeal = this.getByName(mealName);
     if (namedMeal) {
+      logDebugEvent(eventType('updating-named-meal'), {
+        mealName,
+        meal,
+      });
       // update
       await this.http.put<
         UpdateNamedMealGWRequestV1, void
@@ -183,6 +188,10 @@ export class MealsNamedService implements OnBootstrap {
       };
     }
     else {
+      logDebugEvent(eventType('creating-named-meal'), {
+        mealName,
+        meal,
+      });
       // create
       const response = await this.http.post<
         CreateNamedMealGWRequestV1, CreateNamedMealGWResponseV1
@@ -203,8 +212,10 @@ export class MealsNamedService implements OnBootstrap {
   public async deleteByName(name: string): Promise<void> {
     const namedMeal = this.getByName(name);
     if (!namedMeal) {
+      logErrorEvent(eventType('named-meal-not-found'), { name });
       throw new Error('Named meal not found');
     }
+    logDebugEvent(eventType('deleting-named-meal'), { name });
     await this.http.delete<void>(
       MealsNamedV1API.url.deleteV1({ id: namedMeal.id }),
     );
