@@ -566,12 +566,17 @@ export function MealPlanner() {
     },
 
     onClear: () => {
+      let newCalories = state.calories;
+      if (state.goals) {
+        newCalories = calories.fromGoals(state.goals);
+      }
+
     // clear
       markDirty();
       setState(prevState => ({
         ...prevState,
         ingredients: [],
-        calories: prevState.targetMealCalories,
+        calories: newCalories,
         clearUndo: {
           ingredients: prevState.ingredients,
           calories: prevState.calories,
@@ -685,9 +690,7 @@ export function MealPlanner() {
       );
       mealsNamedService.save(name, gwMeal)
         .then(() => {
-          notificationsService.info(
-            translate('meal-saved')
-          );
+          notificationsService.info(translate('meal-saved'));
           namedMeals.current = mealsNamedService.getAll();
         })
         .catch(error => {
@@ -702,9 +705,7 @@ export function MealPlanner() {
     onDelete: (name: string) => {
       mealsNamedService.deleteByName(name)
         .then(() => {
-          notificationsService.info(
-            translate('meal-deleted')
-          );
+          notificationsService.info(translate('meal-deleted'));
         })
         .catch(error => {
           notificationsService.error(
