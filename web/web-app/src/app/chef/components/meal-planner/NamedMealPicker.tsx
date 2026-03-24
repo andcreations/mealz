@@ -42,11 +42,12 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
   const namedMealsToDropdown = (namedMeals: NamedMeal[]) => {
     return namedMeals.map(meal => meal.name).sort();
   }
+  const allNamedMeals = mealsNamedService.getAll();
   
   const [state, setState] = useState<NamedMealPickerState>({
     focus: Focus.Name,
     name: '',
-    dropdownItems: namedMealsToDropdown(mealsNamedService.getAll()),
+    dropdownItems: namedMealsToDropdown(allNamedMeals),
     dropdownIndex: 0,
   });
   const patchState = usePatchState(setState);
@@ -61,6 +62,15 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
       }
     },
     [state.focus],
+  );
+
+  useEffect(
+    () => {
+      patchState({
+        dropdownItems: namedMealsToDropdown(allNamedMeals),
+      });
+    },
+    [mealsNamedService.getAll()],
   );
 
   const name = {
@@ -121,7 +131,7 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
     matchItems: (name: string) => {
       const namedMeals = name.length > 0
         ? mealsNamedService.search(name)
-        : mealsNamedService.getAll();
+        : allNamedMeals;
       return namedMealsToDropdown(namedMeals);
     },
 
