@@ -34,13 +34,17 @@ export class DateService {
   public getTodayFingerprint(): string {
     const timeZone = this.systemService.getTimeZone();
     const now = DateTime.now().setZone(timeZone);
-    return now.toFormat('yyyyLLdd');
+    return now.toFormat(DateService.FINGERPRINT_FORMAT);
   }
 
   public toFingerprint(day: number, month: number, year: number): string {
     return DateTime
       .local(year, month, day)
       .toFormat(DateService.FINGERPRINT_FORMAT);
+  }
+
+  public dateToFingerprint(date: DateTime): string {
+    return date.toFormat(DateService.FINGERPRINT_FORMAT);
   }
 
   public fingerprintToDate(
