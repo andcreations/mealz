@@ -10,7 +10,7 @@ import { AdHocIngredient } from '@mealz/backend-ingredients-shared';
 
 import { I18nService } from '../../i18n';
 import { INVALID_AMOUNT } from '../const';
-import { MealPlannerIngredient, MealSummaryResult } from '../types';
+import { CollapseToOneIngredientResult, MealPlannerIngredient, MealSummaryResult } from '../types';
 import { MealCalculator } from './MealCalculator';
 
 const factKcal = (id: GWFactId, amount: number): GWFactPer100 => {
@@ -608,5 +608,229 @@ describe('MealCalculator.summarize', () => {
         hasAdHocIngredients: true,
       },
     })
+  });
+});
+
+describe('MealCalculator.collapseToOneIngredient', () => {
+  let i18nService: jest.Mocked<I18nService>;
+  let mealCalculator: MealCalculator;
+
+  beforeEach(() => {
+    i18nService = {
+      translate: jest.fn(),
+    } as any;
+    i18nService.translate.mockReturnValue('error');
+    mealCalculator = new MealCalculator(i18nService);
+  });
+
+  const runTest = (
+    input: {
+      calories: number | undefined,
+      ingredients: MealPlannerIngredient[],
+      expected: CollapseToOneIngredientResult,
+    },
+  ) => {
+    const result = mealCalculator.collapseToOneIngredient(
+      input.calories,
+      input.ingredients,
+      'Collapsed ingredient',
+    );
+    expect(result).toEqual(input.expected);
+  };
+
+  test('returns collapsed false when calculateAmounts returns error', () => {
+    const ingredients = [
+      adHocIngredient(PEAR, ''),
+    ];
+    runTest({
+      calories: undefined,
+      ingredients,
+      expected: {
+        ingredients,
+        collapsed: false,
+      },
+    });
+  });
+
+  test('returns collapsed false when total amount is zero', () => {
+    const ingredients = [
+      adHocIngredient(PEAR, '0'),
+    ];
+    runTest({
+      calories: 100,
+      ingredients,
+      expected: {
+        ingredients,
+        collapsed: false,
+      },
+    });
+  });
+
+  test('single full ingredient', () => {
+    runTest({
+      calories: 500,
+      ingredients: [
+        fullIngredient(APPLE, '100'),
+      ],
+      expected: {
+        ingredients: [{
+          adHocIngredient: {
+            name: '',
+            caloriesPer100: 100,
+            carbsPer100: 15,
+            proteinPer100: 4,
+            fatPer100: 6,
+          },
+          enteredAmount: '100',
+          calculatedAmount: 100,
+        }],
+        collapsed: true,
+      },
+    });
+  });
+
+  test('two full ingredients with equal amounts', () => {
+    runTest({
+      calories: 500,
+      ingredients: [
+        fullIngredient(APPLE, '100'),
+        fullIngredient(ROLLED_OATS, '100'),
+      ],
+      expected: {
+        ingredients: [{
+          adHocIngredient: {
+            name: '',
+            caloriesPer100: 150,
+            carbsPer100: 13.5,
+            proteinPer100: 10,
+            fatPer100: 7,
+          },
+          enteredAmount: '200',
+          calculatedAmount: 200,
+        }],
+        collapsed: true,
+      },
+    });
+  });
+
+  test('single ad-hoc ingredient with macros', () => {
+    runTest({
+      calories: 500,
+      ingredients: [
+        adHocIngredient(PROTEIN_BAR, '80'),
+      ],
+      expected: {
+        ingredients: [{
+          adHocIngredient: {
+            name: '',
+            caloriesPer100: 200,
+            carbsPer100: 10,
+            proteinPer100: 20,
+            fatPer100: 5,
+          },
+          enteredAmount: '80',
+          calculatedAmount: 80,
+        }],
+        collapsed: true,
+      },
+    });
+  });
+
+  test('two ad-hoc ingredients with equal amounts', () => {
+    runTest({
+      calories: 500,
+      ingredients: [
+        adHocIngredient(PROTEIN_BAR, '50'),
+        adHocIngredient(PEANUT_BUTTER, '50'),
+      ],
+      expected: {
+        ingredients: [{
+          adHocIngredient: {
+            name: '',
+            caloriesPer100: 400,
+            carbsPer100: 20,
+            proteinPer100: 20,
+            fatPer100: 22.5,
+          },
+          enteredAmount: '100',
+          calculatedAmount: 100,
+        }],
+        collapsed: true,
+      },
+    });
+  });
+
+  test('ad-hoc ingredient without macros defaults to zero', () => {
+    runTest({
+      calories: 500,
+      ingredients: [
+        adHocIngredient(PEAR, '100'),
+      ],
+      expected: {
+        ingredients: [{
+          adHocIngredient: {
+            name: '',
+            caloriesPer100: 80,
+            carbsPer100: 0,
+            proteinPer100: 0,
+            fatPer100: 0,
+          },
+          enteredAmount: '100',
+          calculatedAmount: 100,
+        }],
+        collapsed: true,
+      },
+    });
+  });
+
+  test('mixed full and ad-hoc ingredients', () => {
+    runTest({
+      calories: 500,
+      ingredients: [
+        fullIngredient(APPLE, '100'),
+        adHocIngredient(PROTEIN_BAR, '100'),
+      ],
+      expected: {
+        ingredients: [{
+          adHocIngredient: {
+            name: '',
+            caloriesPer100: 150,
+            carbsPer100: 12.5,
+            proteinPer100: 12,
+            fatPer100: 5.5,
+          },
+          enteredAmount: '200',
+          calculatedAmount: 200,
+        }],
+        collapsed: true,
+      },
+    });
+  });
+
+  test('ingredients without amount get calculated from calories', () => {
+    // APPLE 100g = 100 cal. Remaining = 200 cal.
+    // ROLLED_OATS caloriesPer100 = 200, so amount = 100g.
+    // Total: 200g, same per100 as equal-amounts test.
+    runTest({
+      calories: 300,
+      ingredients: [
+        fullIngredient(APPLE, '100'),
+        fullIngredient(ROLLED_OATS, ''),
+      ],
+      expected: {
+        ingredients: [{
+          adHocIngredient: {
+            name: '',
+            caloriesPer100: 150,
+            carbsPer100: 13.5,
+            proteinPer100: 10,
+            fatPer100: 7,
+          },
+          enteredAmount: '200',
+          calculatedAmount: 200,
+        }],
+        collapsed: true,
+      },
+    });
   });
 });

@@ -16,11 +16,13 @@ import {
 import { INVALID_AMOUNT } from '../const';
 import {
   CalculateAmountsResult,
+  CollapseToOneIngredientResult,
   Macros,
   MealPlannerIngredient,
   MealSummaryResult,
 } from '../types';
 import { MealCalculatorTranslations } from './MealCalculator.translations';
+import { truncateNumber } from '@mealz/backend-shared';
 
 @Service()
 export class MealCalculator {
@@ -328,4 +330,67 @@ export class MealCalculator {
       }),
     };
   }
+
+  public collapseToOneIngredient(
+    calories: number | undefined,
+    ingredients: MealPlannerIngredient[],
+    collapsedIngredientName: string,
+  ): CollapseToOneIngredientResult {
+    const result = this.calculateAmounts(
+      calories,
+      ingredients,
+    );
+    if (result.error) {
+      return {
+        ingredients,
+        collapsed: false,
+      };
+    }
+
+    let totalAmount = 0;
+    let totalCalories = 0;
+    let totalCarbs = 0;
+    let totalProtein = 0;
+    let totalFat = 0;
+
+    for (const ingredient of result.ingredients) {
+      const amount = ingredient.calculatedAmount ?? 0;
+      totalAmount += amount;
+
+      const caloriesPer100 = this.getCaloriesPer100(ingredient);
+      const carbsPer100 = this.getCarbsPer100(ingredient);
+      const proteinPer100 = this.getProteinPer100(ingredient);
+      const fatPer100 = this.getFatPer100(ingredient);
+
+      totalCalories += calculateFact(amount, caloriesPer100 ?? 0);
+      totalCarbs += calculateFact(amount, carbsPer100 ?? 0);
+      totalProtein += calculateFact(amount, proteinPer100 ?? 0);
+      totalFat += calculateFact(amount, fatPer100 ?? 0);
+    }
+
+    if (totalAmount === 0) {
+      return {
+        ingredients,
+        collapsed: false,
+      };
+    }
+    totalAmount = truncateNumber(totalAmount);
+
+    const collapsedIngredient: MealPlannerIngredient = {
+      adHocIngredient: {
+        name: collapsedIngredientName,
+        caloriesPer100: truncateNumber((totalCalories * 100) / totalAmount),
+        carbsPer100: truncateNumber((totalCarbs * 100) / totalAmount),
+        proteinPer100: truncateNumber((totalProtein * 100) / totalAmount),
+        fatPer100: truncateNumber((totalFat * 100) / totalAmount),
+      },
+      enteredAmount: `${totalAmount}`,
+      calculatedAmount: totalAmount,
+    };
+
+    return {
+      ingredients: [collapsedIngredient],
+      collapsed: true,
+    };
+  }  
 }

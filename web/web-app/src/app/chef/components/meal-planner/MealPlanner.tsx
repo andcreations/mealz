@@ -64,6 +64,8 @@ import { MEAL_NAME_MAX_AGE } from '../../const';
 
 enum Focus { Calories };
 
+const COLLAPSE_NAMED_MEAL = true;
+
 interface MealPlannerState {
   loadStatus: LoadStatus;
   fullScreenLoadStatus: LoadStatus | null;
@@ -713,12 +715,22 @@ export function MealPlanner() {
       mealsNamedService.loadByName(name)
         .then((loadedMeal) => {
           markDirty();
-          const caloriesStr = state.calories.length > 0
-            ? state.calories
-            : loadedMeal.calories?.toString();
+          let ingredients = mealMapper.toMealPlannerIngredients(
+            loadedMeal.ingredients,
+          );
+          if (COLLAPSE_NAMED_MEAL) {
+            const collapsed = mealCalculator.collapseToOneIngredient(
+              loadedMeal.calories,
+              ingredients,
+              name,
+            );
+            if (collapsed.collapsed) {
+              ingredients = collapsed.ingredients;
+            }
+          }
           meal.recalculate(
-            caloriesStr,
-            mealMapper.toMealPlannerIngredients(loadedMeal.ingredients),
+            state.calories,
+            [...state.ingredients, ...ingredients],
             {
               showLoadMealPicker: false
             }
