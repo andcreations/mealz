@@ -64,8 +64,6 @@ import { MEAL_NAME_MAX_AGE } from '../../const';
 
 enum Focus { Calories };
 
-const COLLAPSE_NAMED_MEAL = true;
-
 interface MealPlannerState {
   loadStatus: LoadStatus;
   fullScreenLoadStatus: LoadStatus | null;
@@ -711,14 +709,14 @@ export function MealPlanner() {
       patchState({ showDeleteMealPicker: false });
     },
 
-    onLoad: (name: string) => {
+    onLoad: (name: string, switchChecked?: boolean) => {
       mealsNamedService.loadByName(name)
         .then((loadedMeal) => {
           markDirty();
           let ingredients = mealMapper.toMealPlannerIngredients(
             loadedMeal.ingredients,
           );
-          if (COLLAPSE_NAMED_MEAL) {
+          if (switchChecked === true) {
             const collapsed = mealCalculator.collapseToOneIngredient(
               loadedMeal.calories,
               ingredients,
@@ -944,6 +942,8 @@ export function MealPlanner() {
       { state.showLoadMealPicker &&
         <NamedMealPicker
           show={state.showLoadMealPicker}
+          switchLabel={translate('load-switch-label')}
+          switchChecked={true}
           buttonLabel={translate('load-button-label')}
           placeholder={translate('load-placeholder')}
           info={{
