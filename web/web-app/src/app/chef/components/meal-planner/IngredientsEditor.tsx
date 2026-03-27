@@ -320,11 +320,15 @@ export function IngredientsEditor(props: IngredientsEditorProps) {
             </div>
           }
         </div>
-        <div className='mealz-ingredients-editor-plus'>
-          <MaterialIcon
-            icon='add_circle'
-            onClick={onAddIngredient}
-          />
+        <div className='mealz-ingredients-editor-plus-container'>
+          <div className='mealz-ingredients-editor-plus'>
+            <MaterialIcon icon='add_circle'/>
+            <div
+              className='mealz-ingredients-editor-plus-click-area'
+              onClick={onAddIngredient}
+            >
+            </div>
+          </div>
         </div>
       </div>
       <IngredientPickerWrapper

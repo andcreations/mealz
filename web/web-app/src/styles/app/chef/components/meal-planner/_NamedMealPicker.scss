@@ -10,12 +10,51 @@
 .mealz-named-meal-picker-content {
   display: grid;
   grid-template-columns: auto auto;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto auto;
+}
+
+.mealz-named-meal-picker-switch-wrapper {
+  grid-column: 1;
+  grid-row: 1;
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  align-items: center;
+  margin-top: 0.675rem;
+  margin-bottom: 0.25rem;
+  margin-left: 1rem;
+}
+
+.mealz-named-meal-picker-switch-label {
+  margin-left: 0.5rem;
+}
+
+.mealz-named-meal-picker-action-bar-wrapper {
+  grid-column: 2;
+  grid-row: 1;
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  justify-content: flex-end;
+  margin-top: 0.675rem;
+  margin-bottom: 0.25rem;
+  margin-right: 1rem;
+
+  .mealz-link-button {
+    color: $mealz-theme-color-active;
+  }
+}
+
+.mealz-named-meal-picker-separator {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  background-color: $mealz-theme-color-bg;
+  height: 1px;
+  margin: 0.5rem 1rem 0.125rem 1rem;
+  opacity: 0.5;
 }
 
 .mealz-named-meal-picker-name {
-  grid-column: 1;
-  grid-row: 1;
+  grid-column: 1 / span 2;
+  grid-row: 3;
 }
 
 .mealz-named-meal-picker-name-input,
@@ -27,8 +66,8 @@
 }
 
 .mealz-named-meal-picker-info {
-  grid-column: 1;
-  grid-row: 2;
+  grid-column: 1 / span 2;
+  grid-row: 4;
   @include mealz-font-tiny();
   color: $mealz-theme-color-fg-dark;
   padding-left: 0.75rem;
@@ -36,7 +75,7 @@
 
 .mealz-named-meal-picker-button {
   grid-column: 2;
-  grid-row: 1 / span 2;
+  grid-row: 3 / span 2;
   cursor: pointer;
   display: flex;
   align-items: center;

@@ -50,6 +50,8 @@ import { useTranslations } from '../../../i18n';
 import { DateService } from '../../../system';
 import { MealCalculator, MealMapper } from '../../services';
 import { eventType } from '../../event-log';
+import { LocalStorage } from '../../../storage';
+import { MEAL_NAME_STORAGE_ITEM, MealNameStorageItem } from '../../storage';
 import { AIMealScannerModal } from '../ai-meal-scanner';
 import { MealPlannerActionBar } from './MealPlannerActionBar';
 import { IngredientsEditor } from './IngredientsEditor';
@@ -58,6 +60,7 @@ import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
 import { MealPortion } from './MealPortion';
 import { MealNameMenuItem } from './MealNameMenuItem';
+import { MEAL_NAME_MAX_AGE } from '../../const';
 
 enum Focus { Calories };
 
@@ -72,9 +75,6 @@ interface MealPlannerState {
     ingredients: MealPlannerIngredient[];
     calories: string;
   },
-
-  // calories from the daily plan or from the draft meal (picked by the user)
-  targetMealCalories: string;
 
   // name of the meal (picked by the user)
   mealName?: string;
@@ -95,6 +95,7 @@ interface MealPlannerState {
 
 export function MealPlanner() {
   const dateService = useService(DateService);
+  const localStorage = useService(LocalStorage);
   const notificationsService = useService(NotificationsService);
   const mealsUserService = useService(MealsUserService);
   const mealsLogService = useService(MealsLogService);
@@ -110,7 +111,6 @@ export function MealPlanner() {
     ingredients: [],
     calories: '',
     calculateAmountsError: null,
-    targetMealCalories: '',
     showMealNamePicker: false,
     showSaveMealPicker: false,
     showLoadMealPicker: false,
@@ -139,7 +139,7 @@ export function MealPlanner() {
   // initial read
   useEffect(
     () => {
-      let mealName: string | undefined;
+      let resolvedMealName: string | undefined;
       let dailyPlanEntry: GWMealDailyPlanEntry | undefined;
       Promise.all([
         logEventAndRethrow(
@@ -150,20 +150,29 @@ export function MealPlanner() {
           () => mealsNamedService.loadAll(),
           eventType('named-meals-read'),
         ),
+        logEventAndRethrow(
+          () => localStorage.getItemAsync<MealNameStorageItem>(
+            MEAL_NAME_STORAGE_ITEM,
+          ),
+          eventType('meal-name-read'),
+        ),
       ])
-      .then(([currentDailyMealPlan, loadedNamedMeals]) => {
+      .then(([currentDailyMealPlan, loadedNamedMeals, mealNameItem]) => {
         dailyMealPlan.current = currentDailyMealPlan;
         namedMeals.current = loadedNamedMeals;
 
         // resolve meal name
-        dailyPlanEntry = mealsDailyPlanService.getEntryByTime(
+        resolvedMealName = mealName.resolveInitialMealName(
+          mealNameItem,
           currentDailyMealPlan,
-          Date.now(),
         );
-        mealName = dailyPlanEntry?.mealName ?? translate('default-meal-name');
+        dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
+          currentDailyMealPlan,
+          resolvedMealName,
+        );
         
         // read meal
-        return userMealDraft.read(mealName);
+        return userMealDraft.read(resolvedMealName);
       })
       .then((userMeal) => {
         const ingredients = mealMapper.toMealPlannerIngredients(
@@ -174,8 +183,8 @@ export function MealPlanner() {
           ingredients,
           {
             loadStatus: LoadStatus.Loaded,
-            mealName,
-            goals: dailyPlanEntry?.goals,  
+            mealName: resolvedMealName,
+            goals: dailyPlanEntry?.goals,
           }
         );
       })
@@ -235,7 +244,11 @@ export function MealPlanner() {
       );
     },
 
-    readAndRecalculate: (mealName: string, dayFingerprint?: string) => {
+    readAndRecalculate: (
+      mealName: string,
+      dayFingerprint?: string,
+      onSuccess?: () => void,
+    ) => {
       userMealDraft.read(mealName, dayFingerprint)
         .then((userMeal) => {
           const ingredients = mealMapper.toMealPlannerIngredients(
@@ -253,6 +266,7 @@ export function MealPlanner() {
               goals: dailyPlanEntry?.goals,  
             }
           );
+          onSuccess?.();
         })
         .catch((error) => {
           logErrorEvent(eventType('failed-to-read-meal'), {}, error);
@@ -361,6 +375,27 @@ export function MealPlanner() {
   };
 
   const mealName = {
+    resolveInitialMealName: (
+      mealNameStorageItem: MealNameStorageItem | undefined,
+      mealDailyPlan: GWMealDailyPlan | undefined,
+    ) => {
+      const now = Date.now();
+      if (mealNameStorageItem) {
+        const timestampDiff = now - mealNameStorageItem.timestamp;
+        if (timestampDiff < MEAL_NAME_MAX_AGE) {
+          return mealNameStorageItem.mealName;
+        }
+      }
+      if (mealDailyPlan) {
+        const mealDailyPlanEntry = mealsDailyPlanService.getEntryByTime(
+          mealDailyPlan,
+          now,
+        );
+        return mealDailyPlanEntry.mealName;
+      }
+      return translate('default-meal-name');
+    },
+
     onShow: () => {
       const names = mealName.getMealNames();
       if (names.length === 0) {
@@ -413,7 +448,19 @@ export function MealPlanner() {
         return;
       }
       patchState({ fullScreenLoadStatus: LoadStatus.Loading });
-      userMealDraft.readAndRecalculate(mealName);
+      userMealDraft.readAndRecalculate(
+        mealName,
+        undefined,
+        () => {
+          localStorage.setItem<MealNameStorageItem>(
+            MEAL_NAME_STORAGE_ITEM,
+            {
+              mealName,
+              timestamp: Date.now(),
+            },
+          );
+        },
+      );
     },
   };
 
@@ -566,12 +613,17 @@ export function MealPlanner() {
     },
 
     onClear: () => {
+      let newCalories = state.calories;
+      if (state.goals) {
+        newCalories = calories.fromGoals(state.goals);
+      }
+
     // clear
       markDirty();
       setState(prevState => ({
         ...prevState,
         ingredients: [],
-        calories: prevState.targetMealCalories,
+        calories: newCalories,
         clearUndo: {
           ingredients: prevState.ingredients,
           calories: prevState.calories,
@@ -657,13 +709,26 @@ export function MealPlanner() {
       patchState({ showDeleteMealPicker: false });
     },
 
-    onLoad: (name: string) => {
+    onLoad: (name: string, switchChecked?: boolean) => {
       mealsNamedService.loadByName(name)
         .then((loadedMeal) => {
           markDirty();
+          let ingredients = mealMapper.toMealPlannerIngredients(
+            loadedMeal.ingredients,
+          );
+          if (switchChecked === true) {
+            const collapsed = mealCalculator.collapseToOneIngredient(
+              loadedMeal.calories,
+              ingredients,
+              name,
+            );
+            if (collapsed.collapsed) {
+              ingredients = collapsed.ingredients;
+            }
+          }
           meal.recalculate(
-            loadedMeal.calories?.toString() ?? state.calories,
-            mealMapper.toMealPlannerIngredients(loadedMeal.ingredients),
+            state.calories,
+            [...state.ingredients, ...ingredients],
             {
               showLoadMealPicker: false
             }
@@ -685,9 +750,7 @@ export function MealPlanner() {
       );
       mealsNamedService.save(name, gwMeal)
         .then(() => {
-          notificationsService.info(
-            translate('meal-saved')
-          );
+          notificationsService.info(translate('meal-saved'));
           namedMeals.current = mealsNamedService.getAll();
         })
         .catch(error => {
@@ -702,9 +765,7 @@ export function MealPlanner() {
     onDelete: (name: string) => {
       mealsNamedService.deleteByName(name)
         .then(() => {
-          notificationsService.info(
-            translate('meal-deleted')
-          );
+          notificationsService.info(translate('meal-deleted'));
         })
         .catch(error => {
           notificationsService.error(
@@ -881,6 +942,8 @@ export function MealPlanner() {
       { state.showLoadMealPicker &&
         <NamedMealPicker
           show={state.showLoadMealPicker}
+          switchLabel={translate('load-switch-label')}
+          switchChecked={true}
           buttonLabel={translate('load-button-label')}
           placeholder={translate('load-placeholder')}
           info={{

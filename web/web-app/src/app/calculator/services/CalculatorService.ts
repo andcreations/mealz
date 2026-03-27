@@ -10,6 +10,7 @@ import { CalculatorSettings, CalculatorResult } from '../types';
 @Service()
 export class CalculatorService {
   public calculate(settings: CalculatorSettings): CalculatorResult {
+    const calorieAdjustment = settings.calorieAdjustment ?? 0;
     const bmr = MifflinStJeor.calculateBMR(
       settings.sex,
       settings.age,
@@ -22,6 +23,7 @@ export class CalculatorService {
     );
     const macros = Macros.calculateForTDEE(
       tdee,
+      calorieAdjustment,
       settings.goal,
     );
     return {

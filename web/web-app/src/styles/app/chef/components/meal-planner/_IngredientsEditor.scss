@@ -17,13 +17,25 @@
   grid-row: 1;
 }
 
-.mealz-ingredients-editor-plus {
-  color: $mealz-theme-color-active;
+.mealz-ingredients-editor-plus-container {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 50%);
+}
+
+.mealz-ingredients-editor-plus {
+  color: $mealz-theme-color-active;
   cursor: pointer;
+}
+
+.mealz-ingredients-editor-plus-click-area {
+  $margin: 0.5rem;
+  position: absolute;
+  top: -$margin;
+  left: -$margin;
+  width: calc(100% + 2 * $margin);
+  height: calc(100% + 2 * $margin);
 }
 
 .mealz-ingredients-editor-amount {

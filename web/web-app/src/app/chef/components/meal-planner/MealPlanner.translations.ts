@@ -31,6 +31,7 @@ export const MealPlannerTranslations: Translations = {
   'meal-saved': 'Meal saved',
 
   // load
+  'load-switch-label': 'Single ingredient',
   'load-button-label': 'Load meal',
   'load-placeholder': 'Pick meal to load',
   'load-info': 'Select a meal to load',

@@ -7,4 +7,5 @@ export interface CalculatorSettings {
   weight: number;
   activityLevel: ActivityLevel;
   goal: Goal;
+  calorieAdjustment: number;
 }

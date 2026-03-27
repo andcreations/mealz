@@ -40,6 +40,11 @@ export const CalculatorTranslations: Translations = {
   'goal-stay-fit-name': 'Stay fit',
   'goal-build-body-name': 'Build body',
 
+  'calorie-adjustment-title': 'Calorie adjustment',
+  'calorie-adjustment-label': 'Calorie adjustment',
+  'calorie-adjustment-label-suffix': '(kcal)',
+  'calorie-adjustment-details': 'Adjust your daily calorie intake to achieve your goal',
+
   'summary-title': 'Your daily nutrition summary',
   'summary-bmr': 'BMR:',
   'summary-tdee': 'TDEE:',

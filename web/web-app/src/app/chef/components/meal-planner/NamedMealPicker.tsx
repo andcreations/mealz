@@ -5,17 +5,17 @@ import Form from 'react-bootstrap/Form';
 
 import { usePatchState, useService } from '../../../hooks';
 import { focusRef, Key, mapKey, stopBubble } from '../../../utils';
-import { LinkButton } from '../../../components';
+import { LinkButton, Switch } from '../../../components';
 import { SystemService } from '../../../system';
 import { MealsNamedService, NamedMeal } from '../../../meals';
 import { NamedMealPickerDropdown } from './NamedMealPickerDropdown';
 
 enum Focus { Name };
 
-const SEARCH_LIMIT = 8;
-
 export interface NamedMealPickerProps {
   show: boolean;
+  switchLabel?: string;
+  switchChecked?: boolean;
   buttonLabel: string;
   placeholder: string;
   info?: {
@@ -24,12 +24,13 @@ export interface NamedMealPickerProps {
     nonMatching?: string;
   }
   mustMatchToPick?: boolean;
-  onPick: (name: string) => void;
+  onPick: (name: string, switchChecked?: boolean) => void;
   onClose: () => void;
 }
 
 interface NamedMealPickerState {
   focus: Focus;
+  switchChecked: boolean;
   name: string;
   dropdownItems: string[];
   dropdownIndex: number;
@@ -42,11 +43,13 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
   const namedMealsToDropdown = (namedMeals: NamedMeal[]) => {
     return namedMeals.map(meal => meal.name).sort();
   }
+  const allNamedMeals = mealsNamedService.getAll();
   
   const [state, setState] = useState<NamedMealPickerState>({
     focus: Focus.Name,
+    switchChecked: props.switchChecked ?? false,
     name: '',
-    dropdownItems: namedMealsToDropdown(mealsNamedService.getAll()),
+    dropdownItems: namedMealsToDropdown(allNamedMeals),
     dropdownIndex: 0,
   });
   const patchState = usePatchState(setState);
@@ -61,6 +64,15 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
       }
     },
     [state.focus],
+  );
+
+  useEffect(
+    () => {
+      patchState({
+        dropdownItems: namedMealsToDropdown(allNamedMeals),
+      });
+    },
+    [mealsNamedService.getAll()],
   );
 
   const name = {
@@ -113,7 +125,10 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
       ) {
         return;
       }
-      props.onPick(state.name);
+      const switchChecked = props.switchLabel
+        ? state.switchChecked
+        : undefined;
+      props.onPick(state.name, switchChecked);
     }
   }
 
@@ -121,7 +136,7 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
     matchItems: (name: string) => {
       const namedMeals = name.length > 0
         ? mealsNamedService.search(name)
-        : mealsNamedService.getAll();
+        : allNamedMeals;
       return namedMealsToDropdown(namedMeals);
     },
 
@@ -135,6 +150,19 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
 
     selectedIndex: () => {
       return systemService.isMobile() ? undefined : state.dropdownIndex;
+    },
+  }
+
+  const swtch = {
+    onChange: (checked: boolean) => {
+      patchState({ switchChecked: checked });
+    },
+
+    onSwitch: () => {
+      setState(prevState => ({
+        ...prevState,
+        switchChecked: !prevState.switchChecked,
+      }));
     },
   }
 
@@ -173,6 +201,31 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
       onEscapeKeyDown={props.onClose}
     >
       <div className='mealz-named-meal-picker-content'>
+        { props.switchLabel &&
+          <div className='mealz-named-meal-picker-switch-wrapper'>
+            <Switch
+              size='sm'
+              width='xs'
+              checked={state.switchChecked}
+              onChange={swtch.onChange}
+            />
+            <div
+              className='mealz-named-meal-picker-switch-label'
+              onClick={swtch.onSwitch}
+            >
+              { props.switchLabel }
+            </div>
+          </div>
+        }
+        <div className='mealz-named-meal-picker-action-bar-wrapper'>
+          <LinkButton
+            label={props.buttonLabel}
+            size='small'
+            disabled={button.disabled()}
+            onClick={name.onPick}
+          />
+        </div>
+        <div className='mealz-named-meal-picker-separator'></div>
         <div className='mealz-named-meal-picker-name'>
           <Form.Control
             ref={name.ref}
@@ -195,12 +248,6 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
           />
         }
         <div className='mealz-named-meal-picker-button'>
-          <LinkButton
-            label={props.buttonLabel}
-            size='small'
-            disabled={button.disabled()}
-            onClick={name.onPick}
-          />
         </div>
       </div>
     </Modal>
