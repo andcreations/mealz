@@ -1,0 +1,1 @@
+export const ACTIONS_MANAGER_DB_NAME = 'actions-manager';

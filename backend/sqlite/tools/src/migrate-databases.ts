@@ -44,6 +44,7 @@ async function run(): Promise<void> {
   Log.info(`Databases directory is ${Colors.cyan(databasesDir)}`);
 
   await migrateDB('users');
+  await migrateDB('users-properties');
   await migrateDB('ingredients');
   await migrateDB('meals');
   await migrateDB('meals-user');
@@ -54,7 +55,8 @@ async function run(): Promise<void> {
   await migrateDB('hydration-log');
   await migrateDB('telegram-users');
   await migrateDB('telegram-bot');
-  await migrateDB('users-properties');
+  await migrateDB('actions-manager');
+
 }
 
 run().catch(error => {

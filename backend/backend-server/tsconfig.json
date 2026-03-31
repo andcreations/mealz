@@ -85,6 +85,8 @@
 
       "@mealz/backend-event-log-service-api": ["src/domains/event-log/services/log/service-api"],
       "@mealz/backend-event-log-gateway-api": ["src/domains/event-log/services/log/gateway-api"],
+
+      "@mealz/backend-actions-manager-service-api": ["src/domains/actions/services/manager/service-api"]
     }
   },
   "exclude": ["node_modules", "dist"]
