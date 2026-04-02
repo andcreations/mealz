@@ -11,6 +11,8 @@ export class ActionDBMapper {
   public toEntity(action: Action): ActionDBEntity {
     return {
       id: action.id,
+      domain: action.domain,
+      service: action.service,
       topic: action.topic,
       payload: Buffer.from(JSON.stringify(action)),
       status: action.status,
@@ -28,6 +30,8 @@ export class ActionDBMapper {
     }
     return {
       id: entity.id,
+      domain: entity.domain,
+      service: entity.service,
       topic: entity.topic,
       payload: JSON.parse(entity.payload.toString()),
       status: entity.status as ActionStatus,

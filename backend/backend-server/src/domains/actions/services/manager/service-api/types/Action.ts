@@ -4,6 +4,12 @@ export class Action {
   // Action identifier
   public id: string;
 
+  // Domain to which to send the request with the payload
+  public domain: string;
+
+  // Service to which to send the request with the payload
+  public service: string;
+
   // Topic to which to send to request with the payload
   public topic: string;
 

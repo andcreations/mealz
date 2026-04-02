@@ -13,6 +13,18 @@ export class ActionDBEntity {
   public id: string;
 
   @DBField({
+    name: 'domain',
+    type: DBFieldType.STRING,
+  })
+  public domain: string;
+
+  @DBField({
+    name: 'service',
+    type: DBFieldType.STRING,
+  })
+  public service: string;
+
+  @DBField({
     name: 'topic',
     type: DBFieldType.STRING,
   })

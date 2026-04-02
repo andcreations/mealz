@@ -9,6 +9,9 @@ import {
 import {
   HydrationLogAPIModule,
 } from '@mealz/backend-hydration-log-service-api';
+import {
+  ActionsManagerAPIModule,
+} from '@mealz/backend-actions-manager-service-api';
 
 import {
   TELEGRAM_BOT_SQLITE_DB_MODULE_OPTIONS,
@@ -31,6 +34,7 @@ import { OutgoingTelegramMessagesRepository } from './repositories';
     UsersCrudAPIModule.forRoot({}),
     TelegramUsersAPIModule.forRoot({}),
     HydrationLogAPIModule.forRoot({}),
+    ActionsManagerAPIModule.forRoot({}),
     SQLiteDBModule.forFeature(TELEGRAM_BOT_SQLITE_DB_MODULE_OPTIONS),
     TelegramBotDBModule,
   ],
