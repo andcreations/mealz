@@ -325,7 +325,7 @@ export class HydrationReminderService implements OnModuleInit {
     const message = this.translate(messageKey);
 
     // send
-    await this.usersNotificationsTransporter.sendBasicUserNotification(
+    await this.usersNotificationsTransporter.sendBasicUserNotificationV1(
       {
         userId,
         messageTypeId: HYDRATION_REMINDER_TELEGRAM_MESSAGE_TYPE_ID,

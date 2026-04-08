@@ -14,16 +14,18 @@ import {
   ReadNamedMealsFromLastRequestV1,
   ReadNamedMealsFromLastResponseV1,
   UpdateNamedMealRequestV1,
+  ShareNamedMealRequestV1,
+  ShareNamedMealActionPayload,
 } from '@mealz/backend-meals-named-service-api';
 
-import { MealsNamedCrudService } from '../services';
+import { MealsNamedCrudService, MealsNamedShareService } from '../services';
 
 @RequestController()
 export class MealsDailyPlanRequestController {
   public constructor(
     private readonly mealsNamedCrudService: MealsNamedCrudService,
+    private readonly mealsNamedService: MealsNamedShareService,
   ) {}
-
 
   @RequestHandler(MealsNamedRequestTopics.ReadNamedMealByIdV1)
   public async readNamedMealByIdV1(
@@ -66,5 +68,21 @@ export class MealsDailyPlanRequestController {
     context: Context,
   ): Promise<VoidTransporterResponse> {
     return this.mealsNamedCrudService.deleteNamedMealV1(request, context);
+  }
+
+  @RequestHandler(MealsNamedRequestTopics.ShareNamedMealV1)
+  public async shareNamedMealV1(
+    request: ShareNamedMealRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.mealsNamedService.shareNamedMealV1(request, context);
+  }
+
+  @RequestHandler(MealsNamedRequestTopics.RunShareNamedMealActionV1)
+  public async runShareNamedMealActionV1(
+    request: ShareNamedMealActionPayload,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.mealsNamedService.runShareNamedMealActionV1(request, context);
   }
 }

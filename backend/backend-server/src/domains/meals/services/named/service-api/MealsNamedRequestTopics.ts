@@ -22,6 +22,14 @@ export class MealsNamedRequestTopics {
     'deleteNamedMeal',
     'v1',
   );
+  public static readonly ShareNamedMealV1 = topic(
+    'shareNamedMeal',
+    'v1',
+  );
+  public static readonly RunShareNamedMealActionV1 = topic(
+    'runShareNamedMealAction',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

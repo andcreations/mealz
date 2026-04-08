@@ -32,6 +32,13 @@ export class MealsNamedCrudService {
     private readonly mealsNamedCrudRepository: MealsNamedCrudRepository,
   ) {}
 
+  public async readNamedMealById(
+    id: string,
+    context: Context,
+  ): Promise<NamedMeal | undefined> {
+    return await this.mealsNamedCrudRepository.readById(id, context);
+  }
+
   public async readNamedMealByIdV1(
     request: ReadNamedMealByIdRequestV1,
     context: Context,
@@ -50,7 +57,7 @@ export class MealsNamedCrudService {
     request: CreateNamedMealRequestV1,
     context: Context,
   ): Promise<CreateNamedMealResponseV1> {
-    const { userId, meal, mealName } = request;
+    const { userId, meal, mealName, sharedByUserId } = request;
 
     // saga context
     type SagaContext = {
@@ -71,9 +78,9 @@ export class MealsNamedCrudService {
                 mealName,
                 context,
               );
-            if (namedMeal) {
-              throw new NamedMealAlreadyExistsError(mealName);
-            }
+            // if (namedMeal) {
+            //   throw new NamedMealAlreadyExistsError(mealName);
+            // }
           },
         },
         {
@@ -106,6 +113,7 @@ export class MealsNamedCrudService {
                 mealId: sagaContext.newMealId,
                 userId,
                 mealName,
+                sharedByUserId,
                 createdAt: Date.now(),
               },
               context,

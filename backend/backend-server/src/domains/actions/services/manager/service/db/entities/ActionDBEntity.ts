@@ -45,8 +45,9 @@ export class ActionDBEntity {
   @DBField({
     name: 'error',
     type: DBFieldType.STRING,
+    optional: true,
   })
-  public error: string;
+  public error?: string;
 
   @DBField({
     name: 'created_at',
@@ -58,6 +59,7 @@ export class ActionDBEntity {
   @DBField({
     name: 'executed_at',
     type: DBFieldType.INTEGER,
+    optional: true,
   })
-  public executed_at: number;
+  public executed_at?: number;
 }

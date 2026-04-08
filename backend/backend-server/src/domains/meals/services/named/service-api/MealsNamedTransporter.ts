@@ -16,6 +16,7 @@ import {
   ReadNamedMealsFromLastRequestV1,
   ReadNamedMealsFromLastResponseV1,
   UpdateNamedMealRequestV1,
+  ShareNamedMealRequestV1,
 } from './dtos';
 
 @Injectable()
@@ -86,6 +87,18 @@ export class MealsNamedTransporter {
       MealsNamedRequestTopics.DeleteNamedMealV1,
       request,
       context,
+    );
+  }
+
+  public async shareNamedMealV1(
+    request: ShareNamedMealRequestV1,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return await this.transporter.sendRequest<
+      ShareNamedMealRequestV1, VoidTransporterResponse
+    >(
+      MealsNamedRequestTopics.ShareNamedMealV1,
+      request, context,
     );
   }
 }

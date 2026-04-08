@@ -7,6 +7,7 @@ import {
   TelegramUsersTransporter,
 } from '@mealz/backend-telegram-users-service-api';
 import {
+  getActionCallbackData,
   HandleUpdateRequestV1,
   OutgoingTelegramMessageStatus,
   SendMessageToUserRequestV1,
@@ -96,12 +97,23 @@ export class TelegramBotService {
       }
     };
 
+    // actions
+    const actions = (request.actions ?? []).map((action) => {
+      return {
+        text: action.title,
+        callback_data: getActionCallbackData(action.id),
+      };
+    });
+
     // send message
     try {
       const result = await this.telegramBotClient.sendMessage(
         {
           ...request.message,
           chat_id: telegramUser.telegramChatId,
+          reply_markup: {
+            inline_keyboard: [actions],
+          },
         },
         context,
       );

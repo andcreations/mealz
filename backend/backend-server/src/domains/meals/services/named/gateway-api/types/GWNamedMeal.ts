@@ -1,3 +1,5 @@
+import { GWNamedMealSharedBy } from './GWNamedMealSharedBy';
+
 export interface GWNamedMeal {
   // Named meal identifier
   id: string;
@@ -7,4 +9,7 @@ export interface GWNamedMeal {
 
   // Meal identifier
   mealId: string;
+
+  // Shared by user
+  sharedBy?: GWNamedMealSharedBy;
 }

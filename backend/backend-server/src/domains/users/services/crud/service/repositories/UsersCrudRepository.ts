@@ -41,6 +41,22 @@ export class UsersCrudRepository {
     );  
   }
 
+  public async readUsersByIds(
+    identifiers: string[],
+    context: Context,
+  ): Promise<UserWithoutPassword[]> {
+    const entities = await this.repository.find(
+      this.opName('readUsersByIds'),
+      { id: { $in: identifiers } },
+      {},
+      context,
+    );
+    return this.mapper.fromEntities(
+      entities,
+      USER_FIELDS_WITHOUT_PASSWORD,
+    );
+  }
+
   public async readUsersFromLast(
     lastId: string | undefined,
     limit: number,

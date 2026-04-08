@@ -6,3 +6,4 @@ export * from './UpdateNamedMealRequestV1';
 export * from './ReadNamedMealByIdRequestV1';
 export * from './ReadNamedMealByIdResponseV1';
 export * from './DeleteNamedMealRequestV1';
+export * from './ShareNamedMealRequestV1';

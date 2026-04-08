@@ -59,7 +59,6 @@ export class UsersPropertiesRepository {
       id,
       modifiedAt: Date.now(),
     });
-    console.log('entity', entity);
     await this.repository.upsert(
       this.opName('upsertUserProperties'),
       entity,

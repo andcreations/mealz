@@ -3,5 +3,6 @@ export interface NamedMeal {
   userId?: string;
   mealName: string;
   mealId: string;
+  sharedByUserId?: string;
   createdAt: number;
 }

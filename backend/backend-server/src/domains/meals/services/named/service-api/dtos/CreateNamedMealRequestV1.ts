@@ -4,4 +4,5 @@ export interface CreateNamedMealRequestV1 {
   userId: string;
   meal: MealWithoutId;
   mealName: string;
+  sharedByUserId?: string;
 }

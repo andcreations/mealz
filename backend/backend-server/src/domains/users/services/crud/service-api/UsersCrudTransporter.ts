@@ -11,6 +11,8 @@ import {
   CreateUserRequestV1,
   ReadUserByIdRequestV1,
   ReadUserByIdResponseV1,
+  ReadUsersByIdsRequestV1,
+  ReadUsersByIdsResponseV1,
   ReadUsersFromLastRequestV1,
   ReadUsersFromLastResponseV1,
 } from './dtos';
@@ -30,6 +32,20 @@ export class UsersCrudTransporter {
     >(
       UsersCrudRequestTopics.ReadUserByIdV1,
       request, context,
+    );
+  }
+
+  public async readUsersByIdsV1(
+    request: ReadUsersByIdsRequestV1,
+    context: Context,
+  ): Promise<ReadUsersByIdsResponseV1> {
+    return this.transporter.sendRequest<
+      ReadUsersByIdsRequestV1,
+      ReadUsersByIdsResponseV1
+    >(
+      UsersCrudRequestTopics.ReadUsersByIdsV1,
+      request,
+      context,
     );
   }
 

@@ -14,7 +14,7 @@ export class ActionDBMapper {
       domain: action.domain,
       service: action.service,
       topic: action.topic,
-      payload: Buffer.from(JSON.stringify(action)),
+      payload: Buffer.from(JSON.stringify(action.payload)),
       status: action.status,
       error: action.error,
       created_at: action.createdAt,
