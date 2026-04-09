@@ -12,7 +12,11 @@ import {
 } from '@mealz/backend-actions-manager-service-api';
 
 import { MEALS_NAMED_SQLITE_DB_MODULE_OPTIONS, MealsNamedDBModule } from './db';
-import { MealsNamedCrudService, MealsNamedShareService } from './services';
+import { 
+  MealsNamedCrudService,
+  MealsNamedShareService,
+  MealsNamedShareUsersService,
+} from './services';
 import { MealsNamedCrudRepository } from './repositories';
 import { MealsDailyPlanRequestController } from './controllers';
 
@@ -32,6 +36,7 @@ import { MealsDailyPlanRequestController } from './controllers';
     MealsNamedCrudRepository,
     MealsNamedCrudService,
     MealsNamedShareService,
+    MealsNamedShareUsersService,
     MealsDailyPlanRequestController,
   ],
 })

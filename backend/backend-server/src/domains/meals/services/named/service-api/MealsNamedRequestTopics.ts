@@ -30,6 +30,10 @@ export class MealsNamedRequestTopics {
     'runShareNamedMealAction',
     'v1',
   );
+  public static readonly ListShareUsersV1 = topic(
+    'listShareUsers',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

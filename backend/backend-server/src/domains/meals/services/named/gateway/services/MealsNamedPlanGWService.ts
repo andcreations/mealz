@@ -14,6 +14,7 @@ import {
 import {
   CreateNamedMealRequestV1,
   DeleteNamedMealRequestV1,
+  ListShareUsersRequestV1,
   MealsNamedTransporter,
   ReadNamedMealByIdRequestV1,
   ReadNamedMealsFromLastRequestV1,
@@ -23,11 +24,13 @@ import {
 import {
   CreateNamedMealGWRequestV1Impl,
   CreateNamedMealGWResponseV1Impl,
+  ListShareUsersGWResponseV1Impl,
   ReadNamedMealByIdGWResponseV1Impl,
   ReadNamedMealsFromLastGWResponseV1Impl,
   UpdateNamedMealGWRequestV1Impl,
 } from '../dtos';
 import { GWNamedMealMapper } from './GWNamedMealMapper';
+import { GWShareUserMapper } from './GWShareUserMapper';
 
 @Injectable()
 export class MealsNamedPlanGWService {
@@ -36,6 +39,7 @@ export class MealsNamedPlanGWService {
     private readonly mealsNamedTransporter: MealsNamedTransporter,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly gwNamedMealMapper: GWNamedMealMapper,
+    private readonly gwShareUserMapper: GWShareUserMapper,
     private readonly gwMealMapper: GWMealMapper,
   ) {}
 
@@ -159,6 +163,23 @@ export class MealsNamedPlanGWService {
       userId,
     };
     await this.mealsNamedTransporter.deleteNamedMealV1(request, context);
+  }
+
+  public async listShareUsersV1(
+    userId: string,
+    context: Context,
+  ): Promise<ListShareUsersGWResponseV1Impl> {
+    const request: ListShareUsersRequestV1 = {
+      userId,
+    };
+    const { shareUsers } = await this.mealsNamedTransporter.listShareUsersV1(
+      request,
+      context,
+    );
+
+    return {
+      shareUsers: this.gwShareUserMapper.fromShareUsers(shareUsers),
+    };
   }
 
   private async readUsersByIds(

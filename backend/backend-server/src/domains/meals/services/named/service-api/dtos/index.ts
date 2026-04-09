@@ -7,3 +7,5 @@ export * from './ReadNamedMealByIdRequestV1';
 export * from './ReadNamedMealByIdResponseV1';
 export * from './DeleteNamedMealRequestV1';
 export * from './ShareNamedMealRequestV1';
+export * from './ListShareUsersRequestV1';
+export * from './ListShareUsersResponseV1';
