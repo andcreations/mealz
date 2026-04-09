@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import classNames from 'classnames';
-
-import { labelToId } from '../../../utils';
+import { GWNamedMeal } from '@mealz/backend-meals-named-gateway-api';
 
 export interface NamedMealPickerDropdownProps {
-  items: string[];
+  items: GWNamedMeal[];
   selectedIndex?: number;
   onSelect: (index: number) => void;
 }
@@ -27,21 +26,33 @@ export function NamedMealPickerDropdown(props: NamedMealPickerDropdownProps) {
     }
   });
 
-  const renderItem = (item: string, index: number) => {
+  const renderItem = (item: GWNamedMeal, index: number) => {
     const selected = index === props.selectedIndex;
     const itemClassNames = classNames(
       'mealz-named-meal-picker-dropdown-item',
       { 'mealz-named-meal-picker-dropdown-item-selected': selected },
     );
 
+    let info = '';
+    if (item.sharedBy) {
+      info += `Shared by ${item.sharedBy.firstName}`;
+    }
+
     return (
       <div
         id={`mealz-named-meal-picker-dropdown-item-${index}`}
-        key={labelToId(item)}
+        key={item.id}
         className={itemClassNames}
         onClick={() => props.onSelect(index)}
       >
-        {item}
+        <div className='mealz-named-meal-picker-dropdown-item-name'>
+          {item.name}
+        </div>
+        { info &&
+          <div className='mealz-named-meal-picker-dropdown-item-info'>
+            {info}
+          </div>
+        }
       </div>
     );
   }

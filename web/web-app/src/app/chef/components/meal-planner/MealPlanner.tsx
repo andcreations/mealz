@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import { truncateNumber } from '@mealz/backend-shared';
 import { GWUserMeal } from '@mealz/backend-meals-user-gateway-api';
+import { GWNamedMeal } from '@mealz/backend-meals-named-gateway-api';
 import { 
   GWMealDailyPlan,
   GWMealDailyPlanEntry,
@@ -10,7 +11,11 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../../common';
-import { logDebugEvent, logErrorEvent, logEventAndRethrow } from '../../../event-log';
+import {
+  logDebugEvent,
+  logErrorEvent,
+  logEventAndRethrow,
+} from '../../../event-log';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   AIMealScanIngredient,
@@ -44,7 +49,6 @@ import {
   MealsLogService,
   MealsDailyPlanService,
   MealsNamedService,
-  NamedMeal,
 } from '../../../meals';
 import { useTranslations } from '../../../i18n';
 import { DateService } from '../../../system';
@@ -125,7 +129,7 @@ export function MealPlanner() {
   const translate = useTranslations(MealPlannerTranslations);
 
   const dailyMealPlan = useRef<GWMealDailyPlan | undefined>(undefined);
-  const namedMeals = useRef<NamedMeal[]>([]);
+  const namedMeals = useRef<GWNamedMeal[]>([]);
 
   // dirty flag
   const isDirty = useRef(false);
@@ -673,6 +677,10 @@ export function MealPlanner() {
   };
 
   const namedMeal = {
+    withoutSharedBy: (meal: GWNamedMeal): boolean => {
+      return !meal.sharedBy;
+    },
+
     onShowLoad: () => {
       patchState({ showLoadMealPicker: true });
     },
@@ -709,8 +717,8 @@ export function MealPlanner() {
       patchState({ showDeleteMealPicker: false });
     },
 
-    onLoad: (name: string, switchChecked?: boolean) => {
-      mealsNamedService.loadByName(name)
+    onLoad: (name: string, id?: string, switchChecked?: boolean) => {
+      mealsNamedService.loadById(id)
         .then((loadedMeal) => {
           markDirty();
           let ingredients = mealMapper.toMealPlannerIngredients(
@@ -743,12 +751,12 @@ export function MealPlanner() {
         });
     },
 
-    onSave: (name: string) => {
+    onSave: (name: string, id?: string) => {
       const gwMeal = mealMapper.toGWMeal(
         calories.get(),
         state.ingredients,
       );
-      mealsNamedService.save(name, gwMeal)
+      mealsNamedService.save(id, name, gwMeal)
         .then(() => {
           notificationsService.info(translate('meal-saved'));
           namedMeals.current = mealsNamedService.getAll();
@@ -762,8 +770,8 @@ export function MealPlanner() {
       patchState({ showSaveMealPicker: false });
     },
 
-    onDelete: (name: string) => {
-      mealsNamedService.deleteByName(name)
+    onDelete: (_name: string, id?: string) => {
+      mealsNamedService.deleteById(id)
         .then(() => {
           notificationsService.info(translate('meal-deleted'));
         })
@@ -935,6 +943,7 @@ export function MealPlanner() {
             matching: translate('save-info-matching'),
             nonMatching: translate('save-info-non-matching'),
           }}
+          mealFilter={namedMeal.withoutSharedBy}
           onPick={namedMeal.onSave}
           onClose={namedMeal.onCloseSave}
         />
@@ -943,7 +952,7 @@ export function MealPlanner() {
         <NamedMealPicker
           show={state.showLoadMealPicker}
           switchLabel={translate('load-switch-label')}
-          switchChecked={true}
+          switchChecked={false}
           buttonLabel={translate('load-button-label')}
           placeholder={translate('load-placeholder')}
           info={{

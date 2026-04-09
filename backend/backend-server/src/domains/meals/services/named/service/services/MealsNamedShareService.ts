@@ -44,7 +44,7 @@ export class MealsNamedShareService {
     private readonly usersNotificationsTransporter:
       UsersNotificationsTransporter,
   ) {
-    this.translate = createTranslation(MealsNamedShareServiceTranslations);
+    this.translate = createTranslation(MealsNamedShareServiceTranslations);   
   }
 
   private async buildShareNamedMealNotificationChunks(

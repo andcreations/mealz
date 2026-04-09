@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { DEFAULT_READ_LIMIT } from '@mealz/backend-common';
 import { GWMealMapper } from '@mealz/backend-meals-gateway-common';
+import { UserWithoutPassword } from '@mealz/backend-users-common';
 import { UsersCrudTransporter } from '@mealz/backend-users-crud-service-api';
 import {
   MealsCrudTransporter,
@@ -27,7 +28,6 @@ import {
   UpdateNamedMealGWRequestV1Impl,
 } from '../dtos';
 import { GWNamedMealMapper } from './GWNamedMealMapper';
-import { UserWithoutPassword } from '@mealz/backend-users-common';
 
 @Injectable()
 export class MealsNamedPlanGWService {
@@ -56,7 +56,7 @@ export class MealsNamedPlanGWService {
     const mealRequest: ReadMealByIdRequestV1 = {
       id: namedMeal.mealId,
     };
-    const [{ meal }, { user: sharedByUser }] = await Promise.all([
+    const [{ meal }, readUserResponse] = await Promise.all([
       this.mealsCrudTransporter.readMealByIdV1(
         mealRequest,
         context,
@@ -70,7 +70,10 @@ export class MealsNamedPlanGWService {
     ]);
 
     return {
-      namedMeal: this.gwNamedMealMapper.fromNamedMeal(namedMeal, sharedByUser),
+      namedMeal: this.gwNamedMealMapper.fromNamedMeal(
+        namedMeal,
+        readUserResponse?.user,
+      ),
       meal: this.gwMealMapper.fromMeal(meal),
     };
   }

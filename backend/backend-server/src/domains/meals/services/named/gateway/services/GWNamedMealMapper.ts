@@ -10,12 +10,14 @@ import {
 export class GWNamedMealMapper {
   private fromSharedByUser(
     sharedByUser?: UserWithoutPassword,
-  ): GWNamedMealSharedBy | {} {
+  ): Pick<GWNamedMeal, 'sharedBy'> | {} {
     if (!sharedByUser) {
       return {};
     }
     return {
-      firstName: sharedByUser.firstName,
+      sharedBy: {
+        firstName: sharedByUser.firstName,
+      },
     };
   }
 

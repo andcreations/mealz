@@ -8,7 +8,7 @@ import { EventLogCollector } from './EventLogCollector';
 export class EventLog {
   public constructor(
     private readonly collector: EventLogCollector,
-  ) { }
+  ) {}
   
   public log(
     level: LogEventLevel,
@@ -21,6 +21,7 @@ export class EventLog {
       level,
       data: eventData ?? {},
     };
+    console.log(JSON.stringify(event));
     this.collector.addEvent(event);
   }
 }

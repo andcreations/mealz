@@ -17,6 +17,18 @@
   padding: 0.175rem 0.675rem;
 }
 
+.mealz-named-meal-picker-dropdown-item-name {
+  @include mealz-ellipsis();
+  max-width: 100%;
+}
+
+.mealz-named-meal-picker-dropdown-item-info {
+  @include mealz-font-tiny();
+  @include mealz-ellipsis();
+  max-width: 100%;
+  color: $mealz-theme-color-fg-dark;
+}
+
 .mealz-named-meal-picker-dropdown-item-selected {
   background-color: $mealz-theme-color-bg;
 }

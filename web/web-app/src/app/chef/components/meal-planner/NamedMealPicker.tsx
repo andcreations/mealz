@@ -2,12 +2,19 @@ import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { GWNamedMeal } from '@mealz/backend-meals-named-gateway-api';
 
 import { usePatchState, useService } from '../../../hooks';
-import { focusRef, Key, mapKey, stopBubble } from '../../../utils';
+import { 
+  focusRef,
+  Key,
+  mapKey,
+  stopBubble, 
+  stripDiacritics,
+} from '../../../utils';
 import { LinkButton, Switch } from '../../../components';
 import { SystemService } from '../../../system';
-import { MealsNamedService, NamedMeal } from '../../../meals';
+import { MealsNamedService } from '../../../meals';
 import { NamedMealPickerDropdown } from './NamedMealPickerDropdown';
 
 enum Focus { Name };
@@ -24,15 +31,17 @@ export interface NamedMealPickerProps {
     nonMatching?: string;
   }
   mustMatchToPick?: boolean;
-  onPick: (name: string, switchChecked?: boolean) => void;
+  mealFilter?: (meal: GWNamedMeal) => boolean;
+  onPick: (name: string, id?: string, switchChecked?: boolean) => void;
   onClose: () => void;
 }
 
 interface NamedMealPickerState {
   focus: Focus;
   switchChecked: boolean;
+  id?: string;
   name: string;
-  dropdownItems: string[];
+  dropdownItems: GWNamedMeal[];
   dropdownIndex: number;
 }
 
@@ -40,16 +49,28 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
   const systemService = useService(SystemService);
   const mealsNamedService = useService(MealsNamedService);
 
-  const namedMealsToDropdown = (namedMeals: NamedMeal[]) => {
-    return namedMeals.map(meal => meal.name).sort();
+  const sortMeals = (namedMeals: GWNamedMeal[]) => {
+    return [...namedMeals].sort((a, b) => {
+      const nameA = stripDiacritics(a.name.toLowerCase());
+      const nameB = stripDiacritics(b.name.toLowerCase());
+
+      if (nameA === nameB) {
+        return a.id.localeCompare(b.id);
+      }
+
+      return nameA.localeCompare(nameB);
+    }); 
   }
-  const allNamedMeals = mealsNamedService.getAll();
+  const mealsFilter = props.mealFilter ?? (() => true);
+  const allNamedMeals = sortMeals(
+    mealsNamedService.getAll().filter(mealsFilter),
+  );
   
   const [state, setState] = useState<NamedMealPickerState>({
     focus: Focus.Name,
     switchChecked: props.switchChecked ?? false,
     name: '',
-    dropdownItems: namedMealsToDropdown(allNamedMeals),
+    dropdownItems: allNamedMeals,
     dropdownIndex: 0,
   });
   const patchState = usePatchState(setState);
@@ -69,7 +90,7 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
   useEffect(
     () => {
       patchState({
-        dropdownItems: namedMealsToDropdown(allNamedMeals),
+        dropdownItems: allNamedMeals,
       });
     },
     [mealsNamedService.getAll()],
@@ -79,8 +100,10 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
     ref: useRef(null),
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-      const name = event.target.value;  
+      const name = event.target.value;
+      const id = allNamedMeals.find(item => item.name === name)?.id;
       patchState({
+        id,
         name,
         dropdownItems: dropdown.matchItems(name),
         dropdownIndex: 0,
@@ -88,8 +111,10 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
     },
 
     onSelectFromDropdown: (index: number) => {
+      const item = dropdown.items()[index];
       patchState({
-        name: dropdown.items()[index],
+        id: item.id,
+        name: item.name,
       });
     },
 
@@ -128,7 +153,7 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
       const switchChecked = props.switchLabel
         ? state.switchChecked
         : undefined;
-      props.onPick(state.name, switchChecked);
+      props.onPick(state.name, state.id, switchChecked);
     }
   }
 
@@ -137,7 +162,7 @@ export function NamedMealPicker(props: NamedMealPickerProps) {
       const namedMeals = name.length > 0
         ? mealsNamedService.search(name)
         : allNamedMeals;
-      return namedMealsToDropdown(namedMeals);
+      return sortMeals(namedMeals);
     },
 
     items: () => {
