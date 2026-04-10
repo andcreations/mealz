@@ -49,6 +49,7 @@ import {
   MealsLogService,
   MealsDailyPlanService,
   MealsNamedService,
+  MealsNamedShareService,
 } from '../../../meals';
 import { useTranslations } from '../../../i18n';
 import { DateService } from '../../../system';
@@ -62,6 +63,7 @@ import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
+import { ShareNamedMealPicker } from './ShareNamedMealPicker';
 import { MealPortion } from './MealPortion';
 import { MealNameMenuItem } from './MealNameMenuItem';
 import { MEAL_NAME_MAX_AGE } from '../../const';
@@ -90,6 +92,7 @@ interface MealPlannerState {
   showSaveMealPicker: boolean;
   showLoadMealPicker: boolean;
   showDeleteMealPicker: boolean;
+  showShareMealPicker: boolean;
   showMealPortion: boolean;
   showAIMealScannerModal: boolean;
   showMealLogConfirmationModal: boolean;
@@ -105,6 +108,7 @@ export function MealPlanner() {
   const mealsLogService = useService(MealsLogService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
   const mealsNamedService = useService(MealsNamedService);
+  const mealsNamedShareService = useService(MealsNamedShareService);
   const mealMapper = useService(MealMapper);
   const mealCalculator = useService(MealCalculator);
 
@@ -119,6 +123,7 @@ export function MealPlanner() {
     showSaveMealPicker: false,
     showLoadMealPicker: false,
     showDeleteMealPicker: false,
+    showShareMealPicker: false,
     showMealPortion: false,
     showAIMealScannerModal: false,
     showMealLogConfirmationModal: false,
@@ -717,6 +722,26 @@ export function MealPlanner() {
       patchState({ showDeleteMealPicker: false });
     },
 
+    onShowShare: () => {
+      patchState({ showShareMealPicker: true });
+    },
+
+    onCloseShare: () => {
+      patchState({ showShareMealPicker: false });
+    },
+
+    onShare: (sharedMeal: GWNamedMeal, sharedUser: { id: string }) => {
+      mealsNamedShareService.shareNamedMeal(sharedMeal.id, sharedUser.id)
+        .then(() => {
+          notificationsService.info(translate('meal-shared'));
+        })
+        .catch(error => {
+          notificationsService.error(translate('failed-to-share-meal'));
+          logErrorEvent(eventType('failed-to-share-meal'), {}, error);
+        });
+      patchState({ showShareMealPicker: false });
+    },
+
     onLoad: (name: string, id?: string, switchChecked?: boolean) => {
       mealsNamedService.loadById(id)
         .then((loadedMeal) => {
@@ -895,6 +920,7 @@ export function MealPlanner() {
               onSaveMeal={namedMeal.onShowSave}
               onLoadMeal={namedMeal.onShowLoad}
               onDeleteMeal={namedMeal.onShowDelete}
+              onShareMeal={namedMeal.onShowShare}
               onPortionMeal={meal.onShowPortion}
               onPickADay={day.onShow}
             />
@@ -978,6 +1004,13 @@ export function MealPlanner() {
           mustMatchToPick={true}
           onPick={namedMeal.onDelete}
           onClose={namedMeal.onCloseDelete}
+        />
+      }
+      { state.showShareMealPicker &&
+        <ShareNamedMealPicker
+          show={state.showShareMealPicker}
+          onShare={namedMeal.onShare}
+          onClose={namedMeal.onCloseShare}
         />
       }
       { state.showMealPortion &&

@@ -21,7 +21,6 @@ export class EventLog {
       level,
       data: eventData ?? {},
     };
-    console.log(JSON.stringify(event));
     this.collector.addEvent(event);
   }
 }

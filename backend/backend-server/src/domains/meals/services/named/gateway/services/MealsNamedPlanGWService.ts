@@ -18,6 +18,7 @@ import {
   MealsNamedTransporter,
   ReadNamedMealByIdRequestV1,
   ReadNamedMealsFromLastRequestV1,
+  ShareNamedMealRequestV1,
   UpdateNamedMealRequestV1,
 } from '@mealz/backend-meals-named-service-api';
 
@@ -27,6 +28,7 @@ import {
   ListShareUsersGWResponseV1Impl,
   ReadNamedMealByIdGWResponseV1Impl,
   ReadNamedMealsFromLastGWResponseV1Impl,
+  ShareNamedMealGWRequestV1Impl,
   UpdateNamedMealGWRequestV1Impl,
 } from '../dtos';
 import { GWNamedMealMapper } from './GWNamedMealMapper';
@@ -180,6 +182,19 @@ export class MealsNamedPlanGWService {
     return {
       shareUsers: this.gwShareUserMapper.fromShareUsers(shareUsers),
     };
+  }
+
+  public async shareV1(
+    gwRequest: ShareNamedMealGWRequestV1Impl,
+    userId: string,
+    context: Context,
+  ): Promise<void> {
+    const request: ShareNamedMealRequestV1 = {
+      namedMealId: gwRequest.namedMealId,
+      sharedByUserId: userId,
+      sharedWithUserId: gwRequest.sharedWithUserId,
+    };
+    await this.mealsNamedTransporter.shareNamedMealV1(request, context);
   }
 
   private async readUsersByIds(
