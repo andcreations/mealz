@@ -6,12 +6,11 @@ import '@mealz/backend-tracing-bootstrap';
 
 import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
-import { INestApplication } from '@nestjs/common';
 import {
   ExpressAdapter,
   NestExpressApplication,
 } from '@nestjs/platform-express';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { BOOTSTRAP_CONTEXT } from '@mealz/backend-core';
 import { getIntEnv, InternalError } from '@mealz/backend-common';
 import { getLogger } from '@mealz/backend-logger';

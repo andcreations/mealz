@@ -1,0 +1,1 @@
+export const SOCKET_CORRELATION_ID_PREFIX = 'ws';
