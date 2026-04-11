@@ -51,23 +51,6 @@ export class MealsNamedShareService {
       UsersNotificationsTransporter,
   ) {
     this.translate = createTranslation(MealsNamedShareServiceTranslations);
-    setTimeout(async () => {
-      console.log('-> test#1');
-      await this.socketRequestTransporter.sendMessageToUserV1<
-        AddedNamedMealSocketMessagePayload
-      >(
-        {
-          userId: '019c035d-3dc4-773a-b9e2-9fe0ab2944d9',
-          payload: {
-            topic: ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC,
-            payload: { namedMealId: '019d70fd-9a12-744b-8712-9f0d665a6430' },
-          },
-        },
-        {
-          correlationId: '123+1',
-        },
-      );
-    }, 5000);
   }
 
   private async buildShareNamedMealNotificationChunks(
