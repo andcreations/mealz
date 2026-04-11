@@ -31,6 +31,9 @@
       "@mealz/backend-tracing": ["src/commons/tracing"],
       "@mealz/backend-tracing-bootstrap": ["src/commons/tracing-bootstrap"],
 
+      "@mealz/backend-socket-api": ["src/socket/api"],
+      "@mealz/backend-socket-gateway-api": ["src/socket/gateway-api"],
+
       "@mealz/backend-users-common": ["src/domains/users/common"],
       "@mealz/backend-users-db": ["src/domains/users/db"],
       "@mealz/backend-users-auth-service-api": ["src/domains/users/services/auth/service-api"],

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { TranslateFunc, createTranslation } from '@mealz/backend-common';
 import { VoidTransporterResponse } from '@mealz/backend-transport';
+import { SocketRequestTransporter } from '@mealz/backend-socket-api';
 import { UsersCrudTransporter } from '@mealz/backend-users-crud-service-api';
 import { MealsCrudTransporter } from '@mealz/backend-meals-crud-service-api';
 import {
@@ -21,6 +22,10 @@ import {
   ShareNamedMealActionPayload,
   ShareNamedMealRequestV1,
 } from '@mealz/backend-meals-named-service-api';
+import {
+  ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC,
+  AddedNamedMealSocketMessagePayload,
+} from '@mealz/backend-meals-named-gateway-api';
 
 import {
   MEALS_NAMED_CREATED_TELEGRAM_MESSAGE_TYPE_ID,
@@ -29,7 +34,7 @@ import {
 } from '../consts';
 import {
     MealsNamedShareServiceTranslations,
-  } from './MealsNamedShareService.translations';
+} from './MealsNamedShareService.translations';
 import { MealsNamedCrudService } from './MealsNamedCrudService';
 
 @Injectable()
@@ -41,10 +46,28 @@ export class MealsNamedShareService {
     private readonly usersCrudTransporter: UsersCrudTransporter,
     private readonly mealsCrudTransporter: MealsCrudTransporter,
     private readonly mealsNamedCrudService: MealsNamedCrudService,
+    private readonly socketRequestTransporter: SocketRequestTransporter,
     private readonly usersNotificationsTransporter:
       UsersNotificationsTransporter,
   ) {
-    this.translate = createTranslation(MealsNamedShareServiceTranslations);   
+    this.translate = createTranslation(MealsNamedShareServiceTranslations);
+    setTimeout(async () => {
+      console.log('-> test#1');
+      await this.socketRequestTransporter.sendMessageToUserV1<
+        AddedNamedMealSocketMessagePayload
+      >(
+        {
+          userId: '019c035d-3dc4-773a-b9e2-9fe0ab2944d9',
+          payload: {
+            topic: ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC,
+            payload: { namedMealId: '019d70fd-9a12-744b-8712-9f0d665a6430' },
+          },
+        },
+        {
+          correlationId: '123+1',
+        },
+      );
+    }, 5000);
   }
 
   private async buildShareNamedMealNotificationChunks(
@@ -204,6 +227,20 @@ export class MealsNamedShareService {
         messageTypeId: MEALS_NAMED_CREATED_TELEGRAM_MESSAGE_TYPE_ID,
         notification: {
           chunks: notificationChunks,
+        },
+      },
+      context,
+    );
+
+    // send socket message
+    await this.socketRequestTransporter.sendMessageToUserV1<
+      AddedNamedMealSocketMessagePayload
+    >(
+      {
+        userId: request.sharedWithUserId,
+        payload: {
+          topic: ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC,
+          payload: { namedMealId: namedMeal.id },
         },
       },
       context,

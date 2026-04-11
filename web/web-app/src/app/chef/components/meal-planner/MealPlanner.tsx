@@ -744,7 +744,7 @@ export function MealPlanner() {
 
     onLoad: (name: string, id?: string, switchChecked?: boolean) => {
       mealsNamedService.loadById(id)
-        .then((loadedMeal) => {
+        .then(({ meal: loadedMeal }) => {
           markDirty();
           let ingredients = mealMapper.toMealPlannerIngredients(
             loadedMeal.ingredients,

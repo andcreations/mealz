@@ -13,6 +13,8 @@ import {
   MetricsMiddleware,
 } from '@mealz/backend-gateway-common';
 
+import { SocketModule } from './socket';
+import { getServeStaticModule } from './web-app';
 import {
   UsersDomainModule,
   IngredientsDomainModule,
@@ -24,7 +26,6 @@ import {
   EventLogDomainModule,
   ActionsDomainModule,
 } from './domains';
-import { getServeStaticModule } from './web-app';
 
 const DOMAIN_MODULES = [
   UsersDomainModule,
@@ -43,6 +44,7 @@ const DOMAIN_MODULES = [
     getServeStaticModule(),
     SQLiteDBModule.forRoot(),
     MetricsModule.forRoot(),
+    SocketModule,
     ...DOMAIN_MODULES,
   ],
 })

@@ -33,6 +33,10 @@ module.exports = {
         'gateway/api',
       ),
       ...backendAlias(
+        '@mealz/backend-socket-gateway-api',
+        'socket/gateway-api',
+      ),
+      ...backendAlias(
         '@mealz/backend-users-auth-gateway-api',
         'domains/users/services/auth/gateway-api',
       ),

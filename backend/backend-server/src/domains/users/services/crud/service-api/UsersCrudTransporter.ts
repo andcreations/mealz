@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { 
   RequestTransporter,
@@ -17,6 +17,7 @@ import {
   ReadUsersFromLastResponseV1,
 } from './dtos';
 
+@Injectable()
 export class UsersCrudTransporter {
   public constructor(
     @Inject(USERS_CRUD_REQUEST_TRANSPORTER_TOKEN)

@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
+import { Context } from '@mealz/backend-core';
 import { AuthUser } from '@mealz/backend-gateway-core';
-import { getLogger } from '@mealz/backend-logger';
+import { getLogger, Logger } from '@mealz/backend-logger';
+import { SocketMessage } from '@mealz/backend-socket-gateway-api';
 
 @Injectable()
 export class SocketGatewayService {
   private server: Server;
+  private clientsByUserId: Map<string, Socket> = new Map();
+
+  public constructor(
+    private readonly logger: Logger,
+  ) {}
 
   public setServer(server: Server): void {
     this.server = server;
@@ -13,24 +20,63 @@ export class SocketGatewayService {
 
   public handleConnection(client: Socket): void {
     const user: AuthUser | undefined = client.data.user;
+    if (!user) {
+      getLogger().warning('Socket connected without user', {
+        correlationId: client.data.correlationId,
+        socketId: client.id,
+      });
+      client.disconnect();
+      return;
+    }
+
     getLogger().debug('Socket connected', {
       correlationId: client.data.correlationId,
       socketId: client.id,
       userId: user?.id,
     });
     client.emit('connected', { clientId: client.id });
+    this.clientsByUserId.set(user.id, client);
   }
 
   public handleDisconnect(client: Socket): void {
     const user: AuthUser | undefined = client.data.user;
+    if (!user) {
+      getLogger().warning('Socket disconnected without user', {
+        correlationId: client.data.correlationId,
+        socketId: client.id,
+      });
+      return;
+    }
+
     getLogger().debug('Socket disconnected', {
       correlationId: client.data.correlationId,
       socketId: client.id,
       userId: user?.id,
     });
+    this.clientsByUserId.delete(user.id);
   }
 
-  public handleMessage(client: Socket, payload: unknown): { event: string; data: unknown } {
+  public sendMessageToUser<TPayload>(
+    userId: string,
+    payload: SocketMessage<TPayload>,
+    context: Context,
+  ): void {
+    const client = this.clientsByUserId.get(userId);
+    if (!client) {
+      this.logger.warning('Socket not found for user', {
+        ...context,
+        userId,
+      });
+      return;
+    }
+
+    client.emit('message', JSON.stringify(payload));
+  }
+
+  public handleMessage(
+    client: Socket,
+    payload: unknown,
+  ): { event: string; data: unknown } {
     return {
       event: 'message',
       data: payload,

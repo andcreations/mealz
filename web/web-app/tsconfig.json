@@ -21,6 +21,9 @@
       "@mealz/backend-gateway-api": [
         "../../backend/backend-server/src/gateway/api"
       ],
+      "@mealz/backend-socket-gateway-api": [
+        "../../backend/backend-server/src/socket/gateway-api"
+      ],
       "@mealz/backend-users-auth-gateway-api": [
         "../../backend/backend-server/src/domains/users/services/auth/gateway-api"
       ],

@@ -10,6 +10,7 @@ import { AppRouter, PathTo, RoutingService } from './routing';
 import { IngredientsCrudService, IngredientsSearch } from './ingredients';
 import { MealsNamedService } from './meals';
 import { NotificationsService } from './notifications';
+import { SocketService } from './socket';
 
 function failedToRunApp(error: any): void {
   console.log('Failed to run the application', error);
@@ -23,6 +24,7 @@ async function bootstrapServices(): Promise<void> {
   IoC.resolve(IngredientsSearch);
   IoC.resolve(MealsNamedService);
   IoC.resolve(NotificationsService);
+  IoC.resolve(SocketService);
   IoC.bootstrap();
 }
 

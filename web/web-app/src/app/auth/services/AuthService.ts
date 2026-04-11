@@ -46,6 +46,7 @@ export class AuthService {
   public async signOut(): Promise<void> {
     await this.http.delete<void>(UsersAuthV1API.url.signOutV1());
     this.authUserService.setUserId(undefined);
+    this.notifySignedOut();
   }
 
   public async signOutOrLogError(): Promise<void> {
@@ -83,5 +84,10 @@ export class AuthService {
   private notifySignedIn(): void {
     logDebugEvent(eventType('notifying-user-signed-in'));
     this.bus.emit(AuthTopics.UserSignedIn);
+  }
+
+  private notifySignedOut(): void {
+    logDebugEvent(eventType('notifying-user-signed-out'));
+    this.bus.emit(AuthTopics.UserSignedOut);
   }
 }
