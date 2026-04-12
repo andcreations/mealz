@@ -21,6 +21,12 @@
   padding: 0 0.125rem;
 }
 
+.mealz-daily-hydration-last-log {
+  color: $mealz-theme-color-fg-dark;
+  @include mealz-font-tiny();
+  padding: 1rem 0.125rem 0 0.125rem;
+}
+
 .mealz-daily-hydration-progress-info-goal {
   padding: 0 0.125rem;
 }
