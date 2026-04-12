@@ -1,1 +1,1 @@
-export * from './AddedNamedMealSocketMessage';
+export * from './AddedNamedMealSocketMessageV1';

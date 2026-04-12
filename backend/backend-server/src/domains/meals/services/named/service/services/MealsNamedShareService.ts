@@ -23,8 +23,8 @@ import {
   ShareNamedMealRequestV1,
 } from '@mealz/backend-meals-named-service-api';
 import {
-  ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC,
-  AddedNamedMealSocketMessagePayload,
+  ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC_V1,
+  AddedNamedMealSocketMessageV1Payload,
 } from '@mealz/backend-meals-named-gateway-api';
 
 import {
@@ -217,12 +217,12 @@ export class MealsNamedShareService {
 
     // send socket message
     await this.socketRequestTransporter.sendMessageToUserV1<
-      AddedNamedMealSocketMessagePayload
+      AddedNamedMealSocketMessageV1Payload
     >(
       {
         userId: request.sharedWithUserId,
         payload: {
-          topic: ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC,
+          topic: ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC_V1,
           payload: { namedMealId: namedMeal.id },
         },
       },

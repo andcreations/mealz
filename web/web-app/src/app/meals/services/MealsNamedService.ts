@@ -14,8 +14,8 @@ import {
   MealsNamedV1API,
   UpdateNamedMealGWRequestV1,
   ReadNamedMealByIdGWResponseV1,
-  AddedNamedMealSocketMessagePayload,
-  ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC,
+  AddedNamedMealSocketMessageV1Payload,
+  ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC_V1,
 } from '@mealz/backend-meals-named-gateway-api';
 
 import { LoadStatus } from '../../common';
@@ -63,9 +63,9 @@ export class MealsNamedService implements OnBootstrap {
     this.tryReadNamedMeals();
   }
 
-  @SocketMessage(ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC)
+  @SocketMessage(ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC_V1)
   public async addedNamedMeal(
-    payload: AddedNamedMealSocketMessagePayload,
+    payload: AddedNamedMealSocketMessageV1Payload,
   ): Promise<void> {
     const { namedMeal } = await this.loadById(payload.namedMealId);
     const has = !!this.getById(namedMeal.id);
