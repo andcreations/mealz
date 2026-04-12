@@ -6,6 +6,7 @@ import {
   ReadIngredientsByIdResponseV1,
   ReadIngredientsFromLastRequestV1,
   ReadIngredientsFromLastResponseV1,
+  UpsertIngredientsRequestV1,
 } from '@mealz/backend-ingredients-crud-service-api';
 
 import { IngredientsCrudService } from '../services';
@@ -34,5 +35,13 @@ export class IngredientsCrudRequestController {
       request,
       context,
     );
+  }
+
+  @RequestHandler(IngredientsCrudRequestTopics.UpsertIngredientsV1)
+  public async upsertIngredientsV1(
+    request: UpsertIngredientsRequestV1,
+    context: Context,
+  ): Promise<void> {
+    return this.ingredientsCrudService.upsertIngredientsV1(request, context);
   }
 }

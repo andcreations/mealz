@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { decode } from '@mealz/backend-db';
+import { decode, encode } from '@mealz/backend-db';
 import { InternalError } from '@mealz/backend-common';
 import {
   FactId,
@@ -107,5 +107,90 @@ export class IngredientDetailsV1Mapper {
       ),
       isHidden: details.isHidden,
     };
+  }
+
+  private toTypeV1(type: IngredientType): IngredientTypeV1 {
+    switch (type) {
+      case IngredientType.Generic:
+        return IngredientTypeV1.Generic;
+      case IngredientType.Product:
+        return IngredientTypeV1.Product;
+      default:
+        throw new InternalError(`Unknown ingredient type ${type}`);
+    }
+  }
+
+  private toUnitPer100V1(unit: UnitPer100): UnitPer100V1 {
+    switch (unit) {
+      case UnitPer100.Grams:
+        return UnitPer100V1.Grams;
+      case UnitPer100.Milliliters:
+        return UnitPer100V1.Milliliters;
+      default:
+        throw new InternalError(`Unknown per 100 unit ${unit}`);
+    }
+  }
+
+  private toFactIdV1(id: FactId): FactIdV1 {
+    switch (id) {
+      case FactId.Calories:
+        return FactIdV1.Calories;
+      case FactId.Carbs:
+        return FactIdV1.Carbs;
+      case FactId.Sugars:
+        return FactIdV1.Sugars;
+      case FactId.Protein:
+        return FactIdV1.Protein;
+      case FactId.TotalFat:
+        return FactIdV1.TotalFat;
+      case FactId.SaturatedFat:
+        return FactIdV1.SaturatedFat;
+      case FactId.MonounsaturatedFat:
+        return FactIdV1.MonounsaturatedFat;
+      case FactId.PolyunsaturatedFat:
+        return FactIdV1.PolyunsaturatedFat;
+      default:
+        throw new InternalError(`Unknown fact identifier ${id}`);
+    }
+  }
+
+  private toFactUnitV1(unit: FactUnit): FactUnitV1 {
+    switch (unit) {
+      case FactUnit.Grams:
+        return FactUnitV1.Grams;
+      case FactUnit.Kcal:
+        return FactUnitV1.Kcal;
+      default:
+        throw new InternalError(`Unknown fact unit ${unit}`);
+    }
+  }
+
+  private toProductV1(product: Product): ProductV1 {
+    return {
+      brand: product.brand,
+    };
+  }
+  
+  private toFactV1(fact: FactPer100): FactPer100V1 {
+    return {
+      id: this.toFactIdV1(fact.id),
+      unit: this.toFactUnitV1(fact.unit),
+      amount: fact.amount,
+    };
+  }
+
+  public toBuffer(ingredient: IngredientForBuffer): Buffer {
+    const details: IngredientDetailsV1 = {
+      name: ingredient.name,
+      type: this.toTypeV1(ingredient.type),
+      unitPer100: this.toUnitPer100V1(ingredient.unitPer100),
+      factsPer100: ingredient.factsPer100.map(fact => this.toFactV1(fact)),
+      ...(ingredient.product
+        ? { product: this.toProductV1(ingredient.product) }
+        : {}
+      ),
+      isHidden: ingredient.isHidden,
+    };
+    return encode(details);
   }
 }

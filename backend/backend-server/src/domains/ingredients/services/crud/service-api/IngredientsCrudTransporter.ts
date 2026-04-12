@@ -9,6 +9,7 @@ import {
   ReadIngredientsByIdResponseV1,
   ReadIngredientsFromLastRequestV1,
   ReadIngredientsFromLastResponseV1,
+  UpsertIngredientsRequestV1,
 } from './dtos';
 
 @Injectable()
@@ -18,7 +19,6 @@ export class IngredientsCrudTransporter {
     private readonly transporter: RequestTransporter,
   ) {}
 
-
   public async readIngredientsByIdV1(
     request: ReadIngredientsByIdRequestV1,
     context: Context,
@@ -27,7 +27,8 @@ export class IngredientsCrudTransporter {
       ReadIngredientsByIdRequestV1, ReadIngredientsByIdResponseV1
     >(
       IngredientsCrudRequestTopics.ReadIngredientsByIdV1,
-      request, context,
+      request,
+      context,
     );
   }
 
@@ -39,6 +40,19 @@ export class IngredientsCrudTransporter {
       ReadIngredientsFromLastRequestV1, ReadIngredientsFromLastResponseV1
     >(
       IngredientsCrudRequestTopics.ReadIngredientsFromLastV1,
+      request,
+      context,
+    );
+  }
+
+  public async upsertIngredientsV1(
+    request: UpsertIngredientsRequestV1,
+    context: Context,
+  ): Promise<void> {
+    return this.transporter.sendRequest<
+      UpsertIngredientsRequestV1, void
+    >(
+      IngredientsCrudRequestTopics.UpsertIngredientsV1,
       request,
       context,
     );

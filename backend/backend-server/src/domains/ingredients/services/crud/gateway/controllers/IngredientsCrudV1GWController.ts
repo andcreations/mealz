@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { UserRole } from '@mealz/backend-api';
 import { Context } from '@mealz/backend-core';
 import {
@@ -11,7 +11,10 @@ import {
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
-import { ReadIngredientsFromLastGWQueryParamsV1Impl } from '../dtos';
+import { 
+  ReadIngredientsFromLastGWQueryParamsV1Impl,
+  UpsertIngredientsGWRequestV1Impl,
+} from '../dtos';
 import { IngredientsCrudV1GWService } from '../services';
 
 @Controller(INGREDIENTS_CRUD_V1_URL)
@@ -29,6 +32,19 @@ export class IngredientsCrudV1GWController {
   ): Promise<ReadIngredientsFromLastGWResponseV1> {
     return await this.ingredientsCrudV1GWService.readFromLastV1(
       gwParams,
+      context,
+    );
+  }
+
+  @Auth()
+  @Roles([UserRole.ADMIN])
+  @Post('upsert')
+  public async upsertIngredientsV1(
+    @Body() gwRequest: UpsertIngredientsGWRequestV1Impl,
+    @GWContext() context: Context,
+  ): Promise<void> {
+    return await this.ingredientsCrudV1GWService.upsertIngredientsV1(
+      gwRequest,
       context,
     );
   }

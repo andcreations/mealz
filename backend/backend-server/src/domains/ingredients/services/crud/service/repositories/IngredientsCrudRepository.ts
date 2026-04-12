@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
-import { InjectDBRepository, DBRepository, Where } from '@mealz/backend-db';
+import { IdGenerator, InjectIdGenerator } from '@mealz/backend-common';
+import { 
+  InjectDBRepository,
+  DBRepository,
+  Where,
+  UpsertObject,
+} from '@mealz/backend-db';
 import { Ingredient } from '@mealz/backend-ingredients-common';
 import {
   INGREDIENTS_DB_NAME,
@@ -15,6 +21,8 @@ export class IngredientsCrudRepository {
     @InjectDBRepository(INGREDIENTS_DB_NAME, INGREDIENT_DB_ENTITY_NAME)
     private readonly repository: DBRepository<IngredientDBEntity>,
     private readonly mapper: IngredientDBMapper,
+    @InjectIdGenerator()
+    private readonly idGenerator: IdGenerator,
   ) {}
 
   public async readManyById(
@@ -52,7 +60,20 @@ export class IngredientsCrudRepository {
       context,
     );
     return entities.map(entity => this.mapper.fromEntity(entity));
-  }  
+  }
+
+  public async upsertIngredient(
+    ingredient: UpsertObject<Ingredient, 'id'>,
+    context: Context,
+  ): Promise<void> {
+    const id = ingredient.id ?? this.idGenerator();
+    const entity = this.mapper.toEntity({ id, ...ingredient });
+    await this.repository.upsert(
+      this.opName('upsertIngredient'),
+      entity,
+      context,
+    );
+  }
 
   private opName(name: string): string {
     return `${IngredientsCrudRepository.name}.${name}`;

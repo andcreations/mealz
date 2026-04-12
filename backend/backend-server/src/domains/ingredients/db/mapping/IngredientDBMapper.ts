@@ -34,5 +34,13 @@ export class IngredientDBMapper {
       ...this.ingredientDetailsV1Mapper.fromBuffer(entity.details),
     };
   }
+
+  public toEntity(ingredient: Ingredient): IngredientDBEntity {
+    return {
+      id: ingredient.id,
+      details_version: IngredientDetailsVersion.V1,
+      details: this.ingredientDetailsV1Mapper.toBuffer(ingredient),
+    };
+  }
 }
 

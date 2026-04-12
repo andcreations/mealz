@@ -5,6 +5,7 @@ export const INGREDIENTS_CRUD_V1_URL = '/api/v1/ingredients/crud';
 
 export interface IngredientsCrudV1APIURL {
   readFromLastV1: (params: ReadIngredientsFromLastQueryParamsV1) => string;
+  upsertIngredientsV1: () => string;
 }
 
 export class IngredientsCrudV1API {
@@ -18,6 +19,16 @@ export class IngredientsCrudV1API {
       return URLBuilder.build(
         `${INGREDIENTS_CRUD_V1_URL}/from-last`,
         { ...params },
+      );
+    },
+
+    /**
+     * @method POST
+     * @request UpsertIngredientsGWRequestV1
+     */
+    upsertIngredientsV1: () => {
+      return URLBuilder.build(
+        `${INGREDIENTS_CRUD_V1_URL}/upsert`,
       );
     },
   };

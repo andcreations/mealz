@@ -10,7 +10,7 @@ import {
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
-import { ReadIngredientsFromLastGWQueryParamsV1Impl } from '../dtos';
+import { ReadIngredientsFromLastGWQueryParamsV1Impl, UpsertIngredientsGWRequestV1Impl } from '../dtos';
 
 @Injectable()
 export class IngredientsCrudV1GWService {
@@ -38,5 +38,11 @@ export class IngredientsCrudV1GWService {
         this.gwIngredientMapper.fromIngredient(ingredient),
       ),
     };
+  }
+
+  public async upsertIngredientsV1(
+    gwRequest: UpsertIngredientsGWRequestV1Impl,
+    context: Context,
+  ): Promise<void> {
   }
 }
