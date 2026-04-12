@@ -1,7 +1,7 @@
 import { RequestTransporter } from './RequestTransporter';
 import { LocalRequestTransporter } from './LocalRequestTransporter';
 
-export interface ResolveForServiceOptions {
+export interface ResolveForRequestServiceOptions {
   domain: string;
   service: string;
   overrideTransporter?: RequestTransporter;
@@ -9,7 +9,7 @@ export interface ResolveForServiceOptions {
 
 export class RequestTransporterResolver {
   public static forService(
-    options: ResolveForServiceOptions,
+    options: ResolveForRequestServiceOptions,
   ): RequestTransporter {
     if (options.overrideTransporter) {
       return options.overrideTransporter;

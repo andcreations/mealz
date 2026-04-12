@@ -70,6 +70,7 @@ export class SocketService implements OnBootstrap {
           socketMessageTopic(payload.topic),
           payload.payload,
         );
+        logDebugEvent(eventType('socket-message-received'), payload);
       });
     } catch (error) {
       logErrorEvent(eventType('failed-to-connect'), error);

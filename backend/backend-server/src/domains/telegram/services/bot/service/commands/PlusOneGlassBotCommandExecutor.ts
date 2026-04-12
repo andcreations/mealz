@@ -6,6 +6,7 @@ import {
   TelegramUsersTransporter,
 } from '@mealz/backend-telegram-users-service-api';
 import {
+  HydrationLogEmitter,
   HydrationLogTransporter,
 } from '@mealz/backend-hydration-log-service-api';
 
@@ -25,6 +26,7 @@ export class PlusOneGlassBotCommandExecutor extends TelegramBotCommandExecutor {
     telegramBotClient: TelegramBotClient,
     private readonly telegramUsersTransporter: TelegramUsersTransporter,
     private readonly hydrationLogTransporter: HydrationLogTransporter,
+    private readonly hydrationLogEmitter: HydrationLogEmitter,
   ) {
     super(
       {
@@ -69,6 +71,16 @@ export class PlusOneGlassBotCommandExecutor extends TelegramBotCommandExecutor {
     await this.sendMessage(
       command,
       this.translate('glass-logged'),
+      context,
+    );
+
+    // emit event
+    await this.hydrationLogEmitter.hydrationLoggedExternallyV1(
+      {
+        userId: telegramUser.userId,
+        glassFraction: 'full',
+        loggedAt: Date.now(),
+      },
       context,
     );
   }

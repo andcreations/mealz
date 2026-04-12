@@ -2,7 +2,11 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { format } from 'timeago.js';
-import { GWHydrationLog } from '@mealz/backend-hydration-log-gateway-api';
+import {
+  glassFractionToNumber,
+  HYDRATION_LOGGED_SOCKET_MESSAGE_TOPIC_V1,
+  HydrationLoggedSocketMessageV1Payload,
+} from '@mealz/backend-hydration-log-gateway-api';
 
 import { LoadStatus } from '../../common';
 import { logEventAndRethrow, logErrorEvent } from '../../event-log';
@@ -20,6 +24,7 @@ import {
   HydrationLogService,
 } from '../../hydration';
 import { PathTo } from '../../routing';
+import { useSocketMessage } from '../../socket';
 import { eventType } from '../event-log';
 import { ProgressBar } from '../components';
 import { DailyHydrationTranslations } from './DailyHydration.translations';
@@ -83,6 +88,18 @@ export function DailyHydration(props: DailyHydrationProps) {
       });
     },
     [],
+  );
+
+  useSocketMessage<HydrationLoggedSocketMessageV1Payload>(
+    HYDRATION_LOGGED_SOCKET_MESSAGE_TOPIC_V1,
+    (payload) => {
+      const glasses = glassFractionToNumber(payload.glassFraction);
+      setState(prevState => ({
+        ...prevState,
+        glasses: prevState.glasses + glasses,
+        lastLoggedAt: payload.loggedAt,
+      }));
+    },
   );
 
   const logFullGlass = () => {
