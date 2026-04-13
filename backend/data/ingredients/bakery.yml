@@ -357,3 +357,21 @@
       saturated: 0.6
       monounsaturated: 1.0
       polyunsaturated: 1.2
+
+- name:
+    en: Protein bread roll
+    pl: Bułka proteinowa
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 265
+    carbs: 18
+    sugars: 3
+    fibre: 10
+    protein: 22
+    fat:
+      total: 14
+      saturated: 1.8
+      monounsaturated: 6.5
+      polyunsaturated: 4.5
