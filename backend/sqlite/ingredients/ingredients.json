@@ -904,6 +904,56 @@
   },
   {
     "name": {
+      "en": "Beef burger",
+      "pl": "Burger wołowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 250
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 26
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 17
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 7
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 7
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.7
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Beet",
       "pl": "Burak"
     },
@@ -3004,6 +3054,56 @@
   },
   {
     "name": {
+      "en": "Chicken burger",
+      "pl": "Burger z kurczaka"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 239
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 27
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 3.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 5.8
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Chicken ham",
       "pl": "Szynka drobiowa"
     },
@@ -3249,6 +3349,56 @@
         "id": 7,
         "unit": 1,
         "amount": 1.8
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Cocoa powder",
+      "pl": "Kakao w proszku"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 228
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 57.9
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 19.6
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 13.7
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 8.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 4.6
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.4
       }
     ]
   },
@@ -6119,6 +6269,106 @@
   },
   {
     "name": {
+      "en": "Lavaret (raw)",
+      "pl": "Sieja (surowa)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 120
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 20
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 5
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.1
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 2.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 1.2
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Lavaret (smoked)",
+      "pl": "Sieja (wędzona)"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 190
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 25
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 10
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 2.3
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 4.2
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2.1
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Leek",
       "pl": "Szczypiorek"
     },
@@ -7065,6 +7315,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Miso",
+      "pl": "Miso"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 199
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 26.5
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 6.2
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 12.8
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 6
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 1.1
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 3.5
       }
     ]
   },
@@ -8020,6 +8320,56 @@
   },
   {
     "name": {
+      "en": "Pate",
+      "pl": "Pasztet"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 326
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 3.7
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0.6
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 28
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 13
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Peach",
       "pl": "Brzoskwinia"
     },
@@ -8468,6 +8818,56 @@
         "id": 7,
         "unit": 1,
         "amount": 0.3
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Pickled cucumbers",
+      "pl": "Ogórki kiszone"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 11
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 2.3
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.1
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.3
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.2
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.05
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.01
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.05
       }
     ]
   },
@@ -9023,6 +9423,56 @@
   },
   {
     "name": {
+      "en": "Pork burger",
+      "pl": "Burger wieprzowy"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 297
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 0
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 25
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 21
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 7.5
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 9
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Pork sausage",
       "pl": "Kiełbasa wieprzowa"
     },
@@ -9223,6 +9673,56 @@
     "product": {
       "brand": "Olimp"
     }
+  },
+  {
+    "name": {
+      "en": "Protein bread roll",
+      "pl": "Bułka proteinowa"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 265
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 18
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 22
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 14
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 6.5
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 4.5
+      }
+    ]
   },
   {
     "name": {
@@ -10327,6 +10827,56 @@
         "id": 7,
         "unit": 1,
         "amount": 5.1
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Sauerkraut",
+      "pl": "Kapusta kiszona"
+    },
+    "type": 0,
+    "unitPer100": 0,
+    "factsPer100": [
+      {
+        "id": 0,
+        "unit": 0,
+        "amount": 19
+      },
+      {
+        "id": 1,
+        "unit": 1,
+        "amount": 4.3
+      },
+      {
+        "id": 2,
+        "unit": 1,
+        "amount": 1.8
+      },
+      {
+        "id": 3,
+        "unit": 1,
+        "amount": 0.9
+      },
+      {
+        "id": 4,
+        "unit": 1,
+        "amount": 0.1
+      },
+      {
+        "id": 5,
+        "unit": 1,
+        "amount": 0.03
+      },
+      {
+        "id": 6,
+        "unit": 1,
+        "amount": 0.01
+      },
+      {
+        "id": 7,
+        "unit": 1,
+        "amount": 0.05
       }
     ]
   },

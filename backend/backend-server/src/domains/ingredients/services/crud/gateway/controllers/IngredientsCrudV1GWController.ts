@@ -3,6 +3,7 @@ import { UserRole } from '@mealz/backend-api';
 import { Context } from '@mealz/backend-core';
 import {
   Auth,
+  AuthSystemAdmin,
   GWContext,
   Roles,
 } from '@mealz/backend-gateway-common';
@@ -36,10 +37,21 @@ export class IngredientsCrudV1GWController {
     );
   }
 
-  @Auth()
-  @Roles([UserRole.ADMIN])
-  @Post('upsert')
-  public async upsertIngredientsV1(
+  @AuthSystemAdmin()
+  @Get('admin/from-last')
+  public async readFromLastV1Admin(
+    @Query() gwParams: ReadIngredientsFromLastGWQueryParamsV1Impl,
+    @GWContext() context: Context,
+  ): Promise<ReadIngredientsFromLastGWResponseV1> {
+    return await this.ingredientsCrudV1GWService.readFromLastV1(
+      gwParams,
+      context,
+    );
+  } 
+
+  @AuthSystemAdmin()
+  @Post('admin/upsert')
+  public async upsertIngredientsV1Admin(
     @Body() gwRequest: UpsertIngredientsGWRequestV1Impl,
     @GWContext() context: Context,
   ): Promise<void> {
