@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
+import { format } from 'timeago.js';
+import {
+  glassFractionToNumber,
+  HYDRATION_LOGGED_SOCKET_MESSAGE_TOPIC_V1,
+  HydrationLoggedSocketMessageV1Payload,
+} from '@mealz/backend-hydration-log-gateway-api';
 
 import { LoadStatus } from '../../common';
 import { logEventAndRethrow, logErrorEvent } from '../../event-log';
@@ -18,6 +24,7 @@ import {
   HydrationLogService,
 } from '../../hydration';
 import { PathTo } from '../../routing';
+import { useSocketMessage } from '../../socket';
 import { eventType } from '../event-log';
 import { ProgressBar } from '../components';
 import { DailyHydrationTranslations } from './DailyHydration.translations';
@@ -31,6 +38,7 @@ interface DailyHydrationState {
   loadStatus: LoadStatus;
   glassesGoal?: number;
   glasses?: number;
+  lastLoggedAt?: number;
   buttonDisabled: boolean;
 }
 
@@ -67,6 +75,7 @@ export function DailyHydration(props: DailyHydrationProps) {
           loadStatus: LoadStatus.Loaded,
           glassesGoal: dailyPlan?.goals.glasses,
           glasses: hydrationLogService.sumGlassesFromLogs(logs),
+          lastLoggedAt: logs[logs.length - 1]?.loggedAt,
         });
       })
       .catch(error => {
@@ -81,6 +90,18 @@ export function DailyHydration(props: DailyHydrationProps) {
     [],
   );
 
+  useSocketMessage<HydrationLoggedSocketMessageV1Payload>(
+    HYDRATION_LOGGED_SOCKET_MESSAGE_TOPIC_V1,
+    (payload) => {
+      const glasses = glassFractionToNumber(payload.glassFraction);
+      setState(prevState => ({
+        ...prevState,
+        glasses: prevState.glasses + glasses,
+        lastLoggedAt: payload.loggedAt,
+      }));
+    },
+  );
+
   const logFullGlass = () => {
     patchState({
       buttonDisabled: true,
@@ -90,6 +111,7 @@ export function DailyHydration(props: DailyHydrationProps) {
         notificationsService.info(translate('log-full-glass-logged'));
         patchState({
           glasses: state.glasses + 1,
+          lastLoggedAt: Date.now(),
         });
 
         setTimeout(() => {
@@ -160,6 +182,11 @@ export function DailyHydration(props: DailyHydrationProps) {
           >
             { translate('log-full-glass') }
           </Button>
+          { state.lastLoggedAt &&
+            <div className='mealz-daily-hydration-last-log'>
+              { translate('last-log', format(state.lastLoggedAt)) }
+            </div>
+          }
         </div>
       }
       { state.loadStatus === LoadStatus.Loaded && !hasData() &&

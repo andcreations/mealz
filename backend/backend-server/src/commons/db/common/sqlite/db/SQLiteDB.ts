@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import * as sqlite3 from 'better-sqlite3';
+import sqlite3 from 'better-sqlite3';
 
 import { UnknownDBError } from '../../core';
 import { SQLiteError } from '../errors';

@@ -118,10 +118,7 @@ export function HydrationDailyPlanSettings(
         }
         else {
           // ...otherwise, take defaults and show notification
-          notificationsService.pushNotification({
-            message: translate('default-settings-notification'),
-            type: NotificationType.Info,
-          });
+          notificationsService.info(translate('default-settings-notification'));
         }
         patchState({
           loadStatus: LoadStatus.Loaded,

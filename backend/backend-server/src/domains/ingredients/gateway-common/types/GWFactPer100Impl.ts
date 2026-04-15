@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum } from 'class-validator';
+import { IsAmount } from '@mealz/backend-gateway-common';
 import { 
   GWFactId,
   GWFactUnit,
@@ -9,11 +11,18 @@ export class GWFactPer100Impl implements GWFactPer100 {
   @ApiProperty({
     description: 'Fact identifier'
   })
+  @IsEnum(GWFactId)
   public id: GWFactId;
 
   @ApiProperty({
     description: 'Fact unit'
   })
+  @IsEnum(GWFactUnit)
   public unit: GWFactUnit;
+
+  @ApiProperty({
+    description: 'Fact amount'
+  })
+  @IsAmount()
   public amount: number;
 }

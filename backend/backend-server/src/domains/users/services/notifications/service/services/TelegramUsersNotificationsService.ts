@@ -15,8 +15,8 @@ import {
   BasicUserNotification,
   ChunkedUserNotification,
   ChunkedUserNotificationType,
+  NotificationAction,
 } from '@mealz/backend-users-notifications-service-api';
-
 
 @Injectable()
 export class TelegramUsersNotificationsService {
@@ -30,11 +30,12 @@ export class TelegramUsersNotificationsService {
     userId: string,
     messageTypeId: string,
     message: TelegramAnonymousMessage,
+    actions: NotificationAction[],
     context: Context,
   ): Promise<void> {
     try {
       await this.telegramBotTransporter.sendMessageToUserV1(
-        { userId, messageTypeId, message },
+        { userId, messageTypeId, message, actions },
         context,
       );
     } catch (error) {
@@ -72,6 +73,7 @@ export class TelegramUsersNotificationsService {
       userId,
       messageTypeId,
       telegramMessage,
+      notification.actions ?? [],
       context,
     );
   }
@@ -119,6 +121,7 @@ export class TelegramUsersNotificationsService {
       userId,
       messageTypeId,
       telegramMessage,
+      notification.actions ?? [],
       context,
     );
   }

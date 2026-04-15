@@ -3,6 +3,13 @@ import { TelegramUpdate } from '@andcreations/telegram-bot';
 import { Context } from '@mealz/backend-core';
 import { Logger } from '@mealz/backend-logger';
 import { isTelegramEnabled } from '@mealz/backend-telegram-common';
+import {
+  ActionsManagerTransporter,
+} from '@mealz/backend-actions-manager-service-api';
+import { 
+  getActionIdFromCallbackData,
+  isActionCallbackData,
+} from '@mealz/backend-telegram-bot-service-api';
 
 import { TelegramBotCommand } from '../types';
 import { TelegramBotCommandProvider } from './TelegramBotCommandProvider';
@@ -11,6 +18,7 @@ import { TelegramBotCommandProvider } from './TelegramBotCommandProvider';
 export class TelegramBotUpdateService {
   public constructor(
     private readonly logger: Logger,
+    private readonly actionsManagerTransporter: ActionsManagerTransporter,
     private readonly telegramBotCommandProvider: TelegramBotCommandProvider,
   ) {}
 
@@ -25,7 +33,24 @@ export class TelegramBotUpdateService {
       ...context,
       update: JSON.stringify(update),
     });
+    if (update.message) {
+      await this.handleMessage(update, context);
+      return;
+    }
+    if (update.callback_query) {
+      await this.handleCallbackQuery(update, context);
+      return;
+    }
+    this.logger.error('Unknown Telegram bot update', {
+      ...context,
+      update: JSON.stringify(update),
+    });
+  }
 
+  private async handleMessage(
+    update: TelegramUpdate,
+    context: Context,
+  ): Promise<void> {
     const message = update.message.text;
     if (this.isBotCommand(message)) {
       // parse
@@ -61,7 +86,45 @@ export class TelegramBotUpdateService {
           error,
         );
       }
+    }    
+  }
+
+  private async handleCallbackQuery(
+    update: TelegramUpdate,
+    context: Context,
+  ): Promise<void> {
+    const callbackQuery = update.callback_query;
+    const data = callbackQuery.data;
+
+    // run action
+    if (isActionCallbackData(data)) {
+      const actionId = getActionIdFromCallbackData(data);
+      try {
+        await this.actionsManagerTransporter.runActionV1(
+          { actionId },
+          context,
+        );
+      } catch (error) {
+        this.logger.error(
+          'Error running Telegram bot action',
+          {
+            ...context,
+            actionId,
+          },
+          error,
+        );
+      }
+      return;
     }
+
+    // unknown callback query
+    this.logger.error(
+      'Unknown Telegram bot callback query',
+      {
+        ...context,
+        callbackQuery: JSON.stringify(callbackQuery),
+      },
+    );
   }
 
   private isBotCommand(message: string): boolean {

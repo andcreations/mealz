@@ -1,1 +1,1 @@
-export * from './use-bus-event-listener';
+export * from './useBusEventListener';

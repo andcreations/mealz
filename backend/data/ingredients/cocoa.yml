@@ -1,0 +1,17 @@
+- name:
+    en: Cocoa powder
+    pl: Kakao w proszku
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 228
+    carbs: 57.9
+    sugars: 1.8
+    fibre: 33.2
+    protein: 19.6
+    fat:
+      total: 13.7
+      saturated: 8.1
+      monounsaturated: 4.6
+      polyunsaturated: 0.4

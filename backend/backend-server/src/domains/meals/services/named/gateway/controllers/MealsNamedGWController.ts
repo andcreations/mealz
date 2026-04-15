@@ -16,7 +16,9 @@ import {
   ReadNamedMealByIdGWResponseV1Impl,
   ReadNamedMealsFromLastQueryParamsV1Impl,
   ReadNamedMealsFromLastGWResponseV1Impl,
+  ShareNamedMealGWRequestV1Impl,
   UpdateNamedMealGWRequestV1Impl,
+  ListShareUsersGWResponseV1Impl,
 } from '../dtos';
 import { MealsNamedPlanGWService } from '../services';
 
@@ -99,6 +101,34 @@ export class MealsNamedGWController {
   ): Promise<void> {
     return await this.mealsNamedPlanGWService.deleteV1(
       namedMealId,
+      gwUser.id,
+      context,
+    );
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Post('share')
+  public async shareV1(
+    @Body() gwRequest: ShareNamedMealGWRequestV1Impl,
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<void> {
+    return await this.mealsNamedPlanGWService.shareV1(
+      gwRequest,
+      gwUser.id,
+      context,
+    );
+  }
+
+  @Auth()
+  @Roles([UserRole.USER, UserRole.ADMIN])
+  @Get('share-users')
+  public async listShareUsersV1(
+    @GWUser() gwUser: AuthUser,
+    @GWContext() context: Context,
+  ): Promise<ListShareUsersGWResponseV1Impl> {
+    return await this.mealsNamedPlanGWService.listShareUsersV1(
       gwUser.id,
       context,
     );

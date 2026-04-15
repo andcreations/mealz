@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { IdGeneratorProvider } from '@mealz/backend-common';
 import { LoggerModule } from '@mealz/backend-logger';
 import { SQLiteDBModule } from '@mealz/backend-db';
 import {
@@ -17,6 +18,7 @@ import { IngredientsCrudRequestController } from './controllers';
     IngredientsDBModule,
   ],
   providers: [
+    IdGeneratorProvider,
     IngredientsCrudRepository,
     IngredientsCrudService,
     IngredientsCrudRequestController,

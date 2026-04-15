@@ -11,5 +11,7 @@ fi
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 BACKEND_DIR="$SCRIPT_DIR/.."
 
-ln -sf $BACKEND_DIR/backend-server/src/domains/ingredients/db/types/v1 $BACKEND_DIR/sqlite/tools/src/ingredients
 ln -sf $BACKEND_DIR/backend-server/src/domains/ingredients/db/types/v1 $BACKEND_DIR/data/src/ingredients
+ln -sf $BACKEND_DIR/backend-server/src/domains/ingredients/gateway-api/types $BACKEND_DIR/data/src/gateway-ingredients
+ln -sf $BACKEND_DIR/backend-server/src/domains/ingredients/db/types/v1 $BACKEND_DIR/sqlite/tools/src/ingredients
+ln -sf $BACKEND_DIR/backend-server/src/domains/ingredients/gateway-api/types $BACKEND_DIR/sqlite/tools/src/gateway-ingredients

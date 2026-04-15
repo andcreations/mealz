@@ -15,6 +15,8 @@ export interface MealsNamedV1APIURL {
   createV1: () => string;
   updateV1: (params: UpdateNamedMealV1QueryParams) => string;
   deleteV1: (params: DeleteNamedMealV1QueryParams) => string;
+  listShareUsersV1: () => string;
+  shareV1: () => string;
 }
 
 export class MealsNamedV1API {
@@ -64,5 +66,17 @@ export class MealsNamedV1API {
     deleteV1: (params: DeleteNamedMealV1QueryParams) => {
       return `${MEALS_NAMED_V1_URL}/${params.id}`;
     },
+
+    /**
+     * @method GET
+     * @response ListShareUsersGWResponseV1
+     */
+    listShareUsersV1: () => `${MEALS_NAMED_V1_URL}/share-users`,
+
+    /**
+     * @method POST
+     * @request ShareNamedMealGWRequestV1
+     */
+    shareV1: () => `${MEALS_NAMED_V1_URL}/share`,
   };
 }

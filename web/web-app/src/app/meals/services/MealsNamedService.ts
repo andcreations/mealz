@@ -14,20 +14,22 @@ import {
   MealsNamedV1API,
   UpdateNamedMealGWRequestV1,
   ReadNamedMealByIdGWResponseV1,
+  AddedNamedMealSocketMessageV1Payload,
+  ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC_V1,
 } from '@mealz/backend-meals-named-gateway-api';
 
 import { LoadStatus } from '../../common';
 import { isStringSimilar, stripDiacritics } from '../../utils';
 import { logDebugEvent, logErrorEvent, logInfoEvent } from '../../event-log';
 import { AuthUserService, AuthTopics } from '../../auth';
+import { SocketMessage, SocketTopics } from '../../socket';
 import { eventType } from '../event-log';
-import { NamedMeal } from '../types';
 
 @Service()
 @BusListener()
 export class MealsNamedService implements OnBootstrap {
   private loadStatus = LoadStatus.Loading;
-  private namedMeals: NamedMeal[] = [];
+  private namedMeals: GWNamedMeal[] = [];
   private pendingLoads: PendingLoad[] = [];
 
   public constructor(
@@ -49,6 +51,30 @@ export class MealsNamedService implements OnBootstrap {
     this.readNamedMeals();
   }
 
+  @BusEvent(AuthTopics.UserSignedOut)
+  public userSignedOut(): void {
+    logInfoEvent(eventType('clearing-named-meals-on-user-sign-out'));
+    this.namedMeals = [];
+  }
+
+  @BusEvent(SocketTopics.Connected)
+  public socketConnected(): void {
+    logInfoEvent(eventType('reading-all-named-meals-on-socket-connect'));
+    this.tryReadNamedMeals();
+  }
+
+  @SocketMessage(ADDED_NAMED_MEAL_SOCKET_MESSAGE_TOPIC_V1)
+  public async addedNamedMeal(
+    payload: AddedNamedMealSocketMessageV1Payload,
+  ): Promise<void> {
+    const { namedMeal } = await this.loadById(payload.namedMealId);
+    const has = !!this.getById(namedMeal.id);
+    if (has) {
+      return;
+    }
+    this.namedMeals.push(namedMeal);
+  }
+
   private async readNamedMeals(): Promise<void> {
     try {
       await this.doReadNamedMeals();
@@ -64,6 +90,14 @@ export class MealsNamedService implements OnBootstrap {
       });
     } finally {
       this.pendingLoads = [];
+    }
+  }
+
+  private async tryReadNamedMeals(): Promise<void> {
+    try {
+      await this.doReadNamedMeals();
+    } catch (error) {
+      logErrorEvent(eventType('failed-to-read-all-named-meals'), {}, error);
     }
   }
 
@@ -100,7 +134,7 @@ export class MealsNamedService implements OnBootstrap {
     this.loadStatus = loadStatus;
   }
 
-  public async loadAll(): Promise<NamedMeal[]> {
+  public async loadAll(): Promise<GWNamedMeal[]> {
     if (this.loadStatus === LoadStatus.FailedToLoad) {
       throw new Error('Failed to load named meals');
     }
@@ -108,7 +142,7 @@ export class MealsNamedService implements OnBootstrap {
       return this.getAll();
     }
 
-    return new Promise<NamedMeal[]>((resolve, reject) => {
+    return new Promise<GWNamedMeal[]>((resolve, reject) => {
       this.pendingLoads.push({ resolve, reject });
     });
   }
@@ -117,11 +151,15 @@ export class MealsNamedService implements OnBootstrap {
     return this.loadStatus === LoadStatus.Loaded;
   }
 
-  public getByName(name: string): NamedMeal {
+  public getById(id: string): GWNamedMeal {
+    return this.namedMeals.find(namedMeal => namedMeal.id === id);
+  }
+
+  public getByName(name: string): GWNamedMeal {
     return this.namedMeals.find(namedMeal => namedMeal.name === name);
   }
 
-  public getAll(): NamedMeal[] {
+  public getAll(): GWNamedMeal[] {
     return this.namedMeals;
   }
 
@@ -129,7 +167,7 @@ export class MealsNamedService implements OnBootstrap {
     return this.getByName(name) !== undefined;
   }
 
-  public search(query: string, limit?: number): NamedMeal[] {
+  public search(query: string, limit?: number): GWNamedMeal[] {
     if (!this.isLoaded()) {
       logErrorEvent(eventType('named-meals-not-loaded'), {});
       return [];
@@ -149,43 +187,55 @@ export class MealsNamedService implements OnBootstrap {
       .slice(0, limit ?? this.namedMeals.length);
   }
 
-  public async loadByName(name: string): Promise<GWMealWithoutId> {
-    const namedMeal = this.getByName(name);
+  public async loadById(id: string): Promise<
+    { namedMeal: GWNamedMeal; meal: GWMealWithoutId }
+  > {
+    const namedMeal = this.getById(id);
     if (!namedMeal) {
-      logErrorEvent(eventType('named-meal-not-found'), { name });
+      logErrorEvent(eventType('named-meal-not-found'), { id });
       throw new Error('Named meal not found');
     }
     const response = await this.http.get<ReadNamedMealByIdGWResponseV1>(
       MealsNamedV1API.url.readByIdV1({ id: namedMeal.id }),
     );
-    return response.data.meal;
+    return {
+      namedMeal: response.data.namedMeal,
+      meal: response.data.meal,
+    };
   }
 
   public async save(
+    id: string | undefined,
     mealName: string,
     meal: GWMealWithoutId,
   ): Promise<void> {
-    const namedMeal = this.getByName(mealName);
+    const namedMeal = this.getById(id);
     if (namedMeal) {
       logDebugEvent(eventType('updating-named-meal'), {
-        mealName,
+        mealName: namedMeal.name,
         meal,
       });
+
       // update
       await this.http.put<
         UpdateNamedMealGWRequestV1, void
       >(
         MealsNamedV1API.url.updateV1({ id: namedMeal.id }),
         {
-          mealName,
+          mealName: namedMeal.name,
           meal,
         }
       );
-      const index = this.namedMeals.indexOf(namedMeal);
-      this.namedMeals[index] = {
-        id: namedMeal.id,
-        name: mealName,
-      };
+
+      // read to refresh
+      const response = await this.http.get<ReadNamedMealByIdGWResponseV1>(
+        MealsNamedV1API.url.readByIdV1({ id: namedMeal.id }),
+      );
+      const updatedNamedMeal = response.data.namedMeal;
+
+      // refresh
+      const index = this.namedMeals.findIndex(namedMeal => namedMeal.id === id);
+      this.namedMeals[index] = updatedNamedMeal;
     }
     else {
       logDebugEvent(eventType('creating-named-meal'), {
@@ -193,7 +243,7 @@ export class MealsNamedService implements OnBootstrap {
         meal,
       });
       // create
-      const response = await this.http.post<
+      const createResponse = await this.http.post<
         CreateNamedMealGWRequestV1, CreateNamedMealGWResponseV1
       >(
         MealsNamedV1API.url.createV1(),
@@ -202,29 +252,34 @@ export class MealsNamedService implements OnBootstrap {
           meal,
         }
       );
-      this.namedMeals.push({
-        id: response.data.id,
-        name: mealName,
-      });
+
+      // read to refresh
+      const readResponse = await this.http.get<ReadNamedMealByIdGWResponseV1>(
+        MealsNamedV1API.url.readByIdV1({ id: createResponse.data.id }),
+      );
+      const createdNamedMeal = readResponse.data.namedMeal;
+
+      // add
+      this.namedMeals.push(createdNamedMeal);
     }
   }
 
-  public async deleteByName(name: string): Promise<void> {
-    const namedMeal = this.getByName(name);
+  public async deleteById(id: string): Promise<void> {
+    const namedMeal = this.getById(id);
     if (!namedMeal) {
-      logErrorEvent(eventType('named-meal-not-found'), { name });
+      logErrorEvent(eventType('named-meal-not-found'), { id });
       throw new Error('Named meal not found');
     }
-    logDebugEvent(eventType('deleting-named-meal'), { name });
+    logDebugEvent(eventType('deleting-named-meal'), { id });
     await this.http.delete<void>(
-      MealsNamedV1API.url.deleteV1({ id: namedMeal.id }),
+      MealsNamedV1API.url.deleteV1({ id }),
     );
-    const index = this.namedMeals.indexOf(namedMeal);
+    const index = this.namedMeals.findIndex(namedMeal => namedMeal.id === id);
     this.namedMeals.splice(index, 1);
   }
 }
 
 interface PendingLoad {
-  resolve: (value: NamedMeal[]) => void;
+  resolve: (value: GWNamedMeal[]) => void;
   reject: (reason?: any) => void;
 }

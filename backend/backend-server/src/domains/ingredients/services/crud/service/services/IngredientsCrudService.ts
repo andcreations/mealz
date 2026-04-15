@@ -5,6 +5,7 @@ import {
   ReadIngredientsByIdResponseV1,
   ReadIngredientsFromLastRequestV1,
   ReadIngredientsFromLastResponseV1,
+  UpsertIngredientsRequestV1,
 } from '@mealz/backend-ingredients-crud-service-api';
 
 import { IngredientsCrudRepository } from '../repositories';
@@ -14,7 +15,6 @@ export class IngredientsCrudService {
   public constructor(
     private readonly ingredientsCrudRepository: IngredientsCrudRepository,
   ) {}
-
 
   public async readIngredientsByIdV1(
     request: ReadIngredientsByIdRequestV1,
@@ -37,5 +37,17 @@ export class IngredientsCrudService {
       context,
     );
     return { ingredients };
+  }
+
+  public async upsertIngredientsV1(
+    request: UpsertIngredientsRequestV1,
+    context: Context,
+  ): Promise<void> {
+    for (const ingredient of request.ingredients) {
+      await this.ingredientsCrudRepository.upsertIngredient(
+        ingredient,
+        context,
+      );
+    }
   }
 }

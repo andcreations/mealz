@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import { truncateNumber } from '@mealz/backend-shared';
 import { GWUserMeal } from '@mealz/backend-meals-user-gateway-api';
+import { GWNamedMeal } from '@mealz/backend-meals-named-gateway-api';
 import { 
   GWMealDailyPlan,
   GWMealDailyPlanEntry,
@@ -10,7 +11,11 @@ import {
 } from '@mealz/backend-meals-daily-plan-gateway-api';
 
 import { LoadStatus } from '../../../common';
-import { logDebugEvent, logErrorEvent, logEventAndRethrow } from '../../../event-log';
+import {
+  logDebugEvent,
+  logErrorEvent,
+  logEventAndRethrow,
+} from '../../../event-log';
 import { usePatchState, useService } from '../../../hooks';
 import { 
   AIMealScanIngredient,
@@ -44,7 +49,7 @@ import {
   MealsLogService,
   MealsDailyPlanService,
   MealsNamedService,
-  NamedMeal,
+  MealsNamedShareService,
 } from '../../../meals';
 import { useTranslations } from '../../../i18n';
 import { DateService } from '../../../system';
@@ -58,6 +63,7 @@ import { IngredientsEditor } from './IngredientsEditor';
 import { MealSummary } from './MealSummary';
 import { MealPlannerTranslations } from './MealPlanner.translations';
 import { NamedMealPicker } from './NamedMealPicker';
+import { ShareNamedMealPicker } from './ShareNamedMealPicker';
 import { MealPortion } from './MealPortion';
 import { MealNameMenuItem } from './MealNameMenuItem';
 import { MEAL_NAME_MAX_AGE } from '../../const';
@@ -86,6 +92,7 @@ interface MealPlannerState {
   showSaveMealPicker: boolean;
   showLoadMealPicker: boolean;
   showDeleteMealPicker: boolean;
+  showShareMealPicker: boolean;
   showMealPortion: boolean;
   showAIMealScannerModal: boolean;
   showMealLogConfirmationModal: boolean;
@@ -101,6 +108,7 @@ export function MealPlanner() {
   const mealsLogService = useService(MealsLogService);
   const mealsDailyPlanService = useService(MealsDailyPlanService);
   const mealsNamedService = useService(MealsNamedService);
+  const mealsNamedShareService = useService(MealsNamedShareService);
   const mealMapper = useService(MealMapper);
   const mealCalculator = useService(MealCalculator);
 
@@ -115,6 +123,7 @@ export function MealPlanner() {
     showSaveMealPicker: false,
     showLoadMealPicker: false,
     showDeleteMealPicker: false,
+    showShareMealPicker: false,
     showMealPortion: false,
     showAIMealScannerModal: false,
     showMealLogConfirmationModal: false,
@@ -125,7 +134,7 @@ export function MealPlanner() {
   const translate = useTranslations(MealPlannerTranslations);
 
   const dailyMealPlan = useRef<GWMealDailyPlan | undefined>(undefined);
-  const namedMeals = useRef<NamedMeal[]>([]);
+  const namedMeals = useRef<GWNamedMeal[]>([]);
 
   // dirty flag
   const isDirty = useRef(false);
@@ -673,6 +682,10 @@ export function MealPlanner() {
   };
 
   const namedMeal = {
+    withoutSharedBy: (meal: GWNamedMeal): boolean => {
+      return !meal.sharedBy;
+    },
+
     onShowLoad: () => {
       patchState({ showLoadMealPicker: true });
     },
@@ -709,9 +722,29 @@ export function MealPlanner() {
       patchState({ showDeleteMealPicker: false });
     },
 
-    onLoad: (name: string, switchChecked?: boolean) => {
-      mealsNamedService.loadByName(name)
-        .then((loadedMeal) => {
+    onShowShare: () => {
+      patchState({ showShareMealPicker: true });
+    },
+
+    onCloseShare: () => {
+      patchState({ showShareMealPicker: false });
+    },
+
+    onShare: (sharedMeal: GWNamedMeal, sharedUser: { id: string }) => {
+      mealsNamedShareService.shareNamedMeal(sharedMeal.id, sharedUser.id)
+        .then(() => {
+          notificationsService.info(translate('meal-shared'));
+        })
+        .catch(error => {
+          notificationsService.error(translate('failed-to-share-meal'));
+          logErrorEvent(eventType('failed-to-share-meal'), {}, error);
+        });
+      patchState({ showShareMealPicker: false });
+    },
+
+    onLoad: (name: string, id?: string, switchChecked?: boolean) => {
+      mealsNamedService.loadById(id)
+        .then(({ meal: loadedMeal }) => {
           markDirty();
           let ingredients = mealMapper.toMealPlannerIngredients(
             loadedMeal.ingredients,
@@ -743,12 +776,12 @@ export function MealPlanner() {
         });
     },
 
-    onSave: (name: string) => {
+    onSave: (name: string, id?: string) => {
       const gwMeal = mealMapper.toGWMeal(
         calories.get(),
         state.ingredients,
       );
-      mealsNamedService.save(name, gwMeal)
+      mealsNamedService.save(id, name, gwMeal)
         .then(() => {
           notificationsService.info(translate('meal-saved'));
           namedMeals.current = mealsNamedService.getAll();
@@ -762,8 +795,8 @@ export function MealPlanner() {
       patchState({ showSaveMealPicker: false });
     },
 
-    onDelete: (name: string) => {
-      mealsNamedService.deleteByName(name)
+    onDelete: (_name: string, id?: string) => {
+      mealsNamedService.deleteById(id)
         .then(() => {
           notificationsService.info(translate('meal-deleted'));
         })
@@ -887,6 +920,7 @@ export function MealPlanner() {
               onSaveMeal={namedMeal.onShowSave}
               onLoadMeal={namedMeal.onShowLoad}
               onDeleteMeal={namedMeal.onShowDelete}
+              onShareMeal={namedMeal.onShowShare}
               onPortionMeal={meal.onShowPortion}
               onPickADay={day.onShow}
             />
@@ -935,6 +969,7 @@ export function MealPlanner() {
             matching: translate('save-info-matching'),
             nonMatching: translate('save-info-non-matching'),
           }}
+          mealFilter={namedMeal.withoutSharedBy}
           onPick={namedMeal.onSave}
           onClose={namedMeal.onCloseSave}
         />
@@ -943,7 +978,7 @@ export function MealPlanner() {
         <NamedMealPicker
           show={state.showLoadMealPicker}
           switchLabel={translate('load-switch-label')}
-          switchChecked={true}
+          switchChecked={false}
           buttonLabel={translate('load-button-label')}
           placeholder={translate('load-placeholder')}
           info={{
@@ -969,6 +1004,13 @@ export function MealPlanner() {
           mustMatchToPick={true}
           onPick={namedMeal.onDelete}
           onClose={namedMeal.onCloseDelete}
+        />
+      }
+      { state.showShareMealPicker &&
+        <ShareNamedMealPicker
+          show={state.showShareMealPicker}
+          onShare={namedMeal.onShare}
+          onClose={namedMeal.onCloseShare}
         />
       }
       { state.showMealPortion &&

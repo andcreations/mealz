@@ -35,9 +35,8 @@ import {
   MealsDailyPlanTransporter,
 } from '@mealz/backend-meals-daily-plan-service-api';
 import { 
+  buildNotificationChunks,
   ChunkedUserNotification,
-  ChunkedUserNotificationChunk,
-  ChunkedUserNotificationType,
   UsersNotificationsTransporter,
 } from '@mealz/backend-users-notifications-service-api';
 
@@ -209,7 +208,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
 
     // send nutrition summary
     if (this.sendNutritionSummary) {
-      await this.usersNotificationsTransporter.sendChunkedUserNotification(
+      await this.usersNotificationsTransporter.sendChunkedUserNotificationV1(
         {
           userId: user.id,
           messageTypeId: USERS_DAILY_INSIGHTS_TELEGRAM_MESSAGE_TYPE_ID,
@@ -243,7 +242,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
       });
 
       // send insights
-      await this.usersNotificationsTransporter.sendBasicUserNotification(
+      await this.usersNotificationsTransporter.sendBasicUserNotificationV1(
         {
           userId: user.id,
           messageTypeId: 'daily-insights',
@@ -449,26 +448,7 @@ export class UsersDailyInsightsService implements OnModuleInit {
     overallAmounts: UserDailyInsightsAmounts,
   ): ChunkedUserNotification {
     // chunks
-    const chunks: ChunkedUserNotificationChunk[] = [];
-    const bold = (text: string) => {
-      chunks.push({
-        type: ChunkedUserNotificationType.Bold,
-        text,
-      });
-    }
-    const normal = (text: string) => {  
-      chunks.push({
-        type: ChunkedUserNotificationType.Normal,
-        text,
-      });
-    }
-    const code = (text: string) => {
-      chunks.push({
-        type: ChunkedUserNotificationType.Code,
-        text,
-      });
-    }
-    const newLine = () => normal('\n');
+    const { chunks, bold, normal, code, newLine } = buildNotificationChunks();
 
     // title
     bold(this.translate('nutrition-summary-title'));

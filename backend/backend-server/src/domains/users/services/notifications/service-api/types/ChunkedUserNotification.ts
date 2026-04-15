@@ -1,3 +1,5 @@
+import { NotificationAction } from './NotificationAction';
+
 export enum ChunkedUserNotificationType {
   Normal = 'normal',
   Bold = 'bold',
@@ -10,5 +12,9 @@ export interface ChunkedUserNotificationChunk {
 }
 
 export interface ChunkedUserNotification {
+  // Chunks of the notification
   chunks: ChunkedUserNotificationChunk[];
+
+  // Actions the user can perform
+  actions?: NotificationAction[];
 }

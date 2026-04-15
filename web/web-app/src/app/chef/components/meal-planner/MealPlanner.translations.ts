@@ -43,6 +43,10 @@ export const MealPlannerTranslations: Translations = {
   'failed-to-delete-meal': 'Failed to delete meal',
   'delete-info': 'Select a meal to delete',
 
+  // share
+  'meal-shared': 'Meal shared',
+  'failed-to-share-meal': 'Failed to share meal',
+
   // portion
   'cannot-portion-meal-with-errors': 'Please fix the issues with the meal before portioning',
 

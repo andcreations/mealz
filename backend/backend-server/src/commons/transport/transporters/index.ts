@@ -3,3 +3,4 @@ export * from './LocalRequestTransporter';
 export * from './RequestTransporterResolver';
 export * from './EventTransporter';
 export * from './LocalEventTransporter';
+export * from './EventTransporterResolver';

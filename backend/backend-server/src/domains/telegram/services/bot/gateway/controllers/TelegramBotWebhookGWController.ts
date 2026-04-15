@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { 
+  Body, 
+  Controller, 
+  HttpCode, 
+  HttpStatus, 
+  Param, 
+  Post,
+} from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { GWContext } from '@mealz/backend-gateway-common';
 import { TelegramUpdate } from '@andcreations/telegram-bot';
@@ -24,6 +31,7 @@ export class TelegramBotWebhookGWController {
   }
 
   @Post('/update/:token')
+  @HttpCode(HttpStatus.OK)
   public async handleUpdate(
     @Param('token') token: string,
     @Body() body: TelegramUpdate,

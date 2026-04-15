@@ -1,2 +1,35 @@
-# TODO
-[]
+- name:
+    en: Pickled cucumbers
+    pl: Ogórki kiszone
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 11
+    carbs: 2.3
+    sugars: 1.1
+    fibre: 1.2
+    protein: 0.3
+    fat:
+      total: 0.2
+      saturated: 0.05
+      monounsaturated: 0.01
+      polyunsaturated: 0.05
+
+- name:
+    en: Sauerkraut
+    pl: Kapusta kiszona
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 19
+    carbs: 4.3
+    sugars: 1.8
+    fibre: 2.9
+    protein: 0.9
+    fat:
+      total: 0.1
+      saturated: 0.03
+      monounsaturated: 0.01
+      polyunsaturated: 0.05

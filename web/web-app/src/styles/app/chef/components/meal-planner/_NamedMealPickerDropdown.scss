@@ -3,11 +3,12 @@
   top: calc(100% + 0.5rem);
   left: 0.5rem;
   width: calc(100% - 1rem);
-  max-height: 30vh;
+  max-height: 22vh;
   overflow-y: auto;
   @include mealz-border();
   background-color: $mealz-theme-color-bg-dark;
   padding: 0.375rem 0;
+  z-index: 7;
 }
 
 .mealz-named-meal-picker-dropdown-item {
@@ -15,6 +16,18 @@
   @include mealz-ellipsis();
   max-width: 100%;
   padding: 0.175rem 0.675rem;
+}
+
+.mealz-named-meal-picker-dropdown-item-name {
+  @include mealz-ellipsis();
+  max-width: 100%;
+}
+
+.mealz-named-meal-picker-dropdown-item-info {
+  @include mealz-font-tiny();
+  @include mealz-ellipsis();
+  max-width: 100%;
+  color: $mealz-theme-color-fg-dark;
 }
 
 .mealz-named-meal-picker-dropdown-item-selected {

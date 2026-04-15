@@ -6,6 +6,8 @@
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -28,6 +30,9 @@
       "@mealz/backend-system": ["src/commons/system"],
       "@mealz/backend-tracing": ["src/commons/tracing"],
       "@mealz/backend-tracing-bootstrap": ["src/commons/tracing-bootstrap"],
+
+      "@mealz/backend-socket-api": ["src/socket/api"],
+      "@mealz/backend-socket-gateway-api": ["src/socket/gateway-api"],
 
       "@mealz/backend-users-common": ["src/domains/users/common"],
       "@mealz/backend-users-db": ["src/domains/users/db"],
@@ -85,6 +90,8 @@
 
       "@mealz/backend-event-log-service-api": ["src/domains/event-log/services/log/service-api"],
       "@mealz/backend-event-log-gateway-api": ["src/domains/event-log/services/log/gateway-api"],
+
+      "@mealz/backend-actions-manager-service-api": ["src/domains/actions/services/manager/service-api"]
     }
   },
   "exclude": ["node_modules", "dist"]

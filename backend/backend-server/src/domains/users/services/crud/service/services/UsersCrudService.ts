@@ -6,6 +6,8 @@ import {
   CreateUserRequestV1,
   ReadUserByIdRequestV1,
   ReadUserByIdResponseV1,
+  ReadUsersByIdsRequestV1,
+  ReadUsersByIdsResponseV1,
   ReadUsersFromLastRequestV1,
   ReadUsersFromLastResponseV1,
 } from '@mealz/backend-users-crud-service-api';
@@ -31,6 +33,17 @@ export class UsersCrudService {
       throw new UserByIdNotFoundError(request.id);
     }
     return { user };
+  }
+
+  public async readUsersByIdsV1(
+    request: ReadUsersByIdsRequestV1,
+    context: Context,
+  ): Promise<ReadUsersByIdsResponseV1> {
+    const users = await this.usersCrudRepository.readUsersByIds(
+      request.ids,
+      context,
+    );
+    return { users };
   }
 
   public async readUsersFromLastV1(

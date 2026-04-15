@@ -7,3 +7,5 @@ export * from './UpdateNamedMealGWRequestV1';
 export * from './ReadNamedMealByIdQueryParamsV1';
 export * from './ReadNamedMealByIdGWResponseV1';
 export * from './DeleteNamedMealV1QueryParams';
+export * from './ListShareUsersGWResponseV1';
+export * from './ShareNamedMealGWRequestV1';

@@ -13,6 +13,10 @@ export class IngredientsCrudRequestTopics {
     'readIngredientsFromLast',
     'v1',
   );
+  public static readonly UpsertIngredientsV1 = topic(
+    'upsertIngredients',
+    'v1',
+  );
 };
 
 function topic(method: string, version: string): string {

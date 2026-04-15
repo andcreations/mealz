@@ -8,4 +8,5 @@ export const DailyHydrationTranslations: Translations = {
   'glasses': 'glasses',
   'log-full-glass': '+1 glass',
   'log-full-glass-logged': '1 glass logged',
+  'last-log': 'Last logged {0}',
 }

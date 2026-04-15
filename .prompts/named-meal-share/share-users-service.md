@@ -1,0 +1,1 @@
+In `ShareUsersService.ts` implement a service which allows to read share users.

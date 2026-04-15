@@ -1,4 +1,4 @@
-export function ifDefined<T = any, V = any, R = any>(
+export function ifDefined<T = any, V = any>(
   key: keyof T,
   value: V,
 ): { [key: string]: V } | {} {

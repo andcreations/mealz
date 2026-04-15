@@ -5,12 +5,16 @@ import { GWIngredientMapper } from '@mealz/backend-ingredients-gateway-common';
 import {
   IngredientsCrudTransporter,
   ReadIngredientsFromLastRequestV1,
+  UpsertIngredientsRequestV1,
 } from '@mealz/backend-ingredients-crud-service-api';
 import { 
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
-import { ReadIngredientsFromLastGWQueryParamsV1Impl } from '../dtos';
+import { 
+  ReadIngredientsFromLastGWQueryParamsV1Impl,
+  UpsertIngredientsGWRequestV1Impl,
+} from '../dtos';
 
 @Injectable()
 export class IngredientsCrudV1GWService {
@@ -38,5 +42,20 @@ export class IngredientsCrudV1GWService {
         this.gwIngredientMapper.fromIngredient(ingredient),
       ),
     };
+  }
+
+  public async upsertIngredientsV1(
+    gwRequest: UpsertIngredientsGWRequestV1Impl,
+    context: Context,
+  ): Promise<void> {
+    const request: UpsertIngredientsRequestV1 = {
+      ingredients: gwRequest.ingredients.map(ingredient =>
+        this.gwIngredientMapper.toIngredient(ingredient),
+      ),
+    };
+    await this.ingredientsCrudTransporter.upsertIngredientsV1(
+      request,
+      context,
+    );
   }
 }

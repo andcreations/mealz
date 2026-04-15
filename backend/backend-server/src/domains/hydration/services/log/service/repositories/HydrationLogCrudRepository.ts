@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { IdGenerator, InjectIdGenerator } from '@mealz/backend-common';
-import {
-  InjectDBRepository, 
-  DBRepository, 
-  Where, 
-  Update,
-} from '@mealz/backend-db';
+import { InjectDBRepository, DBRepository } from '@mealz/backend-db';
 import { GlassFraction } from '@mealz/backend-hydration-log-service-api';
 
 import {
@@ -29,7 +24,7 @@ export class HydrationLogCrudRepository {
     private readonly idGenerator: IdGenerator,
   ) {}
 
-  public async logHydrationV1(
+  public async create(
     userId: string,
     glassFraction: GlassFraction,
     context: Context,

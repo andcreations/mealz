@@ -32,6 +32,13 @@ export class NamedMealDBEntity {
   public meal_id: string;
 
   @DBField({
+    name: 'shared_by_user_id',
+    type: DBFieldType.STRING,
+    optional: true,
+  })
+  public shared_by_user_id?: string;
+
+  @DBField({
     name: 'created_at',
     type: DBFieldType.INTEGER,
   })

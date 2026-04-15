@@ -1,7 +1,7 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsId, IsAmount } from '@mealz/backend-gateway-common';
+import { IsId, IsAmountString } from '@mealz/backend-gateway-common';
 import { GWMealIngredient } from '@mealz/backend-meals-gateway-api';
 
 import { GWAdHocIngredientImpl } from './GWAdHocIngredientImpl';
@@ -26,6 +26,6 @@ export class GWMealIngredientImpl implements GWMealIngredient {
     description: 'Amount entered by the user'
   })
   @IsOptional()
-  @IsAmount()
+  @IsAmountString()
   public enteredAmount?: string;    
 }

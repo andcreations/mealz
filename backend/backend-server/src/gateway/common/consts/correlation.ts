@@ -1,0 +1,1 @@
+export const HTTP_CORRELATION_ID_PREFIX = 'http';

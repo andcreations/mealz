@@ -8,6 +8,8 @@ import {
   CreateUserRequestV1,
   ReadUserByIdRequestV1,
   ReadUserByIdResponseV1,
+  ReadUsersByIdsRequestV1,
+  ReadUsersByIdsResponseV1,
   ReadUsersFromLastRequestV1,
   ReadUsersFromLastResponseV1,
   UsersCrudRequestTopics,
@@ -27,6 +29,14 @@ export class UsersCrudRequestController {
     context: Context,
   ): Promise<ReadUserByIdResponseV1> {
     return this.usersCrudService.readUserByIdV1(request, context);
+  }
+
+  @RequestHandler(UsersCrudRequestTopics.ReadUsersByIdsV1)
+  public async readUsersByIdsV1(
+    request: ReadUsersByIdsRequestV1,
+    context: Context,
+  ): Promise<ReadUsersByIdsResponseV1> {
+    return this.usersCrudService.readUsersByIdsV1(request, context);
   }
 
   @RequestHandler(UsersCrudRequestTopics.ReadUsersFromLastV1)

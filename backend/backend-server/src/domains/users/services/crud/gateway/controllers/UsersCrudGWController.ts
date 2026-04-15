@@ -10,7 +10,7 @@ import { AuthUser } from '@mealz/backend-gateway-core';
 
 import {
   ReadCurrentUserGWResponseV1Impl,
-} from '../dtos/ReadCurrentUserGWResponseV1Impl';
+} from '../dtos';
 
 @Controller(USERS_CRUD_V1_URL)
 export class UsersCrudGWController {

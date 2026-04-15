@@ -1,0 +1,40 @@
+.mealz-share-named-meal-picker .modal-content {
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+.mealz-share-named-meal-picker .modal-dialog {
+  max-width: calc(100vw - 2 * 1rem);
+}
+
+.mealz-share-named-meal-picker-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding-top: 0.675rem;
+}
+
+.mealz-share-named-meal-picker-action-bar-wrapper {
+  @include mealz-flex-container();
+  @include mealz-flex-horizontal();
+  justify-content: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.mealz-share-named-meal-picker-label {
+  @include mealz-font-tiny();
+  color: $mealz-theme-color-fg-dark;
+  padding-left: $mealz-border-radius;
+}
+
+.mealz-share-named-meal-picker-field {
+  padding: 0;
+  position: relative;
+}
+
+.mealz-share-named-meal-picker-input,
+.mealz-share-named-meal-picker-input:focus {
+  border: 1px solid $mealz-theme-color-bg;
+  box-shadow: none;
+  background-color: $mealz-theme-color-bg-dark;
+}

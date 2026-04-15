@@ -17,7 +17,7 @@ export class HydrationLogCrudService {
     request: LogHydrationRequestV1,
     context: Context,
   ): Promise<VoidTransporterResponse> {
-    await this.crudRepository.logHydrationV1(
+    await this.crudRepository.create(
       request.userId,
       request.glassFraction,
       context,

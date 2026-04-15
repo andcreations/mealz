@@ -25,7 +25,7 @@ export class UsersNotificationsTransporter {
     private readonly transporter: RequestTransporter,
   ) {}
 
-  public async sendBasicUserNotification(
+  public async sendBasicUserNotificationV1(
     request: SendBasicUserNotificationRequestV1,
     context: Context,
   ): Promise<VoidTransporterResponse> {
@@ -38,7 +38,7 @@ export class UsersNotificationsTransporter {
     );
   }
 
-  public async sendChunkedUserNotification(
+  public async sendChunkedUserNotificationV1(
     request: SendChunkedUserNotificationRequestV1,
     context: Context,
   ): Promise<VoidTransporterResponse> {
