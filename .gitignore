@@ -7,7 +7,9 @@
 
 # Linked directories
 backend/data/src/ingredients
+backend/data/src/gateway-ingredients
 backend/sqlite/tools/src/ingredients
+backend/sqlite/tools/src/gateway-ingredients
 
 backend/_db/*
 backend/etc/https/*.crt

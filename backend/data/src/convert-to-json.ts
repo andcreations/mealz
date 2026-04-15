@@ -16,9 +16,17 @@ import {
   FactIdV1,
   FactUnitV1,
   IngredientDetailsV1,
-  IngredientTypeV1,
-  UnitPer100V1,
 } from './ingredients/v1';
+import {
+  GWFactId,
+  GWFactPer100,
+  GWFactUnit,
+  GWIngredient,
+  GWIngredientType,
+  GWUnitPer100,
+} from './gateway-ingredients';
+
+type GWIngredientWithoutId = Omit<GWIngredient, 'id'>;
 
 function validateIngredients(
   rawIngredients: any,
@@ -99,7 +107,7 @@ function readIngredients(dir: string): YamlIngredient[] {
   return allIngredients;
 }
 
-function convertToJson(ingredients: YamlIngredient[]): any {
+function convertToJson(ingredients: YamlIngredient[]): GWIngredientWithoutId[] {
   const convertName = (name: YamlName): IngredientDetailsV1['name'] => {
     return {
       en: name.en,
@@ -107,22 +115,22 @@ function convertToJson(ingredients: YamlIngredient[]): any {
     };
   };
 
-  const convertType = (type: string): IngredientTypeV1 => {
+  const convertType = (type: string): GWIngredientType => {
     if (type === 'generic') {
-      return IngredientTypeV1.Generic;
+      return GWIngredientType.Generic;
     }
     if (type === 'product') {
-      return IngredientTypeV1.Product;
+      return GWIngredientType.Product;
     }
     throw new Error(`Invalid type ${type}`);
   };
 
-  const convertUnit = (unit: string): UnitPer100V1 => {
+  const convertUnit = (unit: string): GWUnitPer100 => {
     if (unit === 'g') {
-      return UnitPer100V1.Grams;
+      return GWUnitPer100.Grams;
     }
     if (unit === 'ml') {
-      return UnitPer100V1.Milliliters;
+      return GWUnitPer100.Milliliters;
     }
     throw new Error(`Invalid per 100 unit ${unit}`);
   }
@@ -130,48 +138,48 @@ function convertToJson(ingredients: YamlIngredient[]): any {
   const convertFacts = (
     facts: YamlFacts,
     factor100: number,
-  ): IngredientDetailsV1['factsPer100'] => {
+  ): GWFactPer100[] => {
     const round = (value: number) => parseFloat(value.toFixed(2))
     const per100 = (amount: number) => round(amount * factor100);
     return [
       {
-        id: FactIdV1.Calories,
-        unit: FactUnitV1.Kcal,
+        id: GWFactId.Calories,
+        unit: GWFactUnit.Kcal,
         amount: per100(facts.calories),
       },
       {
-        id: FactIdV1.Carbs,
-        unit: FactUnitV1.Grams,
+        id: GWFactId.Carbs,
+        unit: GWFactUnit.Grams,
         amount: per100(facts.carbs),
       },
       {
-        id: FactIdV1.Sugars,
-        unit: FactUnitV1.Grams,
+        id: GWFactId.Sugars,
+        unit: GWFactUnit.Grams,
         amount: per100(facts.sugars),
       },
       {
-        id: FactIdV1.Protein,
-        unit: FactUnitV1.Grams,
+        id: GWFactId.Protein,
+        unit: GWFactUnit.Grams,
         amount: per100(facts.protein),
       },
       {
-        id: FactIdV1.TotalFat,
-        unit: FactUnitV1.Grams,
+        id: GWFactId.TotalFat,
+        unit: GWFactUnit.Grams,
         amount: per100(facts.fat.total),
       },
       {
-        id: FactIdV1.SaturatedFat,
-        unit: FactUnitV1.Grams,
+        id: GWFactId.SaturatedFat,
+        unit: GWFactUnit.Grams,
         amount: per100(facts.fat.saturated),
       },
       {
-        id: FactIdV1.MonounsaturatedFat,
-        unit: FactUnitV1.Grams,
+        id: GWFactId.MonounsaturatedFat,
+        unit: GWFactUnit.Grams,
         amount: per100(facts.fat.monounsaturated),
       },
       {
-        id: FactIdV1.PolyunsaturatedFat,
-        unit: FactUnitV1.Grams,
+        id: GWFactId.PolyunsaturatedFat,
+        unit: GWFactUnit.Grams,
         amount: per100(facts.fat.polyunsaturated),
       },
     ];
@@ -185,7 +193,7 @@ function convertToJson(ingredients: YamlIngredient[]): any {
     }
   }
 
-  const json: IngredientDetailsV1[] = [];
+  const json: GWIngredientWithoutId[] = [];
   for (const ingredient of ingredients) {
     const factor100 = 100 / ingredient.weight;
 

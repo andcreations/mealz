@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ifDefined } from '@mealz/backend-shared';
-import { InternalError, MealzError } from '@mealz/backend-common';
+import { 
+  BadRequestError,
+  InternalError,
+  MealzError,
+} from '@mealz/backend-common';
 import {
   FactId,
   FactPer100,
@@ -19,6 +23,7 @@ import {
   GWProduct,
   GWUnitPer100,
 } from '@mealz/backend-ingredients-gateway-api';
+import { UpsertObject } from '@mealz/backend-db';
 
 @Injectable()
 export class GWIngredientMapper {
@@ -105,6 +110,104 @@ export class GWIngredientMapper {
       ...ifDefined<GWIngredient>(
         'product',
         this.fromProduct(ingredient.product),
+      ),
+      isHidden: ingredient.isHidden,
+    };
+  }
+
+  private toType(type: GWIngredientType): IngredientType {
+    switch (type) {
+      case GWIngredientType.Generic:
+        return IngredientType.Generic;
+      case GWIngredientType.Product:
+        return IngredientType.Product;
+      default:
+        throw new BadRequestError(
+          `Unknown ingredient type ${MealzError.quote(type)}`
+        );
+    }
+  }
+
+  private toUnitPer100(unit: GWUnitPer100): UnitPer100 {
+    switch (unit) {
+      case GWUnitPer100.Grams:
+        return UnitPer100.Grams;
+      case GWUnitPer100.Milliliters:
+        return UnitPer100.Milliliters;
+      default:
+        throw new BadRequestError(
+          `Unknown unit per 100 ${MealzError.quote(unit)}`
+        );
+    }
+  }
+
+
+  private toFactId(id: GWFactId): FactId {
+    switch (id) {
+      case GWFactId.Calories:
+        return FactId.Calories;
+      case GWFactId.Carbs:
+        return FactId.Carbs;
+      case GWFactId.Sugars:
+        return FactId.Sugars;
+      case GWFactId.Protein:
+        return FactId.Protein;
+      case GWFactId.TotalFat:
+        return FactId.TotalFat;
+      case GWFactId.SaturatedFat:
+        return FactId.SaturatedFat;
+      case GWFactId.MonounsaturatedFat:
+        return FactId.MonounsaturatedFat;
+      case GWFactId.PolyunsaturatedFat:
+        return FactId.PolyunsaturatedFat;
+      default:
+        throw new BadRequestError(`Unknown fact ${MealzError.quote(id)}`);
+    }
+  }
+
+  private toFactUnit(unit: GWFactUnit): FactUnit {
+    switch (unit) {
+      case GWFactUnit.Kcal:
+        return FactUnit.Kcal;
+      case GWFactUnit.Grams:
+        return FactUnit.Grams;
+      default:
+        throw new BadRequestError(`Unknown fact unit ${MealzError.quote(unit)}`);
+    }
+  }
+
+  private toFact(fact: GWFactPer100): FactPer100 {
+    return {
+      id: this.toFactId(fact.id),
+      unit: this.toFactUnit(fact.unit),
+      amount: fact.amount,
+    };
+  }
+
+  private toProduct(product?: GWProduct): Product | undefined {
+    if (!product) {
+      return;
+    }
+    return {
+      brand: product.brand,
+    };
+  }
+
+  public toIngredient(
+    ingredient: UpsertObject<GWIngredient, 'id'>
+  ): UpsertObject<Ingredient, 'id'> {
+    return {
+      ...ifDefined<UpsertObject<Ingredient, 'id'>, string>(
+        'id',
+        ingredient.id,
+      ),
+      name: ingredient.name,
+      type: this.toType(ingredient.type),
+      unitPer100: this.toUnitPer100(ingredient.unitPer100),
+      factsPer100: ingredient.factsPer100.map(fact => this.toFact(fact)),
+      ...ifDefined<UpsertObject<Ingredient, 'id'>, Product>(
+        'product',
+        this.toProduct(ingredient.product),
       ),
       isHidden: ingredient.isHidden,
     };
