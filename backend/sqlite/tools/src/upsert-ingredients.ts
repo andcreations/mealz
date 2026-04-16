@@ -170,6 +170,28 @@ async function upsertIngredientsBatch(
   }
 }
 
+async function notifyChangedIngredients(
+  serverUrl: string,
+  adminToken: string,
+): Promise<void> {
+  const notifyUrl = `${serverUrl}/api/v1/ingredients/crud/admin/notify-changed`;
+  console.log(`Notifying changed ingredients to ${Colors.cyan(notifyUrl)}`);
+  const response = await fetch(notifyUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-mealz-system-admin-token': `${adminToken}`,
+    },
+  });
+  if (!response.ok) {
+    const body = await response.json();
+    throw new Error(
+      `Failed to notify changed ingredients: ` +
+      `${response.status} ${response.statusText} | ${JSON.stringify(body)}`
+    );
+  }
+}
+
 async function upsertIngredients(
   serverUrl: string,
   adminToken: string,
@@ -181,7 +203,7 @@ async function upsertIngredients(
     const batch = remaining.splice(0, batchSize);
     await upsertIngredientsBatch(serverUrl, adminToken, batch);
   }
-
+  await notifyChangedIngredients(serverUrl, adminToken);
 }
 
 async function run(): Promise<void> {

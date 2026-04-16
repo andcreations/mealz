@@ -73,6 +73,27 @@ export class SocketGatewayService {
     client.emit('message', JSON.stringify(payload));
   }
 
+  public sendMessageToAllUsers<TPayload>(
+    payload: SocketMessage<TPayload>,
+    _context: Context,
+  ): void {
+    if (!this.server) {
+      this.logger.warning(
+        'Socket server not found while sending message to all users',
+        {
+          ..._context,
+          payload: JSON.stringify(payload),
+        },
+      );
+      return;
+    }
+    this.logger.debug('Sending message to all users', {
+      ..._context,
+      payload: JSON.stringify(payload),
+    });
+    this.server.emit('message', JSON.stringify(payload));
+  }
+
   public handleMessage(
     client: Socket,
     payload: unknown,

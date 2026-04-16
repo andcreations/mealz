@@ -7,6 +7,8 @@ import {
 import { HTTPWebClientService } from '@andcreations/web-common';
 import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 import {
+  INGREDIENTS_CHANGED_SOCKET_MESSAGE_TOPIC_V1,
+  IngredientsChangedSocketMessageV1Payload,
   IngredientsCrudV1API,
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
@@ -16,12 +18,17 @@ import { LoadStatus } from '../../common';
 import { BusService } from '../../bus';
 import { AuthUserService } from '../../auth';
 import { AuthTopics } from '../../auth';
+import { NotificationsService } from '../../notifications';
 import { eventType } from '../event-log';
 import { IngredientsLoadStatusChangedEvent, IngredientsTopics } from '../bus';
+import { SocketMessage } from '../../socket';
+import { I18nService, TranslateFunc } from '../../i18n';
+import { IngredientsCrudServiceTranslations } from './IngredientsCrudService.translations';
 
 @Service()
 @BusListener()
 export class IngredientsCrudService implements OnBootstrap {
+  private readonly translate: TranslateFunc;
   private loadStatus = LoadStatus.Loading;
   private ingredients: GWIngredient[] | undefined;
   private ingredientsById: Record<string, GWIngredient> = {};
@@ -29,34 +36,52 @@ export class IngredientsCrudService implements OnBootstrap {
 
   public constructor(
     private readonly http: HTTPWebClientService,
+    private readonly i18n: I18nService,
     private readonly bus: BusService,
     private readonly authUserService: AuthUserService,
-  ) {}
+    private readonly notificationsService: NotificationsService,
+  ) {
+    this.translate = this.i18n.createTranslation(
+      IngredientsCrudServiceTranslations,
+    );
+  }
 
   public async onBootstrap(): Promise<void> {
   // read all the ingredients in the background
     if (this.authUserService.isSignedIn()) {
       logInfoEvent(eventType('reading-all-ingredients-on-bootstrap'));
-      this.readAllIngredients();
+      this.readAllIngredientsOnInit();
     }
   }
 
   @BusEvent(AuthTopics.UserSignedIn)
   public userSignedIn(): void {
     logInfoEvent(eventType('reading-all-ingredients-on-user-sign-in'));
-    this.readAllIngredients();
+    this.readAllIngredientsOnInit();
   }
 
-  private async readAllIngredients(): Promise<void> {
+  @SocketMessage(INGREDIENTS_CHANGED_SOCKET_MESSAGE_TOPIC_V1)
+  public ingredientsChanged(
+    _payload: IngredientsChangedSocketMessageV1Payload,
+  ): void {
+    logInfoEvent(eventType('ingredients-changed'));
+    this.readAllIngredientsOnChange();
+  }
+
+  private async readAllIngredientsOnInit(): Promise<void> {
     try {
-      await this.doReadAllIngredients();
+      await this.readAllIngredients();
       this.changeLoadStatus(LoadStatus.Loaded);
       this.pendingLoads.forEach(pendingLoad => {
         pendingLoad.resolve(this.getIngredients());
       });
     } catch (error) {
       this.changeLoadStatus(LoadStatus.FailedToLoad);
-      logErrorEvent(eventType('failed-to-read-all-ingredients'), {}, error);
+      logErrorEvent(
+        eventType('failed-to-read-all-ingredients-on-init'),
+        {},
+        error,
+      );
       this.pendingLoads.forEach(pendingLoad => {
         pendingLoad.reject(error);
       });
@@ -65,7 +90,22 @@ export class IngredientsCrudService implements OnBootstrap {
     }
   }
 
-  private async doReadAllIngredients(): Promise<void> {
+  private async readAllIngredientsOnChange(): Promise<void> {
+    try {
+      await this.readAllIngredients();
+    } catch (error) {
+      logErrorEvent(
+        eventType('failed-to-read-all-ingredients-on-change'),
+        {},
+        error,
+      );
+      return;
+    }
+    logInfoEvent(eventType('read-all-ingredients-on-change'));
+    this.notificationsService.info(this.translate('ingredients-changed'));
+  }  
+
+  private async readAllIngredients(): Promise<void> {
     const readIngredients: GWIngredient[] = [];
     const startTime = Date.now();
 

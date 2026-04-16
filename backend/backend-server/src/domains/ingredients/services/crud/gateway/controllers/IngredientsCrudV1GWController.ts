@@ -60,4 +60,14 @@ export class IngredientsCrudV1GWController {
       context,
     );
   }
+
+  @AuthSystemAdmin()
+  @Post('admin/notify-changed')
+  public async notifyChangedIngredientsV1Admin(
+    @GWContext() context: Context,
+  ): Promise<void> {
+    return await this.ingredientsCrudV1GWService.notifyChangedIngredientsV1(
+      context,
+    );
+  }  
 }

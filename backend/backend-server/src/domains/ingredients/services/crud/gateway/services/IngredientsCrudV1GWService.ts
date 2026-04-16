@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
 import { DEFAULT_READ_LIMIT } from '@mealz/backend-common';
+import { Logger } from '@mealz/backend-logger';
+import { SocketRequestTransporter } from '@mealz/backend-socket-api';
 import { GWIngredientMapper } from '@mealz/backend-ingredients-gateway-common';
 import {
   IngredientsCrudTransporter,
@@ -8,6 +10,8 @@ import {
   UpsertIngredientsRequestV1,
 } from '@mealz/backend-ingredients-crud-service-api';
 import { 
+  INGREDIENTS_CHANGED_SOCKET_MESSAGE_TOPIC_V1,
+  IngredientsChangedSocketMessageV1Payload,
   ReadIngredientsFromLastGWResponseV1,
 } from '@mealz/backend-ingredients-crud-gateway-api';
 
@@ -19,7 +23,9 @@ import {
 @Injectable()
 export class IngredientsCrudV1GWService {
   public constructor(
+    private readonly logger: Logger,
     private readonly ingredientsCrudTransporter: IngredientsCrudTransporter,
+    private readonly socketRequestTransporter: SocketRequestTransporter,
     private readonly gwIngredientMapper: GWIngredientMapper,
   ) {}
 
@@ -55,6 +61,25 @@ export class IngredientsCrudV1GWService {
     };
     await this.ingredientsCrudTransporter.upsertIngredientsV1(
       request,
+      context,
+    );
+  }
+
+  public async notifyChangedIngredientsV1(
+    context: Context,
+  ): Promise<void> {
+    this.logger.debug('Notifying ingredients changed', {
+      ...context,
+    });
+    await this.socketRequestTransporter.sendMessageToAllUsersV1<
+      IngredientsChangedSocketMessageV1Payload
+    >(
+      {
+        payload: {
+          topic: INGREDIENTS_CHANGED_SOCKET_MESSAGE_TOPIC_V1,
+          payload: {},
+        },
+      },
       context,
     );
   }

@@ -6,8 +6,11 @@ import {
 } from '@mealz/backend-transport';
 
 import { SOCKET_REQUEST_TRANSPORTER_TOKEN } from './inject-tokens';
-import { SendMessageToUserV1Request } from './dtos';
 import { SocketRequestTopics } from './SocketRequestTopics';
+import { 
+  SendMessageToAllUsersV1Request,
+  SendMessageToUserV1Request,
+} from './dtos';
 
 @Injectable()
 export class SocketRequestTransporter {
@@ -24,5 +27,15 @@ export class SocketRequestTransporter {
       SendMessageToUserV1Request<TPayload>,
       VoidTransporterResponse
     >(SocketRequestTopics.SendMessageToUserV1, request, context);
+  }
+
+  public sendMessageToAllUsersV1<TPayload>(
+    request: SendMessageToAllUsersV1Request<TPayload>,
+    context: Context,
+  ): Promise<VoidTransporterResponse> {
+    return this.transporter.sendRequest<
+      SendMessageToAllUsersV1Request<TPayload>,
+      VoidTransporterResponse
+    >(SocketRequestTopics.SendMessageToAllUsersV1, request, context);
   }
 }

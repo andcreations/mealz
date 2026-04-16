@@ -18,7 +18,6 @@ import { AuthServiceTranslations } from './AuthService.translations';
 
 @Service()
 export class AuthService {
-  // private userId: string | undefined;
   private readonly translate: TranslateFunc;
 
   public constructor(
@@ -28,7 +27,7 @@ export class AuthService {
     private readonly notificationsService: NotificationsService,
     private readonly authUserService: AuthUserService,
   ) {
-    this.translate = this.i18n.translateFunc(AuthServiceTranslations);
+    this.translate = this.i18n.createTranslation(AuthServiceTranslations);
   }
 
   public async signIn(email: string, password: string): Promise<void> {

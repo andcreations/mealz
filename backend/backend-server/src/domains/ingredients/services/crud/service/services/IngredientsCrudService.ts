@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Context } from '@mealz/backend-core';
+import { Logger } from '@mealz/backend-logger';
 import {
   ReadIngredientsByIdRequestV1,
   ReadIngredientsByIdResponseV1,
@@ -13,6 +14,7 @@ import { IngredientsCrudRepository } from '../repositories';
 @Injectable()
 export class IngredientsCrudService {
   public constructor(
+    private readonly logger: Logger,
     private readonly ingredientsCrudRepository: IngredientsCrudRepository,
   ) {}
 
@@ -43,6 +45,10 @@ export class IngredientsCrudService {
     request: UpsertIngredientsRequestV1,
     context: Context,
   ): Promise<void> {
+    this.logger.debug('Upserting ingredients', {
+      ...context,
+      count: request.ingredients.length,
+    });
     for (const ingredient of request.ingredients) {
       await this.ingredientsCrudRepository.upsertIngredient(
         ingredient,

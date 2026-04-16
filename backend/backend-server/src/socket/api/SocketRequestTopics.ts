@@ -3,6 +3,10 @@ import { SOCKET_DOMAIN, SOCKET_SERVICE } from './domain-and-service';
 
 export class SocketRequestTopics {
   public static readonly SendMessageToUserV1 = topic('sendMessageToUser', 'v1');
+  public static readonly SendMessageToAllUsersV1 = topic(
+    'sendMessageToAllUsers',
+    'v1',
+  );
 }
 
 function topic(method: string, version: string): string {
