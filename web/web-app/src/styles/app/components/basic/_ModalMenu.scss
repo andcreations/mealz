@@ -5,8 +5,12 @@
 
 .mealz-modal-menu-item {
   padding: 0.5rem 1rem;
+}
 
-  &:not(:last-child) {
-    border-bottom: 1px solid rgba($mealz-theme-color-border, 0.5);
-  }
+.mealz-modal-menu-item-item-separator {
+  border-bottom: 1px solid rgba($mealz-theme-color-border, 0.25);
+}
+
+.mealz-modal-menu-item-group-separator {
+  border-bottom: 1px solid rgba($mealz-theme-color-border, 0.75);
 }

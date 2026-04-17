@@ -436,20 +436,39 @@ export function MealPlanner() {
     },
 
     getMenuItems: (): ModalMenuItem[] => {
-      return mealName.getMealNames().map(name => {
+      const menuItems: ModalMenuItem[] = [];
+      const addMenuItem = (name: string, group: string) => {
         const dailyPlanEntry = mealsDailyPlanService.getEntryByMealName(
           dailyMealPlan.current,
           name,
         );
-        return {
+        menuItems.push({
           key: name,
+          group,
           content: <MealNameMenuItem
             name={name}
             goals={dailyPlanEntry?.goals}
           />,
           onClick: (item: ModalMenuItem) => mealName.onPick(item.key),
-        }
-      });
+        });
+      };
+
+      // daily plan meals
+      const planNames = mealsDailyPlanService.getMealNames(
+        dailyMealPlan.current,
+      );
+      planNames.forEach(name => addMenuItem(name, 'daily-plan'));
+
+      const addMealsFromTranslation = (translation: string, group: string) => {
+        const mealNames = translate(translation).split(',');
+        mealNames.forEach(name => addMenuItem(name, group));
+      };
+
+      addMealsFromTranslation('ad-hoc-meal-names', 'ad-hoc');
+      addMealsFromTranslation('after-training-meal-names', 'after-training');
+      addMealsFromTranslation('draft-meal-names', 'draft');
+
+      return menuItems;
     },
 
     onPick: (mealName: string) => {
