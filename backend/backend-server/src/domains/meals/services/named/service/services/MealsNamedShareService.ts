@@ -10,8 +10,8 @@ import {
   ActionsManagerTransporter,
 } from '@mealz/backend-actions-manager-service-api';
 import {
-  buildNotificationChunks,
   ChunkedUserNotificationChunk,
+  htmlToNotificationChunks,
   NotificationAction,
   UsersNotificationsTransporter,
 } from '@mealz/backend-users-notifications-service-api';
@@ -33,7 +33,7 @@ import {
   MEALS_NAMED_SHARED_TELEGRAM_MESSAGE_TYPE_ID,
 } from '../consts';
 import {
-    MealsNamedShareServiceTranslations,
+  MealsNamedShareServiceTranslations,
 } from './MealsNamedShareService.translations';
 import { MealsNamedCrudService } from './MealsNamedCrudService';
 
@@ -70,12 +70,13 @@ export class MealsNamedShareService {
     ]);
 
     // chunks
-    const { chunks, normal } = buildNotificationChunks();
-    normal(this.translate(
-      'user-shared-named-meal',
-      fromUser.user.firstName,
-      namedMeal.mealName,
-    ));
+    const { chunks } = htmlToNotificationChunks(
+      this.translate(
+        'user-shared-named-meal',
+        fromUser.user.firstName,
+        namedMeal.mealName,
+      ),
+    );
 
     return chunks;
   }
@@ -144,8 +145,12 @@ export class MealsNamedShareService {
     mealName: string,
     context: Context,
   ): ChunkedUserNotificationChunk[] {
-    const { chunks, normal } = buildNotificationChunks();
-    normal(this.translate('user-created-named-meal', mealName));
+    const { chunks } = htmlToNotificationChunks(
+      this.translate(
+        'user-created-named-meal',
+        mealName,
+      ),
+    );
     return chunks;
   }
 

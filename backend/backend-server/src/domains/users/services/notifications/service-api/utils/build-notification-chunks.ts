@@ -3,7 +3,7 @@ import {
   ChunkedUserNotificationType,
 } from '../types';
 
-export interface buildNotificationChunksOutput {
+export interface BuildNotificationChunksOutput {
   chunks: ChunkedUserNotificationChunk[];
   bold: (text: string) => void;
   normal: (text: string) => void;
@@ -11,7 +11,7 @@ export interface buildNotificationChunksOutput {
   newLine: () => void;
 }
 
-export function buildNotificationChunks(): buildNotificationChunksOutput {
+export function buildNotificationChunks(): BuildNotificationChunksOutput {
   const chunks: ChunkedUserNotificationChunk[] = [];
   const bold = (text: string) => {
     chunks.push({
