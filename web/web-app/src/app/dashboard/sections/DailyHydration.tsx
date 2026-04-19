@@ -39,8 +39,12 @@ interface DailyHydrationState {
   glassesGoal?: number;
   glasses?: number;
   lastLoggedAt?: number;
+  lastLoggedAtStr?: string;
   buttonDisabled: boolean;
 }
+
+const UPDATE_LAST_LOGGED_AT_INTERVAL = 60_000;
+const LOG_FULL_GLASS_TIMEOUT = 1024;
 
 export function DailyHydration(props: DailyHydrationProps) {
   const hydrationLogService = useService(HydrationLogService);
@@ -53,6 +57,16 @@ export function DailyHydration(props: DailyHydrationProps) {
     buttonDisabled: false,
   });
   const patchState = usePatchState(setState);
+
+  const lastLoggedAtToStr = (lastLoggedAt?: number): string | undefined=> {
+    return lastLoggedAt ? format(lastLoggedAt) : undefined;
+  }
+  const lastLoggedAtState = (lastLoggedAt?: number) => {
+    return {
+      lastLoggedAt,
+      lastLoggedAtStr: lastLoggedAtToStr(lastLoggedAt),
+    };
+  }
 
   // initial read
   useEffect(
@@ -75,7 +89,7 @@ export function DailyHydration(props: DailyHydrationProps) {
           loadStatus: LoadStatus.Loaded,
           glassesGoal: dailyPlan?.goals.glasses,
           glasses: hydrationLogService.sumGlassesFromLogs(logs),
-          lastLoggedAt: logs[logs.length - 1]?.loggedAt,
+          ...lastLoggedAtState(logs[logs.length - 1]?.loggedAt),
         });
       })
       .catch(error => {
@@ -90,6 +104,19 @@ export function DailyHydration(props: DailyHydrationProps) {
     [],
   );
 
+  useEffect(
+    () => {
+      const interval = setInterval(() => {
+        patchState({
+          lastLoggedAtStr: lastLoggedAtToStr(Date.now()),
+        });
+      }, UPDATE_LAST_LOGGED_AT_INTERVAL);
+      return () => {
+        clearInterval(interval);
+      };
+    },
+  );
+
   useSocketMessage<HydrationLoggedSocketMessageV1Payload>(
     HYDRATION_LOGGED_SOCKET_MESSAGE_TOPIC_V1,
     (payload) => {
@@ -97,7 +124,7 @@ export function DailyHydration(props: DailyHydrationProps) {
       setState(prevState => ({
         ...prevState,
         glasses: prevState.glasses + glasses,
-        lastLoggedAt: payload.loggedAt,
+        ...lastLoggedAtState(payload.loggedAt),
       }));
     },
   );
@@ -111,14 +138,12 @@ export function DailyHydration(props: DailyHydrationProps) {
         notificationsService.info(translate('log-full-glass-logged'));
         patchState({
           glasses: state.glasses + 1,
-          lastLoggedAt: Date.now(),
+          ...lastLoggedAtState(Date.now()),
         });
 
         setTimeout(() => {
-          patchState({
-            buttonDisabled: false,
-          });
-        }, 1024);
+          patchState({ buttonDisabled: false });
+        }, LOG_FULL_GLASS_TIMEOUT);
       })
       .catch(error => {
         logErrorEvent(eventType('failed-to-log-full-glass'), {}, error);
@@ -182,9 +207,9 @@ export function DailyHydration(props: DailyHydrationProps) {
           >
             { translate('log-full-glass') }
           </Button>
-          { state.lastLoggedAt &&
+          { state.lastLoggedAtStr &&
             <div className='mealz-daily-hydration-last-log'>
-              { translate('last-log', format(state.lastLoggedAt)) }
+              { translate('last-log', state.lastLoggedAtStr) }
             </div>
           }
         </div>
