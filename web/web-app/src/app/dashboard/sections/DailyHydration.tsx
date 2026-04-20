@@ -106,11 +106,17 @@ export function DailyHydration(props: DailyHydrationProps) {
 
   useEffect(
     () => {
-      const interval = setInterval(() => {
-        patchState({
-          lastLoggedAtStr: lastLoggedAtToStr(Date.now()),
-        });
-      }, UPDATE_LAST_LOGGED_AT_INTERVAL);
+      const interval = setInterval(
+        () => {
+          if (state.lastLoggedAt) {
+            patchState({
+              lastLoggedAtStr: lastLoggedAtToStr(state.lastLoggedAt),
+            });
+          }
+        },
+        UPDATE_LAST_LOGGED_AT_INTERVAL,
+      );
+
       return () => {
         clearInterval(interval);
       };
