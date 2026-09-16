@@ -35,6 +35,24 @@
       polyunsaturated: 1.6
 
 - name:
+    en: French mustard
+    pl: Musztarda francuska
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 66
+    carbs: 5.83
+    sugars: 0.90
+    fibre: 4.0
+    protein: 4.37
+    fat:
+      total: 4.40
+      saturated: 0.21
+      monounsaturated: 2.21
+      polyunsaturated: 1.92
+
+- name:
     en: Ketchup
     pl: ketchup
   unit: g

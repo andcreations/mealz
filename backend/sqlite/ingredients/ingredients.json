@@ -351,6 +351,56 @@
   },
   {
     "name": {
+      "en": "Apricot",
+      "pl": "Morela"
+    },
+    "type": "generic",
+    "unitPer100": "g",
+    "factsPer100": [
+      {
+        "id": "calories",
+        "unit": "kcal",
+        "amount": 48
+      },
+      {
+        "id": "carbs",
+        "unit": "g",
+        "amount": 11.12
+      },
+      {
+        "id": "sugars",
+        "unit": "g",
+        "amount": 9.24
+      },
+      {
+        "id": "protein",
+        "unit": "g",
+        "amount": 1.4
+      },
+      {
+        "id": "total_fat",
+        "unit": "g",
+        "amount": 0.39
+      },
+      {
+        "id": "saturated_fat",
+        "unit": "g",
+        "amount": 0.03
+      },
+      {
+        "id": "monounsaturated_fat",
+        "unit": "g",
+        "amount": 0.17
+      },
+      {
+        "id": "polyunsaturated_fat",
+        "unit": "g",
+        "amount": 0.08
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Artichoke",
       "pl": "Karczoch"
     },
@@ -4669,6 +4719,56 @@
   },
   {
     "name": {
+      "en": "Fava",
+      "pl": "Bób"
+    },
+    "type": "generic",
+    "unitPer100": "g",
+    "factsPer100": [
+      {
+        "id": "calories",
+        "unit": "kcal",
+        "amount": 88
+      },
+      {
+        "id": "carbs",
+        "unit": "g",
+        "amount": 17.63
+      },
+      {
+        "id": "sugars",
+        "unit": "g",
+        "amount": 9.21
+      },
+      {
+        "id": "protein",
+        "unit": "g",
+        "amount": 7.92
+      },
+      {
+        "id": "total_fat",
+        "unit": "g",
+        "amount": 0.73
+      },
+      {
+        "id": "saturated_fat",
+        "unit": "g",
+        "amount": 0.12
+      },
+      {
+        "id": "monounsaturated_fat",
+        "unit": "g",
+        "amount": 0.06
+      },
+      {
+        "id": "polyunsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      }
+    ]
+  },
+  {
+    "name": {
       "en": "Feta",
       "pl": "Feta"
     },
@@ -4914,6 +5014,56 @@
         "id": "polyunsaturated_fat",
         "unit": "g",
         "amount": 3
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "French mustard",
+      "pl": "Musztarda francuska"
+    },
+    "type": "generic",
+    "unitPer100": "g",
+    "factsPer100": [
+      {
+        "id": "calories",
+        "unit": "kcal",
+        "amount": 66
+      },
+      {
+        "id": "carbs",
+        "unit": "g",
+        "amount": 5.83
+      },
+      {
+        "id": "sugars",
+        "unit": "g",
+        "amount": 0.9
+      },
+      {
+        "id": "protein",
+        "unit": "g",
+        "amount": 4.37
+      },
+      {
+        "id": "total_fat",
+        "unit": "g",
+        "amount": 4.4
+      },
+      {
+        "id": "saturated_fat",
+        "unit": "g",
+        "amount": 0.21
+      },
+      {
+        "id": "monounsaturated_fat",
+        "unit": "g",
+        "amount": 2.21
+      },
+      {
+        "id": "polyunsaturated_fat",
+        "unit": "g",
+        "amount": 1.92
       }
     ]
   },

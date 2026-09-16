@@ -591,3 +591,20 @@
       saturated: 0.1
       monounsaturated: 0.0
       polyunsaturated: 0.1
+
+- name:
+    en: Fava
+    pl: Bób
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 88
+    carbs: 17.63
+    sugars: 9.21
+    fibre: 7.5
+    protein: 7.92
+    fat:
+      total: 0.73
+      saturated: 0.12
+      monounsaturated: 0.06

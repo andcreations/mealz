@@ -411,3 +411,21 @@
       monounsaturated: 0.1
       polyunsaturated: 0.1
   link: https://www.nutritionix.com/food/cherry/100-g
+
+- name:
+    en: Apricot
+    pl: Morela
+  unit: g
+  type: generic
+  weight: 100
+  facts:
+    calories: 48
+    carbs: 11.12
+    sugars: 9.24
+    fibre: 2.0
+    protein: 1.4
+    fat:
+      total: 0.39
+      saturated: 0.03
+      monounsaturated: 0.17
+      polyunsaturated: 0.08
