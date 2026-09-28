@@ -1,53 +1,54 @@
-- name:
-    en: Oat flakes
-    pl: Płatki owsiane
-  unit: g
-  type: generic
-  weight: 100
-  facts:
-    calories: 389
-    carbs: 66.3
-    sugars: 1.0
-    fibre: 11.6
-    protein: 16.9
-    fat:
-      total: 6.9
-      saturated: 1.21
-      monounsaturated: 2.18
-      polyunsaturated: 2.54
+ingredients:
+  - name:
+      en: Oat flakes
+      pl: Płatki owsiane
+    unit: g
+    type: generic
+    weight: 100
+    facts:
+      calories: 389
+      carbs: 66.3
+      sugars: 1.0
+      fibre: 11.6
+      protein: 16.9
+      fat:
+        total: 6.9
+        saturated: 1.21
+        monounsaturated: 2.18
+        polyunsaturated: 2.54
 
-- name:
-    en: Corn flakes
-    pl: Płatki kukurydziane 
-  unit: g
-  type: generic
-  weight: 100
-  facts:
-    calories: 357
-    carbs: 84.4
-    sugars: 8.2
-    fibre: 3.8
-    protein: 7.5
-    fat:
-      total: 4.2
-      saturated: 0.6
-      monounsaturated: 1.2
-      polyunsaturated: 2.0
+  - name:
+      en: Corn flakes
+      pl: Płatki kukurydziane 
+    unit: g
+    type: generic
+    weight: 100
+    facts:
+      calories: 357
+      carbs: 84.4
+      sugars: 8.2
+      fibre: 3.8
+      protein: 7.5
+      fat:
+        total: 4.2
+        saturated: 0.6
+        monounsaturated: 1.2
+        polyunsaturated: 2.0
 
-- name:
-    en: Rice flakes
-    pl: Płatki ryżowe
-  unit: g
-  type: generic
-  weight: 100
-  facts:
-    calories: 380
-    carbs: 85
-    sugars: 6
-    fibre: 2
-    protein: 6
-    fat:
-      total: 2
-      saturated: 0.5
-      monounsaturated: 0.5
-      polyunsaturated: 1.0
+  - name:
+      en: Rice flakes
+      pl: Płatki ryżowe
+    unit: g
+    type: generic
+    weight: 100
+    facts:
+      calories: 380
+      carbs: 85
+      sugars: 6
+      fibre: 2
+      protein: 6
+      fat:
+        total: 2
+        saturated: 0.5
+        monounsaturated: 0.5
+        polyunsaturated: 1.0
