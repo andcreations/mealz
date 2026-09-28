@@ -10,6 +10,7 @@ import {
   ValidateNested,
   IsObject,
   IsBoolean,
+  IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -105,4 +106,18 @@ export class YamlIngredient {
   @IsOptional()
   @IsBoolean()
   hidden?: boolean;
+}
+
+// Represents a list of ingredients as it is stored in a YAML file.
+export class YamlIngredients {
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tags?: string[];
+  
+  @IsDefined()
+  @IsArray()
+  @ValidateNested()
+  @Type(() => YamlIngredient)
+  ingredients: YamlIngredient[];
 }

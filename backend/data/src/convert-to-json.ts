@@ -9,14 +9,11 @@ import { Log } from './log';
 import { 
   YamlFacts,
   YamlIngredient,
+  YamlIngredients,
   YamlName,
   YamlProduct,
 } from './ingredients';
-import {
-  FactIdV1,
-  FactUnitV1,
-  IngredientDetailsV1,
-} from './ingredients/v1';
+import { IngredientDetailsV1 } from './ingredients/v1';
 import {
   GWFactId,
   GWFactPer100,
@@ -31,25 +28,19 @@ type GWIngredientWithoutId = Omit<GWIngredient, 'id'>;
 function validateIngredients(
   rawIngredients: any,
   filePath: string,
-): YamlIngredient[] {
-  if (!Array.isArray(rawIngredients)) {
-    throw new Error('Ingredients must be an array');
+): YamlIngredients {
+  const instance = plainToInstance(YamlIngredients, rawIngredients);
+  const errors = validateSync(instance, {
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  });
+  if (errors.length > 0) {
+    throw new Error(
+      `Invalid file ${filePath}: ${JSON.stringify(errors)}`,
+    );
   }
 
-  for (const rawIngredient of rawIngredients) {
-    const instance = plainToInstance(YamlIngredient, rawIngredient);
-    const errors = validateSync(instance, {
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    });
-    if (errors.length > 0) {
-      throw new Error(
-        `Invalid ingredient in ${filePath}: ${JSON.stringify(errors)}`,
-      );
-    }
-  }
-
-  return rawIngredients as YamlIngredient[];
+  return instance;
 }
 
 function populateMissingFields(
@@ -99,7 +90,9 @@ function readIngredients(dir: string): YamlIngredient[] {
     Log.info(`Reading ${filePath}`);
     const content = fs.readFileSync(filePath, 'utf8');
     const raw = YAML.parse(content);
-    const validatedIngredients = validateIngredients(raw, filePath);
+    const { 
+      ingredients: validatedIngredients,
+    } = validateIngredients(raw, filePath);
     const ingredients = populateMissingFields(validatedIngredients);
     allIngredients = mergeIngredients([allIngredients, ingredients]);
   });
