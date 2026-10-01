@@ -379,6 +379,24 @@ ingredients:
         polyunsaturated: 0.8
 
   - name:
+      en: High-protein yellow cheese
+      pl: Ser żółty wysokobiałkowy
+    unit: g
+    type: generic
+    product:
+      brand: Lidl
+    weight: 100
+    facts:
+      calories: 198
+      carbs: 0.0
+      sugars: 0.0
+      fibre: 0.0
+      protein: 31
+      fat:
+        total: 8.2
+        saturated: 5.9
+
+  - name:
       en: Edam
       pl: Edam
     unit: g
@@ -485,3 +503,21 @@ ingredients:
         saturated: 18.0
         monounsaturated: 8.8
         polyunsaturated: 0.8
+
+  - name:
+      en: Haloumi
+      pl: Haloumi
+    unit: g
+    type: generic
+    product:
+      brand: Lidl
+    weight: 100
+    facts:
+      calories: 317
+      carbs: 3.0
+      sugars: 2.0
+      fibre: 0
+      protein: 20
+      fat:
+        total: 25
+        saturated: 17.5

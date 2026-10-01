@@ -51,4 +51,10 @@ export class IngredientDetailsV1 {
   @IsOptional()
   @IsBoolean()
   public isHidden?: boolean;
+
+  // Tags for the ingredient
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  public tags?: string[];
 }

@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { readInput, readPassword } from './common';
 import { Colors, Log } from './log';
-import { GWFactPer100, GWIngredient } from './gateway-ingredients';
+import { GWFactPer100, GWIngredient, GWProduct } from './gateway-ingredients';
 import { getIngredientName, loadIngredients } from './ingredients-utils';
 
 let debug = false;
@@ -54,6 +54,25 @@ async function downloadIngredients(
   return ingredients;
 }
 
+function areTagsEqual(
+  a: string[] | undefined,
+  b: string[] | undefined,
+): boolean {
+  if (a === undefined && b === undefined) {
+    return true;
+  }
+  if (a === undefined || b === undefined) {
+    return false;
+  }
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  const aSorted = [...a].sort();
+  const bSorted = [...b].sort();
+  return aSorted.every((tag, index) => tag === bSorted[index]);
+}
+
 function areFactsEqual(a: GWFactPer100[], b: GWFactPer100[]): boolean {
   if (a.length !== b.length) {
     return false;
@@ -74,6 +93,19 @@ function areFactsEqual(a: GWFactPer100[], b: GWFactPer100[]): boolean {
   return true;
 }
 
+function areProductEqual(
+  a: GWProduct | undefined,
+  b: GWProduct | undefined,
+): boolean {
+  if (a === undefined && b === undefined) {
+    return true;
+  }
+  if (a === undefined || b === undefined) {
+    return false;
+  }
+  return a.brand === b.brand;
+}
+
 function areIngredientsEqual(a: GWIngredient, b: GWIngredient): boolean {
   const aName = getIngredientName(a);
   const bName = getIngredientName(b);
@@ -89,10 +121,13 @@ function areIngredientsEqual(a: GWIngredient, b: GWIngredient): boolean {
   if (!areFactsEqual(a.factsPer100, b.factsPer100)) {
     return false;
   }
-  if (a.product !== b.product) {
+  if (!areProductEqual(a.product, b.product)) {
     return false;
   }
   if (a.isHidden !== b.isHidden) {
+    return false;
+  }
+  if (!areTagsEqual(a.tags, b.tags)) {
     return false;
   }
   return true;

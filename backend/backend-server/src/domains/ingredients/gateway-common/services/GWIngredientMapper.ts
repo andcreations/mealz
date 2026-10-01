@@ -112,6 +112,10 @@ export class GWIngredientMapper {
         this.fromProduct(ingredient.product),
       ),
       isHidden: ingredient.isHidden,
+      ...ifDefined<GWIngredient>(
+        'tags',
+        ingredient.tags,
+      ),
     };
   }
 
@@ -210,6 +214,10 @@ export class GWIngredientMapper {
         this.toProduct(ingredient.product),
       ),
       isHidden: ingredient.isHidden,
+      ...ifDefined<UpsertObject<Ingredient, 'id'>, string[]>(
+        'tags',
+        ingredient.tags,
+      ),
     };
   }
 }

@@ -44,9 +44,10 @@ function validateIngredients(
 }
 
 function populateMissingFields(
-  ingredients: YamlIngredient[]
-): YamlIngredient[] {
-  return ingredients.map(ingredient => {
+  ingredientsFile: YamlIngredients
+): YamlIngredients {
+  const commonTags = ingredientsFile.tags;
+  const ingredients = ingredientsFile.ingredients.map(ingredient => {
     return {
       ...ingredient,
       facts: {
@@ -57,30 +58,39 @@ function populateMissingFields(
           polyunsaturated: ingredient.facts.fat.polyunsaturated ?? 0,
         },
       },
+      ...(commonTags ? { tags: commonTags } : {}),
     };
   });
+  return {
+    ...ingredientsFile,
+    ingredients,
+  };
 }
 
-function mergeIngredients(list: YamlIngredient[][]): YamlIngredient[] {
+function mergeIngredients(files: YamlIngredients[]): YamlIngredients {
   const equals = (a: YamlIngredient, b: YamlIngredient) => {
     return a.name.en === b.name.en || a.name.pl === b.name.pl;
   };
 
-  const merged: YamlIngredient[] = [];
-  for (const ingredients of list) {
-    for (const ingredient of ingredients) {
-      const existing = merged.find(itr => equals(itr, ingredient));
+  const mergedIngredients: YamlIngredient[] = [];
+  for (const file of files) {
+    for (const ingredient of file.ingredients) {
+      const existing = mergedIngredients.find(itr => equals(itr, ingredient));
       if (existing) {
         throw new Error(`Duplicate ingredient ${ingredient.name.en}`);
       }
-      merged.push(ingredient);
+      mergedIngredients.push(ingredient);
     }
   }
-  return merged;
+  return {
+    ingredients: mergedIngredients,
+  };
 }
 
-function readIngredients(dir: string): YamlIngredient[] {
-  let allIngredients: YamlIngredient[] = [];
+function readIngredients(dir: string): YamlIngredients {
+  let allIngredients: YamlIngredients = {
+    ingredients: [],
+  };
 
   const ymlFiles = fs.readdirSync(dir).filter((file) => {
     return file.endsWith('.yml') && !file.startsWith('.');
@@ -90,9 +100,7 @@ function readIngredients(dir: string): YamlIngredient[] {
     Log.info(`Reading ${filePath}`);
     const content = fs.readFileSync(filePath, 'utf8');
     const raw = YAML.parse(content);
-    const { 
-      ingredients: validatedIngredients,
-    } = validateIngredients(raw, filePath);
+    const validatedIngredients = validateIngredients(raw, filePath);
     const ingredients = populateMissingFields(validatedIngredients);
     allIngredients = mergeIngredients([allIngredients, ingredients]);
   });
@@ -100,7 +108,9 @@ function readIngredients(dir: string): YamlIngredient[] {
   return allIngredients;
 }
 
-function convertToJson(ingredients: YamlIngredient[]): GWIngredientWithoutId[] {
+function convertToJson(
+  ingredientsFile: YamlIngredients,
+): GWIngredientWithoutId[] {
   const convertName = (name: YamlName): IngredientDetailsV1['name'] => {
     return {
       en: name.en,
@@ -187,7 +197,7 @@ function convertToJson(ingredients: YamlIngredient[]): GWIngredientWithoutId[] {
   }
 
   const json: GWIngredientWithoutId[] = [];
-  for (const ingredient of ingredients) {
+  for (const ingredient of ingredientsFile.ingredients) {
     const factor100 = 100 / ingredient.weight;
 
     json.push({
@@ -200,6 +210,7 @@ function convertToJson(ingredients: YamlIngredient[]): GWIngredientWithoutId[] {
         : {}
       ),
       isHidden: ingredient.hidden,
+      ...(ingredient.tags ? { tags: ingredient.tags } : {}),
     });
   }
 

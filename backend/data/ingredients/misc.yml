@@ -16,3 +16,23 @@ ingredients:
         saturated: 0.0
         monounsaturated: 0.0
         polyunsaturated: 0.0
+
+  - name:
+      en: Sunflower seed burger
+      pl: Burger z nasion słonecznika
+    unit: g
+    type: generic
+    product:
+      brand: Lidl    
+    weight: 100
+    facts:
+      calories: 347
+      carbs: 8.8
+      sugars: 3.4
+      #fibre: 0.0
+      protein: 26.1
+      fat:
+        total: 22.4
+        saturated: 2.1
+        #monounsaturated: 0.0
+        #polyunsaturated: 0.0        

@@ -106,6 +106,10 @@ export class IngredientDetailsV1Mapper {
         : {}
       ),
       isHidden: details.isHidden,
+      ...(details.tags
+        ? { tags: details.tags }
+        : {}
+      ),
     };
   }
 
@@ -190,6 +194,10 @@ export class IngredientDetailsV1Mapper {
         : {}
       ),
       isHidden: ingredient.isHidden,
+      ...(ingredient.tags
+        ? { tags: ingredient.tags }
+        : {}
+      ),
     };
     return encode(details);
   }

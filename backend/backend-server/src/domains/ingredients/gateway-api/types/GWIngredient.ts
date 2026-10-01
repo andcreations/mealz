@@ -32,4 +32,7 @@ export interface GWIngredient {
 
   // Indicates if an ingredient is not visible to the user
   isHidden?: boolean;
+
+  // Tags for the ingredient
+  tags?: string[];
 }

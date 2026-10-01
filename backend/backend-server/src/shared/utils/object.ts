@@ -1,13 +1,13 @@
 export function ifDefined<T = any, V = any>(
   key: keyof T,
-  value: V,
+  value: V | undefined,
 ): { [key: string]: V } | {} {
   return value !== undefined ? { [key]: value } : {};
 }
 
 export function mapIfDefined<T = any, V = any, R = any>(
   key: keyof T,
-  value: V,
+  value: V | undefined,
   mapper: (value: V) => R,
 ): { [key: string]: R } | {} {
   return value != null ? { [key]: mapper(value) } : {};

@@ -7,7 +7,8 @@
     "build": "tsc --build",
     "clean": "rm -rf node_modules dist",
     "migrate-databases": "node dist/migrate-databases.js",
-    "insert-ingredients": "node dist/insert-ingredients.js"
+    "insert-ingredients": "node dist/insert-ingredients.js",
+    "upsert-ingredients": "node dist/upsert-ingredients.js"
   },
   "dependencies": {
     "@msgpack/msgpack": "^3.1.2",

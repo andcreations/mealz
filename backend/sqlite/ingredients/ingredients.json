@@ -347,6 +347,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -397,6 +400,9 @@
         "unit": "g",
         "amount": 0.08
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -447,6 +453,9 @@
         "unit": "g",
         "amount": 0.17
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -497,6 +506,9 @@
         "unit": "g",
         "amount": 0.13
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -547,6 +559,9 @@
         "unit": "g",
         "amount": 9.95
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -697,6 +712,9 @@
         "unit": "g",
         "amount": 0.08
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -1050,6 +1068,9 @@
         "unit": "g",
         "amount": 0.1
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -1150,6 +1171,9 @@
         "unit": "g",
         "amount": 0.2
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -1200,6 +1224,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -1400,6 +1427,9 @@
         "unit": "g",
         "amount": 0.2
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -1600,6 +1630,9 @@
         "unit": "g",
         "amount": 0.24
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -2050,6 +2083,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -2600,6 +2636,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -2750,6 +2789,9 @@
         "unit": "g",
         "amount": 0.21
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -2800,6 +2842,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -3700,6 +3745,9 @@
         "unit": "g",
         "amount": 0.58
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -4259,6 +4307,9 @@
         "unit": "g",
         "amount": 0.05
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -4665,6 +4716,9 @@
         "unit": "g",
         "amount": 0.09
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -4765,6 +4819,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -5115,6 +5172,9 @@
         "unit": "g",
         "amount": 0.3
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -5365,6 +5425,9 @@
         "unit": "g",
         "amount": 0.04
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -5415,6 +5478,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -5515,6 +5581,9 @@
         "unit": "g",
         "amount": 0.16
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -5565,6 +5634,9 @@
         "unit": "g",
         "amount": 0.13
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -5666,6 +5738,59 @@
         "amount": 0.6
       }
     ]
+  },
+  {
+    "name": {
+      "en": "Haloumi",
+      "pl": "Haloumi"
+    },
+    "type": "generic",
+    "unitPer100": "g",
+    "factsPer100": [
+      {
+        "id": "calories",
+        "unit": "kcal",
+        "amount": 317
+      },
+      {
+        "id": "carbs",
+        "unit": "g",
+        "amount": 3
+      },
+      {
+        "id": "sugars",
+        "unit": "g",
+        "amount": 2
+      },
+      {
+        "id": "protein",
+        "unit": "g",
+        "amount": 20
+      },
+      {
+        "id": "total_fat",
+        "unit": "g",
+        "amount": 25
+      },
+      {
+        "id": "saturated_fat",
+        "unit": "g",
+        "amount": 17.5
+      },
+      {
+        "id": "monounsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "polyunsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Lidl"
+    }
   },
   {
     "name": {
@@ -5916,6 +6041,59 @@
         "amount": 2.4
       }
     ]
+  },
+  {
+    "name": {
+      "en": "High-protein yellow cheese",
+      "pl": "Ser żółty wysokobiałkowy"
+    },
+    "type": "generic",
+    "unitPer100": "g",
+    "factsPer100": [
+      {
+        "id": "calories",
+        "unit": "kcal",
+        "amount": 198
+      },
+      {
+        "id": "carbs",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "sugars",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "protein",
+        "unit": "g",
+        "amount": 31
+      },
+      {
+        "id": "total_fat",
+        "unit": "g",
+        "amount": 8.2
+      },
+      {
+        "id": "saturated_fat",
+        "unit": "g",
+        "amount": 5.9
+      },
+      {
+        "id": "monounsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "polyunsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Lidl"
+    }
   },
   {
     "name": {
@@ -6265,6 +6443,9 @@
         "unit": "g",
         "amount": 0.3
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -6365,6 +6546,9 @@
         "unit": "g",
         "amount": 0.2
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -6565,6 +6749,9 @@
         "unit": "g",
         "amount": 0.08
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -6615,6 +6802,9 @@
         "unit": "g",
         "amount": 0.12
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -6715,6 +6905,9 @@
         "unit": "g",
         "amount": 0.21
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -6765,6 +6958,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -7015,6 +7211,9 @@
         "unit": "g",
         "amount": 0.06
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -7215,6 +7414,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -7716,6 +7918,9 @@
         "unit": "g",
         "amount": 0.1
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -7916,6 +8121,9 @@
         "unit": "g",
         "amount": 0.13
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -8116,6 +8324,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -8216,6 +8427,9 @@
         "unit": "g",
         "amount": 0.11
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -8266,6 +8480,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -8366,6 +8583,9 @@
         "unit": "g",
         "amount": 0.07
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -8466,6 +8686,9 @@
         "unit": "g",
         "amount": 0.1
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -8566,6 +8789,9 @@
         "unit": "g",
         "amount": 0.11
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -8819,6 +9045,9 @@
         "unit": "g",
         "amount": 0.11
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -9169,6 +9398,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -9369,6 +9601,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -9469,6 +9704,9 @@
         "unit": "g",
         "amount": 0.07
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -9719,6 +9957,9 @@
         "unit": "g",
         "amount": 0.06
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -10128,6 +10369,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -10328,6 +10572,9 @@
         "unit": "g",
         "amount": 0.1
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -10428,6 +10675,9 @@
         "unit": "g",
         "amount": 0.4
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -10478,6 +10728,9 @@
         "unit": "g",
         "amount": 0.09
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -11628,6 +11881,9 @@
         "unit": "g",
         "amount": 0.11
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -11728,6 +11984,9 @@
         "unit": "g",
         "amount": 0.11
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -11779,6 +12038,59 @@
         "amount": 68.8
       }
     ]
+  },
+  {
+    "name": {
+      "en": "Sunflower seed burger",
+      "pl": "Burger z nasion słonecznika"
+    },
+    "type": "generic",
+    "unitPer100": "g",
+    "factsPer100": [
+      {
+        "id": "calories",
+        "unit": "kcal",
+        "amount": 347
+      },
+      {
+        "id": "carbs",
+        "unit": "g",
+        "amount": 8.8
+      },
+      {
+        "id": "sugars",
+        "unit": "g",
+        "amount": 3.4
+      },
+      {
+        "id": "protein",
+        "unit": "g",
+        "amount": 26.1
+      },
+      {
+        "id": "total_fat",
+        "unit": "g",
+        "amount": 22.4
+      },
+      {
+        "id": "saturated_fat",
+        "unit": "g",
+        "amount": 2.1
+      },
+      {
+        "id": "monounsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "polyunsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Lidl"
+    }
   },
   {
     "name": {
@@ -11878,6 +12190,9 @@
         "unit": "g",
         "amount": 0.1
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -11928,6 +12243,9 @@
         "unit": "g",
         "amount": 0.09
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -12128,6 +12446,9 @@
         "unit": "g",
         "amount": 0.08
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -12178,6 +12499,9 @@
         "unit": "g",
         "amount": 0.2
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -12578,6 +12902,9 @@
         "unit": "g",
         "amount": 0
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   },
   {
@@ -12781,6 +13108,9 @@
         "unit": "g",
         "amount": 0.03
       }
+    ],
+    "tags": [
+      "fruit"
     ]
   },
   {
@@ -13281,6 +13611,9 @@
         "unit": "g",
         "amount": 0.15
       }
+    ],
+    "tags": [
+      "vegetable"
     ]
   }
 ]

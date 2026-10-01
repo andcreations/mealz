@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsEnum,
   IsOptional,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 import { IsId, IsNameRecord } from '@mealz/backend-gateway-common';
@@ -64,4 +65,12 @@ export class GWIngredientImpl implements GWIngredient {
   @IsOptional()
   @IsBoolean()
   public isHidden?: boolean;
+
+  @ApiProperty({
+    description: 'Tags for the ingredient'
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  public tags?: string[];
 }
