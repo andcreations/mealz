@@ -320,8 +320,8 @@ export function MealSummary(props: MealSummaryProps) {
         'g',
         'protein',
         {
-           details: percentageToDetails(percentages.protein),
-           nameClassName: 'mealz-color-protein',
+          details: percentageToDetails(percentages.protein),
+          nameClassName: 'mealz-color-protein',
         }
       ),
       ...factsIf(
@@ -391,6 +391,14 @@ export function MealSummary(props: MealSummaryProps) {
           ),
         ]
       ),
+
+      ...createSeparator(),
+      ...createFact(
+        summary.total.grams,
+        'g',
+        'grams',
+        {},
+      ),      
     ];
   };
 
