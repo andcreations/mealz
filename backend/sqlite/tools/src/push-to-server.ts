@@ -318,7 +318,7 @@ async function run(): Promise<void> {
 
 if (require.main === module) {
   run().catch(error => {
-    Log.error('Failed to upsert ingredients from JSON', error);
+    Log.error('Failed to push ingredients to server', error);
     process.exit(1);
   });
 }
