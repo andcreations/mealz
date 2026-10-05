@@ -76,9 +76,6 @@ interface IngredientPickerState {
   dropdownVisible: boolean;
   dropdownIndex: number;
   dropdownIngredients: GWIngredient[];
-
-  // Indicates if to add more ingredients
-  addMoreCheck: boolean;
 }
 
 export function IngredientPicker(props: IngredientPickerProps) {
@@ -118,7 +115,6 @@ export function IngredientPicker(props: IngredientPickerProps) {
     dropdownVisible: false,
     dropdownIndex: 0,
     dropdownIngredients: [],
-    addMoreCheck: false,
   });
   const patchState = usePatchState(setState);
   const translate = useTranslations(IngredientPickerTranslations);
@@ -554,6 +550,13 @@ export function IngredientPicker(props: IngredientPickerProps) {
             onChange={name.onChange}
             onKeyDown={name.onKeyDown}
           />
+          <div className='mealz-ingredient-picker-name-clear-icon'>
+            <MaterialIcon
+              
+              icon='close'
+              onClick={onClear}
+            />
+          </div>
         </div>
 
         <div className='mealz-ingredient-picker-ingredient-details'>
@@ -571,38 +574,24 @@ export function IngredientPicker(props: IngredientPickerProps) {
 
         <div className='mealz-ingredient-separator'/>
 
-        {/* <div className='mealz-ingredient-picker-add-more'>
-          <Switch
-            size='sm'
-            width='xs'
-            checked={state.addMoreCheck}
-            onChange={(checked) => {
-              patchState({ addMoreCheck: checked });
-            }}
-          />
-          <div className='mealz-ingredient-picker-add-more-label'>
-            { translate('add-more') }
-          </div>
-        </div> */}
-
-        <div className='mealz-ingredient-picker-icons'>
+        <div className='mealz-ingredient-picker-icons-left'>
           <MaterialIcon
             className='mealz-ingredient-picker-icon'
             icon='delete'
             onClick={props.onDeleteIngredient}
           />
-          <div className='mealz-ingredient-picker-icon-separator'>·</div>
-          <MaterialIcon
-            className='mealz-ingredient-picker-icon'
-            icon='close'
-            onClick={onClear}
-          />
-          <div className='mealz-ingredient-picker-icon-separator'>·</div>
+        </div>
+
+        <div className='mealz-ingredient-picker-icons-right'>
           <div
             className='mealz-ingredient-picker-accept'
             onClick={amount.onEnter}
           >
             { translate('accept') }
+            <div
+              className='mealz-ingredient-picker-accept-click-area'
+              onClick={amount.onEnter}
+            />
           </div>
         </div>
       </div>
