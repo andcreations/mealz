@@ -176,6 +176,12 @@ $mealz-ingredient-picker-padding-vertical: 0.375rem;
 
 .mealz-ingredient-picker-details-separator {
   padding: 0 0.125rem;
+  color: $mealz-theme-color-fg-dark;
+}
+
+.mealz-ingredient-picker-details-wide-separator {
+  padding: 0 1rem;
+  color: $mealz-theme-color-fg-dark;
 }
 
 .mealz-ingredient-picker-ingredient-details-label {

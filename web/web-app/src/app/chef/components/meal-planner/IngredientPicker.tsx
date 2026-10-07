@@ -195,11 +195,12 @@ export function IngredientPicker(props: IngredientPickerProps) {
       );
     },
     unitPer100: () : string => {
-      if (!!ingredient.adHoc()) {
-        // we don't have the real unit for ad-hoc ingredients
-        return AD_HOC_UNIT;
-      }
-      return ingredient.full()?.unitPer100 ?? '';
+      return 'kcal';
+      // if (!!ingredient.adHoc()) {
+      //   // we don't have the real unit for ad-hoc ingredients
+      //   return AD_HOC_UNIT;
+      // }
+      // return ingredient.full()?.unitPer100 ?? '';
     },
     caloriesPer100: () : number | undefined => {
       const adHocIngredient = ingredient.adHoc();
@@ -575,14 +576,17 @@ export function IngredientPicker(props: IngredientPickerProps) {
         <div className='mealz-ingredient-separator'/>
 
         <div className='mealz-ingredient-picker-icons-left'>
+        </div>
+
+        <div className='mealz-ingredient-picker-icons-right'>
           <MaterialIcon
             className='mealz-ingredient-picker-icon'
             icon='delete'
             onClick={props.onDeleteIngredient}
           />
-        </div>
-
-        <div className='mealz-ingredient-picker-icons-right'>
+          <div className='mealz-ingredient-picker-details-wide-separator'>
+            ·
+          </div>
           <div
             className='mealz-ingredient-picker-accept'
             onClick={amount.onEnter}
