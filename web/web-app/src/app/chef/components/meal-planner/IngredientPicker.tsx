@@ -195,12 +195,11 @@ export function IngredientPicker(props: IngredientPickerProps) {
       );
     },
     unitPer100: () : string => {
-      return 'kcal';
-      // if (!!ingredient.adHoc()) {
-      //   // we don't have the real unit for ad-hoc ingredients
-      //   return AD_HOC_UNIT;
-      // }
-      // return ingredient.full()?.unitPer100 ?? '';
+      if (!!ingredient.adHoc()) {
+        // we don't have the real unit for ad-hoc ingredients
+        return AD_HOC_UNIT;
+      }
+      return ingredient.full()?.unitPer100 ?? '';
     },
     caloriesPer100: () : number | undefined => {
       const adHocIngredient = ingredient.adHoc();
