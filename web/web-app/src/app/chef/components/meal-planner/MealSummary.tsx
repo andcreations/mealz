@@ -102,6 +102,10 @@ export function MealSummary(props: MealSummaryProps) {
       summary.total.protein,
       summary.total.totalFat,
     );
+    percentages.carbs = truncateNumber(percentages.carbs);
+    percentages.protein = truncateNumber(percentages.protein);
+    percentages.fat = 100 - percentages.carbs - percentages.protein;
+
     const percentageToDetails = (percentage: number) => {
       if (!userSettings.showPercentageInMealSummary()) {
         return undefined;
