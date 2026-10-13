@@ -6,7 +6,8 @@ import { NotificationsTopics } from '../bus';
 
 @Service()
 export class NotificationsService {
-  private static readonly NOTIFICATION_SHOW_TIME = 3072;
+  private static readonly SHORT_NOTIFICATION_SHOW_TIME = 1536;
+  private static readonly LONG_NOTIFICATION_SHOW_TIME = 3072;
   private static readonly NEXT_NOTIFICATION_DELAY = 320;
 
   private notifications: Notification[] = [];
@@ -66,7 +67,17 @@ export class NotificationsService {
           NotificationsService.NEXT_NOTIFICATION_DELAY,
         );
       },
-      NotificationsService.NOTIFICATION_SHOW_TIME,
+      this.resolveShowTime(notification),
     );
+  }
+
+  private resolveShowTime(notification: Notification): number {
+    if (notification.showTime) {
+      return notification.showTime;
+    }
+    if (notification.undo) {
+      return NotificationsService.LONG_NOTIFICATION_SHOW_TIME;
+    }
+    return NotificationsService.SHORT_NOTIFICATION_SHOW_TIME;
   }
 }

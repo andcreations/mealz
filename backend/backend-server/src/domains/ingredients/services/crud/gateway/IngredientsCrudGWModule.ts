@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { LocalRequestTransporter } from '@mealz/backend-transport';
+import { LoggerModule } from '@mealz/backend-logger';
+import { SocketAPIModule } from '@mealz/backend-socket-api';
 import {
-  GWIngredientMapper,
   IngredientsGWCommonModule,
 } from '@mealz/backend-ingredients-gateway-common';
 import {
@@ -13,6 +13,8 @@ import { IngredientsCrudV1GWController } from './controllers';
 
 @Module({
   imports: [
+    LoggerModule,
+    SocketAPIModule.forRoot({}),
     IngredientsCrudAPIModule.forRoot({}),
     IngredientsGWCommonModule,
   ],

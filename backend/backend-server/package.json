@@ -4,11 +4,11 @@
   "description": "Mealz backend",
   "main": "dist/index.js",
   "scripts": {
-    "build": "nest build",
+    "build": "NODE_OPTIONS=\"--max-old-space-size=768\" nest build",
     "clean": "rm -rf node_modules dist",
     "test": "jest",
-    "start": "nest start",
-    "start:dev": "nest start --watch"
+    "start": "NODE_OPTIONS=\"--max-old-space-size=768\" nest start",
+    "start:dev": "NODE_OPTIONS=\"--max-old-space-size=768\" nest start --watch"
   },
   "dependencies": {
     "@andcreations/common": "^0.1.13",

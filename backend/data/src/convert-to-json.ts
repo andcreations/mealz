@@ -9,14 +9,11 @@ import { Log } from './log';
 import { 
   YamlFacts,
   YamlIngredient,
+  YamlIngredients,
   YamlName,
   YamlProduct,
 } from './ingredients';
-import {
-  FactIdV1,
-  FactUnitV1,
-  IngredientDetailsV1,
-} from './ingredients/v1';
+import { IngredientDetailsV1 } from './ingredients/v1';
 import {
   GWFactId,
   GWFactPer100,
@@ -31,31 +28,26 @@ type GWIngredientWithoutId = Omit<GWIngredient, 'id'>;
 function validateIngredients(
   rawIngredients: any,
   filePath: string,
-): YamlIngredient[] {
-  if (!Array.isArray(rawIngredients)) {
-    throw new Error('Ingredients must be an array');
+): YamlIngredients {
+  const instance = plainToInstance(YamlIngredients, rawIngredients);
+  const errors = validateSync(instance, {
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  });
+  if (errors.length > 0) {
+    throw new Error(
+      `Invalid file ${filePath}: ${JSON.stringify(errors)}`,
+    );
   }
 
-  for (const rawIngredient of rawIngredients) {
-    const instance = plainToInstance(YamlIngredient, rawIngredient);
-    const errors = validateSync(instance, {
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    });
-    if (errors.length > 0) {
-      throw new Error(
-        `Invalid ingredient in ${filePath}: ${JSON.stringify(errors)}`,
-      );
-    }
-  }
-
-  return rawIngredients as YamlIngredient[];
+  return instance;
 }
 
 function populateMissingFields(
-  ingredients: YamlIngredient[]
-): YamlIngredient[] {
-  return ingredients.map(ingredient => {
+  ingredientsFile: YamlIngredients
+): YamlIngredients {
+  const commonTags = ingredientsFile.tags;
+  const ingredients = ingredientsFile.ingredients.map(ingredient => {
     return {
       ...ingredient,
       facts: {
@@ -66,30 +58,39 @@ function populateMissingFields(
           polyunsaturated: ingredient.facts.fat.polyunsaturated ?? 0,
         },
       },
+      ...(commonTags ? { tags: commonTags } : {}),
     };
   });
+  return {
+    ...ingredientsFile,
+    ingredients,
+  };
 }
 
-function mergeIngredients(list: YamlIngredient[][]): YamlIngredient[] {
+function mergeIngredients(files: YamlIngredients[]): YamlIngredients {
   const equals = (a: YamlIngredient, b: YamlIngredient) => {
     return a.name.en === b.name.en || a.name.pl === b.name.pl;
   };
 
-  const merged: YamlIngredient[] = [];
-  for (const ingredients of list) {
-    for (const ingredient of ingredients) {
-      const existing = merged.find(itr => equals(itr, ingredient));
+  const mergedIngredients: YamlIngredient[] = [];
+  for (const file of files) {
+    for (const ingredient of file.ingredients) {
+      const existing = mergedIngredients.find(itr => equals(itr, ingredient));
       if (existing) {
         throw new Error(`Duplicate ingredient ${ingredient.name.en}`);
       }
-      merged.push(ingredient);
+      mergedIngredients.push(ingredient);
     }
   }
-  return merged;
+  return {
+    ingredients: mergedIngredients,
+  };
 }
 
-function readIngredients(dir: string): YamlIngredient[] {
-  let allIngredients: YamlIngredient[] = [];
+function readIngredients(dir: string): YamlIngredients {
+  let allIngredients: YamlIngredients = {
+    ingredients: [],
+  };
 
   const ymlFiles = fs.readdirSync(dir).filter((file) => {
     return file.endsWith('.yml') && !file.startsWith('.');
@@ -107,7 +108,9 @@ function readIngredients(dir: string): YamlIngredient[] {
   return allIngredients;
 }
 
-function convertToJson(ingredients: YamlIngredient[]): GWIngredientWithoutId[] {
+function convertToJson(
+  ingredientsFile: YamlIngredients,
+): GWIngredientWithoutId[] {
   const convertName = (name: YamlName): IngredientDetailsV1['name'] => {
     return {
       en: name.en,
@@ -194,7 +197,7 @@ function convertToJson(ingredients: YamlIngredient[]): GWIngredientWithoutId[] {
   }
 
   const json: GWIngredientWithoutId[] = [];
-  for (const ingredient of ingredients) {
+  for (const ingredient of ingredientsFile.ingredients) {
     const factor100 = 100 / ingredient.weight;
 
     json.push({
@@ -207,6 +210,7 @@ function convertToJson(ingredients: YamlIngredient[]): GWIngredientWithoutId[] {
         : {}
       ),
       isHidden: ingredient.hidden,
+      ...(ingredient.tags ? { tags: ingredient.tags } : {}),
     });
   }
 

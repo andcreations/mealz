@@ -20,7 +20,7 @@ export class I18nService {
     return this.format(translations[key] ?? key, values || []);
   }
 
-  public translateFunc(translations: Translations): TranslateFunc {
+  public createTranslation(translations: Translations): TranslateFunc {
     return (key: string, ...values: string[]) => {
       return this.translate(translations, key, ...values);
     };

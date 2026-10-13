@@ -5,10 +5,14 @@ import { AuthUser } from '@mealz/backend-gateway-core';
 import { getLogger, Logger } from '@mealz/backend-logger';
 import { SocketMessage } from '@mealz/backend-socket-gateway-api';
 
+interface SocketClient {
+  sockets: Socket[];
+}
+
 @Injectable()
 export class SocketGatewayService {
   private server: Server;
-  private clientsByUserId: Map<string, Socket> = new Map();
+  private clientsByUserId: Map<string, SocketClient> = new Map();
 
   public constructor(
     private readonly logger: Logger,
@@ -35,7 +39,13 @@ export class SocketGatewayService {
       userId: user?.id,
     });
     client.emit('connected', { clientId: client.id });
-    this.clientsByUserId.set(user.id, client);
+
+    // add client
+    if (!this.clientsByUserId.has(user.id)) {
+      this.clientsByUserId.set(user.id, { sockets: [] });
+    }
+    const clientClient = this.clientsByUserId.get(user.id)!;
+    clientClient.sockets.push(client);
   }
 
   public handleDisconnect(client: Socket): void {
@@ -53,7 +63,15 @@ export class SocketGatewayService {
       socketId: client.id,
       userId: user?.id,
     });
-    this.clientsByUserId.delete(user.id);
+
+    // remove client
+    const clientClient = this.clientsByUserId.get(user.id)!;
+    clientClient.sockets = clientClient.sockets.filter(socket => {
+      return socket.id !== client.id;
+    });
+    if (clientClient.sockets.length === 0) {
+      this.clientsByUserId.delete(user.id);
+    }
   }
 
   public sendMessageToUser<TPayload>(
@@ -70,11 +88,35 @@ export class SocketGatewayService {
       return;
     }
 
-    client.emit('message', JSON.stringify(payload));
+    // send message to all the client sockets
+    for (const socket of client.sockets) {
+      socket.emit('message', JSON.stringify(payload));
+    }
+  }
+
+  public sendMessageToAllUsers<TPayload>(
+    payload: SocketMessage<TPayload>,
+    _context: Context,
+  ): void {
+    if (!this.server) {
+      this.logger.warning(
+        'Socket server not found while sending message to all users',
+        {
+          ..._context,
+          payload: JSON.stringify(payload),
+        },
+      );
+      return;
+    }
+    this.logger.debug('Sending message to all users', {
+      ..._context,
+      payload: JSON.stringify(payload),
+    });
+    this.server.emit('message', JSON.stringify(payload));
   }
 
   public handleMessage(
-    client: Socket,
+    _client: Socket,
     payload: unknown,
   ): { event: string; data: unknown } {
     return {

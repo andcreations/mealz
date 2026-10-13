@@ -32,5 +32,8 @@ export class Ingredient {
 
   // Indicates if an ingredient is not visible to the user
   public isHidden?: boolean;
+
+  // Tags for the ingredient
+  public tags?: string[];
 }
 
