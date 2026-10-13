@@ -33,13 +33,18 @@ import {
 } from '../../../ingredients';
 import { IngredientsDropdown } from './IngredientsDropdown';
 import { IngredientPickerTranslations } from './IngredientPicker.translations';
-import { MaterialIcon, Switch } from '../../../components';
+import { MaterialIcon } from '../../../components';
 import { eventType } from '../../event-log';
 
 enum Focus { Amount, Name };
 
 const SEARCH_LIMIT = 24;
 const DEFAULT_AMOUNT = '100';
+const DEFAULT_AMOUNT_UNIT = 'g';
+const AMOUNT_PATTERN = '^([0-9]+)$';
+
+const UNIT_CAROUSEL = ['kcal', 'g'];
+const UNIT_MAPPING: Record<string, string> = { k: 'kcal', g: 'g' };
 
 export interface IngredientPickerProps {
   ingredient?: MealPlannerIngredient;
@@ -68,6 +73,10 @@ interface IngredientPickerState {
 
   // Entered amount.
   amount: string;
+  amountError?: string;
+
+  // Unit of the amount.
+  amountUnit: string;
 
   // Element which currently has focus
   focus: Focus;
@@ -86,7 +95,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
   };
 
   const ingredientStateFromProps = (): Pick<IngredientPickerState,
-    'ingredientId' | 'ingredientSelected' | 'name' | 'amount'
+    'ingredientId' | 'ingredientSelected' | 'name' | 'amount' | 'amountUnit'
   > => {
     const { ingredient } = props;
     const amount = ingredient?.enteredAmount ?? DEFAULT_AMOUNT;
@@ -98,6 +107,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
         ingredientSelected: true,
         name: toAdHocIngredientStr(adHocIngredient, formatAmount),
         amount,
+        amountUnit: AD_HOC_UNIT,
       };
     }
     const fullIngredient = ingredient?.fullIngredient;
@@ -106,6 +116,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
       ingredientSelected: !!fullIngredient,
       name: fullIngredient?.name[INGREDIENT_LANGUAGE] ?? '',
       amount,
+      amountUnit: fullIngredient?.unitPer100 ?? DEFAULT_AMOUNT_UNIT,
     }
   };
 
@@ -195,11 +206,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
       );
     },
     unitPer100: () : string => {
-      if (!!ingredient.adHoc()) {
-        // we don't have the real unit for ad-hoc ingredients
-        return AD_HOC_UNIT;
-      }
-      return ingredient.full()?.unitPer100 ?? '';
+      return state.amountUnit;
     },
     caloriesPer100: () : number | undefined => {
       const adHocIngredient = ingredient.adHoc();
@@ -269,6 +276,26 @@ export function IngredientPicker(props: IngredientPickerProps) {
       return isNaN(amount) ? undefined : amount;
     },
 
+    valueInGrams: (): string | undefined => {
+      const value = amount.value();
+      if (value === undefined) {
+        return undefined;
+      }
+
+      // calculate grams if the unit is kcal
+      if (state.amountUnit === 'kcal') {
+        const caloriesPer100 = ingredient.caloriesPer100();
+        if (!caloriesPer100) {
+          return undefined;
+        }
+        const grams = amount.value() / caloriesPer100 * 100;
+        return grams.toFixed(0);
+      }
+
+      // return the value as it is if the unit is grams
+      return value.toFixed(0);
+    },
+
     isValid: () : boolean => {
       // Empty amount is fine. It means that the amount will be calculated.
       if (!state.amount.length) {
@@ -286,7 +313,29 @@ export function IngredientPicker(props: IngredientPickerProps) {
     },
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-      patchState({ amount: event.target.value });
+      const amountStr = event.target.value;
+
+      // Empty amount is fine. It means that the amount will be calculated.
+      if (amountStr.length === 0) {
+        patchState({ 
+          amount: '',
+          amountError: undefined,
+        });
+        return;
+      }
+
+      // match the amount pattern
+      const match = amountStr.match(AMOUNT_PATTERN);
+      if (!match) {
+        patchState({ amountError: translate('invalid-amount') });
+        return;
+      }
+
+      // update the amount
+      patchState({ 
+        amount: match[1],
+        amountError: undefined,
+      });
     },
 
     onEnter: () => {
@@ -296,15 +345,24 @@ export function IngredientPicker(props: IngredientPickerProps) {
       if (ingredient.adHoc()) {
         props.onPickAdHocIngredient(
           ingredient.adHoc(),
-          state.amount,
+          amount.valueInGrams() ?? '',
         );
       }
       else {
         props.onPickIngredient(
           ingredient.full(),
-          state.amount,
+          amount.valueInGrams() ?? '',
         );
       }
+    },
+
+    changeUnit: () => {
+      const currentIndex = UNIT_CAROUSEL.indexOf(state.amountUnit);
+      const nextIndex = (currentIndex + 1) % UNIT_CAROUSEL.length;
+      const nextUnit = UNIT_CAROUSEL[nextIndex];
+      patchState({
+        amountUnit: nextUnit,
+      });
     },
   };
 
@@ -462,19 +520,35 @@ export function IngredientPicker(props: IngredientPickerProps) {
     },
   };
 
-  // calories
-  const calories = {
+  // amount details
+  const amountDetails = {
     visible: () => {
       return ingredient.has() && amount.value() !== undefined;
     },
+
     value: () => {
-      const calculatedCalories = calculateFact(
-        amount.value(),
-        ingredient.caloriesPer100(),
-      );
-      return `${calculatedCalories.toFixed(0)}`;
+      // calculate calories if the unit is grams
+      if (state.amountUnit === 'g') {
+        const calculatedCalories = calculateFact(
+          amount.value(),
+          ingredient.caloriesPer100(),
+        );
+        return `${calculatedCalories.toFixed(0)}`;
+      }
+
+      // calculate grams if the unit is kcal
+      const caloriesPer100 = ingredient.caloriesPer100();
+      if (!caloriesPer100) {
+        return '';
+      }
+      const grams = amount.value() / caloriesPer100 * 100;
+      return grams.toFixed(0);
     },
+
     unit: () => {
+      if (state.amountUnit === 'kcal') {
+        return 'g';
+      }
       return 'kcal';
     },
   };
@@ -511,8 +585,8 @@ export function IngredientPicker(props: IngredientPickerProps) {
               <div className='mealz-ingredient-picker-amount-value'>
                 <Form.Control
                   type='text'
-                  inputMode='numeric'
-                  pattern='[0-9]*'
+                  inputMode='decimal'
+                  pattern={AMOUNT_PATTERN}
                   placeholder='…'
                   ref={amount.ref}
                   value={state.amount ?? ''}
@@ -527,13 +601,13 @@ export function IngredientPicker(props: IngredientPickerProps) {
               </div>
             </div>
 
-            { calories.visible() &&
+            { amountDetails.visible() &&
               <div className='mealz-ingredient-picker-amount-details'>
                 <div className='mealz-ingredient-picker-amount-calories'>
-                  { calories.value() }
+                  { amountDetails.value() }
                 </div>
                 <div className='mealz-ingredient-picker-amount-calories-unit'>
-                  { calories.unit() }
+                  { amountDetails.unit() }
                 </div>
               </div>
             }
@@ -578,6 +652,14 @@ export function IngredientPicker(props: IngredientPickerProps) {
         </div>
 
         <div className='mealz-ingredient-picker-icons-right'>
+          <MaterialIcon
+            className='mealz-ingredient-picker-icon'
+            icon='swap_horiz'
+            onClick={amount.changeUnit}
+          />
+          <div className='mealz-ingredient-picker-details-wide-separator'>
+            ·
+          </div>
           <MaterialIcon
             className='mealz-ingredient-picker-icon'
             icon='delete'
