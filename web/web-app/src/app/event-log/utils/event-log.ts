@@ -19,6 +19,7 @@ export function logErrorEvent(
   if (eventData instanceof Error) {
     error = eventData;
     eventData = undefined;
+    console.error(error);
   }
   eventData = eventData ?? {};
 

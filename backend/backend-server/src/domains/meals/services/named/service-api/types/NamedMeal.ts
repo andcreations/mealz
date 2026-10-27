@@ -5,4 +5,5 @@ export interface NamedMeal {
   mealId: string;
   sharedByUserId?: string;
   createdAt: number;
+  updatedAt: number;
 }

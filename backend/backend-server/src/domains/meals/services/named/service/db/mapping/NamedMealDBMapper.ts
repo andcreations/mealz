@@ -13,6 +13,7 @@ export class NamedMealDBMapper {
       meal_id: namedMeal.mealId,
       shared_by_user_id: namedMeal.sharedByUserId,
       created_at: namedMeal.createdAt,
+      updated_at: namedMeal.updatedAt,
     };
   }
 
@@ -29,6 +30,7 @@ export class NamedMealDBMapper {
       mealId: entity.meal_id,
       sharedByUserId: entity.shared_by_user_id,
       createdAt: entity.created_at,
+      updatedAt: entity.updated_at,
     }
   }
 

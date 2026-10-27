@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UserWithoutPassword } from '@mealz/backend-users-common';
+import { GWUpdatedAt } from '@mealz/backend-gateway-api';
 import { NamedMeal } from '@mealz/backend-meals-named-service-api';
-import { 
-  GWNamedMeal,
-  GWNamedMealSharedBy,
-} from '@mealz/backend-meals-named-gateway-api';
+import { GWNamedMeal } from '@mealz/backend-meals-named-gateway-api';
 
 @Injectable()
 export class GWNamedMealMapper {
@@ -33,6 +31,16 @@ export class GWNamedMealMapper {
     };
   }
 
+  public fromNamedMealWithUpdatedAt(
+    namedMeal: NamedMeal & { updatedAt: number },
+    sharedByUser?: UserWithoutPassword,
+  ): GWNamedMeal & GWUpdatedAt {
+    return {
+      ...this.fromNamedMeal(namedMeal, sharedByUser),
+      updatedAt: namedMeal.updatedAt,
+    };
+  }
+
   public fromNamedMeals(
     namedMeals: NamedMeal[],
     sharedByUsers: UserWithoutPassword[],
@@ -42,6 +50,18 @@ export class GWNamedMealMapper {
         return user.id === namedMeal.sharedByUserId;
       });
       return this.fromNamedMeal(namedMeal, sharedByUser);
+    });
+  }
+
+  public fromNamedMealsWithUpdatedAt(
+    namedMeals: NamedMeal[],
+    sharedByUsers: UserWithoutPassword[],
+  ): (GWNamedMeal & GWUpdatedAt)[] {
+    return namedMeals.map(namedMeal => {
+      const sharedByUser = sharedByUsers.find(user => {
+        return user.id === namedMeal.sharedByUserId;
+      });
+      return this.fromNamedMealWithUpdatedAt(namedMeal, sharedByUser);
     });
   }
 }

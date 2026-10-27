@@ -78,9 +78,6 @@ export class MealsNamedCrudService {
                 mealName,
                 context,
               );
-            // if (namedMeal) {
-            //   throw new NamedMealAlreadyExistsError(mealName);
-            // }
           },
         },
         {

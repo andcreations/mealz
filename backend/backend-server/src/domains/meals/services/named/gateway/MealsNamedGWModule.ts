@@ -7,7 +7,7 @@ import { MealsGWCommonModule } from '@mealz/backend-meals-gateway-common';
 import {
   GWNamedMealMapper,
   GWShareUserMapper,
-  MealsNamedPlanGWService,
+  MealsNamedGWService,
 } from './services';
 import { MealsNamedGWController } from './controllers';
 
@@ -18,7 +18,7 @@ import { MealsNamedGWController } from './controllers';
     MealsNamedAPIModule.forRoot({}),
     MealsGWCommonModule,
   ],
-  providers: [MealsNamedPlanGWService, GWNamedMealMapper, GWShareUserMapper],
+  providers: [MealsNamedGWService, GWNamedMealMapper, GWShareUserMapper],
   controllers: [MealsNamedGWController],
 })
 export class MealsNamedGWModule {}

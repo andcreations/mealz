@@ -1,3 +1,3 @@
 export * from './NamedMeal';
-export * from './NamedMealWithoutId';
+export * from './NamedMealForCreation';
 export * from './ShareUser';

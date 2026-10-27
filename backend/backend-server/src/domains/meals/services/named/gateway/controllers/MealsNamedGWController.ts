@@ -20,12 +20,12 @@ import {
   UpdateNamedMealGWRequestV1Impl,
   ListShareUsersGWResponseV1Impl,
 } from '../dtos';
-import { MealsNamedPlanGWService } from '../services';
+import { MealsNamedGWService } from '../services';
 
 @Controller(MEALS_NAMED_V1_URL)
 export class MealsNamedGWController {
   public constructor(
-    private readonly mealsNamedPlanGWService: MealsNamedPlanGWService,
+    private readonly mealsNamedGWService: MealsNamedGWService,
   ) {}
 
 
@@ -37,7 +37,7 @@ export class MealsNamedGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadNamedMealByIdGWResponseV1Impl> {
-    return await this.mealsNamedPlanGWService.readByIdV1(
+    return await this.mealsNamedGWService.readByIdV1(
       namedMealId,
       gwUser.id,
       context,
@@ -52,7 +52,7 @@ export class MealsNamedGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ReadNamedMealsFromLastGWResponseV1Impl> {
-    return await this.mealsNamedPlanGWService.readFromLastV1(
+    return await this.mealsNamedGWService.readFromLastV1(
       gwParams,
       gwUser.id,
       context,
@@ -67,7 +67,7 @@ export class MealsNamedGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<CreateNamedMealGWResponseV1Impl> {
-    return await this.mealsNamedPlanGWService.createV1(
+    return await this.mealsNamedGWService.createV1(
       gwRequest,
       gwUser.id,
       context,
@@ -83,7 +83,7 @@ export class MealsNamedGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<void> {
-    return await this.mealsNamedPlanGWService.updateV1(
+    return await this.mealsNamedGWService.updateV1(
       namedMealId,
       gwRequest,
       gwUser.id,
@@ -99,7 +99,7 @@ export class MealsNamedGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<void> {
-    return await this.mealsNamedPlanGWService.deleteV1(
+    return await this.mealsNamedGWService.deleteV1(
       namedMealId,
       gwUser.id,
       context,
@@ -114,7 +114,7 @@ export class MealsNamedGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<void> {
-    return await this.mealsNamedPlanGWService.shareV1(
+    return await this.mealsNamedGWService.shareV1(
       gwRequest,
       gwUser.id,
       context,
@@ -128,7 +128,7 @@ export class MealsNamedGWController {
     @GWUser() gwUser: AuthUser,
     @GWContext() context: Context,
   ): Promise<ListShareUsersGWResponseV1Impl> {
-    return await this.mealsNamedPlanGWService.listShareUsersV1(
+    return await this.mealsNamedGWService.listShareUsersV1(
       gwUser.id,
       context,
     );

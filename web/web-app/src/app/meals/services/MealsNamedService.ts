@@ -24,6 +24,7 @@ import { logDebugEvent, logErrorEvent, logInfoEvent } from '../../event-log';
 import { AuthUserService, AuthTopics } from '../../auth';
 import { SocketMessage, SocketTopics } from '../../socket';
 import { eventType } from '../event-log';
+import { GWUpdatedAt } from '@mealz/backend-gateway-api';
 
 @Service()
 @BusListener()
@@ -102,7 +103,7 @@ export class MealsNamedService implements OnBootstrap {
   }
 
   private async doReadNamedMeals(): Promise<void> {
-    const readNamedMeals: GWNamedMeal[] = [];
+    const readNamedMeals: (GWNamedMeal & GWUpdatedAt)[] = [];
     const startTime = Date.now();
 
     let lastId: string = undefined;

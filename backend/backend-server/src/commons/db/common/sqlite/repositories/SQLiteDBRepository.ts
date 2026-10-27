@@ -75,7 +75,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       this.getFieldsSpec(),
       entity,
     );
-    this.spanAttributes2(span, statement, opName);
+    this.spanAttributes(span, statement, opName);
 
     this.logger.verbose(
       'Running SQL insert',
@@ -129,7 +129,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
         upsert: true,
       },
     );
-    this.spanAttributes2(span, statement, opName);
+    this.spanAttributes(span, statement, opName);
 
     this.logger.verbose(
       'Running SQL upsert',
@@ -183,7 +183,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       where,
       options,
     );
-    this.spanAttributes2(span, statement, opName);
+    this.spanAttributes(span, statement, opName);
     this.logger.verbose(
       'Running SQL query',
       {
@@ -230,7 +230,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       update,
       where,
     );
-    this.spanAttributes2(span, statement, opName);
+    this.spanAttributes(span, statement, opName);
     this.logger.verbose(
       'Running SQL update',
       {
@@ -269,7 +269,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
       this.getFieldsSpec(),
       where,
     );
-    this.spanAttributes2(span, statement, opName);
+    this.spanAttributes(span, statement, opName);
     this.logger.verbose(
       'Running SQL delete',
       {
@@ -318,7 +318,7 @@ export class SQLiteDBRepository<T> extends DBRepository<T>{
     );
   }
 
-  private spanAttributes2(
+  private spanAttributes(
     span: Span,
     statement: SQLiteStatement,
     opName: string,

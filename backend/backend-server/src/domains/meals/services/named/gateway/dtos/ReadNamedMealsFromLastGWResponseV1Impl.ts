@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { GWUpdatedAtImpl } from '@mealz/backend-gateway-common';
 import {
   ReadNamedMealsFromLastGWResponseV1,
 } from '@mealz/backend-meals-named-gateway-api';
@@ -16,5 +17,5 @@ export class ReadNamedMealsFromLastGWResponseV1Impl
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => GWNamedMealImpl)
-  public namedMeals: GWNamedMealImpl[];
+  public namedMeals: (GWNamedMealImpl & GWUpdatedAtImpl)[];
 }

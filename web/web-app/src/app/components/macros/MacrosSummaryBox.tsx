@@ -12,6 +12,7 @@ export enum MacrosSummaryBoxType {
   Carbs = 'carbs',
   Protein = 'protein',
   Fat = 'fat',
+  Other = 'other',
 }
 
 export interface MacrosSummaryBoxProps {
@@ -56,6 +57,7 @@ export function MacrosSummaryBox(props: MacrosSummaryBoxProps) {
       'mealz-color-carbs': isType(MacrosSummaryBoxType.Carbs),
       'mealz-color-protein': isType(MacrosSummaryBoxType.Protein),
       'mealz-color-fat': isType(MacrosSummaryBoxType.Fat),
+      'mealz-color-other': isType(MacrosSummaryBoxType.Other),
     },
   );
   const separatorClassNames = classNames(

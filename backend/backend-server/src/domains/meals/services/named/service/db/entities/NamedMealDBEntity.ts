@@ -43,4 +43,10 @@ export class NamedMealDBEntity {
     type: DBFieldType.INTEGER,
   })
   public created_at: number;
+
+  @DBField({
+    name: 'updated_at',
+    type: DBFieldType.INTEGER,
+  })
+  public updated_at: number;
 }

@@ -78,3 +78,7 @@ $mealz-macros-summary-box-bg-opacity: 1.0;
   @include mealz-font-tiny();
   color: $mealz-theme-color-fg-dark;
 }
+
+.mealz-macros-summary-box-color-other {
+  color: $mealz-color;
+}

@@ -35,7 +35,7 @@ import { GWNamedMealMapper } from './GWNamedMealMapper';
 import { GWShareUserMapper } from './GWShareUserMapper';
 
 @Injectable()
-export class MealsNamedPlanGWService {
+export class MealsNamedGWService {
   public constructor(
     private readonly usersCrudTransporter: UsersCrudTransporter,
     private readonly mealsNamedTransporter: MealsNamedTransporter,
@@ -76,7 +76,7 @@ export class MealsNamedPlanGWService {
     ]);
 
     return {
-      namedMeal: this.gwNamedMealMapper.fromNamedMeal(
+      namedMeal: this.gwNamedMealMapper.fromNamedMealWithUpdatedAt(
         namedMeal,
         readUserResponse?.user,
       ),
@@ -106,14 +106,14 @@ export class MealsNamedPlanGWService {
     // read shared by users
     const sharedByUserIds = namedMeals
       .map(namedMeal => namedMeal.sharedByUserId)
-      .filter(Boolean);
+      .filter(sharedByUserId => sharedByUserId != null);
     const sharedByUsers = await this.readUsersByIds(
       sharedByUserIds,
       context,
     );
 
     return {
-      namedMeals: this.gwNamedMealMapper.fromNamedMeals(
+      namedMeals: this.gwNamedMealMapper.fromNamedMealsWithUpdatedAt(
         namedMeals,
         sharedByUsers,
       ),

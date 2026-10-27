@@ -1,4 +1,5 @@
 export * from './errors';
+export * from './types';
 export * from './bootstrap';
 export * from './decorators';
 export * from './validators';

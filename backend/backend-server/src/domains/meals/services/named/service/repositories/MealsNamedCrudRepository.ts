@@ -10,7 +10,7 @@ import {
 } from '@mealz/backend-db';
 import {
   NamedMeal,
-  NamedMealWithoutId,
+  NamedMealForCreation,
 } from '@mealz/backend-meals-named-service-api';
 
 import { 
@@ -90,11 +90,16 @@ export class MealsNamedCrudRepository {
   }
 
   public async create(
-    namedMeal: NamedMealWithoutId,
+    namedMeal: NamedMealForCreation,
     context: Context,
   ): Promise<Pick<NamedMeal, 'id'>> {
     const id = this.idGenerator();
-    const entity = this.mapper.toEntity({ ...namedMeal, id });
+    const now = Date.now();
+    const entity = this.mapper.toEntity({
+      ...namedMeal,
+      id,
+      updatedAt: now,
+    });
     await this.repository.insert(
       this.opName('create'),
       entity,
@@ -119,11 +124,13 @@ export class MealsNamedCrudRepository {
     namedMeal: UpdateObject<NamedMeal, 'id'>,
     context: Context,
   ): Promise<void> {
+    const now = Date.now();
     const query: Where<NamedMealDBEntity> = {
       id: { $eq: namedMeal.id },
     };
     const update: Update<NamedMealDBEntity> = {
       meal_name: { $set: namedMeal.mealName },
+      updated_at: { $set: now },
     };
     await this.repository.update(
       this.opName('update'),

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import classNames from 'classnames';
+import { format } from 'timeago.js';
+import { GWUpdatedAt } from '@mealz/backend-gateway-api';
 import { GWNamedMeal } from '@mealz/backend-meals-named-gateway-api';
 
 export interface NamedMealPickerDropdownProps {
@@ -26,7 +28,7 @@ export function NamedMealPickerDropdown(props: NamedMealPickerDropdownProps) {
     }
   });
 
-  const renderItem = (item: GWNamedMeal, index: number) => {
+  const renderItem = (item: GWNamedMeal & GWUpdatedAt, index: number) => {
     const selected = index === props.selectedIndex;
     const itemClassNames = classNames(
       'mealz-named-meal-picker-dropdown-item',
@@ -34,8 +36,17 @@ export function NamedMealPickerDropdown(props: NamedMealPickerDropdownProps) {
     );
 
     let info = '';
+    const addInfo = (str: string) => {
+      if (info) {
+        info += ' · ';
+      }
+      info += str;
+    }
     if (item.sharedBy) {
-      info += `Shared by ${item.sharedBy.firstName}`;
+      addInfo(`Shared by ${item.sharedBy.firstName}`);
+    }
+    if (item.updatedAt) {
+      addInfo(format(item.updatedAt));
     }
 
     return (

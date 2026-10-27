@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { Service } from '@andcreations/common';
 import { HTTPWebClientService } from '@andcreations/web-common';
 import { truncateNumber } from '@mealz/backend-shared';
+import { GWIngredient } from '@mealz/backend-ingredients-gateway-api';
 import { GWMealWithoutId } from '@mealz/backend-meals-gateway-api';
 import { 
   GWMealLog,
