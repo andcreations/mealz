@@ -5179,6 +5179,59 @@
   },
   {
     "name": {
+      "en": "Gelatine powder",
+      "pl": "Żelatyna w proszku"
+    },
+    "type": "generic",
+    "unitPer100": "g",
+    "factsPer100": [
+      {
+        "id": "calories",
+        "unit": "kcal",
+        "amount": 338
+      },
+      {
+        "id": "carbs",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "sugars",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "protein",
+        "unit": "g",
+        "amount": 84
+      },
+      {
+        "id": "total_fat",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "saturated_fat",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "monounsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      },
+      {
+        "id": "polyunsaturated_fat",
+        "unit": "g",
+        "amount": 0
+      }
+    ],
+    "product": {
+      "brand": "Cykoria"
+    }
+  },
+  {
+    "name": {
       "en": "Ghee",
       "pl": "Masło klarowane ghee"
     },
